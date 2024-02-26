@@ -12,7 +12,7 @@ export default function HomePage() {
 	return (
 		<div>
 			<Button
-				// isError={true}
+				isError={true}
 				buttonText='Sign In'
 				htmlType='button'
 				onClick={(e) => console.log(e, 'hellofromEvent')}

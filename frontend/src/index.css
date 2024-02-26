@@ -13,6 +13,9 @@
 	--color-dark-blue: #20293a;
 	--color-violet: #6466e9;
 	--color-light-violet: #a8b4f6;
+	--color-error:#D04848
+	--color-success:#65B741
+
 
 	font-family: Inter, sans-serif;
 	color-scheme: dark light;

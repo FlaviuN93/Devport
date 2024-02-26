@@ -1,8 +1,8 @@
-import React, { FC, MouseEvent, ReactNode } from 'react'
+import { FC, MouseEvent, ReactNode } from 'react'
 import { tButtonHtmlType, tButtonType, tSize } from './types'
 import styles from './Button.module.css'
-import Close from '../assets/close.svg'
-
+// import { XMarkIcon, CheckIcon } from '@heroicons/react/16/solid'
+import AirplayIcon from '../assets/airplay.svg?react'
 interface IProps {
 	htmlType: tButtonHtmlType
 	onClick: (event: MouseEvent) => void
@@ -15,6 +15,7 @@ interface IProps {
 	icon?: ReactNode
 	isError?: boolean
 	isLoading?: boolean
+	isSuccess?: boolean
 }
 
 const Button: FC<IProps> = ({
@@ -27,6 +28,7 @@ const Button: FC<IProps> = ({
 	danger = false,
 	isLoading = false,
 	isError = false,
+	isSuccess = false,
 	pressed = false,
 	type = 'primary',
 }) => {
@@ -53,7 +55,12 @@ const Button: FC<IProps> = ({
 			{isLoading ? (
 				<span className={styles.loading}>Loading...</span>
 			) : isError ? (
-				<span className={styles.error}>{<Close />}</span>
+				<span className={styles.error}>{<AirplayIcon />} Error</span>
+			) : isSuccess ? (
+				<span className={styles.success}>
+					{/* {<CheckIcon />}  */}
+					Success
+				</span>
 			) : (
 				<div>
 					{icon && <span className={styles.icon}>{icon}</span>}
