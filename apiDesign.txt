@@ -1,0 +1,62 @@
+portfolio-management.io/ 
+home page - missing design 
+Hello World + navbar
+Get method, later, not sure what to do about it
+
+/login
+POST Method 
+body: {email, password} or 
+check for signin with github and sign in with google
+check for saving email and password with google manager and 
+updating email and password inputs
+
+/register
+POST method
+body: {email, password} 
+or signin with github and google
+
+/forgot-password
+POST Method, body:{email}
+Enter user email and check if 
+email is correct to send verification email to user
+with link to change password
+
+/reset-password
+Patch method, body:{oldPassword, newPassword}
+
+/profile
+Get method 
+Get all info for the current user and update them in the 
+profile ui when he enters 
+
+Post method
+body:{email, job-title, name, bio, profile-image, cover-image, skills,
+contact-options}
+
+/project
+Post method
+body: {project-name, demo-url, repository-url, project-image, 
+	description}
+
+/project/:id
+Get method
+fill all the inputs with values for a specific project
+
+Put method
+update the values for a specific project
+body: {project-name, demo-url, repository-url, project-image, 
+	description}
+
+/my-portfolio
+Get method
+check for authorization and based on user data and project data
+fill the page with information
+
+object to return: 
+{email, job-title, name, bio, profile-image, cover-image, skills,
+contact-options}
+{project-name, demo-url, repository-url, project-image, 
+	description}
+
+
+

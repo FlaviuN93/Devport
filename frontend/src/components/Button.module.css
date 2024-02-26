@@ -1,0 +1,95 @@
+.button {
+	/* Base button styles */
+	padding: 0.6rem 1.2rem;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	transition: all 0.2s ease-in-out;
+}
+
+.small {
+	/* Styles for small size */
+	font-size: 14px;
+}
+
+.medium {
+	/* Styles for medium size */
+	font-size: 16px;
+}
+
+.large {
+	/* Styles for large size */
+	font-size: 18px;
+}
+
+.auto {
+}
+
+.disabled {
+	/* Styles for disabled state */
+	opacity: 0.5;
+	cursor: default;
+}
+
+.icon {
+	/* Styles for icon */
+	margin-right: 8px;
+}
+
+.text {
+	/* Styles for text */
+}
+
+.loading {
+	/* Styles for loading indicator */
+	text-align: center;
+}
+
+.error {
+	/* Styles for error message */
+	color: red;
+}
+
+.primary {
+	/* Styles for primary button type */
+	background-color: #007bff;
+	color: #fff;
+}
+
+.danger {
+	/* Styles for danger button type */
+	background-color: #dc3545;
+	color: #fff;
+}
+/* 
+.logo {
+    height: 6em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: filter 300ms;
+  }
+  .logo:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+  }
+  .logo.react:hover {
+    filter: drop-shadow(0 0 2em #61dafbaa);
+  }
+  
+  @keyframes logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @media (prefers-reduced-motion: no-preference) {
+    a:nth-of-type(2) .logo {
+      animation: logo-spin infinite 20s linear;
+    }
+  }
+   */

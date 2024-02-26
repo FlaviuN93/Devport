@@ -1,0 +1,80 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--color-light-1: #ffffff;
+	--color-light-2: #e3e8ef;
+	--color-black-1: #191b1f;
+	--color-black-2: #2a2d32;
+	--color-grey: #677489;
+	--color-dark-blue: #20293a;
+	--color-violet: #6466e9;
+	--color-light-violet: #a8b4f6;
+
+	font-family: Inter, sans-serif;
+	color-scheme: dark light;
+	background-color: var(--color-black-2);
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: inherit;
+}
+
+html {
+	line-height: 1.5;
+	font-weight: 400;
+	box-sizing: border-box;
+}
+
+body {
+	display: flex;
+	place-items: center;
+	min-width: 320px;
+	min-height: 100vh;
+	text-align: center;
+	margin: 0 auto;
+}
+
+h1 {
+	font-size: 2rem;
+}
+
+h1,
+h2,
+h4 {
+	font-weight: 600;
+}
+
+h2 {
+	font-size: 1.5rem;
+}
+
+h4 {
+	font-size: 1.25rem;
+}
+
+input,
+textarea {
+	width: 100%;
+	padding: 0.8rem 1.2rem;
+	font-family: inherit;
+	border: 1px solid var(--color-grey);
+	border-radius: 5px;
+	background-color: var(--color-light-2);
+	transition: all 0.2s;
+}
+
+input:focus,
+textarea:focus {
+	outline: none;
+	background-color: var(--color-light-2);
+}
