@@ -11,6 +11,7 @@ interface IProps {
 	disabled?: boolean
 	danger?: boolean
 	icon?: ReactNode
+	isLoading?: boolean
 }
 
 const Button: FC<IProps> = ({
@@ -20,11 +21,12 @@ const Button: FC<IProps> = ({
 	icon,
 	buttonText,
 	danger = false,
+	isLoading = false,
 	pressed = false,
 	type,
 }) => {
-	const buttonClasses = `${styles.button} ${styles[size]} ${styles[type]} ${
-		danger && styles.danger
+	const buttonClasses = `${styles.button} ${styles[size]} ${styles[type]} ${danger && styles.danger} ${
+		isLoading && styles.loading
 	} 
 	`
 
@@ -43,8 +45,14 @@ const Button: FC<IProps> = ({
 			aria-disabled={disabled ? 'true' : 'false'}
 			onClick={handleClick}
 		>
-			{icon && <span className='mr-2'>{icon}</span>}
-			<span>{buttonText}</span>
+			{isLoading ? (
+				<span className={styles.spinner}></span>
+			) : (
+				<>
+					{icon && <span className='mr-2'>{icon}</span>}
+					<span>{buttonText}</span>
+				</>
+			)}
 		</button>
 	)
 }
