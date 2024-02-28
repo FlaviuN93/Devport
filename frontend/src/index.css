@@ -12,18 +12,34 @@
 	--color-grey: #677489;
 	--color-dark-blue: #20293a;
 	--color-violet: #6466e9;
-	--color-light-violet: #a8b4f6;
-	--color-error:#D04848
-	--color-success:#65B741
-
+	--color-light-violet: rgba(168, 180, 246, 0.5);
+	--color-dark-violet: #4138c2;
+	--color-error: #b91c1c;
+	--color-danger: #dd524c;
+	--color-success: #15803d;
 
 	font-family: Inter, sans-serif;
-	color-scheme: dark light;
-	background-color: var(--color-black-2);
+
 	font-synthesis: none;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+:root.light-mode {
+	background-color: var(--color-light-2);
+	--content-color: var(--color-black-1);
+	--shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.1);
+	--shadow-sm: 1px 2px 4px rgba(0, 0, 0, 0.1);
+	--shadow-md: 1.5px 3px 6px rgba(0, 0, 0, 0.1);
+	--shadow-lg: 4px 1.2rem 2.4rem rgba(0, 0, 0, 0.1);
+}
+:root.dark-mode {
+	background-color: var(--color-black-2);
+	--content-color: var(--color-light-1);
+	--shadow-xs: 0 1px 2px rgba(255, 255, 255, 0.1);
+	--shadow-sm: 1px 2px 4px rgba(255, 255, 255, 0.1);
+	--shadow-md: 1.5px 3px 6px rgba(255, 255, 255, 0.1);
+	--shadow-lg: 4px 1.2rem 2.4rem rgba(255, 255, 255, 0.1);
 }
 
 * {
@@ -35,6 +51,8 @@
 html {
 	line-height: 1.5;
 	font-weight: 400;
+	font-size: 15px;
+	letter-spacing: 0.5px;
 	box-sizing: border-box;
 }
 

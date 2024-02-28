@@ -1,95 +1,71 @@
 .button {
-	/* Base button styles */
-	padding: 0.6rem 1.2rem;
-	border: 1px solid #ccc;
-	border-radius: 4px;
+	padding: 0.5rem 1.2rem;
+	border: none;
+	border-radius: 6px;
+	box-shadow: var(--shadow-sm);
+	color: var(--color-light-2);
 	cursor: pointer;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	transition: all 0.2s ease-in-out;
+	transform: translate(-1px);
+	overflow: hidden;
+	min-width: 4rem;
+}
+
+.button:active {
+	box-shadow: var(--shadow-xs);
+	transform: translate(0);
 }
 
 .small {
-	/* Styles for small size */
+	padding: 0.4rem 0.8rem;
 	font-size: 14px;
-}
-
-.medium {
-	/* Styles for medium size */
-	font-size: 16px;
+	font-weight: 500;
 }
 
 .large {
-	/* Styles for large size */
-	font-size: 18px;
+	padding: 0.5rem 1.6rem;
 }
 
 .auto {
+	padding: 0.6rem 1.6rem;
+	width: 100%;
 }
 
 .disabled {
-	/* Styles for disabled state */
 	opacity: 0.5;
 	cursor: default;
-}
-
-.icon {
-	/* Styles for icon */
-	margin-right: 8px;
+	background-color: var(--color-grey);
 }
 
 .text {
-	/* Styles for text */
+	color: var(--color-violet);
+	font-size: 12px;
+	font-weight: 700;
+	border: none;
+	box-shadow: none;
 }
 
-.loading {
-	/* Styles for loading indicator */
-	text-align: center;
-}
-
-.error {
-	/* Styles for error message */
-	color: red;
+.text:hover,
+.text:active {
+	box-shadow: none;
 }
 
 .primary {
-	/* Styles for primary button type */
-	background-color: #007bff;
-	color: #fff;
+	background-color: var(--color-violet);
+	color: var(--color-light-1);
+}
+
+.secondary {
+	background-color: var(--color-light-violet);
+	color: var(--color-dark-violet);
+	justify-content: start;
+	font-weight: 500;
 }
 
 .danger {
-	/* Styles for danger button type */
-	background-color: #dc3545;
-	color: #fff;
+	color: var(--color-danger);
+	font-weight: 500;
 }
-/* 
-.logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.react:hover {
-    filter: drop-shadow(0 0 2em #61dafbaa);
-  }
-  
-  @keyframes logo-spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  @media (prefers-reduced-motion: no-preference) {
-    a:nth-of-type(2) .logo {
-      animation: logo-spin infinite 20s linear;
-    }
-  }
-   */
