@@ -1,4 +1,3 @@
-import Input from '../components/Input'
 import Button from '../components/Button'
 import Card from '../components/Card'
 import Avatar from '../components/Avatar'
@@ -10,6 +9,8 @@ import Cover from '../components/Cover'
 import Plus1 from '../assets/Plus-1.svg?react'
 import Plus from '../assets/Plus.svg?react'
 import Trash from '../assets/Trash.svg?react'
+import Input from '../components/Input/Input'
+import PasswordInput from '../components/Input/PasswordInput'
 
 export default function HomePage() {
 	return (
@@ -44,7 +45,20 @@ export default function HomePage() {
 				onClick={(e) => console.log(e, 'hellofromEvent')}
 			/>
 
-			<Input onChange={(e) => console.log(e, 'helloFromInput')} placeholder='Enter input' />
+			<Input
+				onChange={(e) => console.log(e, 'helloFromInput')}
+				placeholder='Enter input'
+				label='Checkbox'
+				value='checkbox1'
+				type='radio'
+			/>
+			<PasswordInput
+				functionality='signUp'
+				onChange={(value) => console.log(value)}
+				placeholder='Enter password'
+				label='Checkbox'
+				type='text'
+			/>
 			<Textarea />
 			<Avatar />
 			<Cover />
