@@ -1,0 +1,44 @@
+.searchContainer {
+	display: flex;
+	align-items: center;
+	width: 100%;
+}
+
+.searchInput {
+	color: var(--color-black-1);
+	width: 100%;
+	padding: 0.8rem 1.2rem;
+	font-family: inherit;
+	border: 1px solid var(--color-grey);
+	border-radius: 5px;
+	background-color: var(--color-light-2);
+	transition: all 0.2s;
+	flex: 1;
+}
+
+.searchInput:focus {
+	outline: none;
+	background-color: var(--color-light-2);
+}
+
+.searchButton {
+	border: none;
+	background-color: #ddd;
+	padding: 8px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.searchButton i {
+	color: #333;
+	font-size: 18px;
+}
+
+/* Add these styles for left icon positioning */
+.searchContainer.left-icon {
+	flex-direction: row-reverse; /* Reverse order for left icon */
+}
+
+.searchContainer.left-icon .searchInput {
+	margin-right: 5px; /* Add margin for left icon */
+}

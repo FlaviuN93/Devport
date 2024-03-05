@@ -9,10 +9,15 @@ import Cover from '../components/Cover'
 import Plus1 from '../assets/Plus-1.svg?react'
 import Plus from '../assets/Plus.svg?react'
 import Trash from '../assets/Trash.svg?react'
-import Input from '../components/Input/Input'
-import PasswordInput from '../components/Input/PasswordInput'
+import Text from '../components/Inputs/Text'
+import { useForm } from 'react-hook-form'
+// import Password from '../components/Inputs/Password'
+import Search from '../components/Inputs/Search'
+// import FileInput from '../components/Input/FileInput'
 
 export default function HomePage() {
+	const { register } = useForm()
+
 	return (
 		<div>
 			<Button
@@ -45,20 +50,21 @@ export default function HomePage() {
 				onClick={(e) => console.log(e, 'hellofromEvent')}
 			/>
 
-			<Input
-				onChange={(e) => console.log(e, 'helloFromInput')}
-				placeholder='Enter input'
-				label='Checkbox'
-				value='checkbox1'
-				type='radio'
+			<Text
+				onChange={(value) => console.log(value, 'helloFromInput')}
+				placeholder='Enter your job title'
+				type='input'
+				label='Sign In'
+				name='password'
+				register={register}
 			/>
-			<PasswordInput
-				functionality='signUp'
-				onChange={(value) => console.log(value)}
-				placeholder='Enter password'
-				label='Checkbox'
-				type='text'
+			{/* <Password/> */}
+			<Search
+				onSearch={(value) => console.log(value, 'helloFromInput')}
+				placeholder='Search for values'
+				name='search'
 			/>
+
 			<Textarea />
 			<Avatar />
 			<Cover />

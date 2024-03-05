@@ -1,6 +1,5 @@
 export type tButtonType = 'primary' | 'secondary' | 'text'
 export type tSize = 'small' | 'large' | 'auto'
-export type tInputType = 'text' | 'number' | 'email' | 'password' | 'checkbox' | 'radio' | 'file'
 
 export type tValidationType =
 	| 'lowerCase'
@@ -8,14 +7,9 @@ export type tValidationType =
 	| 'number'
 	| 'email'
 	| 'required'
-	| 'invalid'
 	| 'minLength'
 	| 'specialChar'
-	| 'invalid'
 
-export type tPasswordFunctionality = 'signIn' | 'signUp' | 'forgotPassword' | 'resetPassword'
+export type tInputValidationType = Record<tValidationType, boolean>
 
-export interface PasswordValidationRule {
-	type: tValidationType
-	isActive: boolean
-}
+export type TailwindClasses = string

@@ -9,6 +9,7 @@
 	--color-light-2: #e3e8ef;
 	--color-black-1: #191b1f;
 	--color-black-2: #2a2d32;
+	--color-light-grey: #cbcdd1;
 	--color-grey: #677489;
 	--color-dark-blue: #20293a;
 	--color-violet: #6466e9;
@@ -81,21 +82,4 @@ h2 {
 
 h4 {
 	font-size: 1.25rem;
-}
-
-input,
-textarea {
-	width: 100%;
-	padding: 0.8rem 1.2rem;
-	font-family: inherit;
-	border: 1px solid var(--color-grey);
-	border-radius: 5px;
-	background-color: var(--color-light-2);
-	transition: all 0.2s;
-}
-
-input:focus,
-textarea:focus {
-	outline: none;
-	background-color: var(--color-light-2);
 }

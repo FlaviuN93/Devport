@@ -1,33 +1,35 @@
 import { FC, MouseEvent, ReactNode } from 'react'
-import { tButtonType, tSize } from './types'
+import { TailwindClasses, tButtonType, tSize } from './types'
 import styles from './Button.module.css'
 
 interface IProps {
 	onClick: (event: MouseEvent) => void
-	buttonText: string
+	buttonText?: string
+	size: tSize
 	type?: tButtonType
-	size?: tSize
 	pressed?: boolean
 	disabled?: boolean
 	danger?: boolean
 	icon?: ReactNode
 	isLoading?: boolean
+	buttonStyles?: TailwindClasses
 }
 
 const Button: FC<IProps> = ({
 	disabled = false,
-	size = 'auto',
+	size,
 	onClick,
 	icon,
 	buttonText,
 	danger = false,
 	isLoading = false,
 	pressed = false,
-	type,
+	type = 'primary',
+	buttonStyles,
 }) => {
 	const buttonClasses = `${styles.button} ${styles[size]} ${styles[type]} ${danger && styles.danger} ${
 		isLoading && styles.loading
-	} 
+	} ${buttonStyles} 
 	`
 
 	const handleClick = (event: MouseEvent) => {
