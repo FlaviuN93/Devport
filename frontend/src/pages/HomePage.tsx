@@ -11,8 +11,8 @@ import Plus from '../assets/Plus.svg?react'
 import Trash from '../assets/Trash.svg?react'
 import Text from '../components/Inputs/Text'
 import { useForm } from 'react-hook-form'
-// import Password from '../components/Inputs/Password'
 import Search from '../components/Inputs/Search'
+import Password from '../components/Inputs/Password'
 // import FileInput from '../components/Input/FileInput'
 
 export default function HomePage() {
@@ -63,6 +63,15 @@ export default function HomePage() {
 				onSearch={(value) => console.log(value, 'helloFromInput')}
 				placeholder='Search for values'
 				name='search'
+				iconPos='right'
+			/>
+			<Password
+				onChange={(value) => console.log(value, 'helloFromInput')}
+				placeholder='Enter your job title'
+				label='Sign In'
+				name='password'
+				register={register}
+				showPasswordBtn={true}
 			/>
 
 			<Textarea />

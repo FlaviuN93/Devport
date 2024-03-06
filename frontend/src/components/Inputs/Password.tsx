@@ -1,8 +1,8 @@
 import { ChangeEvent, FC, useId, useState } from 'react'
 import { TailwindClasses } from '../types'
-import textStyles from './Input.module.css'
+import styles from './Text.module.css'
 import Button from '../Button'
-import { EyeIcon } from '@heroicons/react/16/solid'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/16/solid'
 
 export interface PasswordProps {
 	onChange: (value: string) => void
@@ -11,7 +11,7 @@ export interface PasswordProps {
 	placeholder: string
 	disabled?: boolean
 	label?: string
-	showPasswordButton?: boolean
+	showPasswordBtn?: boolean
 	labelStyles?: TailwindClasses
 	passwordStyles?: TailwindClasses
 }
@@ -25,7 +25,7 @@ const Password: FC<PasswordProps> = ({
 	label,
 	name,
 	register,
-	showPasswordButton = false,
+	showPasswordBtn = false,
 }) => {
 	const [showPassword, setShowPassword] = useState(false)
 	const uniqueId = useId()
@@ -33,34 +33,36 @@ const Password: FC<PasswordProps> = ({
 	const handleTogglePassword = () => setShowPassword(!showPassword)
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => !disabled && onChange(e.target.value)
 
-	const labelClasses = `${textStyles.label} ${labelStyles}`
-	const passwordClasses = `${textStyles.input} ${passwordStyles}`
+	const labelClasses = `${styles.label} ${labelStyles}`
+	const passwordClasses = `${styles.text} ${passwordStyles} `
+	const passwordContainerClasses = `${styles.textContainer} relative`
+	const buttonClasses = `absolute top-[29px] right-0 px-2 py-2 text-[--gray]`
 
 	return (
-		<div>
-			<div>
-				<label className={labelClasses} htmlFor={label} aria-label={label}>
-					{label}
-				</label>
+		<div className={passwordContainerClasses}>
+			<label className={labelClasses} htmlFor={label} aria-label={label}>
+				{label}
+			</label>
 
-				<input
-					name={name}
-					className={passwordClasses}
-					id={label}
-					placeholder={placeholder}
-					ref={() => register(name)}
-					aria-placeholder={placeholder}
-					aria-describedby={`${uniqueId}-${name}`}
-					type={showPassword ? 'text' : 'password'}
-					disabled={disabled}
-					aria-disabled={disabled ? 'true' : 'false'}
-					onChange={handleChange}
-				/>
-			</div>
-			{showPasswordButton && (
+			<input
+				name={name}
+				className={passwordClasses}
+				id={label}
+				placeholder={placeholder}
+				ref={() => register(name)}
+				aria-placeholder={placeholder}
+				aria-describedby={`${uniqueId}-${name}`}
+				type={showPassword ? 'text' : 'password'}
+				disabled={disabled}
+				aria-disabled={disabled ? 'true' : 'false'}
+				onChange={handleChange}
+			/>
+
+			{showPasswordBtn && (
 				<Button
-					icon={<EyeIcon className='h-6 w-6' />}
+					icon={showPassword ? <EyeIcon className='h-6 w-6' /> : <EyeSlashIcon className='h-6 w-6' />}
 					onClick={handleTogglePassword}
+					buttonStyles={buttonClasses}
 					type='text'
 					size='small'
 				/>

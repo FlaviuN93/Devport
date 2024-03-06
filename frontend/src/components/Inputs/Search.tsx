@@ -3,6 +3,7 @@ import { TailwindClasses } from '../types'
 import Button from '../Button'
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid'
 import styles from './Search.module.css'
+import { disableRadiusLeft, disableRadiusRight } from '../../utils/variables'
 
 export interface SearchProps {
 	onSearch: (query: string) => void
@@ -30,7 +31,12 @@ const Search: FC<SearchProps> = ({
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSearch()
 
-	const searchClasses = `${styles.searchInput} ${searchStyles}`
+	const buttonClasses = `bg-white/40 shadow-xs border-0.5 border-solid border-[--light-gray] focus:shadow-sm py-2 px-2 hover:bg-white/50 ${
+		iconPos === 'right' ? disableRadiusLeft : disableRadiusRight
+	}`
+	const searchClasses = `${styles.searchInput} ${searchStyles}  ${
+		iconPos === 'right' ? disableRadiusRight : disableRadiusLeft
+	}`
 
 	return (
 		<div className={styles.searchContainer}>
@@ -38,6 +44,7 @@ const Search: FC<SearchProps> = ({
 				<Button
 					icon={<MagnifyingGlassIcon className='h-6 w-6' />}
 					onClick={handleSearch}
+					buttonStyles={buttonClasses}
 					type='text'
 					size='small'
 				/>
@@ -57,7 +64,7 @@ const Search: FC<SearchProps> = ({
 			{iconPos === 'right' && (
 				<Button
 					isLoading={isLoading}
-					buttonStyles=''
+					buttonStyles={buttonClasses}
 					icon={<MagnifyingGlassIcon className='h-6 w-6' />}
 					onClick={handleSearch}
 					type='text'

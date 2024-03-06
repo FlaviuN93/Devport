@@ -5,19 +5,19 @@
 @tailwind utilities;
 
 :root {
-	--color-light-1: #ffffff;
-	--color-light-2: #e3e8ef;
-	--color-black-1: #191b1f;
-	--color-black-2: #2a2d32;
-	--color-light-grey: #cbcdd1;
-	--color-grey: #677489;
-	--color-dark-blue: #20293a;
-	--color-violet: #6466e9;
-	--color-light-violet: rgba(168, 180, 246, 0.5);
-	--color-dark-violet: #4138c2;
-	--color-error: #b91c1c;
-	--color-danger: #dd524c;
-	--color-success: #15803d;
+	--light-1: #ffffff;
+	--light-2: #e3e8ef;
+	--black-1: #191b1f;
+	--black-2: #2a2d32;
+	--light-gray: #cbcdd1;
+	--gray: #677489;
+	--dark-blue: #20293a;
+	--violet: #6466e9;
+	--light-violet: rgba(168, 180, 246, 0.5);
+	--dark-violet: #4138c2;
+	--error: #b91c1c;
+	--danger: #dd524c;
+	--success: #15803d;
 
 	font-family: Inter, sans-serif;
 
@@ -27,8 +27,8 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 :root.light-mode {
-	background-color: var(--color-light-2);
-	--content-color: var(--color-black-1);
+	background-color: var(--light-2);
+	--content-color: var(--black-1);
 	--shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.1);
 	--shadow-sm: 1px 2px 4px rgba(0, 0, 0, 0.1);
 	--shadow-md: 1.5px 3px 6px rgba(0, 0, 0, 0.1);
@@ -36,7 +36,7 @@
 }
 :root.dark-mode {
 	background-color: var(--color-black-2);
-	--content-color: var(--color-light-1);
+	--content-color: var(--light-1);
 	--shadow-xs: 0 1px 2px rgba(255, 255, 255, 0.1);
 	--shadow-sm: 1px 2px 4px rgba(255, 255, 255, 0.1);
 	--shadow-md: 1.5px 3px 6px rgba(255, 255, 255, 0.1);
@@ -54,6 +54,7 @@ html {
 	font-weight: 400;
 	font-size: 15px;
 	letter-spacing: 0.5px;
+	margin: 1rem;
 	box-sizing: border-box;
 }
 
