@@ -26,19 +26,6 @@
 	font-size: 14px;
 }
 
-.searchButton {
-	border: none;
-	background-color: #ddd;
-	padding: 8px;
-	border-radius: 4px;
-	cursor: pointer;
-}
-
-.searchButton i {
-	color: #333;
-	font-size: 18px;
-}
-
 .searchContainer.left-icon {
 	flex-direction: row-reverse;
 }

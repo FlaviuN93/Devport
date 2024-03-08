@@ -20,8 +20,8 @@ const Password: FC<PasswordProps> = ({
 	onChange,
 	disabled = false,
 	placeholder,
-	labelStyles,
-	passwordStyles,
+	labelStyles = '',
+	passwordStyles = '',
 	label,
 	name,
 	register,
@@ -47,7 +47,7 @@ const Password: FC<PasswordProps> = ({
 			<input
 				name={name}
 				className={passwordClasses}
-				id={label}
+				id={uniqueId}
 				placeholder={placeholder}
 				ref={() => register(name)}
 				aria-placeholder={placeholder}

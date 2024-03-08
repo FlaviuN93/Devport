@@ -1,72 +1,70 @@
-import { ChangeEvent, FC, useId, useState } from 'react'
+import { ChangeEvent, FC, ReactNode, useId, useRef, useEffect, useState } from 'react'
 import { TailwindClasses } from '../types'
-import textStyles from './Input.module.css'
-import Button from '../Button'
-import { EyeIcon } from '@heroicons/react/16/solid'
+import { motion } from 'framer-motion'
+import styles from './File.module.css'
 
-export interface PasswordProps {
-	onChange: (value: string) => void
+export interface FileProps {
+	onChange: (value: File) => void
 	register: (name: string) => void
 	name: string
-	placeholder: string
-	disabled?: boolean
+	buttonText: string
 	label?: string
-	showPasswordButton?: boolean
+	icon?: ReactNode
+	fileStyles?: TailwindClasses
 	labelStyles?: TailwindClasses
-	passwordStyles?: TailwindClasses
 }
 
-const Password: FC<PasswordProps> = ({
+const File: FC<FileProps> = ({
 	onChange,
-	disabled = false,
-	placeholder,
-	labelStyles,
-	passwordStyles,
-	label,
+	fileStyles = '',
 	name,
+	labelStyles = '',
+	label,
+	buttonText,
+	icon,
 	register,
-	showPasswordButton = false,
 }) => {
-	const [showPassword, setShowPassword] = useState(false)
 	const uniqueId = useId()
+	const divRef = useRef<HTMLDivElement>(null)
+	const [size, setSize] = useState({ width: '0', height: '0' })
 
-	const handleTogglePassword = () => setShowPassword(!showPassword)
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) => !disabled && onChange(e.target.value)
+	useEffect(() => {
+		const width = `${divRef.current?.offsetWidth}px`
+		const height = `${divRef.current?.offsetHeight}px`
+		setSize({
+			width,
+			height,
+		})
+	}, [size.width, size.height])
 
-	const labelClasses = `${textStyles.label} ${labelStyles}`
-	const passwordClasses = `${textStyles.input} ${passwordStyles}`
+	const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
+		e.target.files && onChange(e.target.files[0])
+
+	const fileClasses = `${styles.fileButton} ${fileStyles}`
+	const labelClasses = `${styles.label} ${labelStyles}`
 
 	return (
-		<div>
-			<div>
-				<label className={labelClasses} htmlFor={label} aria-label={label}>
-					{label}
-				</label>
-
-				<input
+		<div className={styles.fileContainer}>
+			<label className={labelClasses} htmlFor={label}>
+				{label}
+			</label>
+			<div className={fileClasses} ref={divRef} role='button' tabIndex={0}>
+				{icon && <span className='mr-1.5'>{icon}</span>}
+				<span className='font-medium'>{buttonText}</span>
+				<motion.input
+					variants={size}
+					animate={size}
 					name={name}
-					className={passwordClasses}
-					id={label}
-					placeholder={placeholder}
+					className='absolute opacity-0'
+					id={uniqueId}
 					ref={() => register(name)}
-					aria-placeholder={placeholder}
 					aria-describedby={`${uniqueId}-${name}`}
-					type={showPassword ? 'text' : 'password'}
-					disabled={disabled}
-					aria-disabled={disabled ? 'true' : 'false'}
+					type='file'
 					onChange={handleChange}
 				/>
 			</div>
-			{showPasswordButton && (
-				<Button
-					icon={<EyeIcon className='h-6 w-6' />}
-					onClick={handleTogglePassword}
-					type='text'
-					size='small'
-				/>
-			)}
 		</div>
 	)
 }
 
-export default Password
+export default File

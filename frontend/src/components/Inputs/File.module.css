@@ -1,0 +1,36 @@
+.fileContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin: 10px 0;
+}
+
+.fileButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0.5rem 1rem;
+	background-color: rgba(255, 255, 255, 0.6);
+	border-radius: 10px;
+	box-shadow: var(--shadow-xs);
+	color: var(--black-1);
+
+	transition: all 0.2s ease;
+}
+
+.fileButton:hover,
+.fileButton:active {
+	box-shadow: var(--shadow-sm);
+	background-color: rgba(255, 255, 255, 0.7);
+}
+
+.fileButton:focus {
+	outline: none;
+}
+
+.label {
+	font-size: 1rem;
+	margin-bottom: 5px;
+	color: var(--black-1);
+	font-weight: 500;
+}

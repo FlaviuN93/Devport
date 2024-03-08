@@ -2,7 +2,7 @@ import { FC, MouseEvent, ReactNode } from 'react'
 import { TailwindClasses, tButtonType, tSize } from './types'
 import styles from './Button.module.css'
 
-interface IProps {
+interface ButtonProps {
 	onClick: (event: MouseEvent) => void
 	buttonText?: string
 	size: tSize
@@ -15,7 +15,7 @@ interface IProps {
 	buttonStyles?: TailwindClasses
 }
 
-const Button: FC<IProps> = ({
+const Button: FC<ButtonProps> = ({
 	disabled = false,
 	size,
 	onClick,

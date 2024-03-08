@@ -18,7 +18,7 @@ export interface SearchProps {
 const Search: FC<SearchProps> = ({
 	onSearch,
 	placeholder,
-	searchStyles,
+	searchStyles = '',
 	name,
 	iconPos = 'right',
 	minLength = 3,
@@ -31,7 +31,7 @@ const Search: FC<SearchProps> = ({
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSearch()
 
-	const buttonClasses = `bg-white/40 shadow-xs border-0.5 border-solid border-[--light-gray] focus:shadow-sm py-2 px-2 hover:bg-white/50 ${
+	const buttonClasses = `bg-white/40 shadow-xs border border-solid border-[--light-gray] focus:shadow-sm py-2 px-2 hover:bg-white/50 ${
 		iconPos === 'right' ? disableRadiusLeft : disableRadiusRight
 	}`
 	const searchClasses = `${styles.searchInput} ${searchStyles}  ${

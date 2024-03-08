@@ -1,7 +1,6 @@
 import Button from '../components/Button'
 import Card from '../components/Card'
 import Avatar from '../components/Avatar'
-import Textarea from '../components/Textarea'
 import Menu from '../components/Menu'
 import PageNav from '../components/PageNav'
 import Form from '../components/Form'
@@ -13,6 +12,8 @@ import Text from '../components/Inputs/Text'
 import { useForm } from 'react-hook-form'
 import Search from '../components/Inputs/Search'
 import Password from '../components/Inputs/Password'
+import File from '../components/Inputs/File'
+import UploadIcon from '../assets/upload.svg?react'
 // import FileInput from '../components/Input/FileInput'
 
 export default function HomePage() {
@@ -58,7 +59,7 @@ export default function HomePage() {
 				name='password'
 				register={register}
 			/>
-			{/* <Password/> */}
+
 			<Search
 				onSearch={(value) => console.log(value, 'helloFromInput')}
 				placeholder='Search for values'
@@ -74,12 +75,30 @@ export default function HomePage() {
 				showPasswordBtn={true}
 			/>
 
-			<Textarea />
+			<File
+				onChange={(value) => console.log(value, 'helloFromInput')}
+				label='Sign In'
+				name='file'
+				buttonText='Upload'
+				icon={<UploadIcon />}
+				register={register}
+			/>
+
+			<File
+				onChange={(value) => console.log(value, 'helloFromInput')}
+				label='Sign In'
+				name='file'
+				buttonText='Upload Image'
+				icon={<UploadIcon />}
+				register={register}
+			/>
+
 			<Avatar />
-			<Cover />
-			<Form />
+			<Avatar avatarType='secondary' />
 			<Card />
+			<Form />
 			<Menu />
+			<Cover />
 			<PageNav />
 		</div>
 	)
