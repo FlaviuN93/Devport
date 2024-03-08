@@ -1,5 +1,4 @@
 import Button from '../components/Button'
-import Card from '../components/Card'
 import Avatar from '../components/Avatar'
 import Menu from '../components/Menu'
 import PageNav from '../components/PageNav'
@@ -14,6 +13,7 @@ import Search from '../components/Inputs/Search'
 import Password from '../components/Inputs/Password'
 import File from '../components/Inputs/File'
 import UploadIcon from '../assets/upload.svg?react'
+import ProjectCard from '../components/ProjectCard'
 // import FileInput from '../components/Input/FileInput'
 
 export default function HomePage() {
@@ -95,7 +95,12 @@ export default function HomePage() {
 
 			<Avatar />
 			<Avatar avatarType='secondary' />
-			<Card />
+			<ProjectCard
+				demoUrl='https://www.google.com'
+				repositoryUrl='https://www.google.com'
+				title='Music Player'
+				description='I was Junior Front-End Developers,who are responsible for implementing visual and interactive elements that users see and interact with in a web application. '
+			/>
 			<Form />
 			<Menu />
 			<Cover />

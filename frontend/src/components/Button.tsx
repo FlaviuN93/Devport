@@ -3,14 +3,14 @@ import { TailwindClasses, tButtonType, tSize } from './types'
 import styles from './Button.module.css'
 
 interface ButtonProps {
-	onClick: (event: MouseEvent) => void
-	buttonText?: string
 	size: tSize
+	buttonText?: string
+	onClick?: (event: MouseEvent) => void
 	type?: tButtonType
-	pressed?: boolean
 	disabled?: boolean
 	danger?: boolean
 	icon?: ReactNode
+	iconPos?: 'left' | 'right'
 	isLoading?: boolean
 	buttonStyles?: TailwindClasses
 }
@@ -23,15 +23,15 @@ const Button: FC<ButtonProps> = ({
 	buttonText,
 	danger = false,
 	isLoading = false,
-	pressed = false,
-	type = 'primary',
+	type,
+	iconPos = 'left',
 	buttonStyles,
 }) => {
-	const buttonClasses = `${styles.button} ${styles[size]} ${styles[type]} ${danger && styles.danger} ${
-		isLoading && styles.loading
-	} ${buttonStyles} 
+	const buttonClasses = `${styles.button} ${styles[size]} ${type && styles[type]} ${
+		danger && styles.danger
+	} ${isLoading && styles.loading} ${buttonStyles} 
 	`
-
+	let pressed = false
 	const handleClick = (event: MouseEvent) => {
 		if (!disabled && onClick) {
 			pressed = true
@@ -51,8 +51,9 @@ const Button: FC<ButtonProps> = ({
 				<span className={styles.spinner}></span>
 			) : (
 				<>
-					{icon && <span className='mr-2'>{icon}</span>}
+					{icon && iconPos === 'left' && <span className='mr-2'>{icon}</span>}
 					<span>{buttonText}</span>
+					{icon && iconPos === 'right' && <span className='ml-2'>{icon}</span>}
 				</>
 			)}
 		</button>

@@ -1,9 +1,9 @@
 .button {
 	padding: 0.5rem 1.2rem;
-	border: none;
-	border-radius: 6px;
+	border: 1px solid var(--light-gray);
+	border-radius: 8px;
 	box-shadow: var(--shadow-sm);
-	color: var(--light-2);
+	color: var(--gray);
 	cursor: pointer;
 	display: inline-flex;
 	align-items: center;

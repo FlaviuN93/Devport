@@ -52,7 +52,6 @@ const File: FC<FileProps> = ({
 				{icon && <span className='mr-1.5'>{icon}</span>}
 				<span className='font-medium'>{buttonText}</span>
 				<motion.input
-					variants={size}
 					animate={size}
 					name={name}
 					className='absolute opacity-0'
