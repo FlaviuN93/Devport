@@ -99,7 +99,7 @@ export default function HomePage() {
 				demoUrl='https://www.google.com'
 				repositoryUrl='https://www.google.com'
 				title='Music Player'
-				description='I was Junior Front-End Developers,who are responsible for implementing visual and interactive elements that users see and interact with in a web application. '
+				description='I was Junior Front-End Developers,who are responsible for implementing visual and interactive elements that users see and interact with in a web users see and interact with in a web users see and interact with in a web'
 			/>
 			<Form />
 			<Menu />

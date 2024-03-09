@@ -2,21 +2,24 @@
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	width: 100%;
 	border: 1px solid var(--light-gray-2);
 	border-radius: 6px;
-	padding: 1rem;
-}
-
-.cardImage {
-	width: 75%;
-	height: 75%;
+	padding: 0.75rem;
+	width: 100%;
 }
 
 .articleContainer {
 	text-align: start;
 	font-size: 0.875rem;
-	margin-bottom: 15px;
+	margin-bottom: 1rem;
+}
+
+.articleTitle {
+	margin-bottom: 0.5rem;
+}
+
+.cardImage {
+	aspect-ratio: 16/9;
 }
 
 .articleDescription {
@@ -26,4 +29,36 @@
 .buttonContainer {
 	display: flex;
 	gap: 15px;
+	margin-bottom: 0.25rem;
+}
+
+@media (min-width: 640px) {
+	.cardContainer {
+		flex-direction: row;
+		gap: 1.5rem;
+		max-width: 720px;
+		min-width: 600px;
+	}
+
+	.contentContainer {
+		min-width: calc(0.6 * (100% - 2 * 0.75rem));
+	}
+
+	.cardImage {
+		min-width: 40%;
+	}
+}
+
+@media (min-width: 768px) {
+	.cardContainer {
+		min-width: 720px;
+	}
+	.contentContainer {
+		min-width: calc(0.65 * (100% - 2 * 0.75rem));
+	}
+
+	.cardImage {
+		min-width: 35%;
+		aspect-ratio: 14/9;
+	}
 }
