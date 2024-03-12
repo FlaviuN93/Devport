@@ -2,7 +2,6 @@ import Button from '../components/Button'
 import Avatar from '../components/Avatar'
 import Menu from '../components/Menu'
 import PageNav from '../components/PageNav'
-import Form from '../components/Form'
 import Cover from '../components/Cover'
 import Plus1 from '../assets/Plus-1.svg?react'
 import Plus from '../assets/Plus.svg?react'
@@ -14,7 +13,6 @@ import Password from '../components/Inputs/Password'
 import File from '../components/Inputs/File'
 import UploadIcon from '../assets/upload.svg?react'
 import ProjectCard from '../components/ProjectCard'
-// import FileInput from '../components/Input/FileInput'
 
 export default function HomePage() {
 	const { register } = useForm()
@@ -101,7 +99,7 @@ export default function HomePage() {
 				title='Music Player'
 				description='I was Junior Front-End Developers,who are responsible for implementing visual and interactive elements that users see and interact with in a web users see and interact with in a web users see and interact with in a web'
 			/>
-			<Form />
+
 			<Menu />
 			<Cover />
 			<PageNav />
