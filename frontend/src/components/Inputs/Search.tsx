@@ -1,6 +1,6 @@
 import { ChangeEvent, FC, KeyboardEvent, useId, useState } from 'react'
 import { TailwindClasses } from '../types'
-import Button from '../Button'
+import Button from '../UI/Button'
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid'
 import styles from './Search.module.css'
 import { disableRadiusLeft, disableRadiusRight } from '../../utils/variables'

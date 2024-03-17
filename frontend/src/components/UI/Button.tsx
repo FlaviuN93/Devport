@@ -1,5 +1,5 @@
 import { FC, MouseEvent, ReactNode } from 'react'
-import { TailwindClasses, tButtonType, tSize } from './types'
+import { TailwindClasses, tButtonType, tSize } from '../types'
 import styles from './Button.module.css'
 
 interface ButtonProps {

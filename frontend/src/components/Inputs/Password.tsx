@@ -1,7 +1,7 @@
 import { ChangeEvent, FC, useId, useState } from 'react'
 import { TailwindClasses } from '../types'
 import styles from './Text.module.css'
-import Button from '../Button'
+import Button from '../UI/Button'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/16/solid'
 
 export interface PasswordProps {

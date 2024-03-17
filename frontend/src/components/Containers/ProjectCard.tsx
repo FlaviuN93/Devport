@@ -1,6 +1,6 @@
 import { FC, MouseEvent } from 'react'
 import styles from './ProjectCard.module.css'
-import Button from './Button'
+import Button from '../UI/Button'
 import { ArrowTopRightOnSquareIcon, PencilIcon, PhotoIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 
