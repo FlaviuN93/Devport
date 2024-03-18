@@ -23,21 +23,6 @@
 	transform: translate(0);
 }
 
-.small {
-	padding: 0.5rem 0.8rem;
-	font-size: 14px;
-	font-weight: 500;
-}
-
-.large {
-	padding: 0.5rem 1.6rem;
-}
-
-.auto {
-	padding: 0.5rem 1.6rem;
-	min-width: 100%;
-}
-
 .disabled {
 	opacity: 0.5;
 	cursor: default;
@@ -74,6 +59,8 @@
 }
 
 .primary {
+	font-size: 14px;
+	font-weight: 500;
 	background-color: var(--violet);
 	color: var(--light-1);
 }
@@ -82,11 +69,6 @@
 	background-color: var(--light-violet);
 	color: var(--dark-violet);
 	justify-content: start;
-	font-weight: 500;
-}
-
-.danger {
-	color: var(--danger);
 	font-weight: 500;
 }
 

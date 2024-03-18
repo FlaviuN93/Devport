@@ -1,14 +1,12 @@
 import { FC, MouseEvent, ReactNode } from 'react'
-import { TailwindClasses, tButtonType, tSize } from '../types'
+import { TailwindClasses, tButtonType } from '../types'
 import styles from './Button.module.css'
 
 interface ButtonProps {
-	size: tSize
-	buttonText?: string
-	onClick?: (event: MouseEvent) => void
+	onClick: (event: MouseEvent) => void
 	type?: tButtonType
+	buttonText?: string
 	disabled?: boolean
-	danger?: boolean
 	icon?: ReactNode
 	iconPos?: 'left' | 'right'
 	isLoading?: boolean
@@ -17,19 +15,17 @@ interface ButtonProps {
 
 const Button: FC<ButtonProps> = ({
 	disabled = false,
-	size,
 	onClick,
 	icon,
 	buttonText,
-	danger = false,
 	isLoading = false,
 	type,
 	iconPos = 'left',
 	buttonStyles,
 }) => {
-	const buttonClasses = `${styles.button} ${styles[size]} ${type && styles[type]} ${
-		danger && styles.danger
-	} ${isLoading && styles.loading} ${buttonStyles} 
+	const buttonClasses = `${styles.button} ${type && styles[type]} ${
+		isLoading && styles.loading
+	} ${buttonStyles} 
 	`
 	let pressed = false
 	const handleClick = (event: MouseEvent) => {

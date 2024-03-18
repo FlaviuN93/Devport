@@ -86,6 +86,17 @@ h4 {
 	font-size: 1.25rem;
 }
 
+h5 {
+	font-size: 0.875rem;
+	font-weight: 500;
+}
+
+h6 {
+	font-size: 0.8rem;
+	line-height: 1.5;
+	color: var(--gray);
+}
+
 @media (min-width: 640px) {
 	h4 {
 		font-size: 1.1rem;

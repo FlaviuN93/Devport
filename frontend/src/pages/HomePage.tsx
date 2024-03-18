@@ -12,39 +12,67 @@ import Password from '../components/Inputs/Password'
 import File from '../components/Inputs/File'
 import UploadIcon from '../assets/upload.svg?react'
 import ProjectCard from '../components/Containers/ProjectCard'
-import { useEffect, useState } from 'react'
-import Dropdown from '../components/UI/Dropdown'
+import {
+	Dropdown,
+	DropdownDivider,
+	DropdownItem,
+	DropdownMenu,
+	DropdownToggle,
+} from '../components/UI/Dropdown'
+import { useId } from 'react'
+import { Link } from 'react-router-dom'
+import { UserCircleIcon } from '@heroicons/react/24/outline'
 
 export default function HomePage() {
 	const { register } = useForm()
-	const [toggle, setToggle] = useState(false)
-
-	useEffect(() => {
-		console.log(toggle)
-	}, [toggle])
+	const uniqueId = useId()
 
 	return (
 		<div>
-			<div className='relative'>
-				<Avatar
-					role='button'
-					isOpen={toggle}
-					onClick={(value) => setToggle(value)}
-					icon={<Plus className='h-6 w-6' />}
-				/>
-				<Dropdown position='top'>
-					<div className='flex'>
-						<Avatar icon={<Plus className='h-6 w-6' />} />
-						<div>
-							<h4>Tyler Johnson</h4>
-							<p>tyler.johnson@gmail.com</p>
+			<Dropdown>
+				<DropdownToggle type='avatar' icon={<Plus className='h-6 w-6' />} />
+				<DropdownMenu>
+					<DropdownItem key={uniqueId}>
+						<Avatar icon={<Plus className='h-6 w-6' />} avatarStyles='w-10 h-10' />
+						<div className='text-start -mt-1'>
+							<h5>Tyler Johnson</h5>
+							<p className='text-xs text-gray'>tyler.johnson@gmail.com</p>
 						</div>
+					</DropdownItem>
+					<DropdownDivider />
+					<div>
+						<h6 className='text-start mb-3'>Account</h6>
+						<Link to={'/home'}>
+							<DropdownItem>
+								<UserCircleIcon className='h-6 w-6' />
+								<span>Profile Settings</span>
+							</DropdownItem>
+						</Link>
+						<Link to={'/home'}>
+							<DropdownItem>
+								<UserCircleIcon className='h-6 w-6' />
+								<span>Project Settings</span>
+							</DropdownItem>
+						</Link>
+						<Link to={'/home'}>
+							<DropdownItem>
+								<UserCircleIcon className='h-6 w-6' />
+								<span>My Portofolio</span>
+							</DropdownItem>
+						</Link>
 					</div>
-				</Dropdown>
-			</div>
+					<DropdownDivider />
+
+					<Link to={'/home'}>
+						<DropdownItem>
+							<UserCircleIcon className='h-6 w-6' />
+							<span>Logout</span>
+						</DropdownItem>
+					</Link>
+				</DropdownMenu>
+			</Dropdown>
 			<Button
 				buttonText='Add'
-				size='small'
 				icon={<Plus1 />}
 				type='primary'
 				onClick={(e) => console.log(e, 'hellofromEvent')}
@@ -52,7 +80,6 @@ export default function HomePage() {
 
 			<Button
 				buttonText='Add Project'
-				size='auto'
 				icon={<Plus />}
 				type='secondary'
 				onClick={(e) => console.log(e, 'hellofromEvent')}
@@ -61,14 +88,11 @@ export default function HomePage() {
 			<Button
 				buttonText='Delete Image'
 				icon={<Trash />}
-				danger={true}
-				size='small'
 				onClick={(e) => console.log(e, 'hellofromEvent')}
 			/>
 			<Button
 				buttonText='Create an account'
 				type='text'
-				size='small'
 				onClick={(e) => console.log(e, 'hellofromEvent')}
 			/>
 

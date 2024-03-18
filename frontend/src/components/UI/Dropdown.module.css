@@ -1,14 +1,29 @@
-.dropdownContent {
+.menu {
 	position: absolute;
-	background-color: var(--gray-1);
+	background-color: var(--light-1);
 	box-shadow: var(--shadow-sm);
 	padding: 1rem;
-	width: 100%;
-	height: 100%;
-	border-radius: 4px;
+	border-radius: 8px;
 	z-index: 10;
 }
 
+.item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+}
+
+.item:not(:last-child) {
+	margin-bottom: 0.75rem;
+}
+
+.divider {
+	margin: 1rem -1rem;
+	color: var(--light-2);
+}
+/* 
 .top {
 	top: 100%;
 	left: 0;
@@ -28,7 +43,7 @@
 	top: 0;
 	right: 100%;
 }
-
+*/
 .center {
 	top: 50%;
 	left: 50%;
