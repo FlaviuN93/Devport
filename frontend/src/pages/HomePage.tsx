@@ -145,7 +145,6 @@ export default function HomePage() {
 				description='I was Junior Front-End Developers, who are responsible for implementing visual and interactive elements that users see and interact with in a web users see and interact with in a web users see and interact with in a web'
 			/>
 
-			{/* <Menu /> */}
 			<Cover />
 			<PageNav />
 		</div>

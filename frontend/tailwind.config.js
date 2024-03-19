@@ -5,6 +5,8 @@ export default {
 		extend: {
 			colors: {
 				gray: '#677489',
+				darkBlue: '#20293a',
+				violet: '#6466e9',
 			},
 		},
 	},

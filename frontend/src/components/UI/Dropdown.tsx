@@ -7,11 +7,10 @@ import { useDropdownContext } from '../../contexts/contextHooks'
 import { DropdownProvider } from '../../contexts/DropdownContext'
 
 interface ToggleProps {
-	type?: 'avatar' | 'button'
-	btnStyles?: TailwindClasses
 	imageUrl?: string
 	icon?: ReactNode
 	buttonText?: string
+	btnStyles?: TailwindClasses
 }
 
 interface MenuProps {

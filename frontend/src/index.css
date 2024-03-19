@@ -44,28 +44,24 @@
 	--shadow-lg: 4px 1.2rem 2.4rem rgba(255, 255, 255, 0.1);
 }
 
-* {
+html {
+	box-sizing: border-box;
 	margin: 0;
 	padding: 0;
-	box-sizing: inherit;
-}
-
-html {
 	line-height: 1.5;
 	font-weight: 400;
 	font-size: 15px;
 	letter-spacing: 0.5px;
-	margin: 1rem;
-	box-sizing: border-box;
 }
 
 body {
+	container-type: inline-size;
+	overflow: auto;
 	display: flex;
 	place-items: center;
 	min-width: 320px;
 	min-height: 100vh;
 	text-align: center;
-	margin: 0 auto;
 }
 
 h1 {

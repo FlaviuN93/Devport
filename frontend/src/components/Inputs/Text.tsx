@@ -6,8 +6,8 @@ export interface TextProps {
 	onChange: (value: string) => void
 	register: (name: string) => void
 	name: string
-	type: 'input' | 'textarea'
 	placeholder: string
+	type?: 'input' | 'textarea'
 	label?: string
 	value?: string
 	disabled?: boolean
@@ -27,7 +27,7 @@ const Text: FC<TextProps> = ({
 	label,
 	register,
 	name,
-	type,
+	type = 'input',
 	rows,
 	cols,
 }) => {
