@@ -13,39 +13,64 @@
 	gap: 0.5rem;
 	font-size: 0.875rem;
 	font-weight: 500;
+	margin-bottom: 0.75rem;
+	cursor: pointer;
 }
 
-.item:not(:last-child) {
-	margin-bottom: 0.75rem;
+.active {
+	transition: all 0.2s ease-in;
+	text-decoration: underline;
+	background-color: var(--light-2);
+	border-radius: 4px;
+}
+
+.dropdownToggle {
+	padding: 0.5rem 0.8rem;
+	border: 1px solid var(--light-gray);
+	border-radius: 8px;
+	box-shadow: var(--shadow-sm);
+	color: var(--gray);
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 2.5rem;
+}
+
+.toggleImage {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
 }
 
 .divider {
 	margin: 1rem -1rem;
 	color: var(--light-2);
 }
-/* 
+
 .top {
-	top: 100%;
-	left: 0;
+	bottom: 100%;
+	right: 0;
+	margin-bottom: 2px;
 }
 
 .right {
-	top: 0;
+	bottom: 20%;
 	left: 100%;
+	transform: translateY(50%);
+	margin-left: 2px;
 }
 
 .bottom {
 	top: 100%;
-	left: 0;
+	right: 0;
+	margin-top: 2px;
 }
 
 .left {
-	top: 0;
+	bottom: 20%;
 	right: 100%;
-}
-*/
-.center {
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
+	margin-right: 2px;
+	transform: translateY(50%);
 }

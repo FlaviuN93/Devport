@@ -4,36 +4,38 @@ interface DropdownContextType {
 	isOpen: boolean
 	handleClose: () => void
 	handleToggle: () => void
-	menuRef: RefObject<HTMLElement> | null
-	dropdownBtnRef: RefObject<HTMLElement> | null
+	menuRef: RefObject<HTMLDivElement>
+	dropdownBtnRef: RefObject<HTMLButtonElement>
+	selectedItemId: string | null
+	handleSelect: (itemId: string) => void
 }
 
-const defaultContext: DropdownContextType = {
-	isOpen: false,
-	handleClose: () => {},
-	handleToggle: () => {},
-	menuRef: null,
-	dropdownBtnRef: null,
-}
-
-export const DropdownContext = createContext<DropdownContextType | undefined>(defaultContext)
+export const DropdownContext = createContext<DropdownContextType>({} as DropdownContextType)
 
 export const DropdownProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [isOpen, setIsOpen] = useState(false)
-	const menuRef = useRef(null)
-	const dropdownBtnRef = useRef(null)
+	const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
+	const menuRef = useRef<HTMLDivElement>(null)
+	const dropdownBtnRef = useRef<HTMLButtonElement>(null)
 
-	const handleClose = () => {
-		console.log('false')
-		setIsOpen(false)
-	}
-	const handleToggle = () => {
-		console.log('hello')
-		setIsOpen(!isOpen)
-	}
+	const handleSelect = (itemId: string) => setSelectedItemId(itemId)
+
+	const handleClose = () => setIsOpen(false)
+
+	const handleToggle = () => setIsOpen(!isOpen)
 
 	return (
-		<DropdownContext.Provider value={{ isOpen, handleClose, handleToggle, menuRef, dropdownBtnRef }}>
+		<DropdownContext.Provider
+			value={{
+				isOpen,
+				handleClose,
+				handleToggle,
+				menuRef,
+				dropdownBtnRef,
+				selectedItemId,
+				handleSelect,
+			}}
+		>
 			{children}
 		</DropdownContext.Provider>
 	)

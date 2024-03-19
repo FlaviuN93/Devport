@@ -8,10 +8,10 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	min-width: 3rem;
 	transition: all 0.2s ease-in-out;
 	transform: translate(-1px);
 	overflow: hidden;
-	min-width: 4rem;
 }
 
 .button:focus {

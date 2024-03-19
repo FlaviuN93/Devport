@@ -1,47 +1,49 @@
-import React, { FC, ReactNode, useRef } from 'react'
+import React, { FC, ReactNode } from 'react'
 import { TailwindClasses, tPositions } from '../types'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import styles from './Dropdown.module.css'
 import { useDropdownContext } from '../../contexts/contextHooks'
-import Button from './Button'
-import Avatar from './Avatar'
+
 import { DropdownProvider } from '../../contexts/DropdownContext'
 
 interface ToggleProps {
 	type?: 'avatar' | 'button'
-	styles?: TailwindClasses
+	btnStyles?: TailwindClasses
 	imageUrl?: string
-	iconPos?: 'left' | 'right'
 	icon?: ReactNode
 	buttonText?: string
 }
 
 interface MenuProps {
-	position?: tPositions
+	position: tPositions
 	children: ReactNode
 	menuStyles?: TailwindClasses
 }
 
 interface ItemProps {
+	itemId: string
 	children: ReactNode
 	itemStyles?: TailwindClasses
 }
 
 const Dropdown: FC<{ children: ReactNode }> = ({ children }) => {
-	return <DropdownProvider>{children}</DropdownProvider>
+	return (
+		<DropdownProvider>
+			<div className='relative w-min min-w-10'>{children}</div>
+		</DropdownProvider>
+	)
 }
 
-const DropdownMenu: FC<MenuProps> = ({ children, position = 'center' }) => {
-	const { isOpen, handleClose } = useDropdownContext()
-
-	useOutsideClick(dropdownRef, handleClose)
+const DropdownMenu: FC<MenuProps> = ({ children, position = 'bottom' }) => {
+	const { isOpen, handleClose, menuRef, dropdownBtnRef } = useDropdownContext()
+	useOutsideClick(menuRef, handleClose, dropdownBtnRef)
 
 	const menuClasses = `${styles.menu} ${styles[position]}`
 
 	return (
 		<>
 			{isOpen && (
-				<div ref={dropdownRef} className={menuClasses}>
+				<div ref={menuRef} className={menuClasses}>
 					{children}
 				</div>
 			)}
@@ -49,45 +51,40 @@ const DropdownMenu: FC<MenuProps> = ({ children, position = 'center' }) => {
 	)
 }
 
-const DropdownToggle: FC<ToggleProps> = ({
-	type = 'button',
-	styles,
-	buttonText,
-	icon,
-	iconPos,
-	imageUrl,
-}) => {
-	const { handleToggle } = useDropdownContext()
+const DropdownToggle: FC<ToggleProps> = ({ btnStyles = '', buttonText, icon, imageUrl }) => {
+	const { handleToggle, dropdownBtnRef } = useDropdownContext()
+
+	const buttonClasses = `${styles.dropdownToggle} ${btnStyles}`
+	const iconClasses = `${icon && buttonText && 'ml-2'}`
 
 	return (
-		<div className='relative' id='dropdownToggle'>
-			{type === 'button' ? (
-				<Button
-					buttonText={buttonText}
-					icon={icon}
-					iconPos={iconPos}
-					onClick={() => {}}
-					buttonStyles={styles}
-				/>
+		<button ref={dropdownBtnRef} className={buttonClasses} onClick={handleToggle}>
+			{imageUrl ? (
+				<img src={imageUrl} className={styles.toggleImage} alt='Avatar' />
 			) : (
-				<Avatar
-					imageUrl={imageUrl}
-					icon={icon}
-					role='button'
-					onClick={handleToggle}
-					avatarStyles={styles}
-				/>
+				<>
+					<span>{buttonText}</span>
+					{icon && <span className={iconClasses}>{icon}</span>}
+				</>
 			)}
+		</button>
+	)
+}
+
+const DropdownItem: FC<ItemProps> = ({ children, itemStyles = '', itemId }) => {
+	const { selectedItemId, handleSelect } = useDropdownContext()
+	const itemClasses = `${styles.item} ${itemStyles} ${selectedItemId === itemId ? styles.active : ''}`
+
+	const handleClick = () => itemId && handleSelect(itemId)
+
+	return (
+		<div className={itemClasses} onClick={handleClick}>
+			{children}
 		</div>
 	)
 }
 
-const DropdownItem: FC<ItemProps> = ({ children, itemStyles }) => {
-	const itemClasses = `${styles.item} ${itemStyles}`
-	return <div className={itemClasses}>{children}</div>
-}
-
-const DropdownDivider: FC<{ dividerStyles?: TailwindClasses }> = ({ dividerStyles }) => {
+const DropdownDivider: FC<{ dividerStyles?: TailwindClasses }> = ({ dividerStyles = '' }) => {
 	const dividerClasses = `${styles.divider} ${dividerStyles}`
 	return <hr className={dividerClasses} />
 }

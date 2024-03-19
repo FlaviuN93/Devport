@@ -27,6 +27,9 @@ const Button: FC<ButtonProps> = ({
 		isLoading && styles.loading
 	} ${buttonStyles} 
 	`
+	const iconClasses = `${icon && iconPos === 'left' && buttonText && 'mr-2'} ${
+		icon && iconPos === 'right' && buttonText && 'ml-2'
+	}`
 	let pressed = false
 	const handleClick = (event: MouseEvent) => {
 		if (!disabled && onClick) {
@@ -47,9 +50,9 @@ const Button: FC<ButtonProps> = ({
 				<span className={styles.spinner}></span>
 			) : (
 				<>
-					{icon && iconPos === 'left' && <span className='mr-2'>{icon}</span>}
+					{icon && iconPos === 'left' && <span className={iconClasses}>{icon}</span>}
 					<span>{buttonText}</span>
-					{icon && iconPos === 'right' && <span className='ml-2'>{icon}</span>}
+					{icon && iconPos === 'right' && <span className={iconClasses}>{icon}</span>}
 				</>
 			)}
 		</button>

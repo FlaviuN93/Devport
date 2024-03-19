@@ -19,20 +19,18 @@ import {
 	DropdownMenu,
 	DropdownToggle,
 } from '../components/UI/Dropdown'
-import { useId } from 'react'
 import { Link } from 'react-router-dom'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 
 export default function HomePage() {
 	const { register } = useForm()
-	const uniqueId = useId()
 
 	return (
-		<div>
+		<div className='pl-40 mt-40 flex flex-col'>
 			<Dropdown>
-				<DropdownToggle type='avatar' icon={<Plus className='h-6 w-6' />} />
-				<DropdownMenu>
-					<DropdownItem key={uniqueId}>
+				<DropdownToggle icon={<UserCircleIcon className='h-6 w-6' />} />
+				<DropdownMenu position='bottom'>
+					<DropdownItem itemId='1'>
 						<Avatar icon={<Plus className='h-6 w-6' />} avatarStyles='w-10 h-10' />
 						<div className='text-start -mt-1'>
 							<h5>Tyler Johnson</h5>
@@ -43,19 +41,19 @@ export default function HomePage() {
 					<div>
 						<h6 className='text-start mb-3'>Account</h6>
 						<Link to={'/home'}>
-							<DropdownItem>
+							<DropdownItem itemId='2'>
 								<UserCircleIcon className='h-6 w-6' />
 								<span>Profile Settings</span>
 							</DropdownItem>
 						</Link>
 						<Link to={'/home'}>
-							<DropdownItem>
+							<DropdownItem itemId='3'>
 								<UserCircleIcon className='h-6 w-6' />
 								<span>Project Settings</span>
 							</DropdownItem>
 						</Link>
 						<Link to={'/home'}>
-							<DropdownItem>
+							<DropdownItem itemId='4'>
 								<UserCircleIcon className='h-6 w-6' />
 								<span>My Portofolio</span>
 							</DropdownItem>
@@ -64,7 +62,7 @@ export default function HomePage() {
 					<DropdownDivider />
 
 					<Link to={'/home'}>
-						<DropdownItem>
+						<DropdownItem itemId='5' itemStyles='mb-0'>
 							<UserCircleIcon className='h-6 w-6' />
 							<span>Logout</span>
 						</DropdownItem>
