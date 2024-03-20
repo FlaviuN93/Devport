@@ -33,6 +33,7 @@
 	color: var(--violet);
 	font-size: 12px;
 	font-weight: 700;
+	padding: 0;
 	border: none;
 	box-shadow: none;
 	min-width: 0;

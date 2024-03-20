@@ -64,7 +64,6 @@ const Password: FC<PasswordProps> = ({
 					onClick={handleTogglePassword}
 					buttonStyles={buttonClasses}
 					type='text'
-					size='small'
 				/>
 			)}
 		</div>

@@ -13,7 +13,7 @@ import Login from './pages/Login'
 
 function App() {
 	return (
-		<div className='w-screen'>
+		<div className='w-screen m-4'>
 			<BrowserRouter>
 				<Routes>
 					<Route path='/home' element={<HomePage />} />
