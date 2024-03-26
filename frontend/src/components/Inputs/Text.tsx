@@ -1,80 +1,77 @@
-import { ChangeEvent, FC, useId } from 'react'
+import { useId } from 'react'
 import { TailwindClasses } from '../types'
 import styles from './Text.module.css'
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import Tooltip from '../UI/Tooltip'
 
-export interface TextProps {
-	onChange: (value: string) => void
-	register: (name: string) => void
-	name: string
+export interface TextProps<T extends FieldValues> {
+	name: Path<T>
+	register: UseFormRegister<T>
 	placeholder: string
-	type?: 'input' | 'textarea'
+	variant?: 'input' | 'textarea'
 	label?: string
-	value?: string
 	disabled?: boolean
-	labelStyles?: TailwindClasses
+	tooltipStyles?: TailwindClasses
 	textStyles?: TailwindClasses
+	error?: string
 	rows?: number
 	cols?: number
 }
 
-const Text: FC<TextProps> = ({
-	onChange,
-	disabled = false,
-	value,
-	placeholder,
-	labelStyles = '',
-	textStyles = '',
-	label,
+const Text = <T extends FieldValues>({
 	register,
 	name,
-	type = 'input',
+	disabled = false,
+	placeholder,
+	tooltipStyles = '',
+	textStyles = '',
+	label,
+	variant = 'input',
+	error,
 	rows,
 	cols,
-}) => {
-	const handleInput = (e: ChangeEvent<HTMLInputElement>) => !disabled && onChange(e.target.value)
-	const handleTextarea = (e: ChangeEvent<HTMLTextAreaElement>) => !disabled && onChange(e.target.value)
+}: TextProps<T>) => {
 	const uniqueId = useId()
 
-	const labelClasses = `${styles.label} ${labelStyles}`
-	const textClasses = `${styles.text} ${textStyles}`
+	const textClasses = `${styles.text} ${textStyles} ${error && styles.error}`
 
 	return (
 		<div className={styles.textContainer}>
-			<label className={labelClasses} htmlFor={label} aria-label={label}>
+			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>
 
-			{type === 'input' ? (
-				<input
-					name={name}
-					className={textClasses}
-					id={label}
-					ref={() => register(name)}
-					placeholder={placeholder}
-					disabled={disabled}
-					aria-placeholder={placeholder}
-					aria-describedby={`${uniqueId}-${name}`}
-					value={value}
-					type='text'
-					aria-disabled={disabled ? 'true' : 'false'}
-					onChange={handleInput}
-				/>
+			{variant === 'input' ? (
+				<div className='relative'>
+					<input
+						{...register(name)}
+						className={textClasses}
+						id={label}
+						placeholder={placeholder}
+						disabled={disabled}
+						aria-placeholder={placeholder}
+						aria-describedby={`${uniqueId}-${name}`}
+						type='text'
+						aria-disabled={disabled ? 'true' : 'false'}
+					/>
+					{error && <Tooltip content={error} />}
+				</div>
 			) : (
-				<textarea
-					name={name}
-					className={textClasses}
-					id={label}
-					disabled={disabled}
-					ref={() => register(name)}
-					placeholder={placeholder}
-					aria-placeholder={placeholder}
-					aria-describedby={`${uniqueId}-${name}`}
-					value={value}
-					aria-disabled={disabled ? 'true' : 'false'}
-					onChange={handleTextarea}
-					rows={rows}
-					cols={cols}
-				/>
+				<>
+					<textarea
+						{...register(name)}
+						className={textClasses}
+						id={label}
+						disabled={disabled}
+						placeholder={placeholder}
+						aria-placeholder={placeholder}
+						aria-describedby={`${uniqueId}-${name}`}
+						aria-disabled={disabled ? 'true' : 'false'}
+						rows={rows}
+						cols={cols}
+					/>
+					{error && <Tooltip content={error} tooltipStyles={tooltipStyles} />}
+				</>
 			)}
 		</div>
 	)

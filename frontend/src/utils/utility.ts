@@ -1,15 +1,19 @@
-import { tValidationType } from '../components/types'
+export type PasswordValidationType =
+	| 'lowerCase'
+	| 'upperCase'
+	| 'number'
+	| 'minLength'
+	| 'maxLength'
+	| 'specialChar'
 
-export const getMessageForValidation = (messageKey: tValidationType): string => {
+export const getMessageForValidation = (messageKey: PasswordValidationType): string => {
 	const validationRules = {
 		lowerCase: 'one lower case character',
 		upperCase: 'one upper case character',
 		specialChar: 'one special character',
 		number: 'one number',
 		minLength: '8 character minimum',
-		invalid: 'Invalid input',
-		email: 'Invalid email',
-		required: 'Input required',
+		maxLength: '20 caracters maximum',
 	}
 
 	return validationRules[messageKey]

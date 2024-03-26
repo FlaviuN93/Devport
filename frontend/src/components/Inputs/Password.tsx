@@ -1,71 +1,67 @@
-import { ChangeEvent, FC, useId, useState } from 'react'
+import { useCallback, useId, useState } from 'react'
 import { TailwindClasses } from '../types'
-import styles from './Text.module.css'
-import Button from '../UI/Button'
+import styles from './Password.module.css'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/16/solid'
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import Tooltip from '../UI/Tooltip'
 
-export interface PasswordProps {
-	onChange: (value: string) => void
-	register: (name: string) => void
-	name: string
+export interface PasswordProps<T extends FieldValues> {
+	register: UseFormRegister<T>
+	name: Path<T>
 	placeholder: string
 	disabled?: boolean
 	label?: string
 	showPasswordBtn?: boolean
-	labelStyles?: TailwindClasses
+	tooltipStyles?: TailwindClasses
 	passwordStyles?: TailwindClasses
+	error?: string
 }
 
-const Password: FC<PasswordProps> = ({
-	onChange,
+const Password = <T extends FieldValues>({
 	disabled = false,
 	placeholder,
-	labelStyles = '',
+	tooltipStyles = '',
 	passwordStyles = '',
 	label,
 	name,
 	register,
 	showPasswordBtn = false,
-}) => {
+	error,
+}: PasswordProps<T>) => {
 	const [showPassword, setShowPassword] = useState(false)
 	const uniqueId = useId()
 
-	const handleTogglePassword = () => setShowPassword(!showPassword)
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) => !disabled && onChange(e.target.value)
-
-	const labelClasses = `${styles.label} ${labelStyles}`
-	const passwordClasses = `${styles.text} ${passwordStyles} `
-	const passwordContainerClasses = `${styles.textContainer} relative`
-	const buttonClasses = `absolute top-[29px] right-0 px-2 py-2 text-[--gray]`
+	const handleTogglePassword = useCallback(() => setShowPassword(!showPassword), [showPassword])
+	const passwordClasses = `${styles.password} ${passwordStyles} ${error && styles.error}`
 
 	return (
-		<div className={passwordContainerClasses}>
-			<label className={labelClasses} htmlFor={label} aria-label={label}>
+		<div className={styles.passwordContainer}>
+			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>
 
-			<input
-				name={name}
-				className={passwordClasses}
-				id={uniqueId}
-				placeholder={placeholder}
-				ref={() => register(name)}
-				aria-placeholder={placeholder}
-				aria-describedby={`${uniqueId}-${name}`}
-				type={showPassword ? 'text' : 'password'}
-				disabled={disabled}
-				aria-disabled={disabled ? 'true' : 'false'}
-				onChange={handleChange}
-			/>
-
-			{showPasswordBtn && (
-				<Button
-					icon={showPassword ? <EyeIcon className='h-6 w-6' /> : <EyeSlashIcon className='h-6 w-6' />}
-					onClick={handleTogglePassword}
-					buttonStyles={buttonClasses}
-					type='text'
+			<div className='relative'>
+				<input
+					{...register(name)}
+					className={passwordClasses}
+					name={name}
+					id={uniqueId}
+					placeholder={placeholder}
+					aria-placeholder={placeholder}
+					aria-describedby={`${uniqueId}-${name}`}
+					type={showPassword ? 'text' : 'password'}
+					disabled={disabled}
+					aria-disabled={disabled ? 'true' : 'false'}
 				/>
-			)}
+
+				{showPasswordBtn && (
+					<button className={styles.passwordIcon} onClick={handleTogglePassword}>
+						{showPassword ? <EyeIcon className='h-6 w-6' /> : <EyeSlashIcon className='h-6 w-6' />}
+					</button>
+				)}
+
+				{error && <Tooltip content={error} tooltipStyles={tooltipStyles} />}
+			</div>
 		</div>
 	)
 }

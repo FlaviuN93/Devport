@@ -16,9 +16,7 @@
 	--violet: #6466e9;
 	--light-violet: rgba(168, 180, 246, 0.5);
 	--dark-violet: #4138c2;
-	--error: #b91c1c;
-	--danger: #dd524c;
-	--success: #15803d;
+	--error: #f2aaaa;
 
 	font-family: Inter, sans-serif;
 
@@ -87,7 +85,7 @@ h5 {
 }
 
 h6 {
-	font-size: 0.8rem;
+	font-size: 0.875rem;
 	line-height: 1.5;
 	color: var(--gray);
 }

@@ -3,9 +3,10 @@ import { TailwindClasses, tButtonType } from '../types'
 import styles from './Button.module.css'
 
 interface ButtonProps {
-	onClick: (event: MouseEvent) => void
-	type?: tButtonType
+	onClick?: (event: MouseEvent) => void
+	type?: 'button' | 'submit' | 'reset'
 	buttonText?: string
+	variant?: tButtonType
 	disabled?: boolean
 	icon?: ReactNode
 	iconPos?: 'left' | 'right'
@@ -19,11 +20,12 @@ const Button: FC<ButtonProps> = ({
 	icon,
 	buttonText,
 	isLoading = false,
-	type,
+	type = 'button',
+	variant,
 	iconPos = 'left',
 	buttonStyles,
 }) => {
-	const buttonClasses = `${styles.button} ${type && styles[type]} ${
+	const buttonClasses = `${styles.button} ${variant && styles[variant]} ${
 		isLoading && styles.loading
 	} ${buttonStyles} 
 	`
@@ -45,6 +47,7 @@ const Button: FC<ButtonProps> = ({
 			aria-pressed={pressed ? 'true' : undefined}
 			aria-disabled={disabled ? 'true' : 'false'}
 			onClick={handleClick}
+			type={type}
 		>
 			{isLoading ? (
 				<span className={styles.spinner}></span>
