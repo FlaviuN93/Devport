@@ -1,5 +1,5 @@
 import { FC, MouseEvent, ReactNode } from 'react'
-import { TailwindClasses, tButtonType } from '../types'
+import { TailwindClasses, tButtonType } from '../../utils/types'
 import styles from './Button.module.css'
 
 interface ButtonProps {
@@ -25,7 +25,7 @@ const Button: FC<ButtonProps> = ({
 	iconPos = 'left',
 	buttonStyles,
 }) => {
-	const buttonClasses = `${styles.button} ${variant && styles[variant]} ${
+	const buttonClasses = `${styles.button} ${variant ? styles[variant] : ''} ${
 		isLoading && styles.loading
 	} ${buttonStyles} 
 	`

@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from 'react'
-import { TailwindClasses, tPositions } from '../types'
+import { TailwindClasses, tPositions } from '../../utils/types'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import styles from './Dropdown.module.css'
 import { useDropdownContext } from '../../contexts/contextHooks'

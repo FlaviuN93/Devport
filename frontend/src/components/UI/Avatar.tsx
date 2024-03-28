@@ -1,6 +1,6 @@
 import React, { FC, MouseEvent, ReactNode } from 'react'
 import styles from './Avatar.module.css'
-import { TailwindClasses } from '../types'
+import { TailwindClasses } from '../../utils/types'
 
 interface AvatarProps {
 	imageUrl?: string

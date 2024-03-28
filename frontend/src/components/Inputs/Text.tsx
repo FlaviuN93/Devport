@@ -1,5 +1,5 @@
 import { useId } from 'react'
-import { TailwindClasses } from '../types'
+import { TailwindClasses } from '../../utils/types'
 import styles from './Text.module.css'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 import Tooltip from '../UI/Tooltip'
@@ -13,7 +13,7 @@ export interface TextProps<T extends FieldValues> {
 	disabled?: boolean
 	tooltipStyles?: TailwindClasses
 	textStyles?: TailwindClasses
-	error?: string
+	error?: string | boolean
 	rows?: number
 	cols?: number
 }
@@ -33,7 +33,7 @@ const Text = <T extends FieldValues>({
 }: TextProps<T>) => {
 	const uniqueId = useId()
 
-	const textClasses = `${styles.text} ${textStyles} ${error && styles.error}`
+	const textClasses = `${styles.text} ${textStyles} ${error ? styles.error : ''}`
 
 	return (
 		<div className={styles.textContainer}>
@@ -54,7 +54,9 @@ const Text = <T extends FieldValues>({
 						type='text'
 						aria-disabled={disabled ? 'true' : 'false'}
 					/>
-					{error && <Tooltip content={error} />}
+					{error && typeof error === 'string' && (
+						<Tooltip content={error} tooltipStyles={tooltipStyles} />
+					)}
 				</div>
 			) : (
 				<>
@@ -70,7 +72,9 @@ const Text = <T extends FieldValues>({
 						rows={rows}
 						cols={cols}
 					/>
-					{error && <Tooltip content={error} tooltipStyles={tooltipStyles} />}
+					{error && typeof error === 'string' && (
+						<Tooltip content={error} tooltipStyles={tooltipStyles} />
+					)}
 				</>
 			)}
 		</div>

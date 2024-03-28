@@ -19,7 +19,7 @@
 	border: 1px solid var(--light-gray);
 	border-radius: 8px;
 	background-color: rgba(255, 255, 255, 0.4);
-	transition: all 0.2s ease;
+	transition: border 0.2s, box-shadow 0.2s;
 	box-shadow: var(--shadow-xs);
 	letter-spacing: 0.25px;
 }

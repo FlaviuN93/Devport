@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react'
-import { TailwindClasses, tPositions } from '../types'
+import { TailwindClasses, tPositions } from '../../utils/types'
 import styles from './Tooltip.module.css'
 import { InformationCircleIcon } from '@heroicons/react/24/outline'
 

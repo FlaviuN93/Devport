@@ -8,24 +8,29 @@ type ValidationError = {
 
 export const useValidateResult = (errorTypes: ValidateResult, initialState: ValidationError[]) => {
 	const [errors, setErrors] = useState(initialState)
+	const [isValid, setIsValid] = useState(false)
 	const hasMounted = useRef(false)
 
 	useEffect(() => {
-		setErrors((prevState) => {
+		setErrors((state) => {
 			if (hasMounted.current) {
-				if (typeof errorTypes === 'undefined')
-					return prevState.map((error) => ({ ...error, isActive: true }))
+				if (typeof errorTypes === 'undefined') {
+					setIsValid(false)
+					return state.map((error) => ({ ...error, isActive: true }))
+				}
 
-				if (typeof errorTypes === 'string' || Array.isArray(errorTypes))
-					return prevState.map((error) =>
+				if (typeof errorTypes === 'string' || Array.isArray(errorTypes)) {
+					setIsValid(true)
+					return state.map((error) =>
 						errorTypes.includes(error.type)
 							? { ...error, isActive: false }
 							: { ...error, isActive: true }
 					)
+				}
 			} else hasMounted.current = true
-			return prevState
+			return state
 		})
 	}, [errorTypes])
 
-	return errors
+	return { errors, isValid }
 }

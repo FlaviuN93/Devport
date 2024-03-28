@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const signupSchema = z.object({
-	email: z.string().email({ message: 'Invalid email address' }),
+	email: z.string().min(1, 'Email is required').email({ message: 'Invalid email address' }),
 	password: z
 		.string()
 		.regex(/^.{8,}/, 'minLength')

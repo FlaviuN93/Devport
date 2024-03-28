@@ -1,7 +1,8 @@
 import { FC } from 'react'
-import { getMessageForValidation, PasswordValidationType } from '../../utils/utility'
+import { getMessageForValidation } from '../../utils/functions'
 import styles from './PasswordValidation.module.css'
-import CheckCircle from '../../assets/check circle.svg?react'
+import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { PasswordValidationType } from '../../utils/types'
 
 interface IProps {
 	type: string
@@ -11,15 +12,16 @@ interface IProps {
 const PasswordValidation: FC<IProps> = ({ type, isActive }) => {
 	const messageKey = type as PasswordValidationType
 	const message = getMessageForValidation(messageKey)
-	const rowClasses = `${isActive && styles.active}`
+	const activeClass = `${
+		isActive && 'text-violet'
+	} w-4 h-4 text-lightGray transition-colors duration-300`
 
 	return (
-		<div>
-			{}
-			<span className={rowClasses}>
-				<CheckCircle />
-				{message}
+		<div className={styles.container}>
+			<span className={activeClass}>
+				<CheckCircleIcon />
 			</span>
+			<span>{message}</span>
 		</div>
 	)
 }

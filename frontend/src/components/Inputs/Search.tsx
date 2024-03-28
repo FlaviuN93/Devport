@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, KeyboardEvent, useId, useState } from 'react'
-import { TailwindClasses } from '../types'
+import { TailwindClasses } from '../../utils/types'
 import Button from '../UI/Button'
 import { MagnifyingGlassIcon } from '@heroicons/react/16/solid'
 import styles from './Search.module.css'
@@ -45,8 +45,7 @@ const Search: FC<SearchProps> = ({
 					icon={<MagnifyingGlassIcon className='h-6 w-6' />}
 					onClick={handleSearch}
 					buttonStyles={buttonClasses}
-					type='text'
-					size='small'
+					variant='text'
 				/>
 			)}
 
@@ -67,8 +66,7 @@ const Search: FC<SearchProps> = ({
 					buttonStyles={buttonClasses}
 					icon={<MagnifyingGlassIcon className='h-6 w-6' />}
 					onClick={handleSearch}
-					type='text'
-					size='small'
+					variant='text'
 				/>
 			)}
 		</div>

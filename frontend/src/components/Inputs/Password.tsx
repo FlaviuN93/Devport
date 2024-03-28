@@ -1,5 +1,5 @@
 import { useCallback, useId, useState } from 'react'
-import { TailwindClasses } from '../types'
+import { TailwindClasses } from '../../utils/types'
 import styles from './Password.module.css'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/16/solid'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
@@ -14,7 +14,7 @@ export interface PasswordProps<T extends FieldValues> {
 	showPasswordBtn?: boolean
 	tooltipStyles?: TailwindClasses
 	passwordStyles?: TailwindClasses
-	error?: string
+	error?: string | boolean
 }
 
 const Password = <T extends FieldValues>({
@@ -32,7 +32,7 @@ const Password = <T extends FieldValues>({
 	const uniqueId = useId()
 
 	const handleTogglePassword = useCallback(() => setShowPassword(!showPassword), [showPassword])
-	const passwordClasses = `${styles.password} ${passwordStyles} ${error && styles.error}`
+	const passwordClasses = `${styles.password} ${passwordStyles} ${error ? styles.error : ''}`
 
 	return (
 		<div className={styles.passwordContainer}>
@@ -60,7 +60,7 @@ const Password = <T extends FieldValues>({
 					</button>
 				)}
 
-				{error && <Tooltip content={error} tooltipStyles={tooltipStyles} />}
+				{error && typeof error === 'string' && <Tooltip content={error} tooltipStyles={tooltipStyles} />}
 			</div>
 		</div>
 	)

@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Button from '../components/UI/Button'
 import styles from './SignUp.module.css'
 import GithubIcon from '../assets/github.svg?react'
 import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { signupSchema } from '../utils/validationSchemas'
+import { signupSchema } from '../utils/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useValidateResult } from '../hooks/useValidateResult'
 import PasswordValidation from '../components/Inputs/PasswordValidation'
+import { passwordInitialState } from '../utils/variables'
+import { Link } from 'react-router-dom'
 
 type SignupData = {
 	email: string
@@ -24,32 +26,22 @@ const SignUp = () => {
 		resolver: zodResolver(signupSchema),
 		criteriaMode: 'all',
 	})
+
 	const passwordErrorTypes = errors.password?.types?.invalid_string
-	const passwordInitialState = [
-		{ type: 'lowerCase', isActive: false },
-		{ type: 'upperCase', isActive: false },
-		{ type: 'specialChar', isActive: false },
-		{ type: 'number', isActive: false },
-		{ type: 'minLength', isActive: false },
-		{ type: 'maxLength', isActive: false },
-	]
-	const passwordErrors = useValidateResult(passwordErrorTypes, passwordInitialState)
+	const { errors: passwordErrors, isValid } = useValidateResult(passwordErrorTypes, passwordInitialState)
 
 	const handleGithubSignup = () => {
 		console.log('Github')
 	}
 
-	useEffect(() => {
-		console.log(passwordErrors, 'hello')
-	})
 	const onSubmit: SubmitHandler<SignupData> = (data) => {
 		console.log('Submitted Data', data, errors, 'helrolsd')
 	}
 
 	return (
-		<section className={styles.signupContainer}>
+		<div className={styles.signupContainer}>
 			<div>
-				<h1 className='mb-1'>Create your account</h1>
+				<h1 className='mb-1'>Create Your Account</h1>
 				<h6>Enter the fields below to get started</h6>
 			</div>
 			<Button
@@ -74,23 +66,25 @@ const SignUp = () => {
 					register={register}
 					placeholder='Enter password'
 					showPasswordBtn={true}
+					error={isValid}
 					label='Password'
 				/>
-				<div>
+				<div className={styles.validationContainer}>
 					{passwordErrors.map((error) => (
 						<PasswordValidation key={error.type} isActive={error.isActive} type={error.type} />
 					))}
 				</div>
 
-				{/* {errors.password &&errors.password.map()} */}
 				<Button buttonText='Create account' type='submit' buttonStyles='bg-violet text-white w-full' />
 			</form>
 
 			<div className='-mt-2 text-start'>
 				<span className='text-[12px] text-gray'>Already have an account?</span>{' '}
-				<Button variant='text' buttonText='Log in' onClick={() => {}} />
+				<Link to={'/login'}>
+					<Button variant='text' buttonText='Log in' />
+				</Link>
 			</div>
-		</section>
+		</div>
 	)
 }
 

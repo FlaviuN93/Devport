@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, ReactNode, useId, useRef, useEffect, useState } from 'react'
-import { TailwindClasses } from '../types'
+import { TailwindClasses } from '../../utils/types'
 import { motion } from 'framer-motion'
 import styles from './File.module.css'
 
