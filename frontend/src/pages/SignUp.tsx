@@ -52,14 +52,8 @@ const SignUp = () => {
 			/>
 			<div className={styles.borderWord}>or</div>
 
-			<form className='-mt-5' onSubmit={handleSubmit(onSubmit)}>
-				<Text
-					name='email'
-					register={register}
-					placeholder='Enter email'
-					error={errors.email?.message}
-					label='Email'
-				/>
+			<form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
+				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />
 
 				<Password
 					name='password'
@@ -67,7 +61,6 @@ const SignUp = () => {
 					placeholder='Enter password'
 					showPasswordBtn={true}
 					error={isValid}
-					label='Password'
 				/>
 				<div className={styles.validationContainer}>
 					{passwordErrors.map((error) => (
@@ -78,8 +71,8 @@ const SignUp = () => {
 				<Button buttonText='Create account' type='submit' buttonStyles='bg-violet text-white w-full' />
 			</form>
 
-			<div className='-mt-2 text-start'>
-				<span className='text-[12px] text-gray'>Already have an account?</span>{' '}
+			<div className='-mt-3 text-start'>
+				<span className='text-[12px] text-gray mr-1'>Already have an account?</span>
 				<Link to={'/login'}>
 					<Button variant='text' buttonText='Log in' />
 				</Link>

@@ -24,7 +24,7 @@ const Text = <T extends FieldValues>({
 	disabled = false,
 	placeholder,
 	tooltipStyles = '',
-	textStyles = '',
+	textStyles = 'm-0',
 	label,
 	variant = 'input',
 	error,

@@ -1,4 +1,4 @@
-import { useCallback, useId, useState } from 'react'
+import { useId, useState } from 'react'
 import { TailwindClasses } from '../../utils/types'
 import styles from './Password.module.css'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/16/solid'
@@ -31,7 +31,8 @@ const Password = <T extends FieldValues>({
 	const [showPassword, setShowPassword] = useState(false)
 	const uniqueId = useId()
 
-	const handleTogglePassword = useCallback(() => setShowPassword(!showPassword), [showPassword])
+	const handleTogglePassword = () => setShowPassword((prevState) => !prevState)
+
 	const passwordClasses = `${styles.password} ${passwordStyles} ${error ? styles.error : ''}`
 
 	return (
