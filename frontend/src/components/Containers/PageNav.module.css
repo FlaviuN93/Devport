@@ -1,0 +1,8 @@
+.navContainer {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1rem 1.5rem;
+	border-bottom: 1px solid var(--light-gray-2);
+	width: 100%;
+}

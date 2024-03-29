@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import Button from '../components/UI/Button'
@@ -16,12 +16,10 @@ const ForgotPassword = () => {
 		resolver: zodResolver(forgotPasswordSchema),
 	})
 
-	useEffect(() => {
-		console.log(errors)
-	}, [errors])
 	const onSubmit: SubmitHandler<{ email: string }> = (data) => {
 		console.log('Submitted Data', data, errors, 'helrolsd')
 	}
+
 	return (
 		<div className='formContainer'>
 			<LogoIcon className='place-self-center -mb-3' />
@@ -38,7 +36,7 @@ const ForgotPassword = () => {
 					buttonStyles='bg-violet text-white w-full mt-4'
 				/>
 			</form>
-			<Link to='/login' className='-mt-3 text-start'>
+			<Link to='/auth/login' className='-mt-3 text-start'>
 				<Button buttonText='Back to login' variant='text' />
 			</Link>
 		</div>

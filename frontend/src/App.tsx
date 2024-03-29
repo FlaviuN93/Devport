@@ -10,28 +10,31 @@ import Register from './pages/Register'
 import Error from './pages/Error'
 import SignUp from './pages/SignUp'
 import Login from './pages/Login'
-import AuthLayout from './pages/AuthLayout'
+import AuthLayout from './components/Layouts/AuthLayout'
+import AppLayout from './components/Layouts/AppLayout'
 
 function App() {
 	return (
-		<div className='w-screen'>
-			<BrowserRouter>
-				<Routes>
-					<Route path='/home' element={<HomePage />} />
-					<Route path='/' element={<AuthLayout />}>
-						<Route path='login' element={<Login />} />
-						<Route path='sign-up' element={<SignUp />} />
-						<Route path='register' element={<Register />} />
-						<Route path='forgot-password' element={<ForgotPassword />} />
-						<Route path='reset-password' element={<ResetPassword />} />
-					</Route>
-					<Route path='/my-portfolio' element={<Portfolio />} />
-					<Route path='/project' element={<ProjectSettings />} />
-					<Route path='/profile' element={<ProfileSettings />} />
-					<Route path='*' element={<Error />} />
-				</Routes>
-			</BrowserRouter>
-		</div>
+		<BrowserRouter>
+			<Routes>
+				<Route path='/home' element={<HomePage />} />
+				<Route path='/' element={<AppLayout />}>
+					<Route index element={<Portfolio />} />
+					<Route path='project-settings' element={<ProjectSettings />} />
+					<Route path='profile-settings' element={<ProfileSettings />} />
+				</Route>
+
+				<Route path='/auth' element={<AuthLayout />}>
+					<Route index element={<SignUp />} />
+					<Route path='login' element={<Login />} />
+					<Route path='register' element={<Register />} />
+					<Route path='forgot-password' element={<ForgotPassword />} />
+					<Route path='reset-password' element={<ResetPassword />} />
+				</Route>
+
+				<Route path='*' element={<Error />} />
+			</Routes>
+		</BrowserRouter>
 	)
 }
 

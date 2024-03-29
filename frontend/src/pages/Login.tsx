@@ -52,7 +52,7 @@ const Login = () => {
 					showPasswordBtn={true}
 					error={errors.password?.message}
 				/>
-				<Link to='/forgot-password' className='place-self-end -mt-2'>
+				<Link to='/auth/forgot-password' className='place-self-end -mt-2'>
 					<Button buttonText='Forgot Password' variant='text' />
 				</Link>
 				<Button buttonText='Sign In' type='submit' buttonStyles='bg-violet text-white w-full' />
@@ -60,7 +60,7 @@ const Login = () => {
 
 			<div className='-mt-3 text-start'>
 				<span className='text-[12px] text-gray mr-1'>Not a member?</span>
-				<Link to={'/sign-up'}>
+				<Link to='/auth'>
 					<Button variant='text' buttonText='Create an account' />
 				</Link>
 			</div>

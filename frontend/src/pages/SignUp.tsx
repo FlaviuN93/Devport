@@ -24,6 +24,7 @@ const SignUp = () => {
 	} = useForm<SignupData>({
 		resolver: zodResolver(signupSchema),
 		criteriaMode: 'all',
+		mode: 'onChange',
 	})
 
 	const passwordErrorTypes = errors.password?.types?.invalid_string
@@ -72,7 +73,7 @@ const SignUp = () => {
 
 			<div className='-mt-3 text-start'>
 				<span className='text-[12px] text-gray mr-1'>Already have an account?</span>
-				<Link to={'/login'}>
+				<Link to={'login'}>
 					<Button variant='text' buttonText='Log in' />
 				</Link>
 			</div>

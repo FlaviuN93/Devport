@@ -22,6 +22,7 @@ const ResetPassword = () => {
 	} = useForm<ResetPasswordData>({
 		resolver: zodResolver(resetPasswordSchema),
 		criteriaMode: 'all',
+		mode: 'onChange',
 	})
 
 	const passwordErrorTypes = errors.password?.types?.invalid_string
@@ -51,7 +52,6 @@ const ResetPassword = () => {
 					name='confirmPassword'
 					register={register}
 					placeholder='Re-enter a password'
-					showPasswordBtn={true}
 					error={errors.confirmPassword?.message}
 				/>
 

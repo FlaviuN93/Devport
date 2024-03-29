@@ -55,10 +55,6 @@ html {
 body {
 	container-type: inline-size;
 	overflow: auto;
-	display: flex;
-	place-items: center;
-	min-height: 100vh;
-	text-align: center;
 }
 
 h1 {

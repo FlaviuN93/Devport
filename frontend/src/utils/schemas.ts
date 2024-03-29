@@ -43,7 +43,7 @@ export const resetPasswordSchema = z
 			.regex(/[A-Z]/, 'upperCase')
 			.regex(/\d/, 'number')
 			.regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, 'specialChar'),
-		confirmPassword: z.string().min(8, { message: 'Password must be of at least 8 characters' }),
+		confirmPassword: z.string().min(1, 'Password must be of at least 8 characters'),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: 'Passwords do not match',

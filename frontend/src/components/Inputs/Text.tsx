@@ -7,6 +7,7 @@ import Tooltip from '../UI/Tooltip'
 export interface TextProps<T extends FieldValues> {
 	name: Path<T>
 	register: UseFormRegister<T>
+
 	placeholder: string
 	variant?: 'input' | 'textarea'
 	label?: string

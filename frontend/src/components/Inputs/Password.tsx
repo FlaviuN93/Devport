@@ -31,8 +31,9 @@ const Password = <T extends FieldValues>({
 	const [showPassword, setShowPassword] = useState(false)
 	const uniqueId = useId()
 
-	const handleTogglePassword = () => setShowPassword((prevState) => !prevState)
-
+	const handleTogglePassword = () => {
+		setShowPassword((prevState) => !prevState)
+	}
 	const passwordClasses = `${styles.password} ${passwordStyles} ${error ? styles.error : ''}`
 
 	return (

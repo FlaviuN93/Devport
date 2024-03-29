@@ -33,11 +33,11 @@ const Dropdown: FC<{ children: ReactNode }> = ({ children }) => {
 	)
 }
 
-const DropdownMenu: FC<MenuProps> = ({ children, position = 'bottom' }) => {
+const DropdownMenu: FC<MenuProps> = ({ children, position = 'bottom', menuStyles = '' }) => {
 	const { isOpen, handleClose, menuRef, dropdownBtnRef } = useDropdownContext()
 	useOutsideClick(menuRef, handleClose, dropdownBtnRef)
 
-	const menuClasses = `${styles.menu} ${styles[position]}`
+	const menuClasses = `${styles.menu} ${styles[position]} ${menuStyles}`
 
 	return (
 		<>
