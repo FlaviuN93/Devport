@@ -1,5 +1,4 @@
 import React from 'react'
-import styles from './Login.module.css'
 import { Link } from 'react-router-dom'
 import GithubIcon from '../assets/github.svg?react'
 import Button from '../components/UI/Button'
@@ -21,7 +20,6 @@ const Login = () => {
 		formState: { errors },
 	} = useForm<LoginData>({
 		resolver: zodResolver(loginSchema),
-		criteriaMode: 'all',
 	})
 	const handleGithubSignup = () => {
 		console.log('Github')
@@ -31,7 +29,7 @@ const Login = () => {
 		console.log('Submitted Data', data, errors, 'helrolsd')
 	}
 	return (
-		<div className={styles.loginContainer}>
+		<div className='formContainer'>
 			<div>
 				<h1 className='mb-1'>Login to Account</h1>
 				<h6>Enter your credentials to access your account</h6>
@@ -42,9 +40,9 @@ const Login = () => {
 				buttonStyles='bg-darkBlue text-white'
 				icon={<GithubIcon />}
 			/>
-			<div className={styles.borderWord}>or</div>
+			<div className='borderWord'>or</div>
 
-			<form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
+			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit(onSubmit)}>
 				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />
 
 				<Password

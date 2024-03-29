@@ -1,6 +1,5 @@
 import React from 'react'
 import Button from '../components/UI/Button'
-import styles from './SignUp.module.css'
 import GithubIcon from '../assets/github.svg?react'
 import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
@@ -39,7 +38,7 @@ const SignUp = () => {
 	}
 
 	return (
-		<div className={styles.signupContainer}>
+		<div className='formContainer'>
 			<div>
 				<h1 className='mb-1'>Create Your Account</h1>
 				<h6>Enter the fields below to get started</h6>
@@ -50,9 +49,9 @@ const SignUp = () => {
 				buttonStyles='bg-darkBlue text-white'
 				icon={<GithubIcon />}
 			/>
-			<div className={styles.borderWord}>or</div>
+			<div className='borderWord'>or</div>
 
-			<form className={styles.formContainer} onSubmit={handleSubmit(onSubmit)}>
+			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit(onSubmit)}>
 				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />
 
 				<Password
@@ -62,7 +61,7 @@ const SignUp = () => {
 					showPasswordBtn={true}
 					error={isValid}
 				/>
-				<div className={styles.validationContainer}>
+				<div className='grid grid-cols-2 gap-3'>
 					{passwordErrors.map((error) => (
 						<PasswordValidation key={error.type} isActive={error.isActive} type={error.type} />
 					))}

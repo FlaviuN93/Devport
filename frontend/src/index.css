@@ -63,6 +63,7 @@ body {
 
 h1 {
 	font-size: 2rem;
+	line-height: 3rem;
 }
 
 h1,
@@ -86,8 +87,39 @@ h5 {
 
 h6 {
 	font-size: 0.875rem;
-	line-height: 1.5;
+	line-height: 1.5rem;
 	color: var(--gray);
+}
+
+.formContainer {
+	width: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	flex: 1 1 auto;
+	max-width: 400px;
+}
+
+.borderWord {
+	position: relative;
+}
+
+.borderWord::before,
+.borderWord::after {
+	content: '';
+	position: absolute;
+	top: 55%;
+	height: 1px;
+	background-color: var(--gray);
+	width: 180px;
+}
+
+.borderWord::before {
+	left: 0;
+}
+
+.borderWord::after {
+	right: 0;
 }
 
 @media (min-width: 640px) {

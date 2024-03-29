@@ -55,7 +55,7 @@ const Text = <T extends FieldValues>({
 						aria-disabled={disabled ? 'true' : 'false'}
 					/>
 					{error && typeof error === 'string' && (
-						<Tooltip content={error} tooltipStyles={tooltipStyles} />
+						<Tooltip content={error} position='top' tooltipStyles={tooltipStyles} />
 					)}
 				</div>
 			) : (
