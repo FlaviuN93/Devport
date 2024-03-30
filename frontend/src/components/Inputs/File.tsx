@@ -1,29 +1,32 @@
-import { ChangeEvent, FC, ReactNode, useId, useRef, useEffect, useState } from 'react'
-import { TailwindClasses } from '../../utils/types'
+import { ReactNode, useId, useRef, useEffect, useState } from 'react'
+import { TailwindClasses, tPositions } from '../../utils/types'
 import { motion } from 'framer-motion'
 import styles from './File.module.css'
+import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 
-export interface FileProps {
-	onChange: (value: File) => void
-	register: (name: string) => void
-	name: string
+export interface FileProps<T extends FieldValues> {
+	register: UseFormRegister<T>
+	onFileUpload: (file: File) => void
+	name: Path<T>
 	buttonText: string
 	label?: string
 	icon?: ReactNode
 	fileStyles?: TailwindClasses
 	labelStyles?: TailwindClasses
+	error?: string
+	errorPosition?: tPositions
 }
 
-const File: FC<FileProps> = ({
-	onChange,
+const File = <T extends FieldValues>({
 	fileStyles = '',
 	name,
 	labelStyles = '',
 	label,
 	buttonText,
 	icon,
+	onFileUpload,
 	register,
-}) => {
+}: FileProps<T>) => {
 	const uniqueId = useId()
 	const divRef = useRef<HTMLDivElement>(null)
 	const [size, setSize] = useState({ width: '0', height: '0' })
@@ -36,9 +39,6 @@ const File: FC<FileProps> = ({
 			height,
 		})
 	}, [size.width, size.height])
-
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) =>
-		e.target.files && onChange(e.target.files[0])
 
 	const fileClasses = `${styles.fileButton} ${fileStyles}`
 	const labelClasses = `${styles.label} ${labelStyles}`
@@ -56,10 +56,10 @@ const File: FC<FileProps> = ({
 					name={name}
 					className='absolute opacity-0'
 					id={uniqueId}
+					onChange={(event) => event.target.files && onFileUpload(event.target.files[0])}
 					ref={() => register(name)}
 					aria-describedby={`${uniqueId}-${name}`}
 					type='file'
-					onChange={handleChange}
 				/>
 			</div>
 		</div>

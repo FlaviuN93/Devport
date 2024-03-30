@@ -9,6 +9,7 @@
 	align-items: center;
 	justify-content: center;
 	min-width: 3rem;
+	font-weight: 500;
 	transition: all 0.2s ease-in-out;
 	transform: translate(-1px);
 	overflow: hidden;
@@ -61,7 +62,6 @@
 
 .primary {
 	font-size: 14px;
-	font-weight: 500;
 	background-color: var(--violet);
 	color: var(--light-1);
 }
@@ -70,7 +70,6 @@
 	background-color: var(--light-violet);
 	color: var(--dark-violet);
 	justify-content: start;
-	font-weight: 500;
 }
 
 @keyframes spin {

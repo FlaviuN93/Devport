@@ -28,7 +28,7 @@ const ResetPassword = () => {
 	const passwordErrorTypes = errors.password?.types?.invalid_string
 	const { errors: passwordErrors, isValid } = useValidateResult(passwordErrorTypes, passwordInitialState)
 
-	const onSubmit: SubmitHandler<ResetPasswordData> = (data) => {
+	const resetPasswordData: SubmitHandler<ResetPasswordData> = (data) => {
 		console.log('Submitted Data', data, errors, 'submitResetPassword')
 	}
 	return (
@@ -39,7 +39,7 @@ const ResetPassword = () => {
 				<h6>Enter your new password and you're all set.</h6>
 			</div>
 
-			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit(onSubmit)}>
+			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit(resetPasswordData)}>
 				<Password
 					name='password'
 					register={register}

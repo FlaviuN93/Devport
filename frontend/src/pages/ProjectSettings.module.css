@@ -1,0 +1,11 @@
+.projectContainer {
+	display: flex;
+	flex-direction: column;
+	width: max-content;
+	max-width: 720px;
+
+	padding: 1rem;
+	border-radius: 8px;
+	border: 1px solid var(--light-gray-2);
+	background-color: #f2f5f9;
+}

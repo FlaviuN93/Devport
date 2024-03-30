@@ -9,6 +9,7 @@ export default {
 				violet: '#6466e9',
 				light2: '#e3e8ef',
 				lightGray: '#cbcdd1',
+				danger: '#DD524C',
 			},
 		},
 	},

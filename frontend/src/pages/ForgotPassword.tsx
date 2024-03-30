@@ -16,7 +16,7 @@ const ForgotPassword = () => {
 		resolver: zodResolver(forgotPasswordSchema),
 	})
 
-	const onSubmit: SubmitHandler<{ email: string }> = (data) => {
+	const forgotPasswordData: SubmitHandler<{ email: string }> = (data) => {
 		console.log('Submitted Data', data, errors, 'helrolsd')
 	}
 
@@ -28,7 +28,7 @@ const ForgotPassword = () => {
 				<h6 className='text-base'>We'll email you instructions to reset your password</h6>
 			</div>
 
-			<form onSubmit={handleSubmit(onSubmit)}>
+			<form onSubmit={handleSubmit(forgotPasswordData)}>
 				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />
 				<Button
 					buttonText='Request Password Reset'

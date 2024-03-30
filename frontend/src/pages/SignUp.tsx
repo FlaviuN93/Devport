@@ -34,7 +34,7 @@ const SignUp = () => {
 		console.log('Github')
 	}
 
-	const onSubmit: SubmitHandler<SignupData> = (data) => {
+	const signupData: SubmitHandler<SignupData> = (data) => {
 		console.log('Submitted Data', data, errors, 'helrolsd')
 	}
 
@@ -52,7 +52,7 @@ const SignUp = () => {
 			/>
 			<div className='borderWord'>or</div>
 
-			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit(onSubmit)}>
+			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit(signupData)}>
 				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />
 
 				<Password
