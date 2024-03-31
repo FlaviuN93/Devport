@@ -1,11 +1,28 @@
 .projectContainer {
+	width: calc(280px + (100vw - 320px) * 0.5);
+	max-width: 720px;
+	min-width: 280px;
+	padding: 1.5rem;
+	border-radius: 8px;
+	background-color: #f2f5f9;
+}
+
+.formContainer {
+	border: 1px solid var(--light-gray-2);
+	padding: 1rem;
+	background-color: var(--light-1);
 	display: flex;
 	flex-direction: column;
-	width: max-content;
-	max-width: 720px;
-
-	padding: 1rem;
+	gap: 1rem;
 	border-radius: 8px;
-	border: 1px solid var(--light-gray-2);
-	background-color: #f2f5f9;
+}
+
+.imageFileContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	background-color: var(--light-3);
+	border-radius: 6px;
+	padding: 2.25rem 0;
 }

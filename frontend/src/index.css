@@ -15,7 +15,7 @@
 	--gray: #677489;
 	--dark-blue: #20293a;
 	--violet: #6466e9;
-	--light-violet: rgba(168, 180, 246, 0.5);
+	--light-violet: #e1e7fd;
 	--dark-violet: #4138c2;
 	--error: #f2aaaa;
 
@@ -27,7 +27,7 @@
 	-moz-osx-font-smoothing: grayscale;
 }
 :root.light-mode {
-	background-color: var(--light-2);
+	background-color: var(--light-1);
 	--content-color: var(--black-1);
 	--shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.1);
 	--shadow-sm: 1px 2px 4px rgba(0, 0, 0, 0.1);
@@ -56,6 +56,7 @@ html {
 body {
 	container-type: inline-size;
 	overflow: auto;
+	min-height: 100vh;
 }
 
 h1 {

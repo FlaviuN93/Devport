@@ -10,9 +10,12 @@
 	justify-content: center;
 	min-width: 3rem;
 	font-weight: 500;
-	transition: all 0.2s ease-in-out;
 	transform: translate(-1px);
 	overflow: hidden;
+}
+
+.button.defaultColor {
+	background-color: var(--light-1);
 }
 
 .button:focus {
@@ -60,16 +63,18 @@
 	box-shadow: none;
 }
 
-.primary {
+.button.primary {
 	font-size: 14px;
 	background-color: var(--violet);
 	color: var(--light-1);
 }
 
-.secondary {
+.button.secondary {
 	background-color: var(--light-violet);
+	padding: 0.8rem 1rem;
 	color: var(--dark-violet);
 	justify-content: start;
+	width: 100%;
 }
 
 @keyframes spin {

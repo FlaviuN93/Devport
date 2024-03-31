@@ -40,11 +40,12 @@ const File = <T extends FieldValues>({
 		})
 	}, [size.width, size.height])
 
+	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''}`
 	const fileClasses = `${styles.fileButton} ${fileStyles}`
 	const labelClasses = `${styles.label} ${labelStyles}`
 
 	return (
-		<div className={styles.fileContainer}>
+		<div className={fileContainerClasses}>
 			<label className={labelClasses} htmlFor={label}>
 				{label}
 			</label>

@@ -10,18 +10,19 @@
 	align-items: center;
 	justify-content: center;
 	padding: 0.5rem 1rem;
-	background-color: rgba(255, 255, 255, 0.6);
-	border-radius: 10px;
-	box-shadow: var(--shadow-xs);
+	background-color: var(--light-1);
+	border-radius: 8px;
+	box-shadow: var(--shadow-sm);
+	transition: all 0.2s ease-in-out;
+	transform: translate(-1px);
 	color: var(--black-1);
 
 	transition: all 0.2s ease;
 }
 
-.fileButton:hover,
 .fileButton:active {
-	box-shadow: var(--shadow-sm);
-	background-color: rgba(255, 255, 255, 0.7);
+	box-shadow: var(--shadow-xs);
+	transform: translate(0);
 }
 
 .fileButton:focus {
