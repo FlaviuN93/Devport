@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Button from '../components/UI/Button'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,6 +7,7 @@ import { projectSettingsSchema } from '../utils/schemas'
 import styles from './ProjectSettings.module.css'
 import File from '../components/Inputs/File'
 import TrashIcon from '../assets/Trash.svg?react'
+import TrashIcon2 from '../assets/Trash-1.svg?react'
 import UploadIcon from '../assets/upload.svg?react'
 import ProjectIcon from '../assets/project.svg?react'
 import Avatar from '../components/UI/Avatar'
@@ -26,21 +27,19 @@ const ProjectSettings = () => {
 		handleSubmit,
 		register,
 		formState: { errors },
-		setValue,
+		// setValue,
 	} = useForm<ProjectData>({
 		resolver: zodResolver(projectSettingsSchema),
 	})
-	const [selectedImage, setSelectedImage] = useState<File | null>(null)
+	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
 	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
-
-	const handleProject = () => {}
 
 	const handleFile = (selectedFile: File) => {
 		if (!selectedFile) return
 		// console.log(selectedFile, 'selectedFile')
 		// setValue('imageFile', selectedFile, { shouldValidate: true })
 		// console.log(errors.imageFile, 'hello')
-		setSelectedImage(selectedFile)
+		// setSelectedImage(selectedFile)
 	}
 
 	useEffect(() => {
@@ -51,21 +50,15 @@ const ProjectSettings = () => {
 	}
 	return (
 		<section className={styles.projectContainer}>
-			<h4 className='my-4'>Project Settings</h4>
-			<Button
-				icon={<PlusIcon className='h-5 w-5' />}
-				buttonText='Add Project'
-				variant='secondary'
-				buttonStyles='mb-7'
-				iconPos='left'
-				onClick={handleProject}
-			/>
+			<h4 className='mt-2 mb-4'>Project Settings</h4>
 			<form onSubmit={handleSubmit(projectData)} className={styles.formContainer}>
 				<div className={styles.imageFileContainer}>
 					<img src='' alt='' />
 					<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
-					<p className='text-gray text-sm font-medium'>Image must be PNG or JPEG - max 2MB</p>
-					<div className='flex items-center gap-3 -mt-1'>
+					<p className='text-gray text-sm text-center font-medium px-4'>
+						Image must be PNG or JPEG - max 2MB
+					</p>
+					<div className='flex items-center flex-col sm:flex-row gap-3 -mt-1'>
 						<File
 							buttonText='Upload Image'
 							icon={<UploadIcon />}
@@ -78,10 +71,11 @@ const ProjectSettings = () => {
 
 						<Button
 							buttonText='Delete Image'
-							buttonStyles='text-danger border-0'
+							buttonStyles='text-danger bg-white border-0'
 							iconPos='left'
+							variant='transparent'
 							icon={<TrashIcon />}
-							onClick={() => setSelectedImage(null)}
+							// onClick={() => setSelectedImage(null)}
 						/>
 					</div>
 				</div>
@@ -119,10 +113,27 @@ const ProjectSettings = () => {
 				<Text
 					label='Description'
 					register={register}
+					variant='textarea'
+					rows={5}
 					name='description'
 					placeholder='Enter a short description..'
 					error={errors.description?.message}
 				/>
+				<div className='place-self-end mb-2 flex flex-col w-full gap-4 sm:flex-row sm:w-auto'>
+					<Button
+						buttonText='Remove'
+						buttonStyles='text-darkBlue bg-light3 border-0'
+						icon={<TrashIcon2 className='h-5 w-5' />}
+						iconPos='left'
+					/>
+					<Button
+						icon={<PlusIcon className='h-5 w-5' />}
+						iconPos='left'
+						buttonText='Add'
+						buttonStyles='px-3'
+						variant='primary'
+					/>
+				</div>
 			</form>
 		</section>
 	)

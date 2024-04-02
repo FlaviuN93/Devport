@@ -1,4 +1,4 @@
-export type tButtonType = 'primary' | 'secondary' | 'text'
+export type tButtonType = 'primary' | 'secondary' | 'text' | 'transparent'
 
 export type TailwindClasses = string
 

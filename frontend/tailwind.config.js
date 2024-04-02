@@ -8,6 +8,7 @@ export default {
 				darkBlue: '#20293a',
 				violet: '#6466e9',
 				light2: '#e3e8ef',
+				light3: '#f2f5f9',
 				lightGray: '#cbcdd1',
 				danger: '#DD524C',
 			},

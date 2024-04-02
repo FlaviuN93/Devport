@@ -27,7 +27,7 @@ const Button: FC<ButtonProps> = ({
 }) => {
 	const buttonClasses = `${styles.button} ${variant ? styles[variant] : ''} ${
 		isLoading && styles.loading
-	} ${buttonStyles} ${styles.defaultColor}
+	} ${buttonStyles}
 	`
 	const iconClasses = `${icon && iconPos === 'left' && buttonText && 'mr-2'} ${
 		icon && iconPos === 'right' && buttonText && 'ml-2'
