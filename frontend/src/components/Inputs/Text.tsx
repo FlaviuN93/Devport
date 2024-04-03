@@ -37,13 +37,13 @@ const Text = <T extends FieldValues>({
 	const textClasses = `${styles.text} ${textStyles} ${error ? styles.error : ''}`
 
 	return (
-		<div className={styles.textContainer}>
+		<div>
 			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>
 
-			{variant === 'input' ? (
-				<div className='relative'>
+			<div className='relative mt-1'>
+				{variant === 'input' ? (
 					<input
 						{...register(name)}
 						className={textClasses}
@@ -55,12 +55,7 @@ const Text = <T extends FieldValues>({
 						type='text'
 						aria-disabled={disabled ? 'true' : 'false'}
 					/>
-					{error && typeof error === 'string' && (
-						<Tooltip content={error} position='top' tooltipStyles={tooltipStyles} />
-					)}
-				</div>
-			) : (
-				<>
+				) : (
 					<textarea
 						{...register(name)}
 						className={textClasses}
@@ -73,11 +68,9 @@ const Text = <T extends FieldValues>({
 						rows={rows}
 						cols={cols}
 					/>
-					{error && typeof error === 'string' && (
-						<Tooltip content={error} tooltipStyles={tooltipStyles} />
-					)}
-				</>
-			)}
+				)}{' '}
+				{error && typeof error === 'string' && <Tooltip content={error} tooltipStyles={tooltipStyles} />}
+			</div>
 		</div>
 	)
 }

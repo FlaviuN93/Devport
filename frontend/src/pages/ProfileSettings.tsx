@@ -3,7 +3,6 @@ import Button from '../components/UI/Button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { profileSettingsSchema } from '../utils/schemas'
-import styles from './ProjectSettings.module.css'
 import File from '../components/Inputs/File'
 import TrashIcon from '../assets/Trash.svg?react'
 import CheckCircleIcon from '../assets/check circle-1.svg?react'
@@ -20,7 +19,7 @@ type ProfileData = {
 	bio: string
 }
 
-const ProjectSettings = () => {
+const ProfileSettings = () => {
 	const {
 		handleSubmit,
 		register,
@@ -47,10 +46,10 @@ const ProjectSettings = () => {
 		console.log('handleSubmit data', data)
 	}
 	return (
-		<section className={styles.projectContainer}>
+		<section className='settingsContainer'>
 			<h4 className='mt-2 mb-4'>Profile Settings</h4>
-			<form onSubmit={handleSubmit(projectData)} className={styles.formContainer}>
-				<div className={styles.imageFileContainer}>
+			<form onSubmit={handleSubmit(projectData)} className='formSettingsContainer'>
+				<div className='imageFileContainer'>
 					<img src='' alt='' />
 					<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
 					<p className='text-gray text-sm text-center font-medium px-4'>
@@ -64,7 +63,7 @@ const ProjectSettings = () => {
 							name='imageFile'
 							onFileUpload={handleFile}
 							error={errors.imageFile?.message}
-							errorPosition='top'
+							tooltipPosition='top'
 						/>
 
 						<Button
@@ -114,7 +113,7 @@ const ProjectSettings = () => {
 				<Button
 					icon={<CheckCircleIcon className='h-5 w-5' />}
 					iconPos='left'
-					buttonText='Save'
+					buttonText='Add'
 					buttonStyles='mb-2 w-full sm:place-self-end sm:w-auto'
 					variant='primary'
 				/>
@@ -123,4 +122,4 @@ const ProjectSettings = () => {
 	)
 }
 
-export default ProjectSettings
+export default ProfileSettings

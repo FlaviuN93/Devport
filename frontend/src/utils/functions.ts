@@ -12,3 +12,6 @@ export const getMessageForValidation = (messageKey: PasswordValidationType): str
 
 	return validationRules[messageKey]
 }
+
+export const validateCollectionLimit = (stateCollection: string[], maxItems: number) =>
+	stateCollection.length > maxItems && `You can only select ${maxItems} items from the list`

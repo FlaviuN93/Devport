@@ -1,12 +1,6 @@
-.textContainer {
-	display: flex;
-	flex-direction: column;
-}
-
 .label {
 	text-align: start;
 	font-size: 1rem;
-	margin-bottom: 5px;
 	color: var(--black-1);
 	font-weight: 500;
 }

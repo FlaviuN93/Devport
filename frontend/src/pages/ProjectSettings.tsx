@@ -4,7 +4,6 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { projectSettingsSchema } from '../utils/schemas'
-import styles from './ProjectSettings.module.css'
 import File from '../components/Inputs/File'
 import TrashIcon from '../assets/Trash.svg?react'
 import TrashIcon2 from '../assets/Trash-1.svg?react'
@@ -12,6 +11,7 @@ import UploadIcon from '../assets/upload.svg?react'
 import ProjectIcon from '../assets/project.svg?react'
 import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
+import MultiSelect from '../components/Inputs/MultiSelect'
 
 type ProjectData = {
 	imageFile: File
@@ -22,6 +22,8 @@ type ProjectData = {
 	technologies: string
 }
 
+const itemsForMultiSelect = ['Java', 'Javascript', 'Python', 'NodeJS', 'React', 'Angular']
+
 const ProjectSettings = () => {
 	const {
 		handleSubmit,
@@ -30,6 +32,7 @@ const ProjectSettings = () => {
 		// setValue,
 	} = useForm<ProjectData>({
 		resolver: zodResolver(projectSettingsSchema),
+		mode: 'onChange',
 	})
 	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
 	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
@@ -45,14 +48,16 @@ const ProjectSettings = () => {
 	useEffect(() => {
 		console.log(errors.imageFile)
 	}, [errors.imageFile])
+
 	const projectData: SubmitHandler<ProjectData> = (data) => {
 		console.log('handleSubmit data', data)
 	}
+
 	return (
-		<section className={styles.projectContainer}>
+		<section className='settingsContainer'>
 			<h4 className='mt-2 mb-4'>Project Settings</h4>
-			<form onSubmit={handleSubmit(projectData)} className={styles.formContainer}>
-				<div className={styles.imageFileContainer}>
+			<form onSubmit={handleSubmit(projectData)} className='formSettingsContainer'>
+				<div className='imageFileContainer'>
 					<img src='' alt='' />
 					<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
 					<p className='text-gray text-sm text-center font-medium px-4'>
@@ -66,7 +71,7 @@ const ProjectSettings = () => {
 							name='imageFile'
 							onFileUpload={handleFile}
 							error={errors.imageFile?.message}
-							errorPosition='top'
+							tooltipPosition='top'
 						/>
 
 						<Button
@@ -102,12 +107,14 @@ const ProjectSettings = () => {
 					placeholder='Enter the repository URL'
 					error={errors.repositoryUrl?.message}
 				/>
-				<Text
-					label='Technologies'
+
+				<MultiSelect
 					register={register}
 					name='technologies'
-					placeholder='Enter technologies used'
-					error={errors.technologies?.message}
+					items={itemsForMultiSelect}
+					placeholder='Select maximum 5 technologies from the list'
+					limit={5}
+					label='Technologies'
 				/>
 
 				<Text
@@ -132,6 +139,7 @@ const ProjectSettings = () => {
 						buttonText='Add'
 						buttonStyles='px-3'
 						variant='primary'
+						type='submit'
 					/>
 				</div>
 			</form>

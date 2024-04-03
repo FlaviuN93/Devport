@@ -3,6 +3,7 @@
 	border: 1px solid var(--light-gray);
 	border-radius: 8px;
 	box-shadow: var(--shadow-sm);
+	font-size: 14px;
 	cursor: pointer;
 	display: inline-flex;
 	align-items: center;
@@ -58,9 +59,8 @@
 }
 
 .button.primary {
-	font-size: 14px;
 	background-color: var(--violet);
-	color: var(--light-1);
+	color: var(--light);
 }
 
 .button.secondary {

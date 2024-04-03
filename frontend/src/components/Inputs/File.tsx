@@ -3,6 +3,7 @@ import { TailwindClasses, tPositions } from '../../utils/types'
 import { motion } from 'framer-motion'
 import styles from './File.module.css'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
+import Tooltip from '../UI/Tooltip'
 
 export interface FileProps<T extends FieldValues> {
 	register: UseFormRegister<T>
@@ -12,20 +13,22 @@ export interface FileProps<T extends FieldValues> {
 	label?: string
 	icon?: ReactNode
 	fileStyles?: TailwindClasses
-	labelStyles?: TailwindClasses
 	error?: string
-	errorPosition?: tPositions
+	tooltipPosition?: tPositions
+	tooltipStyles?: TailwindClasses
 }
 
 const File = <T extends FieldValues>({
 	fileStyles = '',
 	name,
-	labelStyles = '',
 	label,
 	buttonText,
 	icon,
 	onFileUpload,
+	error,
+	tooltipPosition,
 	register,
+	tooltipStyles,
 }: FileProps<T>) => {
 	const uniqueId = useId()
 	const divRef = useRef<HTMLDivElement>(null)
@@ -41,12 +44,11 @@ const File = <T extends FieldValues>({
 	}, [size.width, size.height])
 
 	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''}`
-	const fileClasses = `${styles.fileButton} ${fileStyles}`
-	const labelClasses = `${styles.label} ${labelStyles}`
+	const fileClasses = `${styles.fileButton} ${fileStyles} relative`
 
 	return (
 		<div className={fileContainerClasses}>
-			<label className={labelClasses} htmlFor={label}>
+			<label className={styles.label} htmlFor={label}>
 				{label}
 			</label>
 			<div className={fileClasses} ref={divRef} role='button' tabIndex={0}>
@@ -62,6 +64,7 @@ const File = <T extends FieldValues>({
 					aria-describedby={`${uniqueId}-${name}`}
 					type='file'
 				/>
+				{error && <Tooltip content={error} position={tooltipPosition} tooltipStyles={tooltipStyles} />}
 			</div>
 		</div>
 	)

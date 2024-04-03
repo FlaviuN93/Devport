@@ -37,12 +37,12 @@ const Password = <T extends FieldValues>({
 	const passwordClasses = `${styles.password} ${passwordStyles} ${error ? styles.error : ''}`
 
 	return (
-		<div className={styles.passwordContainer}>
+		<div>
 			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>
 
-			<div className='relative'>
+			<div className='relative mt-1'>
 				<input
 					{...register(name)}
 					className={passwordClasses}

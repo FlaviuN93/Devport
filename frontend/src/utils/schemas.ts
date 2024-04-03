@@ -58,10 +58,13 @@ export const resetPasswordSchema = z
 const MAX_FILE_SIZE = 1024 * 1024 * 2
 
 export const projectSettingsSchema = z.object({
-	imageFile: z.instanceof(File).refine((file) => {
-		const allowedMimeTypes = ['image/png', 'image/jpeg']
-		return allowedMimeTypes.includes(file.type) && file.size <= MAX_FILE_SIZE
-	}, 'File must be a valid image (PNG, JPEG, or GIF) under 2MB'),
+	imageFile: z
+		.instanceof(File)
+		.refine((file) => {
+			const allowedMimeTypes = ['image/png', 'image/jpeg']
+			return allowedMimeTypes.includes(file.type) && file.size <= MAX_FILE_SIZE
+		}, 'File must be a valid image (PNG, JPEG, or GIF) under 2MB')
+		.optional(),
 	name: z.string().trim().min(4, 'Name of the project has to have a minimum of 4 characters'),
 	demoUrl: z.string().trim().url('Invalid URL format.Please enter a valid demo URL.'),
 	repositoryUrl: z.string().trim().url('Invalid URL format.Please enter a repository URL.'),
@@ -70,7 +73,7 @@ export const projectSettingsSchema = z.object({
 		.trim()
 		.min(30, 'Description must be at least 30 characters long.')
 		.max(80, 'Description cannot exceed 80 characters.')
-		.regex(/^[a-zA-Z0-9]+$/, 'Description can only contain letters and numbers.'),
+		.regex(/^[a-zA-Z0-9\s]+$/, 'Description can only contain letters and numbers.'),
 	technologies: z.array(z.string().length(3, 'You have to add at least 3 technologies to the field')),
 })
 
