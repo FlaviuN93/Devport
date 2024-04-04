@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import Button from '../components/UI/Button'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { projectSettingsSchema } from '../utils/schemas'
 import File from '../components/Inputs/File'
 import TrashIcon from '../assets/Trash.svg?react'
@@ -28,6 +28,7 @@ const ProjectSettings = () => {
 	const {
 		handleSubmit,
 		register,
+		control,
 		formState: { errors },
 	} = useForm<ProjectData>({
 		resolver: zodResolver(projectSettingsSchema),
@@ -105,12 +106,19 @@ const ProjectSettings = () => {
 					error={errors.repositoryUrl?.message}
 				/>
 
-				<MultiSelect
-					register={register}
+				<Controller
+					control={control}
 					name='technologies'
-					items={itemsForMultiSelect}
-					placeholder='Select technologies from the list'
-					label='Technologies'
+					render={({ field: { value, onChange }, fieldState: { error } }) => (
+						<MultiSelect
+							onChange={onChange}
+							selectedItem={value}
+							error={error?.message}
+							items={itemsForMultiSelect}
+							placeholder='Select technologies from the list'
+							label='Technologies'
+						/>
+					)}
 				/>
 
 				<Text

@@ -74,7 +74,10 @@ export const projectSettingsSchema = z.object({
 		.min(30, 'Description must be at least 30 characters long.')
 		.max(80, 'Description cannot exceed 80 characters.')
 		.regex(/^[a-zA-Z0-9\s]+$/, 'Description can only contain letters and numbers.'),
-	technologies: z.array(z.string()).refine((value) => console.log(value, 'helloFromSchema')),
+	technologies: z
+		.array(z.string())
+		.min(3, { message: 'Select a minimum of 3 technologies' })
+		.max(6, { message: 'Select a maximum of 6 technologies' }),
 })
 
 export const profileSettingsSchema = z.object({
