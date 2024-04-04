@@ -82,45 +82,47 @@ const ProjectSettings = () => {
 						/>
 					</div>
 				</div>
-				<Text
-					label='Project Name'
-					register={register}
-					name='name'
-					placeholder='Enter your project name'
-					error={errors.name?.message}
-				/>
+				<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
+					<Text
+						label='Project Name'
+						register={register}
+						name='name'
+						placeholder='Enter your project name'
+						error={errors.name?.message}
+					/>
 
-				<Text
-					label='Demo URL'
-					register={register}
-					name='demoUrl'
-					placeholder='Enter the demo URL'
-					error={errors.demoUrl?.message}
-				/>
+					<Text
+						label='Demo URL'
+						register={register}
+						name='demoUrl'
+						placeholder='Enter the demo URL'
+						error={errors.demoUrl?.message}
+					/>
+				</div>
+				<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
+					<Text
+						label='Repository URL'
+						register={register}
+						name='repositoryUrl'
+						placeholder='Enter the repository URL'
+						error={errors.repositoryUrl?.message}
+					/>
 
-				<Text
-					label='Repository URL'
-					register={register}
-					name='repositoryUrl'
-					placeholder='Enter the repository URL'
-					error={errors.repositoryUrl?.message}
-				/>
-
-				<Controller
-					control={control}
-					name='technologies'
-					render={({ field: { value, onChange }, fieldState: { error } }) => (
-						<MultiSelect
-							onChange={onChange}
-							selectedItem={value}
-							error={error?.message}
-							items={itemsForMultiSelect}
-							placeholder='Select technologies from the list'
-							label='Technologies'
-						/>
-					)}
-				/>
-
+					<Controller
+						control={control}
+						name='technologies'
+						render={({ field: { value, onChange }, fieldState: { error } }) => (
+							<MultiSelect
+								onChange={onChange}
+								selectedItem={value}
+								error={error?.message}
+								items={itemsForMultiSelect}
+								placeholder='Select technologies from the list'
+								label='Technologies'
+							/>
+						)}
+					/>
+				</div>
 				<Text
 					label='Description'
 					register={register}

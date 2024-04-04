@@ -16,6 +16,7 @@ type ProfileData = {
 	email: string
 	name: string
 	jobTitle: string
+	linkedin: string
 	bio: string
 }
 
@@ -52,14 +53,14 @@ const ProfileSettings = () => {
 					<p className='text-gray text-sm text-center font-medium px-4'>
 						Image must be 256px x 256px - max 2MB
 					</p>
-					<div className='flex items-center flex-col sm:flex-row gap-3 -mt-1'>
+					<div className='flex items-center flex-col sm:flex-row gap-4 -mt-1'>
 						<File
 							buttonText='Upload Image'
 							icon={<UploadIcon />}
 							register={register}
 							name='imageFile'
 							onFileUpload={handleFile}
-							error={errors.imageFile?.message}
+							// error={errors.imageFile?.message}
 						/>
 
 						<Button
@@ -72,30 +73,41 @@ const ProfileSettings = () => {
 						/>
 					</div>
 				</div>
-				<Text
-					label='Email'
-					register={register}
-					name='email'
-					placeholder='example@mail.com'
-					error={errors.email?.message}
-				/>
 
-				<Text
-					label='Job Title'
-					register={register}
-					name='jobTitle'
-					placeholder='Enter your job title'
-					error={errors.jobTitle?.message}
-				/>
+				<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
+					<Text
+						label='Name'
+						register={register}
+						name='name'
+						placeholder='Enter your name'
+						error={errors.name?.message}
+					/>
 
-				<Text
-					label='Name'
-					register={register}
-					name='name'
-					placeholder='Enter your name'
-					error={errors.name?.message}
-				/>
+					<Text
+						label='Linkedin Profile'
+						register={register}
+						name='linkedin'
+						placeholder='Enter your linkedin profile'
+						error={errors.linkedin?.message}
+					/>
+				</div>
+				<div className='flex flex-col gap-3 md:flex-row md:gap-10'>
+					<Text
+						label='Email'
+						register={register}
+						name='email'
+						placeholder='example@mail.com'
+						error={errors.email?.message}
+					/>
 
+					<Text
+						label='Job Title'
+						register={register}
+						name='jobTitle'
+						placeholder='Enter your job title'
+						error={errors.jobTitle?.message}
+					/>
+				</div>
 				<Text
 					label='Bio'
 					register={register}
@@ -112,6 +124,7 @@ const ProfileSettings = () => {
 					buttonText='Add'
 					buttonStyles='mb-2 w-full sm:place-self-end sm:w-auto'
 					variant='primary'
+					type='submit'
 				/>
 			</form>
 		</section>

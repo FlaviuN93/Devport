@@ -37,7 +37,7 @@ const Text = <T extends FieldValues>({
 	const textClasses = `${styles.text} ${textStyles} ${error ? styles.error : ''}`
 
 	return (
-		<div>
+		<div className='w-full'>
 			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>

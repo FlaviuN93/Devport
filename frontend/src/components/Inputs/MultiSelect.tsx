@@ -57,11 +57,11 @@ const MultiSelect: FC<MultiSelectProps> = ({
 	const inputClasses = `${styles.input} ${error ? styles.error : ''}`
 
 	return (
-		<div className={styles.selectContainer}>
+		<div className='w-full'>
 			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>
-			<div className='relative w-full' ref={divRef}>
+			<div className='relative mt-1' ref={divRef}>
 				<input
 					className={inputClasses}
 					value={selectedItem}

@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+// Auth Schemas
+
 export const signupSchema = z.object({
 	email: z
 		.string()
@@ -55,6 +57,8 @@ export const resetPasswordSchema = z
 		path: ['confirmPassword'],
 	})
 
+// Settings Schemas
+
 const MAX_FILE_SIZE = 1024 * 1024 * 2
 
 export const projectSettingsSchema = z.object({
@@ -91,7 +95,8 @@ export const profileSettingsSchema = z.object({
 		.min(1, 'Email is required')
 		.email({ message: 'Invalid email address. Please try again.' }),
 	name: z.string().trim().min(4, 'Your name must contain at least 4 characters'),
-	jobTitle: z.string().trim().min(4, 'Your name must contain at least 4 characters'),
+	jobTitle: z.string().trim().min(4, 'Your job title must contain at least 4 characters'),
+	linkedin: z.string().trim().url('Invalid URL format. Please enter a valid URL.'),
 	bio: z
 		.string()
 		.trim()
