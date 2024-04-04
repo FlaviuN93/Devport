@@ -4,6 +4,7 @@ import styles from './Password.module.css'
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/16/solid'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 import Tooltip from '../UI/Tooltip'
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 export interface PasswordProps<T extends FieldValues> {
 	register: UseFormRegister<T>
@@ -30,7 +31,7 @@ const Password = <T extends FieldValues>({
 }: PasswordProps<T>) => {
 	const [showPassword, setShowPassword] = useState(false)
 	const uniqueId = useId()
-
+	const isLaptop = useMediaQuery('(min-width:1024px)')
 	const handleTogglePassword = () => {
 		setShowPassword((prevState) => !prevState)
 	}
@@ -62,7 +63,13 @@ const Password = <T extends FieldValues>({
 					</button>
 				)}
 
-				{error && typeof error === 'string' && <Tooltip content={error} tooltipStyles={tooltipStyles} />}
+				{error && typeof error === 'string' && (
+					<Tooltip
+						position={isLaptop ? 'right' : 'left'}
+						content={error}
+						tooltipStyles={tooltipStyles}
+					/>
+				)}
 			</div>
 		</div>
 	)

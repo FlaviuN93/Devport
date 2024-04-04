@@ -2,23 +2,22 @@ import React, { useState, useRef, useEffect } from 'react'
 import styles from './MultiSelect.module.css'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { validateCollectionLimit } from '../../utils/functions'
-import Button from '../UI/Button'
-import PlusIcon from '../../assets/Plus-1.svg?react'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
+import Tooltip from '../UI/Tooltip'
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 interface MultiSelectProps<T extends FieldValues> {
 	register: UseFormRegister<T>
 	name: Path<T>
 	items: string[]
-	limit: number
 	placeholder: string
 	label?: string
+	error?: string
 }
 
 const MultiSelect = <T extends FieldValues>({
 	items,
-	limit,
+	error,
 	placeholder,
 	name,
 	register,
@@ -26,17 +25,20 @@ const MultiSelect = <T extends FieldValues>({
 }: MultiSelectProps<T>) => {
 	const [selectedItems, setSelectedItems] = useState<string[]>([])
 	const [isOpen, setIsOpen] = useState(false)
-	const selectRef = useRef(null)
+	const isLaptop = useMediaQuery('(min-width:1024px)')
 
+	const selectRef = useRef(null)
+	const divRef = useRef(null)
 	const handleClose = () => setIsOpen(false)
 
-	useOutsideClick(selectRef, handleClose)
+	useOutsideClick(selectRef, handleClose, divRef)
 
-	const errorMessage = validateCollectionLimit(selectedItems, limit)
 	const isItemActive = (item: string) => selectedItems.includes(item)
 
-	const handleResetItems = () => setSelectedItems([])
-	const handleAddItems = () => setIsOpen(false)
+	const handleResetItems = () => {
+		setSelectedItems([])
+		setIsOpen(false)
+	}
 
 	const handleToggleItem = (selectedItem: string) => {
 		setSelectedItems((prevItems) => {
@@ -45,16 +47,16 @@ const MultiSelect = <T extends FieldValues>({
 			else return prevItems.filter((item) => item !== selectedItem)
 		})
 	}
-	useEffect(() => {
-		console.log(register(name), 'hello')
-	}, [register, name])
+	// useEffect(() => {
+	// 	console.log(register(name), 'hello')
+	// }, [register, name])
 
 	return (
 		<div className={styles.selectContainer}>
 			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>
-			<div className='relative'>
+			<div className='relative' ref={divRef}>
 				<div
 					className={styles.selectedItemContainer}
 					onClick={() => setIsOpen((prevIsOpen) => !prevIsOpen)}
@@ -74,29 +76,22 @@ const MultiSelect = <T extends FieldValues>({
 						<XMarkIcon className='h-6 w-6' />
 					</button>
 				)}
+				{error && <Tooltip content={error} position={isLaptop ? 'right' : 'left'} />}
 			</div>
 
 			{isOpen && (
-				<ul className={styles.itemList} ref={selectRef}>
+				<select className={styles.itemList} {...register(name)} multiple>
 					{items.map((item) => (
-						<li
+						<option
 							key={item}
-							onClick={() => handleToggleItem(item)}
+							value={item}
 							className={`${styles.item}  ${isItemActive(item) ? styles.isActive : ''}`}
 						>
 							{item}
 							{isItemActive(item) ? <CheckIcon className='h-6 w-6' /> : null}
-						</li>
+						</option>
 					))}
-
-					<Button
-						buttonText='Add'
-						buttonStyles='place-self-start py-4 w-full rounded-md'
-						variant='primary'
-						icon={<PlusIcon />}
-						onClick={handleAddItems}
-					/>
-				</ul>
+				</select>
 			)}
 		</div>
 	)

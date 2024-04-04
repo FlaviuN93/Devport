@@ -3,6 +3,8 @@
 	flex-direction: column;
 	align-items: flex-start;
 	margin: 10px 0;
+	font-size: 14px;
+	font-weight: 500;
 }
 
 .fileButton {

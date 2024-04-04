@@ -3,11 +3,11 @@ import { TailwindClasses } from '../../utils/types'
 import styles from './Text.module.css'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 import Tooltip from '../UI/Tooltip'
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 export interface TextProps<T extends FieldValues> {
 	name: Path<T>
 	register: UseFormRegister<T>
-
 	placeholder: string
 	variant?: 'input' | 'textarea'
 	label?: string
@@ -33,7 +33,7 @@ const Text = <T extends FieldValues>({
 	cols,
 }: TextProps<T>) => {
 	const uniqueId = useId()
-
+	const isLaptop = useMediaQuery('(min-width:1024px)')
 	const textClasses = `${styles.text} ${textStyles} ${error ? styles.error : ''}`
 
 	return (
@@ -69,7 +69,13 @@ const Text = <T extends FieldValues>({
 						cols={cols}
 					/>
 				)}{' '}
-				{error && typeof error === 'string' && <Tooltip content={error} tooltipStyles={tooltipStyles} />}
+				{error && typeof error === 'string' && (
+					<Tooltip
+						position={isLaptop ? 'right' : 'left'}
+						content={error}
+						tooltipStyles={tooltipStyles}
+					/>
+				)}
 			</div>
 		</div>
 	)

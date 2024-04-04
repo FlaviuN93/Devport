@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Button from '../components/UI/Button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -39,16 +39,13 @@ const ProfileSettings = () => {
 		// setSelectedImage(selectedFile)
 	}
 
-	useEffect(() => {
-		console.log(errors.imageFile)
-	}, [errors.imageFile])
-	const projectData: SubmitHandler<ProfileData> = (data) => {
+	const profileData: SubmitHandler<ProfileData> = (data) => {
 		console.log('handleSubmit data', data)
 	}
 	return (
 		<section className='settingsContainer'>
 			<h4 className='mt-2 mb-4'>Profile Settings</h4>
-			<form onSubmit={handleSubmit(projectData)} className='formSettingsContainer'>
+			<form onSubmit={handleSubmit(profileData)} className='formSettingsContainer'>
 				<div className='imageFileContainer'>
 					<img src='' alt='' />
 					<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
@@ -63,7 +60,6 @@ const ProfileSettings = () => {
 							name='imageFile'
 							onFileUpload={handleFile}
 							error={errors.imageFile?.message}
-							tooltipPosition='top'
 						/>
 
 						<Button

@@ -29,10 +29,8 @@ const ProjectSettings = () => {
 		handleSubmit,
 		register,
 		formState: { errors },
-		// setValue,
 	} = useForm<ProjectData>({
 		resolver: zodResolver(projectSettingsSchema),
-		mode: 'onChange',
 	})
 	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
 	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
@@ -46,8 +44,8 @@ const ProjectSettings = () => {
 	}
 
 	useEffect(() => {
-		console.log(errors.imageFile)
-	}, [errors.imageFile])
+		console.log(errors, 'helloFromUseEffect')
+	}, [errors])
 
 	const projectData: SubmitHandler<ProjectData> = (data) => {
 		console.log('handleSubmit data', data)
@@ -71,7 +69,6 @@ const ProjectSettings = () => {
 							name='imageFile'
 							onFileUpload={handleFile}
 							error={errors.imageFile?.message}
-							tooltipPosition='top'
 						/>
 
 						<Button
@@ -112,8 +109,7 @@ const ProjectSettings = () => {
 					register={register}
 					name='technologies'
 					items={itemsForMultiSelect}
-					placeholder='Select maximum 5 technologies from the list'
-					limit={5}
+					placeholder='Select technologies from the list'
 					label='Technologies'
 				/>
 

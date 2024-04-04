@@ -5,20 +5,14 @@ import { InformationCircleIcon } from '@heroicons/react/24/outline'
 
 interface TooltipProps {
 	content: string
-	position?: tPositions
+	position: tPositions
 	tooltipStyles?: TailwindClasses
 	iconStyles?: TailwindClasses
 	icon?: ReactNode
 }
 
-const Tooltip: FC<TooltipProps> = ({
-	content,
-	position = 'right',
-	tooltipStyles = '',
-	iconStyles = '',
-	icon,
-}) => {
-	const toolTipClasses = `${styles.tooltipContent} ${tooltipStyles} ${styles[position]}`
+const Tooltip: FC<TooltipProps> = ({ content, position, tooltipStyles = '', iconStyles = '', icon }) => {
+	const toolTipClasses = `${styles.tooltipContent} ${tooltipStyles} ${styles[position]} `
 	const iconClasses = `${styles.tooltipIcon} ${iconStyles}`
 
 	return (

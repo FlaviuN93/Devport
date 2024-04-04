@@ -1,9 +1,10 @@
 import { ReactNode, useId, useRef, useEffect, useState } from 'react'
-import { TailwindClasses, tPositions } from '../../utils/types'
+import { TailwindClasses } from '../../utils/types'
 import { motion } from 'framer-motion'
 import styles from './File.module.css'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 import Tooltip from '../UI/Tooltip'
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 export interface FileProps<T extends FieldValues> {
 	register: UseFormRegister<T>
@@ -14,7 +15,6 @@ export interface FileProps<T extends FieldValues> {
 	icon?: ReactNode
 	fileStyles?: TailwindClasses
 	error?: string
-	tooltipPosition?: tPositions
 	tooltipStyles?: TailwindClasses
 }
 
@@ -26,7 +26,6 @@ const File = <T extends FieldValues>({
 	icon,
 	onFileUpload,
 	error,
-	tooltipPosition,
 	register,
 	tooltipStyles,
 }: FileProps<T>) => {
@@ -42,7 +41,7 @@ const File = <T extends FieldValues>({
 			height,
 		})
 	}, [size.width, size.height])
-
+	const isLaptop = useMediaQuery('(min-width:1024px)')
 	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''}`
 	const fileClasses = `${styles.fileButton} ${fileStyles} relative`
 
@@ -64,7 +63,13 @@ const File = <T extends FieldValues>({
 					aria-describedby={`${uniqueId}-${name}`}
 					type='file'
 				/>
-				{error && <Tooltip content={error} position={tooltipPosition} tooltipStyles={tooltipStyles} />}
+				{error && (
+					<Tooltip
+						content={error}
+						position={isLaptop ? 'right' : 'left'}
+						tooltipStyles={tooltipStyles}
+					/>
+				)}
 			</div>
 		</div>
 	)
