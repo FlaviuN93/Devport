@@ -26,11 +26,11 @@ const Button: FC<ButtonProps> = ({
 	buttonStyles,
 }) => {
 	const buttonClasses = `${styles.button} ${variant ? styles[variant] : ''} ${
-		isLoading && styles.loading
+		isLoading ? styles.loading : ''
 	} ${buttonStyles}
 	`
-	const iconClasses = `${icon && iconPos === 'left' && buttonText && 'mr-2'} ${
-		icon && iconPos === 'right' && buttonText && 'ml-2'
+	const iconClasses = `${icon && iconPos === 'left' && buttonText ? 'mr-2' : ''} ${
+		icon && iconPos === 'right' && buttonText ? 'ml-2' : ''
 	}`
 	let pressed = false
 	const handleClick = (event: MouseEvent) => {

@@ -62,6 +62,7 @@ const ProjectSettings = () => {
 					<p className='text-gray text-sm text-center font-medium px-4'>
 						Image must be PNG or JPEG - max 2MB
 					</p>
+
 					<div className='flex items-center flex-col sm:flex-row gap-3 -mt-1'>
 						<File
 							buttonText='Upload Image'

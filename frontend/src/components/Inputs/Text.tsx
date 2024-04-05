@@ -70,11 +70,7 @@ const Text = <T extends FieldValues>({
 					/>
 				)}{' '}
 				{error && typeof error === 'string' && (
-					<Tooltip
-						position={isLaptop ? 'right' : 'left'}
-						content={error}
-						tooltipStyles={tooltipStyles}
-					/>
+					<Tooltip position={isLaptop ? 'right' : 'top'} content={error} tooltipStyles={tooltipStyles} />
 				)}
 			</div>
 		</div>

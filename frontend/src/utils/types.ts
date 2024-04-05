@@ -11,3 +11,5 @@ export type PasswordValidationType =
 	| 'minLength'
 	| 'maxLength'
 	| 'specialChar'
+
+export type tCardState = 'presentation' | 'edit'

@@ -3,6 +3,7 @@ import styles from './ProjectCard.module.css'
 import Button from '../UI/Button'
 import { ArrowTopRightOnSquareIcon, PencilIcon, PhotoIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
+import { tCardState } from '../../utils/types'
 
 interface ProjectCardProps {
 	demoUrl: string
@@ -10,7 +11,7 @@ interface ProjectCardProps {
 	title: string
 	description: string
 	imageUrl?: string
-	cardState?: 'presentation' | 'edit'
+	cardState?: tCardState
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
@@ -44,8 +45,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 							<Link to={demoUrl} target='_blank'>
 								<Button
 									buttonText='Demo URL'
-									size='small'
-									buttonStyles='flex items-center sm:py-1.5'
+									buttonStyles='w-full'
 									icon={<ArrowTopRightOnSquareIcon className='h-5 w-5' />}
 									iconPos='right'
 								/>
@@ -54,15 +54,14 @@ const ProjectCard: FC<ProjectCardProps> = ({
 							<Link to={repositoryUrl} target='_blank'>
 								<Button
 									buttonText='Repository URL'
-									buttonStyles='flex items-center sm:py-1.5'
-									size='small'
+									buttonStyles='w-full'
 									icon={<ArrowTopRightOnSquareIcon className='h-5 w-5' />}
 									iconPos='right'
 								/>
 							</Link>
 						</>
 					) : (
-						<Button buttonText='Edit' onClick={handleClick} size='small' icon={<PencilIcon />} />
+						<Button buttonText='Edit' onClick={handleClick} icon={<PencilIcon />} />
 					)}
 				</div>
 			</div>

@@ -57,18 +57,14 @@ const Password = <T extends FieldValues>({
 					aria-disabled={disabled ? 'true' : 'false'}
 				/>
 
-				{showPasswordBtn && (
+				{showPasswordBtn && !error && (
 					<button className={styles.passwordIcon} onClick={handleTogglePassword}>
 						{showPassword ? <EyeIcon className='h-6 w-6' /> : <EyeSlashIcon className='h-6 w-6' />}
 					</button>
 				)}
 
 				{error && typeof error === 'string' && (
-					<Tooltip
-						position={isLaptop ? 'right' : 'left'}
-						content={error}
-						tooltipStyles={tooltipStyles}
-					/>
+					<Tooltip position={isLaptop ? 'right' : 'top'} content={error} tooltipStyles={tooltipStyles} />
 				)}
 			</div>
 		</div>

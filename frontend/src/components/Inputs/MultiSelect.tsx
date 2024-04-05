@@ -70,13 +70,9 @@ const MultiSelect: FC<MultiSelectProps> = ({
 					onClick={() => setIsOpen((prevIsOpen) => !prevIsOpen)}
 				/>
 				{error && (
-					<Tooltip
-						content={error}
-						position={isLaptop ? 'right' : 'left'}
-						tooltipStyles={tooltipStyles}
-					/>
+					<Tooltip content={error} position={isLaptop ? 'right' : 'top'} tooltipStyles={tooltipStyles} />
 				)}
-				{selectedItems.length > 0 && (
+				{selectedItems.length > 0 && !error && (
 					<button className={styles.inputIcon} onClick={handleResetItems}>
 						<XMarkIcon className='h-6 w-6' />
 					</button>

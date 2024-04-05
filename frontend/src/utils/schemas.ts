@@ -69,7 +69,11 @@ export const projectSettingsSchema = z.object({
 			return allowedMimeTypes.includes(file.type) && file.size <= MAX_FILE_SIZE
 		}, 'File must be a valid image (PNG, JPEG, or GIF) under 2MB')
 		.optional(),
-	name: z.string().trim().min(4, 'Name of the project has to have a minimum of 4 characters'),
+	name: z
+		.string()
+		.trim()
+		.min(1, 'Project name is required')
+		.max(30, 'Project name is maximum 30 characters long'),
 	demoUrl: z.string().trim().url('Invalid URL format.Please enter a valid demo URL.'),
 	repositoryUrl: z.string().trim().url('Invalid URL format.Please enter a repository URL.'),
 	description: z
@@ -80,8 +84,8 @@ export const projectSettingsSchema = z.object({
 		.regex(/^[a-zA-Z0-9\s]+$/, 'Description can only contain letters and numbers.'),
 	technologies: z
 		.array(z.string())
-		.min(3, { message: 'Select a minimum of 3 technologies' })
-		.max(6, { message: 'Select a maximum of 6 technologies' }),
+		.min(2, { message: 'Select a minimum of 2 technologies' })
+		.max(5, { message: 'Select a maximum of 5 technologies' }),
 })
 
 export const profileSettingsSchema = z.object({
@@ -94,8 +98,13 @@ export const profileSettingsSchema = z.object({
 		.trim()
 		.min(1, 'Email is required')
 		.email({ message: 'Invalid email address. Please try again.' }),
-	name: z.string().trim().min(4, 'Your name must contain at least 4 characters'),
-	jobTitle: z.string().trim().min(4, 'Your job title must contain at least 4 characters'),
+	name: z.string().trim().min(1, 'Your name is required').max(30, 'Your name can be 30 characters long'),
+	jobTitle: z
+		.string()
+		.trim()
+		.min(1, 'You must enter your position')
+		.regex(/^[a-zA-Z]+$/, 'Position can only contain letters'),
+
 	linkedin: z.string().trim().url('Invalid URL format. Please enter a valid URL.'),
 	bio: z
 		.string()

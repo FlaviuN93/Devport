@@ -8,6 +8,7 @@
 .text {
 	width: 100%;
 	padding: 0.5rem 1rem;
+	padding-right: 2.75rem;
 	font-family: inherit;
 	border: 1px solid var(--light-2);
 	border-radius: 8px;
