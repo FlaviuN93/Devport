@@ -49,15 +49,19 @@ const Button: FC<ButtonProps> = ({
 			onClick={handleClick}
 			type={type}
 		>
-			{isLoading ? (
-				<span className={styles.spinner}></span>
-			) : (
-				<>
-					{icon && iconPos === 'left' && <span className={iconClasses}>{icon}</span>}
-					<span>{buttonText}</span>
-					{icon && iconPos === 'right' && <span className={iconClasses}>{icon}</span>}
-				</>
-			)}
+			<>
+				{icon && iconPos === 'left' && (
+					<span className={iconClasses}>
+						{isLoading ? <span className={styles.spinner}></span> : icon}
+					</span>
+				)}
+				<span>{buttonText}</span>
+				{icon && iconPos === 'right' && (
+					<span className={iconClasses}>
+						{isLoading ? <span className={styles.spinner}></span> : icon}
+					</span>
+				)}
+			</>
 		</button>
 	)
 }

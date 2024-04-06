@@ -62,7 +62,7 @@ const SignUp = () => {
 					showPasswordBtn={true}
 					error={isValid}
 				/>
-				<div className='grid grid-cols-2 gap-3'>
+				<div className='grid grid-cols-2 gap-1 sm:gap-3'>
 					{passwordErrors.map((error) => (
 						<PasswordValidation key={error.type} isActive={error.isActive} type={error.type} />
 					))}
