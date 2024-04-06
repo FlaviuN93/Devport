@@ -12,6 +12,7 @@ import ProjectIcon from '../assets/project.svg?react'
 import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
 import MultiSelect from '../components/Inputs/MultiSelect'
+// import { useQuery } from '@tanstack/react-query'
 
 type ProjectData = {
 	imageFile: File
@@ -33,6 +34,8 @@ const ProjectSettings = () => {
 	} = useForm<ProjectData>({
 		resolver: zodResolver(projectSettingsSchema),
 	})
+
+	// useQuery({queryKey:['projectSettings'], queryFn:})
 	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
 	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
 

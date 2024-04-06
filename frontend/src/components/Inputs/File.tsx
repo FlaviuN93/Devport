@@ -41,6 +41,7 @@ const File = <T extends FieldValues>({
 			height,
 		})
 	}, [size.width, size.height])
+
 	const isLaptop = useMediaQuery('(min-width:1024px)')
 	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''}`
 	const fileClasses = `${styles.fileButton} ${fileStyles} relative`
