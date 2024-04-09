@@ -2,8 +2,8 @@ import { PasswordValidationType } from './types'
 
 export const getMessageForValidation = (messageKey: PasswordValidationType): string => {
 	const validationRules = {
-		lowerCase: 'Uppercase letter',
-		upperCase: 'Lowercase letter',
+		lowerCase: 'Lowercase letter',
+		upperCase: 'Uppercase letter',
 		specialChar: 'Special character (!?<>@#$)',
 		number: 'Number',
 		minLength: '8 characters or more',

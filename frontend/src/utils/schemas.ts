@@ -27,7 +27,7 @@ export const loginSchema = z.object({
 		.email({ message: 'Invalid email address. Please try again.' }),
 	password: z
 		.string()
-		.min(8, 'Password must be of at least 8 characters')
+		.min(8, 'Password must have at least 8 characters')
 		.max(20, 'Password must have a maximum of 20 characters'),
 })
 
@@ -50,7 +50,7 @@ export const resetPasswordSchema = z
 			.regex(/[A-Z]/, 'upperCase')
 			.regex(/\d/, 'number')
 			.regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, 'specialChar'),
-		confirmPassword: z.string().min(1, 'Password must be of at least 8 characters'),
+		confirmPassword: z.string().min(1, 'Password must have at least 8 characters'),
 	})
 	.refine((data) => data.password === data.confirmPassword, {
 		message: 'Passwords do not match',
@@ -89,27 +89,32 @@ export const projectSettingsSchema = z.object({
 })
 
 export const profileSettingsSchema = z.object({
-	imageFile: z.instanceof(File).refine((file) => {
-		const allowedMimeTypes = ['image/png', 'image/jpeg']
-		return allowedMimeTypes.includes(file.type) && file.size <= MAX_FILE_SIZE
-	}, 'File must be a valid image (PNG, JPEG, or GIF) under 2MB'),
-	email: z
+	imageFile: z
+		.instanceof(File)
+		.refine((file) => {
+			const allowedMimeTypes = ['image/png', 'image/jpeg']
+			return allowedMimeTypes.includes(file.type) && file.size <= MAX_FILE_SIZE
+		}, 'File must be a valid image (PNG, JPEG, or GIF) under 2MB')
+		.optional(),
+	email: z.string().trim().email({ message: 'Invalid email address. Please try again.' }).optional(),
+	name: z
 		.string()
 		.trim()
-		.min(1, 'Email is required')
-		.email({ message: 'Invalid email address. Please try again.' }),
-	name: z.string().trim().min(1, 'Your name is required').max(30, 'Your name can be 30 characters long'),
+		.max(30, 'Your name can be maximum 30 characters long')
+		.regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, { message: 'No special characters allowed' })
+		.optional(),
 	jobTitle: z
 		.string()
 		.trim()
-		.min(1, 'You must enter your position')
-		.regex(/^[a-zA-Z]+$/, 'Position can only contain letters'),
+		.regex(/^[a-zA-Z]+$/, 'Position can only contain letters')
+		.optional(),
 
-	linkedin: z.string().trim().url('Invalid URL format. Please enter a valid URL.'),
+	linkedin: z.string().trim().url('Invalid URL format. Please enter a valid URL.').optional(),
 	bio: z
 		.string()
 		.trim()
 		.min(30, 'Bio must be at least 30 characters long.')
 		.max(60, 'Bio cannot exceed 60 characters.')
-		.regex(/^[a-zA-Z0-9]+$/, 'Bio can only contain letters and numbers.'),
+		.regex(/^[a-zA-Z0-9]+$/, 'Bio can only contain letters and numbers.')
+		.optional(),
 })
