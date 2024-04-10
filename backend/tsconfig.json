@@ -9,5 +9,5 @@
 		"outDir": "build",
 		"moduleResolution": "Bundler"
 	},
-	"include": ["src"]
+	"include": ["src", "src/server.ts", "src/app.ts"]
 }

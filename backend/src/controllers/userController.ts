@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import supabase from '../services/supabase'
+import { authentication } from '../models/userModel'
 
 export const checkId = async (req: Request, res: Response) => {
 	console.log(req.params.id, 'checkUserId')
@@ -18,8 +19,8 @@ export const getUserAndProjects = async (req: Request, res: Response) => {
 	// let { data: users, error } = await supabase.from('users').select('*')
 }
 export const authenticateUser = async (req: Request, res: Response) => {
-	const body = req.body
-	console.log(body, 'Post method for users')
+	const message = authentication(req.body.email, req.body.password)
+	console.log(message, 'ForgotPassword')
 }
 
 export const getUser = async (req: Request, res: Response) => {
