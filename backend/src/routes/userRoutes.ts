@@ -1,11 +1,8 @@
 import {
-	getUserAndProjects,
-	authenticateUser,
-	getUser,
-	updateUser,
+	getUserAndProjectsData,
+	getUserData,
+	updateUserData,
 	checkId,
-	checkAuthUserData,
-	checkUserData,
 } from '../controllers/userController'
 import express from 'express'
 
@@ -13,7 +10,7 @@ const userRouter = express.Router()
 
 userRouter.param('id', checkId)
 
-userRouter.route('/').get(getUserAndProjects).post(checkAuthUserData, authenticateUser)
-userRouter.route('/:id').get(getUser).patch(checkUserData, updateUser)
+userRouter.route('/').get(getUserAndProjectsData)
+userRouter.route('/:id').get(getUserData).patch(updateUserData)
 
 export default userRouter
