@@ -1,10 +1,19 @@
-import { getUserAndProjects, authenticateUser, getUser, updateUser } from '../controllers/userController'
-import supabase from '../services/supabase'
+import {
+	getUserAndProjects,
+	authenticateUser,
+	getUser,
+	updateUser,
+	checkId,
+	checkAuthUserData,
+	checkUserData,
+} from '../controllers/userController'
 import express from 'express'
 
 const userRouter = express.Router()
 
-userRouter.route('/').get(getUserAndProjects).post(authenticateUser)
-userRouter.route('/:id').get(getUser).patch(updateUser)
+userRouter.param('id', checkId)
+
+userRouter.route('/').get(getUserAndProjects).post(checkAuthUserData, authenticateUser)
+userRouter.route('/:id').get(getUser).patch(checkUserData, updateUser)
 
 export default userRouter

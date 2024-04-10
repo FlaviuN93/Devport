@@ -1,8 +1,7 @@
-import React from 'react'
 import Button from '../components/UI/Button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { profileSettingsSchema } from '../utils/schemas'
+import { ProfileSettingsType, profileSettingsSchema } from '../utils/schemas'
 import File from '../components/Inputs/File'
 // import TrashIcon from '../assets/Trash.svg?react'
 import CheckCircleIcon from '../assets/check circle-1.svg?react'
@@ -12,22 +11,13 @@ import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 
-type ProfileData = {
-	imageFile: File
-	email: string
-	name: string
-	jobTitle: string
-	linkedin: string
-	bio: string
-}
-
 const ProfileSettings = () => {
 	const {
 		handleSubmit,
 		register,
 		formState: { errors },
 		// setValue,
-	} = useForm<ProfileData>({
+	} = useForm<ProfileSettingsType>({
 		resolver: zodResolver(profileSettingsSchema),
 	})
 	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
@@ -41,7 +31,7 @@ const ProfileSettings = () => {
 		// setSelectedImage(selectedFile)
 	}
 
-	const profileData: SubmitHandler<ProfileData> = (data) => {
+	const profileData: SubmitHandler<ProfileSettingsType> = (data) => {
 		console.log('handleSubmit data', data)
 	}
 	return (

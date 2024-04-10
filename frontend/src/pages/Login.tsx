@@ -1,31 +1,25 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import GithubIcon from '../assets/github.svg?react'
 import Button from '../components/UI/Button'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { loginSchema } from '../utils/schemas'
+import { LoginType, loginSchema } from '../utils/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
-
-type LoginData = {
-	email: string
-	password: string
-}
 
 const Login = () => {
 	const {
 		handleSubmit,
 		register,
 		formState: { errors },
-	} = useForm<LoginData>({
+	} = useForm<LoginType>({
 		resolver: zodResolver(loginSchema),
 	})
 	const handleGithubSignup = () => {
 		console.log('Github')
 	}
 
-	const loginData: SubmitHandler<LoginData> = (data) => {
+	const loginData: SubmitHandler<LoginType> = (data) => {
 		console.log('Submitted Data', data, errors, 'helrolsd')
 	}
 	return (

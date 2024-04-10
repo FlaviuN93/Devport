@@ -118,3 +118,9 @@ export const profileSettingsSchema = z.object({
 		.regex(/^[a-zA-Z0-9]+$/, 'Bio can only contain letters and numbers.')
 		.optional(),
 })
+
+export type ProfileSettingsType = z.infer<typeof profileSettingsSchema>
+export type ProjectSettingsType = z.infer<typeof projectSettingsSchema>
+export type ResetPasswordType = z.infer<typeof resetPasswordSchema>
+export type SignupType = z.infer<typeof signupSchema>
+export type LoginType = z.infer<typeof loginSchema>

@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Button from '../components/UI/Button'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { projectSettingsSchema } from '../utils/schemas'
+import { ProjectSettingsType, projectSettingsSchema } from '../utils/schemas'
 import File from '../components/Inputs/File'
 import TrashIcon from '../assets/Trash.svg?react'
 import TrashIcon2 from '../assets/Trash-1.svg?react'
@@ -14,15 +14,6 @@ import Text from '../components/Inputs/Text'
 import MultiSelect from '../components/Inputs/MultiSelect'
 // import { useQuery } from '@tanstack/react-query'
 
-type ProjectData = {
-	imageFile: File
-	name: string
-	demoUrl: string
-	repositoryUrl: string
-	description: string
-	technologies: string
-}
-
 const itemsForMultiSelect = ['Java', 'Javascript', 'Python', 'NodeJS', 'React', 'Angular']
 
 const ProjectSettings = () => {
@@ -31,7 +22,7 @@ const ProjectSettings = () => {
 		register,
 		control,
 		formState: { errors },
-	} = useForm<ProjectData>({
+	} = useForm<ProjectSettingsType>({
 		resolver: zodResolver(projectSettingsSchema),
 	})
 
@@ -51,7 +42,7 @@ const ProjectSettings = () => {
 		console.log(errors, 'helloFromUseEffect')
 	}, [errors])
 
-	const projectData: SubmitHandler<ProjectData> = (data) => {
+	const projectData: SubmitHandler<ProjectSettingsType> = (data) => {
 		console.log('handleSubmit data', data)
 	}
 

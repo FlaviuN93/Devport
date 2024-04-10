@@ -1,7 +1,6 @@
-import React from 'react'
 import Button from '../components/UI/Button'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { resetPasswordSchema } from '../utils/schemas'
+import { ResetPasswordType, resetPasswordSchema } from '../utils/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Password from '../components/Inputs/Password'
 import LogoIcon from '../assets/Logo.svg?react'
@@ -9,17 +8,12 @@ import { useValidateResult } from '../hooks/useValidateResult'
 import { passwordInitialState } from '../utils/variables'
 import PasswordValidation from '../components/Inputs/PasswordValidation'
 
-type ResetPasswordData = {
-	password: string
-	confirmPassword: string
-}
-
 const ResetPassword = () => {
 	const {
 		handleSubmit,
 		register,
 		formState: { errors },
-	} = useForm<ResetPasswordData>({
+	} = useForm<ResetPasswordType>({
 		resolver: zodResolver(resetPasswordSchema),
 		criteriaMode: 'all',
 		mode: 'onChange',
@@ -28,7 +22,7 @@ const ResetPassword = () => {
 	const passwordErrorTypes = errors.password?.types?.invalid_string
 	const { errors: passwordErrors, isValid } = useValidateResult(passwordErrorTypes, passwordInitialState)
 
-	const resetPasswordData: SubmitHandler<ResetPasswordData> = (data) => {
+	const resetPasswordData: SubmitHandler<ResetPasswordType> = (data) => {
 		console.log('Submitted Data', data, errors, 'submitResetPassword')
 	}
 	return (

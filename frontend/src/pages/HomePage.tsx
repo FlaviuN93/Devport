@@ -5,10 +5,7 @@ import Cover from '../components/UI/Cover'
 import Plus1 from '../assets/Plus-1.svg?react'
 import Plus from '../assets/Plus.svg?react'
 import Trash from '../assets/Trash.svg?react'
-import { useForm } from 'react-hook-form'
 import Search from '../components/Inputs/Search'
-import File from '../components/Inputs/File'
-import UploadIcon from '../assets/upload.svg?react'
 import ProjectCard from '../components/Containers/ProjectCard'
 import {
 	Dropdown,
@@ -20,13 +17,7 @@ import {
 import { Link } from 'react-router-dom'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 
-import { useEffect } from 'react'
-
 export default function HomePage() {
-	const { register } = useForm()
-	useEffect(() => {
-		console.log('hello')
-	}, [])
 	return (
 		<div className='pl-40 mt-40 flex flex-col'>
 			<PageNav />
@@ -102,24 +93,6 @@ export default function HomePage() {
 				placeholder='Search for values'
 				name='search'
 				iconPos='right'
-			/>
-
-			<File
-				onChange={(value) => console.log(value, 'helloFromInput')}
-				label='Sign In'
-				name='file'
-				buttonText='Upload'
-				icon={<UploadIcon />}
-				register={register}
-			/>
-
-			<File
-				onChange={(value) => console.log(value, 'helloFromInput')}
-				label='Sign In'
-				name='file'
-				buttonText='Upload Image'
-				icon={<UploadIcon />}
-				register={register}
 			/>
 
 			<Avatar />

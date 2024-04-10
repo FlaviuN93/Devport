@@ -1,27 +1,21 @@
-import React from 'react'
 import Button from '../components/UI/Button'
 import GithubIcon from '../assets/github.svg?react'
 import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { signupSchema } from '../utils/schemas'
+import { SignupType, signupSchema } from '../utils/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useValidateResult } from '../hooks/useValidateResult'
 import PasswordValidation from '../components/Inputs/PasswordValidation'
 import { passwordInitialState } from '../utils/variables'
 import { Link } from 'react-router-dom'
 
-type SignupData = {
-	email: string
-	password: string
-}
-
 const SignUp = () => {
 	const {
 		handleSubmit,
 		register,
 		formState: { errors },
-	} = useForm<SignupData>({
+	} = useForm<SignupType>({
 		resolver: zodResolver(signupSchema),
 		criteriaMode: 'all',
 		mode: 'onChange',
@@ -34,7 +28,7 @@ const SignUp = () => {
 		console.log('Github')
 	}
 
-	const signupData: SubmitHandler<SignupData> = (data) => {
+	const signupData: SubmitHandler<SignupType> = (data) => {
 		console.log('Submitted Data', data, errors, 'helrolsd')
 	}
 

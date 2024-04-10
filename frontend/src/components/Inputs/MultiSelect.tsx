@@ -1,4 +1,4 @@
-import React, { useState, useRef, FC, useEffect } from 'react'
+import { useState, useRef, FC, useEffect } from 'react'
 import styles from './MultiSelect.module.css'
 
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline'
@@ -10,7 +10,7 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 interface MultiSelectProps {
 	onChange: (selectedValue: string[]) => void
 	items: string[]
-	selectedItem: string
+	selectedItem: string[]
 	placeholder: string
 	error?: string
 	label?: string

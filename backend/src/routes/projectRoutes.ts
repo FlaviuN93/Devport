@@ -4,15 +4,18 @@ import {
 	createProject,
 	updateProject,
 	deleteProject,
+	checkUserId,
+	checkProjectData,
 } from '../controllers/projectController'
 
 const projectRouter = express.Router()
+projectRouter.param('id', checkUserId)
 
 projectRouter
 	.route('/:userId')
 	.get(getProjects)
-	.post(createProject)
-	.patch(updateProject)
+	.post(checkProjectData, createProject)
+	.patch(checkProjectData, updateProject)
 	.delete(deleteProject)
 
 export default projectRouter

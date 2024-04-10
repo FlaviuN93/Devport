@@ -1,5 +1,13 @@
 import { Request, Response } from 'express'
 
+export const checkUserId = async (req: Request, res: Response) => {
+	console.log(req.params.id, 'checkUserId')
+}
+
+export const checkProjectData = async (req: Request, res: Response) => {
+	console.log(req.body, 'checkProjectBody')
+}
+
 export const getProjects = async (req: Request, res: Response) => {
 	console.log(req.params, 'Get projects data')
 	// let { data: users, error } = await supabase.from('projects').select('*')
