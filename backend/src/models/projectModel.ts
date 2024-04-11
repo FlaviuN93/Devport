@@ -1,8 +1,10 @@
 import { z } from 'zod'
 import { descriptionSchema, fileSchema, nameSchema, urlSchema } from './baseSchema'
 
+const MAX_FILE_SIZE = 1024 * 1024 * 2
+
 const createProjectSchema = z.object({
-	imageFile: fileSchema,
+	imageFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB'),
 	name: nameSchema,
 	demoUrl: urlSchema,
 	repositoryUrl: urlSchema,

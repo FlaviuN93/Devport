@@ -16,8 +16,8 @@ if (process.env.NODE_ENV === 'development') {
 app.use(cors({ origin: process.env.VITE_APP_LOCAL_DOMAIN }))
 app.use(bodyParser.json())
 
-app.use('/api/v1/projects', projectRouter)
-app.use('/api/v1/users', userRouter)
-app.use('/api/v1/auth', authRouter)
+app.use('/api/projects', projectRouter)
+app.use('/api/users', userRouter)
+app.use('/api/auth', authRouter)
 
 export default app

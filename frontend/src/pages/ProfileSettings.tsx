@@ -53,7 +53,7 @@ const ProfileSettings = () => {
 							buttonText='Upload Cover'
 							icon={<PhotoIcon className='h-6 w-6' />}
 							register={register}
-							name='imageFile'
+							name='coverFile'
 							onFileUpload={handleFile}
 							// error={errors.imageFile?.message}
 						/>
@@ -62,7 +62,7 @@ const ProfileSettings = () => {
 							buttonText='Upload Avatar'
 							icon={<UserCircleIcon className='w-6 h-6' />}
 							register={register}
-							name='imageFile'
+							name='avatarFile'
 							onFileUpload={handleFile}
 							// error={errors.imageFile?.message}
 						/>

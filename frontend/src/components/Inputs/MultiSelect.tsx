@@ -10,7 +10,7 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 interface MultiSelectProps {
 	onChange: (selectedValue: string[]) => void
 	items: string[]
-	selectedItem: string[]
+	selectedItem: string[] | undefined
 	placeholder: string
 	error?: string
 	label?: string

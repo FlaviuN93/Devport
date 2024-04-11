@@ -12,9 +12,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 }
 
 export const registerUser = async (req: Request, res: Response) => {
-	// if(req.body)
-	const message = register(req.body)
-	console.log(message, 'Auntheticate')
+	register(req.body)
 	res.status(200).json('hello From Authenticate')
 }
 

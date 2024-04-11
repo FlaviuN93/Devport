@@ -1,5 +1,6 @@
 import { TypeOf, ZodError, z } from 'zod'
 import { emailSchema, passwordSchema } from './baseSchema'
+import supabase from '../services/supabase'
 
 const authSchema = z.object({
 	email: emailSchema,
@@ -24,9 +25,10 @@ type AuthType = z.infer<typeof authSchema>
 type ForgotPasswordType = z.infer<typeof forgotPasswordSchema>
 type ResetPasswordType = z.infer<typeof resetPasswordSchema>
 
-export const register = (reqBody: AuthType) => {
+export const register = async (reqBody: AuthType) => {
 	try {
 		const { email, password } = authSchema.parse(reqBody)
+		const { data, error, status } = await supabase.from('users').insert({ email, password }).select().single()
 	} catch (err) {
 		if (err instanceof ZodError) {
 			const formattedErrors = err.format()
@@ -35,9 +37,11 @@ export const register = (reqBody: AuthType) => {
 	}
 }
 
-export const login = (reqBody: AuthType) => {
+export const login = async (reqBody: AuthType) => {
 	try {
 		const { email, password } = authSchema.parse(reqBody)
+		const { data, error, status } = await supabase.from('users').select().eq('password', password).single()
+		console.log(data, 'CheckLogin')
 	} catch (err) {
 		if (err instanceof ZodError) {
 			const formattedErrors = err.format()
@@ -46,9 +50,10 @@ export const login = (reqBody: AuthType) => {
 	}
 }
 
-export const forgot = (reqBody: ForgotPasswordType) => {
+export const forgot = async (reqBody: ForgotPasswordType) => {
 	try {
 		const { email } = forgotPasswordSchema.parse(reqBody)
+		const { data, error, status } = await supabase.from('users').select('email').eq('email', email).single()
 	} catch (err) {
 		if (err instanceof ZodError) {
 			const formattedErrors = err.format()
@@ -57,9 +62,14 @@ export const forgot = (reqBody: ForgotPasswordType) => {
 	}
 }
 
-export const reset = (reqBody: ResetPasswordType) => {
+export const reset = async (reqBody: ResetPasswordType) => {
 	try {
 		const { password } = resetPasswordSchema.parse(reqBody)
+		const { data, error, status } = await supabase
+			.from('users')
+			.select('password')
+			.eq('password', password)
+			.single()
 	} catch (err) {
 		if (err instanceof ZodError) {
 			const formattedErrors = err.format()

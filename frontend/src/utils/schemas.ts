@@ -20,8 +20,8 @@ const passwordSchema = z
 const nameSchema = z
 	.string()
 	.trim()
-	.min(1, 'Name is required')
-	.max(30, 'Name is maximum 30 characters long')
+	.min(4, 'Name must be at least 4 characters')
+	.max(30, 'Name must be maximum 30 characters')
 	.regex(/^[a-zA-Z]+$/, 'Name can only contain letters')
 
 const descriptionSchema = z
@@ -31,7 +31,7 @@ const descriptionSchema = z
 	.max(80, 'Description cannot exceed 80 characters.')
 	.regex(/^[a-zA-Z0-9\s]+$/, 'Description can only contain letters and numbers.')
 
-const urlSchema = z.string().trim().url('Invalid URL format.Please enter a repository URL.')
+const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
 
 const fileSchema = z.instanceof(File).refine((file) => {
 	const allowedMimeTypes = ['image/png', 'image/jpeg']
@@ -70,19 +70,21 @@ export const resetPasswordSchema = z
 const MAX_FILE_SIZE = 1024 * 1024 * 2
 const AVATAR_FILE_SIZE = 1024 * 1024
 
-export const projectSettingsSchema = z.object({
-	imageFile: fileSchema
-		.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB')
-		.optional(),
-	name: nameSchema,
-	demoUrl: urlSchema,
-	repositoryUrl: urlSchema,
-	description: descriptionSchema,
-	technologies: z
-		.array(z.string())
-		.min(2, 'Select a minimum of 2 technologies')
-		.max(5, 'Select a maximum of 5 technologies'),
-})
+export const projectSettingsSchema = z
+	.object({
+		imageFile: fileSchema
+			.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB')
+			.optional(),
+		name: nameSchema,
+		demoUrl: urlSchema,
+		repositoryUrl: urlSchema,
+		description: descriptionSchema,
+		technologies: z
+			.array(z.string())
+			.min(2, 'Select a minimum of 2 technologies')
+			.max(5, 'Select a maximum of 5 technologies'),
+	})
+	.partial()
 
 export const profileSettingsSchema = z
 	.object({

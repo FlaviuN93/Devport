@@ -45,10 +45,7 @@ const Portfolio = () => {
 				<img src='../assets/profile-bg.png' alt='Cover' />
 			</div>
 			<div className='portfolioContainer relative'>
-				<Avatar
-					avatarStyles='h-40 w-40 absolute -top-20'
-					icon={<UserCircleIcon className=' h-20 w-20' />}
-				/>
+				<Avatar avatarStyles='h-40 w-40 absolute -top-20' icon={<UserCircleIcon className=' h-20 w-20' />} />
 
 				<div className='mt-20'>
 					<h2 className='mb-2'>Mitsuyo Nguyen</h2>
@@ -77,8 +74,8 @@ const Portfolio = () => {
 				<div>
 					<h4 className='text-gray mb-2'>Bio</h4>
 					<p className='text-black2 font-medium text-md md:w-[90%]'>
-						A passionate Junior Front-end Developer with extensive experience in HTML, CSS, JavaScript,
-						and React. Proven track record of developing user-friendly interfaces and optimizing website
+						A passionate Junior Front-end Developer with extensive experience in HTML, CSS, JavaScript, and
+						React. Proven track record of developing user-friendly interfaces and optimizing website
 						performance. Eager to learn and grow in the tech industry.
 					</p>
 				</div>
