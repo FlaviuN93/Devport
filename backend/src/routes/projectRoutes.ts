@@ -4,11 +4,9 @@ import {
 	createProjectData,
 	updateProjectData,
 	deleteProjectData,
-	checkUserId,
 } from '../controllers/projectController'
 
 const projectRouter = express.Router()
-projectRouter.param('id', checkUserId)
 
 projectRouter
 	.route('/:userId')

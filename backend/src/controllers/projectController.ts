@@ -2,10 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import { createProjectSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 
-export const checkUserId = async (req: Request, res: Response) => {
-	console.log(req.params.id, 'checkUserId')
-}
-
 export const getProjectsData = async (req: Request, res: Response) => {
 	console.log(req.params, 'Get projects data')
 	// let { data: users, error } = await supabase.from('projects').select('*')

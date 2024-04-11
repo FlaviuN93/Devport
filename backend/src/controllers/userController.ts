@@ -4,10 +4,6 @@ import { getUser } from '../models/userModel'
 import { updateUserSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 
-export const checkId = async (req: Request, res: Response) => {
-	console.log(req.params.id, 'checkUserId')
-}
-
 export const getUserAndProjectsData = async (req: Request, res: Response) => {
 	console.log(req, 'Get user and projects data')
 	// let { data: users, error } = await supabase.from('users').select('*')

@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response, Errback, ErrorRequestHandler } from 'express'
+import express, { NextFunction, Request, Response } from 'express'
 import 'dotenv/config' // This import should not be moved from here
 import cors from 'cors'
 import morgan from 'morgan'
