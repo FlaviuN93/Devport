@@ -1,28 +1,45 @@
 import { z } from 'zod'
 import { createProjectSchema, updateProjectSchema } from '../services/routeSchema'
 import supabase from '../services/supabase'
+import AppError from '../utils/appError'
 
-type CreateProjectType = z.infer<typeof createProjectSchema>
-type UpdateProjectType = z.infer<typeof updateProjectSchema>
+type ProjectType = z.infer<typeof createProjectSchema>
+type OptionalProjectType = z.infer<typeof updateProjectSchema>
 
-export const getProjects = async (userId: string) => {
+interface defaultResponse {
+	status: number
+	statusText: string
+}
+interface getProjectsResponse extends defaultResponse {
+	projects: ProjectType[]
+}
+
+export const getProjects = async (userId: string): Promise<getProjectsResponse | AppError> => {
 	const response = await supabase.from('projects').select('*').eq('user_id', userId)
 	const { data: projects, error, status, statusText } = response
-	console.log(projects, 'getProjects', error, 'errorMessage')
+
+	if (error) return new AppError(status, statusText)
+
+	return { projects, status, statusText }
 }
 
-export const createProject = async (reqBody: CreateProjectType) => {
-	const response = await supabase.from('projects').insert(reqBody).select().single()
-	const { data: project, error, status, statusText } = response
-	console.log(project, 'createdProject', error, 'errorMessage')
+export const createProject = async (reqBody: ProjectType): Promise<defaultResponse | AppError> => {
+	const response = await supabase.from('projects').insert(reqBody)
+	const { error, status, statusText } = response
+	if (error) return new AppError(status, statusText)
+	return { status, statusText }
 }
 
-export const updateProject = async (reqBody: UpdateProjectType) => {
+export const updateProject = async (reqBody: OptionalProjectType): Promise<defaultResponse | AppError> => {
 	const response = await supabase.from('projects').update(reqBody)
-	console.log(response, 'updateProject')
+	const { error, status, statusText } = response
+	if (error) return new AppError(status, statusText)
+	return { status, statusText }
 }
 
-export const deleteProject = async (projectId: string) => {
+export const deleteProject = async (projectId: string): Promise<defaultResponse | AppError> => {
 	const response = await supabase.from('projects').delete().eq('id', projectId)
-	console.log(response, 'deleteProject')
+	const { error, status, statusText } = response
+	if (error) return new AppError(status, statusText)
+	return { status, statusText }
 }

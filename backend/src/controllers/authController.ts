@@ -1,29 +1,31 @@
 import { NextFunction, Request, Response } from 'express'
-import { register, login } from '../models/authModel'
+import { forgotPassword, loginUser, registerUser, resetPassword } from '../models/authModel'
 
 import { catchAsync } from '../utils/errorFunctions'
 import { authSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
 
-export const forgotPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	const email = forgotPasswordSchema.parse(req.body)
-	console.log(email, 'ForgotPassword')
+export const forgotPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const { email } = forgotPasswordSchema.parse(req.body)
+	const response = forgotPassword(email)
+	console.log(response, 'ForgotPassword')
 })
 
-export const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { password } = resetPasswordSchema.parse(req.body)
-	console.log(password, 'ResetPassword')
+	const response = resetPassword(password)
+	console.log(response, 'ResetPassword')
 })
 
-export const registerUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const registerUserHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { email, password } = authSchema.parse(req.body)
-	register(email, password)
-
+	const response = await registerUser(email, password)
+	console.log(response, 'RegisterUser')
 	res.status(200).json('hello From Authenticate')
 })
 
-export const loginUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const loginUserHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { email, password } = authSchema.parse(req.body)
-	const message = login(email, password)
-	console.log(message, 'Auntheticate')
+	const response = await loginUser(email, password)
+	console.log(response, 'Login')
 	res.status(200).json('hello From Authenticate')
 })

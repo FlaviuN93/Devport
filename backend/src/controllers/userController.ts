@@ -1,19 +1,22 @@
 import { Request, Response } from 'express'
-import supabase from '../services/supabase'
-import { getUser } from '../models/userModel'
+import { getUser, updateUser } from '../models/userModel'
 import { updateUserSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
+import { getProjects } from '../models/projectModel'
 
 export const getUserAndProjectsData = async (req: Request, res: Response) => {
-	console.log(req, 'Get user and projects data')
-	// let { data: users, error } = await supabase.from('users').select('*')
+	const userData = await getUser(req.params.id)
+	const projectsData = await getProjects(req.params.id)
+	console.log(projectsData, userData, 'getUserAndPRojects')
 }
 
 export const getUserData = async (req: Request, res: Response) => {
-	const data = await getUser(req.params.id)
+	const response = await getUser(req.params.id)
+	console.log(response, 'getUser')
 }
 
 export const updateUserData = catchAsync(async (req: Request, res: Response) => {
-	console.log(req.body, 'Patch method for updating user settings')
-	const user = updateUserSchema.parse(req.body)
+	const userData = updateUserSchema.parse(req.body)
+	const response = await updateUser(userData)
+	console.log(response, 'Update User')
 })

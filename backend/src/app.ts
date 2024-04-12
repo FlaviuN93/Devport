@@ -23,7 +23,7 @@ app.use('/api/users', userRouter)
 app.use('/api/auth', authRouter)
 
 app.all('*', (req: Request, res: Response, next: NextFunction) => {
-	next(new AppError(404, 'not_found', `Can't find ${req.originalUrl} on this app!`))
+	next(new AppError(404, 'Not Found'))
 })
 
 app.use(globalErrorHandler)

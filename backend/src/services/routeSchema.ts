@@ -34,7 +34,7 @@ export const resetPasswordSchema = z
 
 // Project Schema
 export const createProjectSchema = z.object({
-	imageFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB'),
+	imageFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB').optional(),
 	name: nameSchema,
 	demoUrl: urlSchema,
 	repositoryUrl: urlSchema,

@@ -1,10 +1,15 @@
 import express from 'express'
-import { forgotPassword, loginUser, registerUser, resetPassword } from '../controllers/authController'
+import {
+	forgotPasswordHandler,
+	loginUserHandler,
+	registerUserHandler,
+	resetPasswordHandler,
+} from '../controllers/authController'
 
 const authRouter = express.Router()
 
-authRouter.route('/register').post(registerUser)
-authRouter.route('/login').post(loginUser)
-authRouter.route('/password').post(forgotPassword).patch(resetPassword)
+authRouter.route('/register').post(registerUserHandler)
+authRouter.route('/login').post(loginUserHandler)
+authRouter.route('/password').post(forgotPasswordHandler).patch(resetPasswordHandler)
 
 export default authRouter
