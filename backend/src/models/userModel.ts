@@ -2,10 +2,33 @@ import { z } from 'zod'
 import supabase from '../services/supabase'
 import { updateUserSchema } from '../services/routeSchema'
 import AppError from '../utils/appError'
+import { ProjectType } from './projectModel'
+
+export const getUserAndProjects = async (userId: string): Promise<IGetUserAndProjects | AppError> => {
+	const response = await supabase.from('users').select(`*, projects(*)`).eq('id', userId).single()
+	const { data: user, error, status, statusText } = response
+
+	if (error) return new AppError(status, statusText)
+	return { user, status, statusText }
+}
+
+export const getUser = async (userId: string): Promise<IGetUser | AppError> => {
+	const response = await supabase.from('users').select('*').eq('id', userId).single()
+	const { data: user, error, status, statusText } = response
+	if (error) return new AppError(status, statusText)
+	return { user, status, statusText }
+}
+
+export const updateUser = async (reqBody: UpdateUserType): Promise<IDefault | AppError> => {
+	const response = await supabase.from('users').update(reqBody).eq('id', reqBody.name)
+	const { error, status, statusText } = response
+	if (error) return new AppError(status, statusText)
+	return { status, statusText }
+}
 
 type UpdateUserType = z.infer<typeof updateUserSchema>
 
-type User = {
+interface IUser {
 	coverFile: File
 	avatarFile: File
 	email: string
@@ -15,25 +38,19 @@ type User = {
 	bio: string
 }
 
-interface defaultResponse {
+interface IDefault {
 	status: number
 	statusText: string
 }
 
-interface GetUserResponse extends defaultResponse {
-	user: User
+interface IUserAndProjects extends IUser {
+	projects: ProjectType[]
 }
 
-export const getUser = async (userId: string): Promise<GetUserResponse | AppError> => {
-	const response = await supabase.from('users').select().eq('id', userId).single()
-	const { data: user, error, status, statusText } = response
-	if (error) return new AppError(status, statusText)
-	return { user, status, statusText }
+interface IGetUser extends IDefault {
+	user: IUser
 }
 
-export const updateUser = async (reqBody: UpdateUserType): Promise<defaultResponse | AppError> => {
-	const response = await supabase.from('users').update(reqBody).eq('id', reqBody.name)
-	const { error, status, statusText } = response
-	if (error) return new AppError(status, statusText)
-	return { status, statusText }
+interface IGetUserAndProjects extends IDefault {
+	user: IUserAndProjects
 }

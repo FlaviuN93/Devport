@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import { createProjectSchema, updateProjectSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import { createProject, deleteProject, getProjects, updateProject } from '../models/projectModel'
-import AppError from '../utils/appError'
+import AppError, { successMessage } from '../utils/appError'
 
 export const getProjectsData = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getProjects(req.params.userId)
@@ -10,6 +10,7 @@ export const getProjectsData = async (req: Request, res: Response, next: NextFun
 	const { projects, status, statusText } = response
 	res.status(status).json({
 		statusText,
+		message: successMessage[response.status],
 		data: projects,
 	})
 }
@@ -20,6 +21,7 @@ export const createProjectData = catchAsync(async (req: Request, res: Response, 
 	if (response instanceof AppError) return next(response)
 	res.status(response.status).json({
 		statusText: response.statusText,
+		message: successMessage[response.status],
 	})
 })
 
@@ -29,6 +31,7 @@ export const updateProjectData = catchAsync(async (req: Request, res: Response, 
 	if (response instanceof AppError) return next(response)
 	res.status(response.status).json({
 		statusText: response.statusText,
+		message: successMessage[response.status],
 	})
 })
 
@@ -37,5 +40,6 @@ export const deleteProjectData = async (req: Request, res: Response, next: NextF
 	if (response instanceof AppError) return next(response)
 	res.status(response.status).json({
 		statusText: response.statusText,
+		message: successMessage[response.status],
 	})
 }
