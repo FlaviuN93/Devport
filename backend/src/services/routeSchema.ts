@@ -7,22 +7,16 @@ import {
 	urlSchema,
 } from '../services/baseSchema'
 import { z } from 'zod'
-import bcrypt from 'bcrypt'
 
 // Constants
 const MAX_FILE_SIZE = 1024 * 1024 * 2
 const AVATAR_FILE_SIZE = 1024 * 1024
 
 // Auth Schema
-export const authSchema = z
-	.object({
-		email: emailSchema,
-		password: passwordSchema,
-	})
-	.transform(async (data) => {
-		data.password = await bcrypt.hash(data.password, 12)
-		return data
-	})
+export const authSchema = z.object({
+	email: emailSchema,
+	password: passwordSchema,
+})
 
 export const forgotPasswordSchema = z.object({
 	email: emailSchema,
@@ -37,7 +31,6 @@ export const resetPasswordSchema = z
 		message: 'Passwords do not match',
 		path: ['confirmPassword'],
 	})
-	.transform(async (data) => await bcrypt.hash(data.password, 12))
 
 // Project Schema
 export const createProjectSchema = z.object({

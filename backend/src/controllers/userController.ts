@@ -7,12 +7,20 @@ import AppError, { successMessage } from '../utils/appError'
 export const getUserAndProjectsData = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getUserAndProjects(req.params.userId)
 	if (response instanceof AppError) return next(response)
+	const { userWithProjects, status, statusText } = response
+
+	res.status(status).json({
+		statusText,
+		message: successMessage[response.status],
+		data: userWithProjects,
+	})
 }
 
 export const getUserData = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getUser(req.params.userId)
 	if (response instanceof AppError) return next(response)
 	const { user, status, statusText } = response
+
 	res.status(status).json({
 		statusText,
 		message: successMessage[response.status],

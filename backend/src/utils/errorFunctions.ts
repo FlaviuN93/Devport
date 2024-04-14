@@ -31,7 +31,6 @@ const sendErrorInDev = (err: AppError, res: Response) => {
 
 const sendErrorInProd = (err: AppError, res: Response) => {
 	if (!err.isClientError) {
-		console.error('Server or programming ERROR', err.stack)
 		return res.status(500).json({
 			status: 'error',
 			message: 'Something went very wrong!',
@@ -49,7 +48,6 @@ const sendErrorInProd = (err: AppError, res: Response) => {
 
 // Main Functions
 export const globalErrorHandler = (err: AppError, req: Request, res: Response, next: NextFunction) => {
-	console.log(err, 'sendErrorDev')
 	if (process.env.NODE_ENV === 'development') sendErrorInDev(err, res)
 	else sendErrorInProd(err, res)
 }

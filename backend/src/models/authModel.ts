@@ -1,32 +1,46 @@
 import supabase from '../services/supabase'
 import AppError from '../utils/appError'
 import jwt from 'jsonwebtoken'
+import bcrypt from 'bcrypt'
+import { removePassword } from '../utils/functions'
 
-export const registerUser = async (email: string, password: string): Promise<IUser | AppError> => {
+export const registerUser = async (email: string, password: string): Promise<any | AppError> => {
+	const hashedPassword = await bcrypt.hash(password, 12)
 	const {
 		data: user,
 		error,
 		status,
 		statusText,
-	} = await supabase
-		.from('users')
-		.insert({ email, password })
-		.select('id,fullName,email,avatarImage')
-		.single()
+	} = await supabase.from('users').insert({ email, password: hashedPassword }).select('id,email').single()
+
 	if (error) return new AppError(status, statusText)
-	const token = jwt.sign({ user }, process.env.JWT_SECRET || '', {
-		expiresIn: process.env.JWT_EXPIRES_IN || '',
+
+	const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || '', {
+		expiresIn: process.env.JWT_EXPIRES_IN,
 	})
-	return { user, token, status, statusText }
+
+	return { email: user.email, token, status, statusText }
 }
 
-export const loginUser = async (email: string, password: string) => {
-	const { data, error, status, statusText } = await supabase
+export const loginUser = async (email: string, loginPassword: string): Promise<any | AppError> => {
+	const response = await supabase
 		.from('users')
-		.select()
-		.eq('password', password)
+		.select('id,password,fullName,email,avatarImage')
+		.eq('email', email)
 		.single()
-	console.log(data, status, error, statusText, 'CheckLogin')
+	const { data: user, error, status, statusText } = response
+	if (error) return new AppError(status, statusText)
+
+	const arePasswordsEqual = await bcrypt.compare(loginPassword, user.password)
+	if (!arePasswordsEqual) return new AppError(401, 'Unauthorized')
+
+	const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET || '', {
+		expiresIn: process.env.JWT_EXPIRES_IN,
+	})
+
+	const newUser = removePassword<LoginUser>(user)
+
+	return { user: newUser, token, status, statusText }
 }
 
 export const forgotPassword = async (email: string) => {
@@ -48,16 +62,22 @@ export const resetPassword = async (newPassword: string) => {
 	console.log(error, status, statusText, 'resetPassword')
 }
 
-type RegisteredUser = {
+type LoginUser = {
 	fullName: string
 	email: string
 	id: number
 	avatarImage: string
 }
 
-interface IUser {
-	user: RegisteredUser
+interface IDefault {
 	token: string
 	status: number
 	statusText: string
+}
+interface ILoginUser extends IDefault {
+	user: LoginUser
+}
+
+interface IRegisterUser extends IDefault {
+	email: string
 }
