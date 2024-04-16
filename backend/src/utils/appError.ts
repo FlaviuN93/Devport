@@ -17,8 +17,8 @@ export const successMessage: { [key: number]: string } = {
 
 class AppError extends Error {
 	public isClientError: boolean
-	constructor(public statusCode: number, public statusText: string) {
-		super(errorMessage[statusCode])
+	constructor(public statusCode: number, public statusText: string, message?: string) {
+		super(message ? message : errorMessage[statusCode])
 		this.isClientError = true
 		Error.captureStackTrace(this, this.constructor)
 	}

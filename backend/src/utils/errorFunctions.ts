@@ -14,6 +14,7 @@ const sendError = (err: AppError, res: Response, type: 'clientError' | 'serverEr
 
 const sendZodError = (err: ZodError, res: Response): void => {
 	const formattedErrors = err.flatten()
+
 	res.status(400).json({
 		status: 'Bad Request',
 		type: 'zodError',
@@ -22,22 +23,24 @@ const sendZodError = (err: ZodError, res: Response): void => {
 }
 
 const sendErrorInDev = (err: AppError, res: Response) => {
+	// Order matters. This check is first
+	if (err instanceof ZodError) return sendZodError(err, res)
+
 	if (!err.isClientError) return sendError(err, res, 'serverError')
 
-	if (err instanceof ZodError) return sendZodError(err, res)
-	console.log('sendErrorDev')
 	sendError(err, res, 'clientError')
 }
 
 const sendErrorInProd = (err: AppError, res: Response) => {
+	// Order matters. This check is first
+	if (err instanceof ZodError) return sendZodError(err, res)
+
 	if (!err.isClientError) {
 		return res.status(500).json({
 			status: 'error',
 			message: 'Something went very wrong!',
 		})
 	}
-
-	if (err instanceof ZodError) return sendZodError(err, res)
 
 	res.status(err.statusCode).json({
 		status: err.statusText,

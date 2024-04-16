@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
-import { forgotPassword, loginUser, registerUser, resetPassword } from '../models/authModel'
+import { forgotPassword, loginUser, protect, registerUser, resetPassword } from '../models/authModel'
+
 import { catchAsync } from '../utils/errorFunctions'
-import jwt from 'jsonwebtoken'
 import { authSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
 import AppError, { successMessage } from '../utils/appError'
 
@@ -49,16 +49,10 @@ export const resetPasswordHandler = catchAsync(async (req: Request, res: Respons
 })
 
 export const protectHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	let token = ''
-	if (req.headers.authorization?.startsWith('Bearer')) {
-		token = req.headers.authorization.split(' ')[1]
-	}
-
-	if (!token) return next(new AppError(401, 'Unauthorized'))
-
-	jwt.verify(token, process.env.JWT_SECRET || '', (err, payload) => {
-		console.log(err, payload)
-	})
-
+	let reqToken = ''
+	if (req.headers.authorization?.startsWith('Bearer')) reqToken = req.headers.authorization.split(' ')[1]
+	const response = await protect(reqToken)
+	if (response instanceof AppError) return next(response)
+	req.userId = response.userId
 	next()
 })
