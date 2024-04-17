@@ -8,27 +8,26 @@ export const getProjects = async (userId: string): Promise<IGetProjects | AppErr
 	const { data: projects, error, status, statusText } = response
 
 	if (error) return new AppError(status, statusText)
+	if (projects.length === 0) return new AppError(404, 'Not Found')
 
 	return { projects, status, statusText }
 }
 
 export const createProject = async (reqBody: ProjectType): Promise<IDefault | AppError> => {
-	const response = await supabase.from('projects').insert(reqBody)
-	const { error, status, statusText } = response
+	const { error, status, statusText } = await supabase.from('projects').insert(reqBody)
 	if (error) return new AppError(status, statusText)
 	return { status, statusText }
 }
 
 export const updateProject = async (reqBody: OptionalProjectType): Promise<IDefault | AppError> => {
-	const response = await supabase.from('projects').update(reqBody)
-	const { error, status, statusText } = response
+	const { error, status, statusText } = await supabase.from('projects').update(reqBody)
 	if (error) return new AppError(status, statusText)
 	return { status, statusText }
 }
 
 export const deleteProject = async (projectId: string): Promise<IDefault | AppError> => {
-	const response = await supabase.from('projects').delete().eq('id', projectId)
-	const { error, status, statusText } = response
+	const { error, status, statusText } = await supabase.from('projects').delete().eq('id', projectId)
+
 	if (error) return new AppError(status, statusText)
 	return { status, statusText }
 }

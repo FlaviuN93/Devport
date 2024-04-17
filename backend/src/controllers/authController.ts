@@ -38,8 +38,15 @@ export const loginUserHandler = catchAsync(async (req: Request, res: Response, n
 
 export const forgotPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { email } = forgotPasswordSchema.parse(req.body)
-	const response = forgotPassword(email)
-	console.log(response, 'ForgotPassword')
+	const resetUrl = `${req.protocol}://${req.get('host')}/api/auth/password`
+
+	const response = await forgotPassword(email, resetUrl)
+	if (response instanceof AppError) return next(response)
+
+	res.status(response.status).json({
+		statusText: response.statusText,
+		message: 'Token sent to email',
+	})
 })
 
 export const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -53,6 +60,7 @@ export const protectHandler = catchAsync(async (req: Request, res: Response, nex
 	if (req.headers.authorization?.startsWith('Bearer')) reqToken = req.headers.authorization.split(' ')[1]
 	const response = await protect(reqToken)
 	if (response instanceof AppError) return next(response)
+	// I could add here userRoles if needed
 	req.userId = response.userId
 	next()
 })

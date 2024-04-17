@@ -1,5 +1,6 @@
 import jwt, { JsonWebTokenError, NotBeforeError, TokenExpiredError } from 'jsonwebtoken'
 import AppError from './appError'
+import crypto from 'crypto'
 
 export const removePassword = <T extends { [key: string]: any }>(obj: T): T => {
 	if (obj.hasOwnProperty('password')) delete obj.password
@@ -30,8 +31,12 @@ export const verifyToken = <T extends jwt.JwtPayload>(reqToken: string): T | App
 }
 
 export const checkPasswordChange = (JWTTimestamp: number, passwordTimestamp: string) => {
-	console.log(passwordTimestamp, 'helloFromTimestamp')
 	const changePasswordTimestamp = Date.parse(passwordTimestamp) / 1000
-
 	return JWTTimestamp < changePasswordTimestamp
+}
+
+export const createPasswordResetToken = () => {
+	const resetToken = crypto.randomBytes(32).toString('hex')
+	const encryptedToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+	return resetToken
 }

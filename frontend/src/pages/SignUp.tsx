@@ -14,7 +14,7 @@ const SignUp = () => {
 	const {
 		handleSubmit,
 		register,
-		formState: { errors },
+		formState: { errors, isSubmitted },
 	} = useForm<SignupType>({
 		resolver: zodResolver(signupSchema),
 		criteriaMode: 'all',
@@ -47,7 +47,12 @@ const SignUp = () => {
 			<div className='borderWord'>or</div>
 
 			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit(signupData)}>
-				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />
+				<Text
+					name='email'
+					register={register}
+					placeholder='Enter email'
+					error={isSubmitted ? errors.email?.message : ''}
+				/>
 
 				<Password
 					name='password'

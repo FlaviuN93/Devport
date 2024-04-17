@@ -10,6 +10,6 @@ const authRouter = express.Router()
 
 authRouter.route('/register').post(registerUserHandler)
 authRouter.route('/login').post(loginUserHandler)
-authRouter.route('/password').post(forgotPasswordHandler).patch(resetPasswordHandler)
-
+authRouter.route('/password').post(forgotPasswordHandler)
+authRouter.route('/password/:token').patch(resetPasswordHandler)
 export default authRouter
