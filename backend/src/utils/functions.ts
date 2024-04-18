@@ -2,11 +2,19 @@ import jwt, { JsonWebTokenError, NotBeforeError, TokenExpiredError } from 'jsonw
 import AppError from './appError'
 import crypto from 'crypto'
 
-export const removePassword = <T extends { [key: string]: any }>(obj: T): T => {
+export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T => {
 	if (obj.hasOwnProperty('password')) delete obj.password
-	if (obj.hasOwnProperty('password_updated_at')) delete obj.password_updated_at
+	if (obj.hasOwnProperty('passwordUpdatedAt')) delete obj.passwordUpdatedAt
 	if (obj.hasOwnProperty('created_at')) delete obj.created_at
+	if (obj.hasOwnProperty('resetToken')) delete obj.resetToken
+	if (obj.hasOwnProperty('resetTokenExpiresIn')) delete obj.resetTokenExpiresIn
+
 	return obj
+}
+
+export const removeUserPassword = <T extends { [key: string]: any }>(user: T): T => {
+	if (user.hasOwnProperty('password')) delete user.password
+	return user
 }
 
 export const verifyToken = <T extends jwt.JwtPayload>(reqToken: string): T | AppError => {
@@ -30,13 +38,23 @@ export const verifyToken = <T extends jwt.JwtPayload>(reqToken: string): T | App
 	return new AppError(500, 'JsonWebToken')
 }
 
-export const checkPasswordChange = (JWTTimestamp: number, passwordTimestamp: string) => {
-	const changePasswordTimestamp = Date.parse(passwordTimestamp) / 1000
-	return JWTTimestamp < changePasswordTimestamp
+export const checkPasswordChange = (JWTTimestamp: number, passwordTimestamp: string) =>
+	JWTTimestamp < Date.parse(passwordTimestamp) / 1000
+
+export const createPasswordResetToken = (): PasswordResetTokenData => {
+	const resetToken = crypto.randomBytes(32).toString('hex')
+	const encryptedResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+	const tokenExpiresIn = Date.now() + 15 * 60 * 1000
+	return { resetToken, encryptedResetToken, tokenExpiresIn }
 }
 
-export const createPasswordResetToken = () => {
-	const resetToken = crypto.randomBytes(32).toString('hex')
-	const encryptedToken = crypto.createHash('sha256').update(resetToken).digest('hex')
-	return resetToken
+export const signToken = (id: number): string =>
+	jwt.sign({ userId: id }, process.env.JWT_SECRET || '', {
+		expiresIn: process.env.JWT_EXPIRES_IN,
+	})
+
+type PasswordResetTokenData = {
+	resetToken: string
+	encryptedResetToken: string
+	tokenExpiresIn: number
 }

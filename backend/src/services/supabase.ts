@@ -73,9 +73,9 @@ type Database = {
 			}
 			users: {
 				Row: {
-					avatarImage: string
+					avatarURL: string
 					bio: string
-					coverImage: string
+					coverURL: string
 					created_at: string
 					email: string
 					fullName: string
@@ -84,9 +84,9 @@ type Database = {
 					password: string
 				}
 				Insert: {
-					avatarImage?: string
+					avatarURL?: string
 					bio?: string
-					coverImage?: string
+					coverURL?: string
 					created_at?: string
 					email: string
 					fullName?: string
@@ -95,9 +95,9 @@ type Database = {
 					password: string
 				}
 				Update: {
-					avatarImage?: string
+					avatarURL?: string
 					bio?: string
-					coverImage?: string
+					coverURL?: string
 					created_at?: string
 					email?: string
 					fullName?: string

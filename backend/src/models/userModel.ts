@@ -2,8 +2,8 @@ import { z } from 'zod'
 import supabase from '../services/supabase'
 import { updateUserSchema } from '../services/routeSchema'
 import AppError from '../utils/appError'
-import { ProjectType } from './projectModel'
-import { removePassword } from '../utils/functions'
+import { removeUserColumns } from '../utils/functions'
+import { BaseUser, IDefault, IGetUserAndProjects, IUser, IUserAndProjects } from './types'
 
 export const getUserAndProjects = async (userId: string): Promise<IGetUserAndProjects | AppError> => {
 	const response = await supabase.from('users').select(`*, projects(*)`).eq('id', userId).single()
@@ -11,18 +11,18 @@ export const getUserAndProjects = async (userId: string): Promise<IGetUserAndPro
 
 	if (!userWithProjects) return new AppError(404, 'Not Found')
 	if (error) return new AppError(status, statusText)
-	const newUser = removePassword<IUserAndProjects>(userWithProjects)
+	const newUser = removeUserColumns<IUserAndProjects>(userWithProjects)
 	return { userWithProjects: newUser, status, statusText }
 }
 
-export const getUser = async (userId: string): Promise<IGetUser | AppError> => {
+export const getUser = async (userId: string): Promise<IUser | AppError> => {
 	const response = await supabase.from('users').select('*').eq('id', userId).single()
 	const { data: user, error, status, statusText } = response
 
 	if (!user) return new AppError(404, 'Not Found')
 	if (error) return new AppError(status, statusText)
 
-	const newUser = removePassword<IUser>(user)
+	const newUser = removeUserColumns<BaseUser>(user)
 	return { user: newUser, status, statusText }
 }
 
@@ -34,30 +34,3 @@ export const updateUser = async (reqBody: UpdateUserType): Promise<IDefault | Ap
 }
 
 type UpdateUserType = z.infer<typeof updateUserSchema>
-
-interface IUser {
-	coverFile: File
-	avatarFile: File
-	email: string
-	name: string
-	jobTitle: string
-	linkedin: string
-	bio: string
-}
-
-interface IDefault {
-	status: number
-	statusText: string
-}
-
-interface IUserAndProjects extends IUser {
-	projects: ProjectType[]
-}
-
-interface IGetUser extends IDefault {
-	user: IUser
-}
-
-interface IGetUserAndProjects extends IDefault {
-	userWithProjects: IUserAndProjects
-}

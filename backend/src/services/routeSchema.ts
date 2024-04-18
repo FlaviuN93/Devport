@@ -25,19 +25,19 @@ export const forgotPasswordSchema = z.object({
 export const resetPasswordSchema = z
 	.object({
 		password: passwordSchema,
-		confirmPassword: passwordSchema,
+		passwordConfirm: passwordSchema,
 	})
-	.refine((data) => data.password === data.confirmPassword, {
+	.refine((data) => data.password === data.passwordConfirm, {
 		message: 'Passwords do not match',
-		path: ['confirmPassword'],
+		path: ['passwordConfirm'],
 	})
 
 // Project Schema
 export const createProjectSchema = z.object({
-	imageFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB').optional(),
+	imageURL: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB').optional(),
 	name: nameSchema,
-	demoUrl: urlSchema,
-	repositoryUrl: urlSchema,
+	demoURL: urlSchema,
+	repositoryURL: urlSchema,
 	technologies: z
 		.array(z.string())
 		.min(2, 'Select a minimum of 2 technologies')
@@ -45,13 +45,16 @@ export const createProjectSchema = z.object({
 	description: descriptionSchema,
 })
 
-export const updateProjectSchema = createProjectSchema.optional()
+export const updateProjectSchema = createProjectSchema.extend({
+	id: z.number(),
+})
 
 // User Schema
 export const updateUserSchema = z
 	.object({
-		coverFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB'),
-		avatarFile: fileSchema.refine((file) => file.size <= AVATAR_FILE_SIZE, 'File must be under 1MB'),
+		id: z.number(),
+		coverURL: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB'),
+		avatarURL: fileSchema.refine((file) => file.size <= AVATAR_FILE_SIZE, 'File must be under 1MB'),
 		email: emailSchema,
 		name: nameSchema,
 		jobTitle: z

@@ -51,7 +51,7 @@ export const forgotPasswordHandler = catchAsync(async (req: Request, res: Respon
 
 export const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { password } = resetPasswordSchema.parse(req.body)
-	const response = resetPassword(password)
+	const response = await resetPassword(password, req.params.token)
 	console.log(response, 'ResetPassword')
 })
 

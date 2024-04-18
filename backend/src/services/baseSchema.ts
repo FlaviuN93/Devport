@@ -22,14 +22,17 @@ export const nameSchema = z
 	.trim()
 	.min(4, 'Name must be at least 4 characters')
 	.max(30, 'Name must be maximum 30 characters')
-	.regex(/^[a-zA-Z]+$/, 'Name can only contain letters')
+	.regex(/^[a-zA-Z0-9\s]+$/, 'Name can only contain letters and numbers')
 
 export const descriptionSchema = z
 	.string()
 	.trim()
-	.min(30, 'Description must be at least 30 characters long.')
-	.max(80, 'Description cannot exceed 80 characters.')
-	.regex(/^[a-zA-Z0-9\s]+$/, 'Description can only contain letters and numbers.')
+	.min(75, 'Description must be at least 75 characters long.')
+	.max(150, 'Description cannot exceed 150 characters.')
+	.regex(
+		/^[a-zA-Z0-9\s\.\!\?\'\,\-]+$/,
+		'Description cannot contain special characters. Keep it simple and clean.'
+	)
 
 export const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
 

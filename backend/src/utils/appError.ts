@@ -13,7 +13,6 @@ const errorMessage: { [key: number]: string } = {
 export const successMessage: { [key: number]: string } = {
 	200: 'Your request was successful! The data you requested has been retrieved.',
 	201: 'The resource you requested has been created successfully.',
-	204: 'The request was processed successfully, but there is no content to return.',
 }
 
 class AppError extends Error {

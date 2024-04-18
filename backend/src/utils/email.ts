@@ -29,7 +29,7 @@ export const sendEmail = async (options: MailOptions) => {
 		},
 	})
 	const mailOptions = {
-		from: `Flaviu Nemes <${process.env.EMAIL_FROM}>`,
+		from: `Portofolio App <${process.env.EMAIL_FROM}>`,
 		to: options.email,
 		subject: options.subject,
 		text: options.message,

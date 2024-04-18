@@ -29,9 +29,10 @@ export const updateProjectData = catchAsync(async (req: Request, res: Response, 
 	const projectData = updateProjectSchema.parse(req.body)
 	const response = await updateProject(projectData)
 	if (response instanceof AppError) return next(response)
+	console.log(response.status, response.statusText, 'hello')
 	res.status(response.status).json({
 		statusText: response.statusText,
-		message: successMessage[response.status],
+		message: 'successMessage[response.status]',
 	})
 })
 
