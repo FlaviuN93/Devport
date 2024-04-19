@@ -25,14 +25,12 @@ export const verifyToken = <T extends jwt.JwtPayload>(reqToken: string): T | App
 	} catch (err) {
 		// Order matters here. TokenExpiredError is a subclass of JsonWebTokenError. That's why JsonWebTokenError is at the end.
 
-		if (err instanceof NotBeforeError)
-			return new AppError(403, err.message, 'Your token is not active. Nice try!')
+		if (err instanceof NotBeforeError) return new AppError(403, 'Your token is not active. Nice try!')
 
 		if (err instanceof TokenExpiredError)
-			return new AppError(403, err.message, 'Your token has expired! Please log in again.')
+			return new AppError(403, 'Your token has expired! Please log in again.')
 
-		if (err instanceof JsonWebTokenError)
-			return new AppError(403, err.message, 'Invalid token. Please login in again.')
+		if (err instanceof JsonWebTokenError) return new AppError(403, 'Invalid token. Please login in again.')
 	}
 
 	return new AppError(500, 'JsonWebToken')

@@ -5,42 +5,46 @@ import AppError from '../utils/appError'
 import { removeUserColumns } from '../utils/functions'
 import { BaseUser, IDefault, IGetUserAndProjects, IUser, IUserAndProjects } from './types'
 
-export const getUserAndProjects = async (userId: string): Promise<IGetUserAndProjects | AppError> => {
+export const getUserAndProjects = async (userId: number): Promise<IGetUserAndProjects | AppError> => {
 	const {
 		data: userWithProjects,
 		error,
-		statusText,
+		status,
 	} = await supabase.from('users').select(`*, projects(*)`).eq('id', userId).single()
 
-	if (error) return new AppError(+error.code, statusText, error.message)
-	if (!userWithProjects) return new AppError(404, 'Not Found')
+	if (!userWithProjects) return new AppError(404)
+	if (error) return new AppError(status)
 
 	const newUser = removeUserColumns<IUserAndProjects>(userWithProjects)
-	return { userWithProjects: newUser, statusCode: 204, statusText: [''] }
+	return {
+		userWithProjects: newUser,
+		statusCode: 200,
+		statusText: ['retrieve', 'user and projects have been sent successfully'],
+	}
 }
 
-export const getUser = async (userId: string): Promise<IUser | AppError> => {
+export const getUser = async (userId: number): Promise<IUser | AppError> => {
 	const response = await supabase.from('users').select('*').eq('id', userId).single()
-	const { data: user, error, statusText } = response
+	const { data: user, error, status } = response
 
-	if (error) return new AppError(+error.code, statusText, error.message)
-	if (!user) return new AppError(404, 'Not Found')
+	if (!user) return new AppError(404)
+	if (error) return new AppError(status)
 
 	const newUser = removeUserColumns<BaseUser>(user)
-	return { user: newUser, statusCode: 204, statusText: [''] }
+	return { user: newUser, statusCode: 200, statusText: ['retrieve', 'user has been sent successfully'] }
 }
 
 export const updateUser = async (reqBody: UpdateUserType): Promise<IDefault | AppError> => {
 	const {
 		data: userId,
 		error,
-		statusText,
+		status,
 	} = await supabase.from('users').update(reqBody).eq('id', reqBody.name).select('id').single()
 
-	if (error) return new AppError(+error.code, statusText, error.message)
-	if (!userId) return new AppError(400, 'Bad Request')
+	if (!userId) return new AppError(400)
+	if (error) return new AppError(status)
 
-	return { statusCode: 201, statusText: ['updated'] }
+	return { statusCode: 200, statusText: ['update', 'user has been updated successfully'] }
 }
 
 type UpdateUserType = z.infer<typeof updateUserSchema>

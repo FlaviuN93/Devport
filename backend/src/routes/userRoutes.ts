@@ -5,6 +5,6 @@ import express from 'express'
 const userRouter = express.Router()
 
 userRouter.route('/projects/:userId').get(getUserAndProjectsData)
-userRouter.route('/:userId').get(protectHandler, getUserData).patch(protectHandler, updateUserData)
+userRouter.route('/').get(protectHandler, getUserData).patch(protectHandler, updateUserData)
 
 export default userRouter

@@ -5,7 +5,6 @@ import { ZodError } from 'zod'
 // Helper Functions
 const sendError = (err: AppError, res: Response, type: 'clientError' | 'serverError'): void => {
 	res.status(err.statusCode).json({
-		statusText: err.statusText,
 		type,
 		message: err.message,
 		stack: err.stack,
@@ -43,7 +42,6 @@ const sendErrorInProd = (err: AppError, res: Response) => {
 	}
 
 	res.status(err.statusCode).json({
-		status: err.statusText,
 		type: 'clientError',
 		message: err.message,
 	})

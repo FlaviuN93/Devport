@@ -14,7 +14,6 @@ export const registerUserHandler = catchAsync(async (req: Request, res: Response
 	const { email: userEmail, token, statusCode, statusText } = response
 
 	res.status(statusCode).json({
-		statusText,
 		message: getSuccessMessage(statusCode, statusText),
 		user: userEmail,
 		token,
@@ -29,7 +28,6 @@ export const loginUserHandler = catchAsync(async (req: Request, res: Response, n
 	const { user, token, statusCode, statusText } = response
 
 	res.status(statusCode).json({
-		statusText,
 		message: getSuccessMessage(statusCode, statusText),
 		token,
 		user,
@@ -46,7 +44,6 @@ export const forgotPasswordHandler = catchAsync(async (req: Request, res: Respon
 	const { statusCode, statusText } = response
 
 	res.status(statusCode).json({
-		statusText,
 		message: getSuccessMessage(statusCode, statusText),
 	})
 })
@@ -60,7 +57,6 @@ export const resetPasswordHandler = catchAsync(async (req: Request, res: Respons
 	const { user, token, statusCode, statusText } = response
 
 	res.status(statusCode).json({
-		statusText,
 		message: getSuccessMessage(statusCode, statusText),
 		token,
 		user,

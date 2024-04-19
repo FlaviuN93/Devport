@@ -4,28 +4,24 @@ import supabase from '../services/supabase'
 import AppError from '../utils/appError'
 import { IDefault, IGetProjects } from './types'
 
-export const getProjects = async (userId: string): Promise<IGetProjects | AppError> => {
-	const {
-		data: projects,
-		error,
-		statusText,
-	} = await supabase.from('projects').select('*').eq('user_id', userId)
+export const getProjects = async (userId: number): Promise<IGetProjects | AppError> => {
+	const { data: projects, error, status } = await supabase.from('projects').select('*').eq('user_id', userId)
 
-	if (error) return new AppError(+error.code, statusText, error.message)
-	if (projects === null || projects.length === 0) return new AppError(404, 'Not Found')
+	if (error) return new AppError(status)
+	if (projects === null || projects.length === 0) return new AppError(404)
 
-	return { projects, statusCode: 204, statusText: [''] }
+	return { projects, statusCode: 200, statusText: ['retrieve', 'projects have been sent successfully'] }
 }
 
 export const createProject = async (reqBody: CreateProject): Promise<IDefault | AppError> => {
 	const {
 		data: projectId,
 		error,
-		statusText,
+		status,
 	} = await supabase.from('projects').insert(reqBody).select('id').single()
 
-	if (error) return new AppError(+error.code, statusText, error.message)
-	if (!projectId) return new AppError(400, 'Bad Request')
+	if (error) return new AppError(status)
+	if (!projectId) return new AppError(400)
 
 	return { statusCode: 201, statusText: ['project', 'created'] }
 }
@@ -34,26 +30,26 @@ export const updateProject = async (reqBody: UpdateProject): Promise<IDefault | 
 	const {
 		data: project,
 		error,
-		statusText,
+		status,
 	} = await supabase.from('projects').update(reqBody).eq('id', reqBody.id).select().single()
 
-	if (error) return new AppError(+error.code, statusText, error.message)
-	if (!project) return new AppError(400, 'Bad Request')
+	if (error) return new AppError(status)
+	if (!project) return new AppError(400)
 
-	return { statusCode: 201, statusText: ['project', 'updated'] }
+	return { statusCode: 200, statusText: ['update', 'project has been updated successfully'] }
 }
 
 export const deleteProject = async (id: string): Promise<IDefault | AppError> => {
 	const {
 		data: projectId,
 		error,
-		statusText,
+		status,
 	} = await supabase.from('projects').delete().eq('id', id).select('id').single()
 
-	if (error) return new AppError(+error.code, statusText, error.message)
-	if (!projectId) return new AppError(400, 'Bad Request')
+	if (error) return new AppError(status)
+	if (!projectId) return new AppError(400)
 
-	return { statusCode: 200, statusText: ['delete'] }
+	return { statusCode: 200, statusText: ['delete', 'project has been deleted'] }
 }
 
 export type CreateProject = z.infer<typeof createProjectSchema>

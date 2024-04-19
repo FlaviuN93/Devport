@@ -43,6 +43,7 @@ export const createProjectSchema = z.object({
 		.min(2, 'Select a minimum of 2 technologies')
 		.max(5, 'Select a maximum of 5 technologies'),
 	description: descriptionSchema,
+	user_id: z.number().optional(),
 })
 
 export const updateProjectSchema = createProjectSchema.extend({
@@ -64,5 +65,6 @@ export const updateUserSchema = z
 			.regex(/^[a-zA-Z]+$/, 'Position can only contain letters'),
 		linkedin: urlSchema,
 		bio: descriptionSchema,
+		user_id: z.number().optional(),
 	})
 	.partial()

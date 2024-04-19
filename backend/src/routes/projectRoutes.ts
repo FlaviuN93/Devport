@@ -10,7 +10,7 @@ import { protectHandler } from '../controllers/authController'
 const projectRouter = express.Router()
 
 projectRouter
-	.route('/:userId')
+	.route('/')
 	.get(protectHandler, getProjectsData)
 	.post(protectHandler, createProjectData)
 	.patch(protectHandler, updateProjectData)
