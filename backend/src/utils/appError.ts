@@ -7,12 +7,12 @@ const errorMessage: { [key: number]: string } = {
 	409: `Conflict. The operation could not be performed due to a conflict. This could be due to trying to create a duplicate entry that violates a unique constraint.`,
 	429: `Too Many Requests. You are making too many requests too quickly. Please slow down and try again later.`,
 	500: `Internal Server Error. Something went wrong on our end. Please try again later.`,
-	544: `Connection reset by peer. The connection to the server was interrupted. This could be due to a network issue.`,
 }
 
-export const successMessage: { [key: number]: string } = {
-	200: 'Your request was successful! The data you requested has been retrieved.',
-	201: 'The resource you requested has been created successfully.',
+export const getSuccessMessage = (statusCode: number, statusText: string[]): string | undefined => {
+	if (statusCode === 200) return `Your ${statusText[0]} request was successful!`
+	if (statusCode === 201)
+		return `The data you entered is correct.The ${statusText[0]} has been ${statusText[1]} successfully!`
 }
 
 class AppError extends Error {

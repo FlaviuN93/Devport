@@ -21,7 +21,7 @@ export interface BaseUser {
 
 export interface IDefault {
 	statusCode: number
-	statusText: string
+	statusText: string[]
 	token?: string
 }
 

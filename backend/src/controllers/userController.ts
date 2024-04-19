@@ -2,16 +2,16 @@ import { NextFunction, Request, Response } from 'express'
 import { getUser, getUserAndProjects, updateUser } from '../models/userModel'
 import { updateUserSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
-import AppError, { successMessage } from '../utils/appError'
+import AppError, { getSuccessMessage } from '../utils/appError'
 
 export const getUserAndProjectsData = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getUserAndProjects(req.params.userId)
 	if (response instanceof AppError) return next(response)
-	const { userWithProjects, status, statusText } = response
+	const { userWithProjects, statusCode, statusText } = response
 
-	res.status(status).json({
+	res.status(statusCode).json({
 		statusText,
-		message: successMessage[response.status],
+		message: getSuccessMessage(statusCode, statusText),
 		data: userWithProjects,
 	})
 }
@@ -19,13 +19,13 @@ export const getUserAndProjectsData = async (req: Request, res: Response, next: 
 export const getUserData = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getUser(req.params.userId)
 	if (response instanceof AppError) return next(response)
-	const { user, status, statusText } = response
+	const { user, statusCode, statusText } = response
 
-	res.status(status).json({
-		statusText,
-		message: successMessage[response.status],
-		data: user,
-	})
+	// res.status(status).json({
+	// 	statusText,
+	// 	message: successMessage[response.status],
+	// 	data: user,
+	// })
 }
 
 export const updateUserData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -33,8 +33,8 @@ export const updateUserData = catchAsync(async (req: Request, res: Response, nex
 	const response = await updateUser(userData)
 	if (response instanceof AppError) return next(response)
 
-	res.status(response.status).json({
-		statusText: response.statusText,
-		message: successMessage[response.status],
-	})
+	// res.status(response.status).json({
+	// 	statusText: response.statusText,
+	// 	message: successMessage[response.status],
+	// })
 })
