@@ -33,7 +33,7 @@ export const updateProjectData = catchAsync(async (req: Request, res: Response, 
 	const projectData = updateProjectSchema.parse(req.body)
 	projectData.user_id = req.userId
 
-	const response = await updateProject(projectData)
+	const response = await updateProject(projectData, req.params.projectId)
 	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText } = response
 
@@ -43,13 +43,12 @@ export const updateProjectData = catchAsync(async (req: Request, res: Response, 
 })
 
 export const deleteProjectData = async (req: Request, res: Response, next: NextFunction) => {
-	console.log(req.params, 'hello')
-	// const response = await deleteProject(req.userId)
+	const response = await deleteProject(req.params.projectId)
 
-	// if (response instanceof AppError) return next(response)
-	// const { statusCode, statusText } = response
+	if (response instanceof AppError) return next(response)
+	const { statusCode, statusText } = response
 
-	// res.status(statusCode).json({
-	// 	message: getSuccessMessage(statusCode, statusText),
-	// })
+	res.status(statusCode).json({
+		message: getSuccessMessage(statusCode, statusText),
+	})
 }

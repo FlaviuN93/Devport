@@ -53,6 +53,7 @@ export const globalErrorHandler = (err: AppError, req: Request, res: Response, n
 	else sendErrorInProd(err, res)
 }
 
+// This function wrapper catches any error in a handler function and sends it to the globalErrorHandler
 export const catchAsync = (fn: (req: Request, res: Response, next: NextFunction) => Promise<any | void>) => {
 	return (req: Request, res: Response, next: NextFunction) => {
 		fn(req, res, next).catch(next)

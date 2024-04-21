@@ -43,17 +43,14 @@ export const createProjectSchema = z.object({
 		.min(2, 'Select a minimum of 2 technologies')
 		.max(5, 'Select a maximum of 5 technologies'),
 	description: descriptionSchema,
-	user_id: z.number().optional(),
+	user_id: z.string().optional(),
 })
 
-export const updateProjectSchema = createProjectSchema.extend({
-	id: z.number(),
-})
+export const updateProjectSchema = createProjectSchema.partial()
 
 // User Schema
 export const updateUserSchema = z
 	.object({
-		id: z.number(),
 		coverURL: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB'),
 		avatarURL: fileSchema.refine((file) => file.size <= AVATAR_FILE_SIZE, 'File must be under 1MB'),
 		email: emailSchema,

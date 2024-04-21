@@ -9,11 +9,10 @@ import { protectHandler } from '../controllers/authController'
 
 const projectRouter = express.Router()
 
+projectRouter.route('/').get(protectHandler, getProjectsData).post(protectHandler, createProjectData)
 projectRouter
-	.route('/')
-	.get(protectHandler, getProjectsData)
-	.post(protectHandler, createProjectData)
+	.route('/:projectId')
 	.patch(protectHandler, updateProjectData)
-projectRouter.route('/:projectId').delete(protectHandler, deleteProjectData)
+	.delete(protectHandler, deleteProjectData)
 
 export default projectRouter

@@ -5,7 +5,7 @@ import AppError from '../utils/appError'
 import { removeUserColumns } from '../utils/functions'
 import { BaseUser, IDefault, IGetUserAndProjects, IUser, IUserAndProjects } from './types'
 
-export const getUserAndProjects = async (userId: number): Promise<IGetUserAndProjects | AppError> => {
+export const getUserAndProjects = async (userId: string): Promise<IGetUserAndProjects | AppError> => {
 	const {
 		data: userWithProjects,
 		error,
@@ -23,7 +23,7 @@ export const getUserAndProjects = async (userId: number): Promise<IGetUserAndPro
 	}
 }
 
-export const getUser = async (userId: number): Promise<IUser | AppError> => {
+export const getUser = async (userId: string): Promise<IUser | AppError> => {
 	const response = await supabase.from('users').select('*').eq('id', userId).single()
 	const { data: user, error, status } = response
 
@@ -34,15 +34,15 @@ export const getUser = async (userId: number): Promise<IUser | AppError> => {
 	return { user: newUser, statusCode: 200, statusText: ['retrieve', 'user has been sent successfully'] }
 }
 
-export const updateUser = async (reqBody: UpdateUserType): Promise<IDefault | AppError> => {
+export const updateUser = async (reqBody: UpdateUserType, userId: string): Promise<IDefault | AppError> => {
 	const {
-		data: userId,
+		data: id,
 		error,
 		status,
-	} = await supabase.from('users').update(reqBody).eq('id', reqBody.name).select('id').single()
+	} = await supabase.from('users').update(reqBody).eq('id', userId).select('id').single()
 
-	if (!userId) return new AppError(400)
 	if (error) return new AppError(status)
+	if (!id) return new AppError(400)
 
 	return { statusCode: 200, statusText: ['update', 'user has been updated successfully'] }
 }

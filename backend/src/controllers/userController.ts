@@ -5,7 +5,7 @@ import { catchAsync } from '../utils/errorFunctions'
 import AppError, { getSuccessMessage } from '../utils/appError'
 
 export const getUserAndProjectsData = async (req: Request, res: Response, next: NextFunction) => {
-	const response = await getUserAndProjects(req.userId)
+	const response = await getUserAndProjects(req.params.userId)
 	if (response instanceof AppError) return next(response)
 	const { userWithProjects, statusCode, statusText } = response
 
@@ -16,7 +16,7 @@ export const getUserAndProjectsData = async (req: Request, res: Response, next: 
 }
 
 export const getUserData = async (req: Request, res: Response, next: NextFunction) => {
-	const response = await getUser(req.userId)
+	const response = await getUser(req.params.userId)
 	if (response instanceof AppError) return next(response)
 	const { user, statusCode, statusText } = response
 
@@ -28,7 +28,8 @@ export const getUserData = async (req: Request, res: Response, next: NextFunctio
 
 export const updateUserData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const userData = updateUserSchema.parse(req.body)
-	const response = await updateUser(userData)
+	const response = await updateUser(userData, req.params.userId)
+
 	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText } = response
 

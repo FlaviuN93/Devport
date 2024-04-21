@@ -124,7 +124,7 @@ export const resetPassword = async (
 	}
 }
 
-export const protect = async (reqToken: string): Promise<{ userId: number } | AppError> => {
+export const protect = async (reqToken: string): Promise<{ userId: string } | AppError> => {
 	if (!reqToken) return new AppError(401)
 
 	const decodedToken = verifyToken<TokenPayload>(reqToken)
@@ -143,5 +143,5 @@ export const protect = async (reqToken: string): Promise<{ userId: number } | Ap
 	const isPasswordChanged = checkPasswordChange(decodedToken.iat, user.passwordUpdatedAt)
 	if (isPasswordChanged) return new AppError(401, 'User recently changed password! Please log in again')
 
-	return { userId: (user as BaseUser).id }
+	return { userId: (user as BaseUser).id.toString() }
 }
