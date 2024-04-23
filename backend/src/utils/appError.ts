@@ -13,7 +13,7 @@ export const getSuccessMessage = (statusCode: number, statusText: string[]): str
 	if (statusCode === 200)
 		return statusText.length > 0
 			? `The ${statusText[0]} operation was processed.Your ${statusText[1]}!`
-			: '"Your request was successful!"'
+			: 'Your request was successful!'
 
 	if (statusCode === 201)
 		return `The data you entered is correct.The ${statusText[0]} has been ${statusText[1]} successfully!`

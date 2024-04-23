@@ -4,6 +4,7 @@ import crypto from 'crypto'
 
 export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T => {
 	if (obj.hasOwnProperty('password')) delete obj.password
+	if (obj.hasOwnProperty('id')) delete obj.id
 	if (obj.hasOwnProperty('passwordUpdatedAt')) delete obj.passwordUpdatedAt
 	if (obj.hasOwnProperty('created_at')) delete obj.created_at
 	if (obj.hasOwnProperty('resetToken')) delete obj.resetToken
@@ -14,6 +15,7 @@ export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T =
 
 export const removeUserPassword = <T extends { [key: string]: any }>(user: T): T => {
 	if (user.hasOwnProperty('password')) delete user.password
+	if (user.hasOwnProperty('id')) delete user.id
 	return user
 }
 

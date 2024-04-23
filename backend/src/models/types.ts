@@ -2,16 +2,15 @@ import { JwtPayload } from 'jsonwebtoken'
 import { UpdateProject } from './projectModel'
 
 export interface LoginUser {
-	id: number
-	avatarImage: string
+	avatarURL: string
 	email: string
 	fullName: string
 }
 
 export interface BaseUser {
 	id: number
-	coverImage: string
-	avatarImage: string
+	coverURL: string
+	avatarURL: string
 	email: string
 	fullName: string
 	jobTitle: string

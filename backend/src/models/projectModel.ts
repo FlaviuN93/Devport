@@ -7,8 +7,9 @@ import { IDefault, IGetProjects } from './types'
 export const getProjects = async (userId: string): Promise<IGetProjects | AppError> => {
 	const { data: projects, error, status } = await supabase.from('projects').select('*').eq('user_id', userId)
 
-	if (error) return new AppError(status)
-	if (projects === null || projects.length === 0) return new AppError(404)
+	if (error) return new AppError(status, 'User token has probably expired. Please try to log in again.')
+	if (projects === null || projects.length === 0)
+		return new AppError(404, 'User does not have any projects created')
 
 	return { projects, statusCode: 200, statusText: ['retrieve', 'projects have been sent successfully'] }
 }

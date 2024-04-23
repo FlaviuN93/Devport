@@ -1,9 +1,22 @@
 import { NextFunction, Request, Response } from 'express'
-import { forgotPassword, loginUser, protect, registerUser, resetPassword } from '../models/authModel'
+import {
+	forgotPassword,
+	loginUser,
+	protect,
+	registerUser,
+	resetPassword,
+	updatePassword,
+} from '../models/authModel'
 
 import { catchAsync } from '../utils/errorFunctions'
-import { authSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
+import {
+	authSchema,
+	forgotPasswordSchema,
+	resetPasswordSchema,
+	updatePasswordSchema,
+} from '../services/routeSchema'
 import AppError, { getSuccessMessage } from '../utils/appError'
+import { z } from 'zod'
 
 export const registerUserHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { email, password } = await authSchema.parseAsync(req.body)
@@ -24,6 +37,20 @@ export const loginUserHandler = catchAsync(async (req: Request, res: Response, n
 	const { email, password } = await authSchema.parseAsync(req.body)
 	const response = await loginUser(email, password)
 
+	if (response instanceof AppError) return next(response)
+	const { user, token, statusCode, statusText } = response
+
+	res.status(statusCode).json({
+		message: getSuccessMessage(statusCode, statusText),
+		token,
+		user,
+	})
+})
+
+export const updatePasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const passwords = updatePasswordSchema.parse(req.body)
+
+	const response = await updatePassword(passwords, req.userId)
 	if (response instanceof AppError) return next(response)
 	const { user, token, statusCode, statusText } = response
 
@@ -70,7 +97,7 @@ export const protectHandler = catchAsync(async (req: Request, res: Response, nex
 
 	if (response instanceof AppError) return next(response)
 
-	// I could add here userRoles if needed
+	// I could add userRoles here if needed
 	req.userId = response.userId
 	next()
 })

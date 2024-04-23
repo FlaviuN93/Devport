@@ -32,6 +32,11 @@ export const resetPasswordSchema = z
 		path: ['passwordConfirm'],
 	})
 
+export const updatePasswordSchema = z.object({
+	currentPassword: passwordSchema,
+	newPassword: passwordSchema,
+})
+
 // Project Schema
 export const createProjectSchema = z.object({
 	imageURL: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB').optional(),
@@ -62,6 +67,5 @@ export const updateUserSchema = z
 			.regex(/^[a-zA-Z]+$/, 'Position can only contain letters'),
 		linkedin: urlSchema,
 		bio: descriptionSchema,
-		user_id: z.number().optional(),
 	})
 	.partial()

@@ -43,10 +43,7 @@ const ProfileSettings = () => {
 					<Avatar icon={<UserCircleIcon className='w-6 h-6' />} avatarStyles='h-[52px] w-[52px]' />
 
 					<p className='text-gray text-sm text-center font-medium px-4'>
-						Avatar image must be 256px x 256px - max 2MB
-					</p>
-					<p className='text-gray text-sm text-center font-medium px-4'>
-						Cover Image must be 256px x 256px - max 2MB
+						Cover Image resolution 1584x396 pixels, max size 2MB
 					</p>
 					<div className='flex items-center flex-col sm:flex-row gap-4 -mt-1'>
 						<File

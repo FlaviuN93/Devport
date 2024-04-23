@@ -47,4 +47,11 @@ export const updateUser = async (reqBody: UpdateUserType, userId: string): Promi
 	return { statusCode: 200, statusText: ['update', 'user has been updated successfully'] }
 }
 
+// export const deleteUser = async (userId: string): Promise<IDefault | AppError> => {
+// 	const { error } = await supabase.from('users').delete().eq('id', userId).select('id').single()
+// 	if (error) return new AppError(404, 'The user you tried to delete does not exist')
+
+// 	return {statusCode:204}
+// }
+
 type UpdateUserType = z.infer<typeof updateUserSchema>
