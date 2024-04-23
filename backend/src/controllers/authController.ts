@@ -16,7 +16,7 @@ import {
 	updatePasswordSchema,
 } from '../services/routeSchema'
 import AppError, { getSuccessMessage } from '../utils/appError'
-import { z } from 'zod'
+import { sendTokenByCookie } from '../utils/functions'
 
 export const registerUserHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { email, password } = await authSchema.parseAsync(req.body)
@@ -25,7 +25,7 @@ export const registerUserHandler = catchAsync(async (req: Request, res: Response
 	if (response instanceof AppError) return next(response)
 
 	const { email: userEmail, token, statusCode, statusText } = response
-
+	sendTokenByCookie(token, res, next)
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
 		user: userEmail,
@@ -78,7 +78,6 @@ export const forgotPasswordHandler = catchAsync(async (req: Request, res: Respon
 export const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { password } = resetPasswordSchema.parse(req.body)
 	const response = await resetPassword(password, req.params.token)
-	console.log(response, 'ResetPassword')
 
 	if (response instanceof AppError) return next(response)
 	const { user, token, statusCode, statusText } = response

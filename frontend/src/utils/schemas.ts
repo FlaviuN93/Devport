@@ -72,9 +72,7 @@ const AVATAR_FILE_SIZE = 1024 * 1024
 
 export const projectSettingsSchema = z
 	.object({
-		imageFile: fileSchema
-			.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB')
-			.optional(),
+		imageFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB').optional(),
 		name: nameSchema,
 		demoUrl: urlSchema,
 		repositoryUrl: urlSchema,
@@ -86,25 +84,20 @@ export const projectSettingsSchema = z
 	})
 	.partial()
 
-export const profileSettingsSchema = z
-	.object({
-		coverFile: fileSchema
-			.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB')
-			.optional(),
-		avatarFile: fileSchema
-			.refine((file) => file.size <= AVATAR_FILE_SIZE, 'File must be under 1MB')
-			.optional(),
-		email: emailSchema,
-		name: nameSchema,
-		jobTitle: z
-			.string()
-			.trim()
-			.max(30, 'Job title is maximum 30 characters long')
-			.regex(/^[a-zA-Z]+$/, 'Position can only contain letters'),
-		linkedin: urlSchema,
-		bio: descriptionSchema,
-	})
-	.partial()
+export const profileSettingsSchema = z.object({
+	coverFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB').optional(),
+	avatarFile: fileSchema.refine((file) => file.size <= AVATAR_FILE_SIZE, 'File must be under 1MB').optional(),
+	email: emailSchema.optional(),
+	name: nameSchema.optional(),
+	jobTitle: z
+		.string()
+		.trim()
+		.max(30, 'Job title is maximum 30 characters long')
+		.regex(/^[a-zA-Z]+$/, 'Position can only contain letters')
+		.optional(),
+	linkedin: urlSchema.optional(),
+	bio: descriptionSchema.optional(),
+})
 
 export type ProfileSettingsType = z.infer<typeof profileSettingsSchema>
 export type ProjectSettingsType = z.infer<typeof projectSettingsSchema>

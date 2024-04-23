@@ -1,10 +1,20 @@
 import { protectHandler } from '../controllers/authController'
-import { getUserAndProjectsData, getUserData, updateUserData } from '../controllers/userController'
+import {
+	deleteUserHandler,
+	getUserAndProjectsHandler,
+	getUserHandler,
+	updateUserHandler,
+} from '../controllers/userController'
 import express from 'express'
 
 const userRouter = express.Router()
 
-userRouter.route('/projects/:userId').get(getUserAndProjectsData)
-userRouter.route('/:userId').get(protectHandler, getUserData).patch(protectHandler, updateUserData)
+userRouter.route('/projects/:userId').get(getUserAndProjectsHandler)
+
+userRouter
+	.route('/:userId')
+	.get(protectHandler, getUserHandler)
+	.patch(protectHandler, updateUserHandler)
+	.delete(protectHandler, deleteUserHandler)
 
 export default userRouter

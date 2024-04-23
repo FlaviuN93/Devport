@@ -39,7 +39,7 @@ export const updatePasswordSchema = z.object({
 
 // Project Schema
 export const createProjectSchema = z.object({
-	imageURL: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB').optional(),
+	imageURL: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB'),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,
@@ -48,7 +48,7 @@ export const createProjectSchema = z.object({
 		.min(2, 'Select a minimum of 2 technologies')
 		.max(5, 'Select a maximum of 5 technologies'),
 	description: descriptionSchema,
-	user_id: z.string().optional(),
+	user_id: z.string(),
 })
 
 export const updateProjectSchema = createProjectSchema.partial()

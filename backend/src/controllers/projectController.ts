@@ -17,8 +17,8 @@ export const getProjectsData = async (req: Request, res: Response, next: NextFun
 }
 
 export const createProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	req.body.user_id = req.userId
 	const projectData = createProjectSchema.parse(req.body)
-	projectData.user_id = req.userId
 
 	const response = await createProject(projectData)
 	if (response instanceof AppError) return next(response)
@@ -30,8 +30,8 @@ export const createProjectData = catchAsync(async (req: Request, res: Response, 
 })
 
 export const updateProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	req.body.user_id = req.userId
 	const projectData = updateProjectSchema.parse(req.body)
-	projectData.user_id = req.userId
 
 	const response = await updateProject(projectData, req.params.projectId)
 	if (response instanceof AppError) return next(response)

@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 
 import {
-	checkPasswordChange,
+	hasPasswordChanged,
 	createPasswordResetToken,
 	removeUserPassword,
 	signToken,
@@ -148,7 +148,7 @@ export const resetPassword = async (
 }
 
 export const protect = async (reqToken: string): Promise<{ userId: string } | AppError> => {
-	if (!reqToken) return new AppError(401)
+	if (!reqToken) return new AppError(401, 'You are not logged in. Please log in to gain access')
 
 	const decodedToken = verifyToken<TokenPayload>(reqToken)
 	if (decodedToken instanceof AppError) return decodedToken
@@ -158,7 +158,7 @@ export const protect = async (reqToken: string): Promise<{ userId: string } | Ap
 	if (!user) return new AppError(404)
 	if (!decodedToken.iat) return new AppError(500, 'Something went wrong. Please log in again')
 
-	const isPasswordChanged = checkPasswordChange(decodedToken.iat, user.passwordUpdatedAt)
+	const isPasswordChanged = hasPasswordChanged(decodedToken.iat, user.passwordUpdatedAt)
 	if (isPasswordChanged) return new AppError(401, 'User recently changed password! Please log in again')
 
 	return { userId: (user as BaseUser).id.toString() }

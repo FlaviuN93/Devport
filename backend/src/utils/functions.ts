@@ -1,7 +1,9 @@
 import jwt, { JsonWebTokenError, NotBeforeError, TokenExpiredError } from 'jsonwebtoken'
 import AppError from './appError'
 import crypto from 'crypto'
+import { NextFunction, Response } from 'express'
 
+// Remove User Data that should not be returned
 export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T => {
 	if (obj.hasOwnProperty('password')) delete obj.password
 	if (obj.hasOwnProperty('id')) delete obj.id
@@ -9,6 +11,7 @@ export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T =
 	if (obj.hasOwnProperty('created_at')) delete obj.created_at
 	if (obj.hasOwnProperty('resetToken')) delete obj.resetToken
 	if (obj.hasOwnProperty('resetTokenExpiresIn')) delete obj.resetTokenExpiresIn
+	if (obj.hasOwnProperty('active')) delete obj.active
 
 	return obj
 }
@@ -16,9 +19,12 @@ export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T =
 export const removeUserPassword = <T extends { [key: string]: any }>(user: T): T => {
 	if (user.hasOwnProperty('password')) delete user.password
 	if (user.hasOwnProperty('id')) delete user.id
+	if (user.hasOwnProperty('active')) delete user.active
+
 	return user
 }
 
+// Verify Token
 export const verifyToken = <T extends jwt.JwtPayload>(reqToken: string): T | AppError => {
 	try {
 		const decodedToken = jwt.verify(reqToken, process.env.JWT_SECRET || '')
@@ -38,7 +44,7 @@ export const verifyToken = <T extends jwt.JwtPayload>(reqToken: string): T | App
 	return new AppError(500, 'JsonWebToken')
 }
 
-export const checkPasswordChange = (JWTTimestamp: number, passwordTimestamp: string) =>
+export const hasPasswordChanged = (JWTTimestamp: number, passwordTimestamp: string) =>
 	JWTTimestamp < Date.parse(passwordTimestamp) / 1000
 
 export const createPasswordResetToken = (): PasswordResetTokenData => {
@@ -52,6 +58,20 @@ export const signToken = (id: number): string =>
 	jwt.sign({ userId: id }, process.env.JWT_SECRET || '', {
 		expiresIn: process.env.JWT_EXPIRES_IN,
 	})
+
+export const sendTokenByCookie = (token: string | undefined, res: Response, next: NextFunction) => {
+	if (!process.env.JWT_COOKIE_EXPIRES_IN || !token) return next(new AppError(500))
+
+	const cookieOptions = {
+		expires: new Date(Date.now() + +process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+		secure: false,
+		httpOnly: true,
+	}
+
+	if (process.env.NODE_ENV === 'production') cookieOptions.secure = true
+
+	res.cookie('jwt', token, cookieOptions)
+}
 
 type PasswordResetTokenData = {
 	resetToken: string
