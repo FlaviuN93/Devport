@@ -3,8 +3,9 @@ import { createProjectSchema, updateProjectSchema } from '../services/routeSchem
 import { catchAsync } from '../utils/errorFunctions'
 import { createProject, deleteProject, getProjects, updateProject } from '../models/projectModel'
 import AppError, { getSuccessMessage } from '../utils/appError'
+import { idSchema } from '../services/baseSchema'
 
-export const getProjectsData = async (req: Request, res: Response, next: NextFunction) => {
+export const getMyProjectsData = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getProjects(req.userId)
 
 	if (response instanceof AppError) return next(response)
@@ -16,7 +17,7 @@ export const getProjectsData = async (req: Request, res: Response, next: NextFun
 	})
 }
 
-export const createProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const createMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	req.body.user_id = req.userId
 	const projectData = createProjectSchema.parse(req.body)
 
@@ -29,11 +30,12 @@ export const createProjectData = catchAsync(async (req: Request, res: Response, 
 	})
 })
 
-export const updateProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const updateMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	req.body.user_id = req.userId
 	const projectData = updateProjectSchema.parse(req.body)
+	const projectId = idSchema.parse(req.params.projectId).toString()
 
-	const response = await updateProject(projectData, req.params.projectId)
+	const response = await updateProject(projectData, projectId)
 	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText } = response
 
@@ -42,13 +44,14 @@ export const updateProjectData = catchAsync(async (req: Request, res: Response, 
 	})
 })
 
-export const deleteProjectData = async (req: Request, res: Response, next: NextFunction) => {
-	const response = await deleteProject(req.params.projectId)
+export const deleteMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const projectId = idSchema.parse(req.params.projectId).toString()
 
+	const response = await deleteProject(projectId)
 	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText } = response
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
 	})
-}
+})

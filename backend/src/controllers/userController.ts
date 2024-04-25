@@ -3,19 +3,24 @@ import { deleteUser, getUser, getUserAndProjects, updateUser } from '../models/u
 import { updateUserSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import AppError, { getSuccessMessage } from '../utils/appError'
+import { idSchema } from '../services/baseSchema'
 
-export const getUserAndProjectsHandler = async (req: Request, res: Response, next: NextFunction) => {
-	const response = await getUserAndProjects(req.params.userId)
-	if (response instanceof AppError) return next(response)
-	const { userWithProjects, statusCode, statusText } = response
+export const getUserAndProjectsHandler = catchAsync(
+	async (req: Request, res: Response, next: NextFunction) => {
+		const userId = idSchema.parse(req.params.userId).toString()
 
-	res.status(statusCode).json({
-		message: getSuccessMessage(statusCode, statusText),
-		data: userWithProjects,
-	})
-}
+		const response = await getUserAndProjects(userId)
+		if (response instanceof AppError) return next(response)
+		const { userWithProjects, statusCode, statusText } = response
 
-export const getUserHandler = async (req: Request, res: Response, next: NextFunction) => {
+		res.status(statusCode).json({
+			message: getSuccessMessage(statusCode, statusText),
+			data: userWithProjects,
+		})
+	}
+)
+
+export const getMeHandler = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getUser(req.userId)
 	if (response instanceof AppError) return next(response)
 	const { user, statusCode, statusText } = response
@@ -26,7 +31,7 @@ export const getUserHandler = async (req: Request, res: Response, next: NextFunc
 	})
 }
 
-export const updateUserHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const updateMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const userData = updateUserSchema.parse(req.body)
 	const response = await updateUser(userData, req.userId)
 
@@ -38,7 +43,7 @@ export const updateUserHandler = catchAsync(async (req: Request, res: Response, 
 	})
 })
 
-export const deleteUserHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const deleteMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const response = await deleteUser(req.userId)
 	if (response instanceof AppError) return next(response)
 

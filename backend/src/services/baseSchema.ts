@@ -7,6 +7,13 @@ export const emailSchema = z
 	.min(1, 'Email is required')
 	.email({ message: 'Invalid email address. Please try again.' })
 
+export const idSchema = z.coerce
+	.number({
+		invalid_type_error: 'The id you added to the request is not a number',
+	})
+	.int({ message: 'Id must be an integer' })
+	.positive({ message: `Id mustn't have a negative value` })
+
 export const passwordSchema = z
 	.string()
 	.trim()

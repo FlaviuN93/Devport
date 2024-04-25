@@ -1,18 +1,23 @@
 import express from 'express'
-import {
-	getProjectsData,
-	createProjectData,
-	updateProjectData,
-	deleteProjectData,
-} from '../controllers/projectController'
+
 import { protectHandler } from '../controllers/authController'
+import {
+	createMyProjectData,
+	getMyProjectsData,
+	updateMyProjectData,
+	deleteMyProjectData,
+} from '../controllers/projectController'
 
 const projectRouter = express.Router()
 
-projectRouter.route('/').get(protectHandler, getProjectsData).post(protectHandler, createProjectData)
 projectRouter
-	.route('/:projectId')
-	.patch(protectHandler, updateProjectData)
-	.delete(protectHandler, deleteProjectData)
+	.route('/currentProject')
+	.get(protectHandler, getMyProjectsData)
+	.post(protectHandler, createMyProjectData)
+
+projectRouter
+	.route('/currentProject/:projectId')
+	.patch(protectHandler, updateMyProjectData)
+	.delete(protectHandler, deleteMyProjectData)
 
 export default projectRouter

@@ -11,7 +11,7 @@
 		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
 		"strict": true,
-		"types": ["vite-plugin-svgr/client"],
+		"types": ["vite-plugin-svgr/client", "node"],
 		"isolatedModules": true,
 		"noEmit": true,
 		"jsx": "react-jsx",
