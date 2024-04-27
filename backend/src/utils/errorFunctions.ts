@@ -15,7 +15,6 @@ const sendZodError = (err: ZodError, res: Response): void => {
 	const formattedErrors = err.flatten()
 
 	res.status(400).json({
-		status: 'Bad Request',
 		type: 'zodError',
 		message: formattedErrors.fieldErrors,
 	})
@@ -36,7 +35,7 @@ const sendErrorInProd = (err: AppError, res: Response) => {
 
 	if (!err.isClientError) {
 		return res.status(500).json({
-			status: 'error',
+			type: 'serverError',
 			message: 'Something went very wrong!',
 		})
 	}

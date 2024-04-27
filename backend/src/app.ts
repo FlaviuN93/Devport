@@ -30,7 +30,7 @@ app.use(helmet())
 // Limits requests from users to the API
 app.use('/api', limiter)
 
-app.use(cors({ origin: process.env.VITE_APP_LOCAL_DOMAIN }))
+app.use(cors({ origin: process.env.VITE_APP_LOCAL_DOMAIN, credentials: true }))
 
 app.use('/api/projects', projectRouter)
 app.use('/api/users', userRouter)

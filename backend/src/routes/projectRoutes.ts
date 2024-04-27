@@ -11,12 +11,12 @@ import {
 const projectRouter = express.Router()
 
 projectRouter
-	.route('/currentProject')
+	.route('/currentUser')
 	.get(protectHandler, getMyProjectsData)
 	.post(protectHandler, createMyProjectData)
 
 projectRouter
-	.route('/currentProject/:projectId')
+	.route('/currentUser/:projectId')
 	.patch(protectHandler, updateMyProjectData)
 	.delete(protectHandler, deleteMyProjectData)
 

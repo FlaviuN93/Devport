@@ -12,9 +12,10 @@ import {
 } from '../utils/functions'
 
 import { sendEmail } from '../utils/email'
-import { BaseUser, IDefault, ILoginUser, IRegisterUser, LoginUser, TokenPayload } from './types'
+import { User, IDefault, ILoginUser, IRegisterUser, LoginUser, TokenPayload } from './types'
 import { z } from 'zod'
 import { updatePasswordSchema } from '../services/routeSchema'
+import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js'
 
 export const registerUser = async (email: string, password: string): Promise<IRegisterUser | AppError> => {
 	const hashedPassword = await bcrypt.hash(password, 12)
@@ -38,7 +39,7 @@ export const loginUser = async (email: string, loginPassword: string): Promise<I
 		.select('id,email,fullName,avatarURL,password')
 		.eq('email', email)
 		.single()
-	if (!user) return new AppError(404, `Your user credentials don't match. Try again.`)
+	if (!user) return new AppError(400, `Your user credentials don't match. Try again.`)
 
 	const arePasswordsEqual = await bcrypt.compare(loginPassword, user.password)
 	if (!arePasswordsEqual) return new AppError(401, `Hmm, that password doesn't seem to match. Try again.`)
@@ -161,7 +162,7 @@ export const protect = async (reqToken: string): Promise<{ userId: string } | Ap
 	const isPasswordChanged = hasPasswordChanged(decodedToken.iat, user.passwordUpdatedAt)
 	if (isPasswordChanged) return new AppError(401, 'User recently changed password! Please log in again')
 
-	return { userId: (user as BaseUser).id.toString() }
+	return { userId: user.id.toString() }
 }
 
 type UpdatePasswordType = z.infer<typeof updatePasswordSchema>

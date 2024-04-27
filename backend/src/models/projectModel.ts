@@ -2,10 +2,17 @@ import { z } from 'zod'
 import { createProjectSchema, updateProjectSchema } from '../services/routeSchema'
 import supabase from '../services/supabase'
 import AppError from '../utils/appError'
-import { IDefault, IGetProjects } from './types'
+import { IDefault, IProjects, IProject } from './types'
 
-export const getProjects = async (userId: string): Promise<IGetProjects | AppError> => {
-	const { data: projects, error, status } = await supabase.from('projects').select('*').eq('user_id', userId)
+export const getProjects = async (userId: string): Promise<IProjects | AppError> => {
+	const {
+		data: projects,
+		error,
+		status,
+	} = await supabase
+		.from('projects')
+		.select('id,imageURL,name,demoURL,repositoryURL,technologies,description')
+		.eq('user_id', userId)
 
 	if (error) return new AppError(status, 'User token has probably expired. Please try to log in again.')
 	if (projects === null || projects.length === 0)
@@ -14,33 +21,31 @@ export const getProjects = async (userId: string): Promise<IGetProjects | AppErr
 	return { projects, statusCode: 200, statusText: ['retrieve', 'projects have been sent successfully'] }
 }
 
-export const createProject = async (reqBody: CreateProject): Promise<IDefault | AppError> => {
+export const createProject = async (reqBody: CreateProject): Promise<IProject | AppError> => {
 	const {
-		data: projectId,
+		data: project,
 		error,
 		status,
-	} = await supabase.from('projects').insert(reqBody).select('id').single()
+	} = await supabase.from('projects').insert(reqBody).select('*').single()
 
 	if (error) return new AppError(status)
-	if (!projectId) return new AppError(400)
 
-	return { statusCode: 201, statusText: ['project', 'created'] }
+	return { project, statusCode: 201, statusText: ['project', 'created'] }
 }
 
 export const updateProject = async (
 	reqBody: UpdateProject,
 	projectId: string
-): Promise<IDefault | AppError> => {
+): Promise<IProject | AppError> => {
 	const {
 		data: project,
 		error,
 		status,
-	} = await supabase.from('projects').update(reqBody).eq('id', projectId).select().single()
+	} = await supabase.from('projects').update(reqBody).eq('id', projectId).select('*').single()
 
 	if (error) return new AppError(status)
-	if (!project) return new AppError(400)
 
-	return { statusCode: 200, statusText: ['update', 'project has been updated successfully'] }
+	return { project, statusCode: 200, statusText: ['update', 'project has been updated successfully'] }
 }
 
 export const deleteProject = async (id: string): Promise<IDefault | AppError> => {

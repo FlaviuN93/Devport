@@ -7,8 +7,7 @@ export interface LoginUser {
 	fullName: string
 }
 
-export interface BaseUser {
-	id: number
+export interface User {
 	coverURL: string
 	avatarURL: string
 	email: string
@@ -16,6 +15,16 @@ export interface BaseUser {
 	jobTitle: string
 	linkedin: string
 	bio: string
+}
+
+interface Project {
+	id: number
+	imageURL: File
+	name: string
+	demoURL: string
+	repositoryURL: string
+	technologies: string[]
+	description: string
 }
 
 export interface IDefault {
@@ -26,7 +35,7 @@ export interface IDefault {
 
 // User Types
 export interface IUserAndProjects extends IUser {
-	projects: UpdateProject[]
+	projects: Project[]
 }
 
 export interface IGetUserAndProjects extends IDefault {
@@ -34,12 +43,16 @@ export interface IGetUserAndProjects extends IDefault {
 }
 
 export interface IUser extends IDefault {
-	user: BaseUser
+	user: User
 }
 
 // Project Types
-export interface IGetProjects extends IDefault {
-	projects: UpdateProject[]
+export interface IProjects extends IDefault {
+	projects: Project[]
+}
+
+export interface IProject extends IDefault {
+	project: Project
 }
 
 // Auth Types

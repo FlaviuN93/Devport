@@ -3,7 +3,7 @@ import supabase from '../services/supabase'
 import { updateUserSchema } from '../services/routeSchema'
 import AppError from '../utils/appError'
 import { removeUserColumns } from '../utils/functions'
-import { BaseUser, IDefault, IGetUserAndProjects, IUser, IUserAndProjects } from './types'
+import { User, IDefault, IGetUserAndProjects, IUser, IUserAndProjects } from './types'
 
 export const getUserAndProjects = async (userId: string): Promise<IGetUserAndProjects | AppError> => {
 	const {
@@ -30,7 +30,7 @@ export const getUser = async (userId: string): Promise<IUser | AppError> => {
 	if (error) return new AppError(status)
 	if (!user) return new AppError(404)
 
-	const newUser = removeUserColumns<BaseUser>(user)
+	const newUser = removeUserColumns<User>(user)
 	return { user: newUser, statusCode: 200, statusText: ['retrieve', 'user has been sent successfully'] }
 }
 
@@ -41,7 +41,7 @@ export const updateUser = async (reqBody: UpdateUserType, userId: string): Promi
 	if (error) return new AppError(status)
 	if (!user) return new AppError(400)
 
-	const newUser = removeUserColumns<BaseUser>(user)
+	const newUser = removeUserColumns<User>(user)
 
 	return { user: newUser, statusCode: 200, statusText: ['update', 'user has been updated successfully'] }
 }

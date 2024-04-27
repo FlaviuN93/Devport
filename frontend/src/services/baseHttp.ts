@@ -1,9 +1,9 @@
 import axios, { Method } from 'axios'
-import { HttpParamsType } from '../utils/types'
+import { HttpParamsType } from './types'
 
-const instance = axios.create({ baseURL: process.env.LOCAL_DOMAIN, withCredentials: true })
+const instance = axios.create({ baseURL: process.env.LOCAL_DOMAIN, withCredentials: true, timeout: 1000 })
 
-export const request = async <T>(method: Method, url: string, paramsData?: HttpParamsType): Promise<T> => {
+const request = async <T>(method: Method, url: string, paramsData?: HttpParamsType): Promise<T | any> => {
 	try {
 		const { data } = await instance.request({
 			method,
@@ -16,6 +16,18 @@ export const request = async <T>(method: Method, url: string, paramsData?: HttpP
 		})
 		return data
 	} catch (err) {
-		throw Error
+		console.log(err, 'CheckError')
 	}
 }
+
+export const getReq = <T>(url: string, paramsData?: HttpParamsType): Promise<T | Error> =>
+	request<T>('get', url, paramsData)
+
+export const postReq = <T>(url: string, paramsData?: HttpParamsType): Promise<T | Error> =>
+	request<T>('post', url, paramsData)
+
+export const patchReq = <T>(url: string, paramsData?: HttpParamsType): Promise<T | Error> =>
+	request<T>('post', url, paramsData)
+
+export const deleteReq = <T>(url: string, paramsData?: HttpParamsType): Promise<T | Error> =>
+	request<T>('post', url, paramsData)

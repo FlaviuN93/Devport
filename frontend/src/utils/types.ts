@@ -13,17 +13,3 @@ export type PasswordValidationType =
 	| 'specialChar'
 
 export type tCardState = 'presentation' | 'edit'
-
-export interface Params {
-	[key: string]: boolean | string | string[] | number | number[]
-}
-
-export interface HttpParamsType<T> {
-	queryParams?: Params
-	body?: T
-}
-
-export interface HttpParamsType<T = Body> {
-	queryParams?: Params
-	body?: T
-}
