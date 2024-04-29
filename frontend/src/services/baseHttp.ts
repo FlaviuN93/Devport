@@ -1,11 +1,15 @@
-import axios, { Method } from 'axios'
+import axios, { AxiosError, Method } from 'axios'
 import { HttpParamsType } from './types'
 
-const instance = axios.create({ baseURL: process.env.LOCAL_DOMAIN, withCredentials: true, timeout: 1000 })
+const instance = axios.create({
+	baseURL: import.meta.env.VITE_LOCAL_DOMAIN,
+	withCredentials: true,
+	timeout: 1000,
+})
 
-const request = async <T>(method: Method, url: string, paramsData?: HttpParamsType): Promise<T | any> => {
+const request = async <T>(method: Method, url: string, paramsData?: HttpParamsType): Promise<T> => {
 	try {
-		const { data } = await instance.request({
+		const { data } = await instance.request<T>({
 			method,
 			url,
 			data: paramsData?.body,
@@ -16,18 +20,36 @@ const request = async <T>(method: Method, url: string, paramsData?: HttpParamsTy
 		})
 		return data
 	} catch (err) {
-		console.log(err, 'CheckError')
+		if (err instanceof AxiosError) {
+			if (!err.response)
+				throw { statusCode: 500, statusText: 'Server Error', type: err.code, message: err.message }
+			const error = err.response
+
+			throw {
+				statusCode: error.status,
+				statusText: error.statusText,
+				type: error.data.type,
+				message: error.data.message,
+			}
+		}
+
+		throw {
+			statusCode: 500,
+			statusText: 'Server Error',
+			type: '',
+			message: 'Unexpected Error. Please give us some time to fix the problem.',
+		}
 	}
 }
 
-export const getReq = <T>(url: string, paramsData?: HttpParamsType): Promise<T | Error> =>
+export const get = <T>(url: string, paramsData?: HttpParamsType): Promise<T> =>
 	request<T>('get', url, paramsData)
 
-export const postReq = <T>(url: string, paramsData?: HttpParamsType): Promise<T | Error> =>
+export const post = <T>(url: string, paramsData?: HttpParamsType): Promise<T> =>
 	request<T>('post', url, paramsData)
 
-export const patchReq = <T>(url: string, paramsData?: HttpParamsType): Promise<T | Error> =>
+export const patch = <T>(url: string, paramsData?: HttpParamsType): Promise<T> =>
 	request<T>('post', url, paramsData)
 
-export const deleteReq = <T>(url: string, paramsData?: HttpParamsType): Promise<T | Error> =>
+export const remove = <T>(url: string, paramsData?: HttpParamsType): Promise<T> =>
 	request<T>('post', url, paramsData)

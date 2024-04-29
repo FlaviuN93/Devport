@@ -15,8 +15,10 @@ export interface IDefaultSuccess {
 }
 
 export interface IDefaultError {
-	type: 'clientError' | 'serverError' | 'zodError'
-	message: string
+	statusCode: number
+	statusText: string
+	type: 'clientError' | 'serverError' | 'zodError' | 'ERR_NETWORK' | 'ECONNABORTED'
+	message: string | string[]
 }
 
 export interface IRegister extends IDefaultSuccess {
@@ -43,8 +45,8 @@ export interface IUserAndProjects extends IDefaultSuccess {
 	user: UserAndProjects
 }
 
-type Project = {
-	imageURL: File
+interface Project {
+	imageURL: string
 	name: string
 	demoURL: string
 	repositoryURL: string
@@ -52,7 +54,7 @@ type Project = {
 	description: string
 }
 
-type User = {
+interface User {
 	coverURL: string
 	avatarURL: string
 	email: string

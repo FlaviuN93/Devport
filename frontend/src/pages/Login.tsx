@@ -6,6 +6,7 @@ import { LoginType, loginSchema } from '../utils/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
+import { loginReq } from '../services/api.requests'
 
 const Login = () => {
 	const {
@@ -19,9 +20,12 @@ const Login = () => {
 		console.log('Github')
 	}
 
-	const loginData: SubmitHandler<LoginType> = (data) => {
+	const loginData: SubmitHandler<LoginType> = async (data) => {
 		console.log('Submitted Data', data, errors, 'helrolsd')
+		const response = await loginReq(data)
+		console.log(response)
 	}
+
 	return (
 		<div className='formContainer'>
 			<div>

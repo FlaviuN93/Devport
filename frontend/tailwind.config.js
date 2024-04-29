@@ -12,6 +12,8 @@ export default {
 				lightGray: '#cbcdd1',
 				danger: '#ab1b1b',
 				black2: '#364153',
+				lightViolet: '#e1e7fd',
+				darkViolet: '#4138c2',
 			},
 		},
 	},

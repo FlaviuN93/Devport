@@ -100,7 +100,19 @@ export const profileSettingsSchema = z.object({
 })
 
 export type ProfileSettingsType = z.infer<typeof profileSettingsSchema>
+
 export type ProjectSettingsType = z.infer<typeof projectSettingsSchema>
+
 export type ResetPasswordType = z.infer<typeof resetPasswordSchema>
+
 export type SignupType = z.infer<typeof signupSchema>
+
 export type LoginType = z.infer<typeof loginSchema>
+
+export interface IProfileSettings {
+	userSettings: ProfileSettingsType
+}
+
+export interface IProjectSettings {
+	projectSettings: ProjectSettingsType
+}

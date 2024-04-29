@@ -10,6 +10,8 @@ import CheckCircleIcon from '../assets/check circle-1.svg?react'
 import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { PencilSquareIcon } from '@heroicons/react/16/solid'
+import { useDeleteMe, useGetMe, useUpdateMe } from '../services/queries'
 
 const ProfileSettings = () => {
 	const {
@@ -20,6 +22,11 @@ const ProfileSettings = () => {
 	} = useForm<ProfileSettingsType>({
 		resolver: zodResolver(profileSettingsSchema),
 	})
+
+	const { data: user, error: getUserError, isSuccess, isLoading, refetch } = useGetMe()
+	const { error: updateUserError, isPending: pendingUpdate, mutate: mutateUpdate } = useUpdateMe()
+	const { error: deleteUserError, isPending: pendingDelete, mutate: mutateDelete } = useDeleteMe()
+
 	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
 	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
 
@@ -31,13 +38,10 @@ const ProfileSettings = () => {
 		// setSelectedImage(selectedFile)
 	}
 
-	const profileData: SubmitHandler<ProfileSettingsType> = (data) => {
-		console.log('handleSubmit data', data)
-	}
 	return (
 		<section className='settingsContainer'>
 			<h4 className='mt-2 mb-4'>Profile Settings</h4>
-			<form onSubmit={handleSubmit(profileData)} className='formSettingsContainer'>
+			<form onSubmit={handleSubmit((data) => mutateUpdate(data))} className='formSettingsContainer'>
 				<div className='imageFileContainer'>
 					<img src='' alt='' />
 					<Avatar icon={<UserCircleIcon className='w-6 h-6' />} avatarStyles='h-[52px] w-[52px]' />
@@ -118,15 +122,26 @@ const ProfileSettings = () => {
 					placeholder='Enter a short introduction..'
 					error={errors.bio?.message}
 				/>
-
-				<Button
-					icon={<CheckCircleIcon className='h-5 w-5' />}
-					iconPos='left'
-					buttonText='Add'
-					buttonStyles='mb-2 w-full sm:place-self-end sm:w-auto'
-					variant='primary'
-					type='submit'
-				/>
+				<div className='place-self-end flex flex-col w-full gap-4 sm:flex-row sm:w-auto'>
+					<Button
+						icon={<PencilSquareIcon className='h-5 w-5' />}
+						iconPos='left'
+						buttonText='Edit'
+						buttonStyles='mb-2 w-full sm:place-self-end sm:w-auto bg-lightViolet text-darkViolet'
+						type='button'
+						isLoading={isLoading}
+						onClick={() => refetch()}
+					/>
+					<Button
+						icon={<CheckCircleIcon className='h-5 w-5' />}
+						iconPos='left'
+						buttonText={isSuccess ? 'Update' : 'Add'}
+						buttonStyles='mb-2 w-full sm:place-self-end sm:w-auto'
+						variant='primary'
+						isLoading={pendingUpdate}
+						type='submit'
+					/>
+				</div>
 			</form>
 		</section>
 	)

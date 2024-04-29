@@ -25,9 +25,7 @@ const Button: FC<ButtonProps> = ({
 	iconPos = 'left',
 	buttonStyles,
 }) => {
-	const buttonClasses = `${styles.button} ${variant ? styles[variant] : ''} ${
-		isLoading ? styles.loading : ''
-	} ${buttonStyles}
+	const buttonClasses = `${styles.button} ${variant ? styles[variant] : ''} ${buttonStyles}
 	`
 	const iconClasses = `${icon && iconPos === 'left' && buttonText ? 'mr-2' : ''} ${
 		icon && iconPos === 'right' && buttonText ? 'ml-2' : ''
@@ -51,15 +49,11 @@ const Button: FC<ButtonProps> = ({
 		>
 			<>
 				{icon && iconPos === 'left' && (
-					<span className={iconClasses}>
-						{isLoading ? <span className={styles.spinner}></span> : icon}
-					</span>
+					<span className={iconClasses}>{isLoading ? <span className={styles.spinner}></span> : icon}</span>
 				)}
 				<span>{buttonText}</span>
 				{icon && iconPos === 'right' && (
-					<span className={iconClasses}>
-						{isLoading ? <span className={styles.spinner}></span> : icon}
-					</span>
+					<span className={iconClasses}>{isLoading ? <span className={styles.spinner}></span> : icon}</span>
 				)}
 			</>
 		</button>

@@ -1,4 +1,4 @@
-import { deleteReq, getReq, patchReq, postReq } from './baseHttp'
+import { remove, get, patch, post } from './baseHttp'
 import { IDefaultSuccess, ILogin, IProject, IProjects, IRegister, IUser, IUserAndProjects } from './types'
 import {
 	LoginType,
@@ -9,40 +9,48 @@ import {
 } from '../utils/schemas'
 
 // User Routes
-export const getMe = () => getReq<IUser>('/users/currentUser')
+export const getMe = () => get<IUser>('/users/currentUser')
 
-export const updateMe = (body: ProfileSettingsType) =>
-	patchReq<IDefaultSuccess>('/users/currentUser', { body })
+export const updateMe = (body: ProfileSettingsType) => patch<IDefaultSuccess>('/users/currentUser', { body })
 
-export const deleteMe = () => deleteReq<IDefaultSuccess>('/users/currentUser')
+export const deleteMe = () => remove<IDefaultSuccess>('/users/currentUser')
 
 // I will get access to userId from the url with react router
 export const getUserAndProjects = (userId: string) =>
-	getReq<IUserAndProjects>('/users/projects/:userId', { queryParams: { userId } })
+	get<IUserAndProjects>('/users/projects/:userId', {
+		queryParams: { userId },
+	})
 
 // Project Routes
-export const getMyProjects = () => getReq<IProjects>('/projects/currentUser')
+export const getMyProjects = () => get<IProjects>('/projects/currentUser')
+export const getMyProject = () => get<IProject>('/projects/currentUser/:projectId')
 
-export const createMyProject = (body: ProjectSettingsType) =>
-	postReq<IProject>('projects/currentUser', { body })
+export const createMyProject = (body: ProjectSettingsType) => post<IProject>('projects/currentUser', { body })
 
 export const updateMyProject = (projectId: string, body: ProjectSettingsType) =>
-	patchReq<IProject>('projects/currentUser/:projectId', { queryParams: { projectId }, body })
+	patch<IProject>('projects/currentUser/:projectId', {
+		queryParams: { projectId },
+		body,
+	})
 
 export const deleteMyProject = (projectId: string) =>
-	deleteReq<IDefaultSuccess>('projects/currentUser/:projectId', { queryParams: { projectId } })
+	remove<IDefaultSuccess>('projects/currentUser/:projectId', {
+		queryParams: { projectId },
+	})
 
 // Authentication Routes
-export const registerReq = (body: SignupType) => postReq<IRegister>('/auth/register', { body })
+export const register = (body: SignupType) => post<IRegister>('/auth/register', { body })
 
-export const loginReq = (body: LoginType) => postReq<ILogin>('/auth/login', { body })
+export const login = (body: LoginType) => post<ILogin>('/auth/login', { body })
 
-export const forgotPasswordReq = (body: { email: string }) =>
-	postReq<IDefaultSuccess>('/auth/forgotPassword', { body })
+export const forgotPassword = (body: { email: string }) =>
+	post<IDefaultSuccess>('/auth/forgotPassword', { body })
 
 // I will get access to resetToken from the url with react router
-export const resetPasswordReq = (resetToken: string, body: ResetPasswordType) =>
-	patchReq<ILogin>('/auth/resetPassword/:resetToken', { queryParams: { resetToken }, body })
+export const resetPassword = (resetToken: string, body: ResetPasswordType) =>
+	patch<ILogin>('/auth/resetPassword/:resetToken', {
+		queryParams: { resetToken },
+		body,
+	})
 
-export const changePasswordReq = (body: ResetPasswordType) =>
-	postReq<ILogin>('/auth/changePassword', { body })
+export const changePassword = (body: ResetPasswordType) => post<ILogin>('/auth/changePassword', { body })
