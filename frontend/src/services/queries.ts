@@ -1,15 +1,47 @@
 import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
-import { createMyProject, deleteMe, getMe, getMyProjects, getUserAndProjects, updateMe } from './api.requests'
-import { IDefaultError, IDefaultSuccess, IProject, IProjects, IUser, IUserAndProjects } from './types'
-import { ProfileSettingsType, ProjectSettingsType } from '../utils/schemas'
+import {
+	changePassword,
+	createMyProject,
+	deleteMe,
+	deleteMyProject,
+	forgotPassword,
+	getMe,
+	getMyProject,
+	getMyProjects,
+	getUserAndProjects,
+	login,
+	register,
+	resetPassword,
+	updateMe,
+	updateMyProject,
+} from './api.requests'
+import {
+	HttpParamsType,
+	IDefaultError,
+	IDefaultSuccess,
+	ILogin,
+	IProject,
+	IProjects,
+	IRegister,
+	IUser,
+	IUserAndProjects,
+} from './types'
+import {
+	IProfileSettings,
+	IProjectSettings,
+	LoginType,
+	ResetPasswordType,
+	SignupType,
+} from '../utils/schemas'
 
 const queryClient = new QueryClient()
 
+// User Queries and Mutations
 export const useGetMe = () =>
 	useQuery<IUser, IDefaultError>({ queryKey: ['profileSettings', 'getUser'], queryFn: getMe, enabled: false })
 
 export const useUpdateMe = () =>
-	useMutation<IDefaultSuccess, IDefaultError, ProfileSettingsType>({
+	useMutation<IDefaultSuccess, IDefaultError, IProfileSettings>({
 		mutationFn: updateMe,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['profileSettings', 'getUser'] })
@@ -24,13 +56,50 @@ export const useGetUserAndProjects = (userId: string) =>
 		queryFn: () => getUserAndProjects(userId),
 	})
 
+export const useChangePassword = () =>
+	useMutation<ILogin, IDefaultError, ResetPasswordType>({ mutationFn: changePassword })
+
+//Project Queries and Mutations
+
 export const useGetMyProjects = () =>
 	useQuery<IProjects, IDefaultError>({ queryKey: ['myProjects'], queryFn: getMyProjects })
 
+export const useGetMyProject = (projectId: string) =>
+	useQuery<IProject, IDefaultError>({
+		queryKey: ['myProject', projectId],
+		queryFn: () => getMyProject(projectId),
+		enabled: false,
+	})
+
 export const useCreateMyProject = () =>
-	useMutation<IProject, IDefaultError, ProjectSettingsType>({
+	useMutation<IProject, IDefaultError, IProjectSettings>({
 		mutationFn: createMyProject,
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['profileSettings', 'getUser'] })
+			queryClient.invalidateQueries({ queryKey: ['myProjects'] })
 		},
 	})
+
+export const useUpdateMyProject = () =>
+	useMutation<IProject, IDefaultError, HttpParamsType<IProjectSettings>>({
+		mutationFn: updateMyProject,
+	})
+
+export const useDeleteMyProject = () =>
+	useMutation<IDefaultSuccess, IDefaultError, string>({
+		mutationFn: deleteMyProject,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['myProjects'] })
+		},
+	})
+
+// Authentication Mutations
+
+export const useRegister = () => useMutation<IRegister, IDefaultError, SignupType>({ mutationFn: register })
+
+export const useLogin = () => useMutation<ILogin, IDefaultError, LoginType>({ mutationFn: login })
+
+export const useForgotPassword = () =>
+	useMutation<IDefaultSuccess, IDefaultError, { email: string }>({ mutationFn: forgotPassword })
+
+export const useResetPassword = () =>
+	useMutation<ILogin, IDefaultError, HttpParamsType<ResetPasswordType>>({ mutationFn: resetPassword })

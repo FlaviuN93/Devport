@@ -1,13 +1,10 @@
 export interface Params {
-	[key: string]: boolean | string | string[] | number | number[]
+	[key: string]: string | string[] | number | number[]
 }
 
-export interface RequestBody {
-	[key: string]: any
-}
-export interface HttpParamsType {
-	queryParams?: Params
-	body?: RequestBody
+export interface HttpParamsType<T> {
+	query?: Params
+	body?: T
 }
 
 export interface IDefaultSuccess {

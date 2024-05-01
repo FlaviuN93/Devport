@@ -6,14 +6,17 @@ const instance = axios.create({
 	withCredentials: true,
 	timeout: 1000,
 })
-
-const request = async <T>(method: Method, url: string, paramsData?: HttpParamsType): Promise<T> => {
+const request = async <D, B = undefined>(
+	method: Method,
+	url: string,
+	paramsData?: HttpParamsType<B>
+): Promise<D> => {
 	try {
-		const { data } = await instance.request<T>({
+		const { data } = await instance.request<D>({
 			method,
 			url,
 			data: paramsData?.body,
-			params: paramsData?.queryParams,
+			params: paramsData?.query,
 			headers: {
 				'content-type': paramsData?.body instanceof FormData ? 'multipart/form-data' : 'application/json',
 			},
@@ -42,14 +45,14 @@ const request = async <T>(method: Method, url: string, paramsData?: HttpParamsTy
 	}
 }
 
-export const get = <T>(url: string, paramsData?: HttpParamsType): Promise<T> =>
-	request<T>('get', url, paramsData)
+export const get = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
+	request<D, B>('get', url, paramsData)
 
-export const post = <T>(url: string, paramsData?: HttpParamsType): Promise<T> =>
-	request<T>('post', url, paramsData)
+export const post = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
+	request<D, B>('post', url, paramsData)
 
-export const patch = <T>(url: string, paramsData?: HttpParamsType): Promise<T> =>
-	request<T>('post', url, paramsData)
+export const patch = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
+	request<D, B>('post', url, paramsData)
 
-export const remove = <T>(url: string, paramsData?: HttpParamsType): Promise<T> =>
-	request<T>('post', url, paramsData)
+export const remove = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
+	request<D, B>('post', url, paramsData)

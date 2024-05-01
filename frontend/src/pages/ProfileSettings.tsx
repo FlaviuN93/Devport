@@ -1,7 +1,7 @@
 import Button from '../components/UI/Button'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { ProfileSettingsType, profileSettingsSchema } from '../utils/schemas'
+import { useForm } from 'react-hook-form'
+import { IProfileSettings, profileSettingsSchema } from '../utils/schemas'
 import File from '../components/Inputs/File'
 // import TrashIcon from '../assets/Trash.svg?react'
 import CheckCircleIcon from '../assets/check circle-1.svg?react'
@@ -11,7 +11,7 @@ import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import { PencilSquareIcon } from '@heroicons/react/16/solid'
-import { useDeleteMe, useGetMe, useUpdateMe } from '../services/queries'
+import { useDeleteMe, useGetMe, useGetMyProject, useUpdateMe } from '../services/queries'
 
 const ProfileSettings = () => {
 	const {
@@ -19,14 +19,14 @@ const ProfileSettings = () => {
 		register,
 		formState: { errors },
 		// setValue,
-	} = useForm<ProfileSettingsType>({
+	} = useForm<IProfileSettings>({
 		resolver: zodResolver(profileSettingsSchema),
 	})
 
-	const { data: user, error: getUserError, isSuccess, isLoading, refetch } = useGetMe()
+	const { data: getUser, error: getUserError, isSuccess, isLoading, refetch } = useGetMe()
 	const { error: updateUserError, isPending: pendingUpdate, mutate: mutateUpdate } = useUpdateMe()
 	const { error: deleteUserError, isPending: pendingDelete, mutate: mutateDelete } = useDeleteMe()
-
+	console.log(getUserError, 'hello')
 	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
 	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
 

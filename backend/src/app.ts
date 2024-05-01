@@ -10,6 +10,7 @@ import userRouter from './routes/userRoutes'
 import authRouter from './routes/authRoutes'
 import AppError, { errorMessage } from './utils/appError'
 import { globalErrorHandler } from './utils/errorFunctions'
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -22,6 +23,9 @@ const limiter = rateLimit({
 if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'))
 }
+
+// Cookie Parser
+app.use(cookieParser())
 
 app.use(bodyParser.json({ limit: '5mb' }))
 // Set security HTTP headers

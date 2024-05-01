@@ -6,6 +6,7 @@ import {
 	getMyProjectsData,
 	updateMyProjectData,
 	deleteMyProjectData,
+	getMyProjectData,
 } from '../controllers/projectController'
 
 const projectRouter = express.Router()
@@ -17,6 +18,7 @@ projectRouter
 
 projectRouter
 	.route('/currentUser/:projectId')
+	.get(protectHandler, getMyProjectData)
 	.patch(protectHandler, updateMyProjectData)
 	.delete(protectHandler, deleteMyProjectData)
 

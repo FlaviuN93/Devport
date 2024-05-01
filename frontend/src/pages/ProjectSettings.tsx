@@ -1,9 +1,8 @@
-import { useEffect } from 'react'
 import Button from '../components/UI/Button'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { ProjectSettingsType, projectSettingsSchema } from '../utils/schemas'
+import { IProjectSettings, projectSettingsSchema } from '../utils/schemas'
 import File from '../components/Inputs/File'
 import TrashIcon from '../assets/Trash.svg?react'
 import TrashIcon2 from '../assets/Trash-1.svg?react'
@@ -22,11 +21,10 @@ const ProjectSettings = () => {
 		register,
 		control,
 		formState: { errors },
-	} = useForm<ProjectSettingsType>({
+	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
 	})
 
-	// useQuery({queryKey:['projectSettings'], queryFn:})
 	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
 	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
 
@@ -38,11 +36,7 @@ const ProjectSettings = () => {
 		// setSelectedImage(selectedFile)
 	}
 
-	useEffect(() => {
-		console.log(errors, 'helloFromUseEffect')
-	}, [errors])
-
-	const projectData: SubmitHandler<ProjectSettingsType> = (data) => {
+	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		console.log('handleSubmit data', data)
 	}
 

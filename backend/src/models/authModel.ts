@@ -12,10 +12,9 @@ import {
 } from '../utils/functions'
 
 import { sendEmail } from '../utils/email'
-import { User, IDefault, ILoginUser, IRegisterUser, LoginUser, TokenPayload } from './types'
+import { IDefault, ILoginUser, IRegisterUser, LoginUser, TokenPayload } from './types'
 import { z } from 'zod'
 import { updatePasswordSchema } from '../services/routeSchema'
-import { PostgrestResponse, PostgrestSingleResponse } from '@supabase/supabase-js'
 
 export const registerUser = async (email: string, password: string): Promise<IRegisterUser | AppError> => {
 	const hashedPassword = await bcrypt.hash(password, 12)

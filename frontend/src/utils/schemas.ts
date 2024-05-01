@@ -99,10 +99,6 @@ export const profileSettingsSchema = z.object({
 	bio: descriptionSchema.optional(),
 })
 
-export type ProfileSettingsType = z.infer<typeof profileSettingsSchema>
-
-export type ProjectSettingsType = z.infer<typeof projectSettingsSchema>
-
 export type ResetPasswordType = z.infer<typeof resetPasswordSchema>
 
 export type SignupType = z.infer<typeof signupSchema>
@@ -110,9 +106,20 @@ export type SignupType = z.infer<typeof signupSchema>
 export type LoginType = z.infer<typeof loginSchema>
 
 export interface IProfileSettings {
-	userSettings: ProfileSettingsType
+	coverFile?: File | undefined
+	avatarFile?: File | undefined
+	email?: string | undefined
+	name?: string | undefined
+	jobTitle?: string | undefined
+	linkedin?: string | undefined
+	bio?: string | undefined
 }
 
 export interface IProjectSettings {
-	projectSettings: ProjectSettingsType
+	imageFile?: File | undefined
+	name?: string | undefined
+	demoUrl?: string | undefined
+	repositoryUrl?: string | undefined
+	description?: string | undefined
+	technologies?: string[] | undefined
 }

@@ -88,10 +88,7 @@ export const resetPasswordHandler = catchAsync(async (req: Request, res: Respons
 })
 
 export const protectHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	let reqToken = ''
-	if (req.headers.authorization?.startsWith('Bearer')) reqToken = req.headers.authorization.split(' ')[1]
-	const response = await protect(reqToken)
-
+	const response = await protect(req.cookies.jwt)
 	if (response instanceof AppError) return next(response)
 
 	// I could add userRoles here if needed

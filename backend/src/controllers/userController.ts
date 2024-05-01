@@ -24,7 +24,6 @@ export const getMeHandler = async (req: Request, res: Response, next: NextFuncti
 	const response = await getUser(req.userId)
 	if (response instanceof AppError) return next(response)
 	const { user, statusCode, statusText } = response
-
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
 		data: user,
