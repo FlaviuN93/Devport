@@ -12,8 +12,7 @@ export interface IDefaultSuccess {
 }
 
 export interface IDefaultError {
-	statusCode: number
-	statusText: string
+	statusTitle: string
 	type: 'clientError' | 'serverError' | 'zodError' | 'ERR_NETWORK' | 'ECONNABORTED'
 	message: string | string[]
 }
@@ -23,7 +22,7 @@ export interface IRegister extends IDefaultSuccess {
 }
 
 export interface ILogin extends IDefaultSuccess {
-	user: { avatarURL: string; email: string; fullName: string }
+	user: { email: string; avatarURL: string; fullName: string }
 }
 
 export interface IUser extends IDefaultSuccess {
@@ -39,10 +38,10 @@ export interface IProject extends IDefaultSuccess {
 }
 
 export interface IUserAndProjects extends IDefaultSuccess {
-	user: UserAndProjects
+	user: User
 }
 
-interface Project {
+export interface Project {
 	imageURL: string
 	name: string
 	demoURL: string
@@ -51,16 +50,13 @@ interface Project {
 	description: string
 }
 
-interface User {
-	coverURL: string
-	avatarURL: string
+export interface User {
+	coverURL?: string
+	avatarURL?: string
 	email: string
-	fullName: string
-	jobTitle: string
-	linkedin: string
-	bio: string
-}
-
-interface UserAndProjects extends User {
-	projects: Project[]
+	fullName?: string
+	jobTitle?: string
+	linkedin?: string
+	bio?: string
+	projects?: Project[]
 }

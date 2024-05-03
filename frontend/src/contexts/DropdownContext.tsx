@@ -1,6 +1,6 @@
 import { FC, ReactNode, RefObject, createContext, useRef, useState } from 'react'
 
-interface DropdownContextType {
+interface DropdownContextProps {
 	isOpen: boolean
 	handleClose: () => void
 	handleToggle: () => void
@@ -10,7 +10,7 @@ interface DropdownContextType {
 	handleSelect: (itemId: string) => void
 }
 
-export const DropdownContext = createContext<DropdownContextType>({} as DropdownContextType)
+export const DropdownContext = createContext<DropdownContextProps>({} as DropdownContextProps)
 
 export const DropdownProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [isOpen, setIsOpen] = useState(false)

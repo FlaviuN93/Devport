@@ -25,11 +25,8 @@ const Button: FC<ButtonProps> = ({
 	iconPos = 'left',
 	buttonStyles,
 }) => {
-	const buttonClasses = `${styles.button} ${variant ? styles[variant] : ''} ${buttonStyles}
-	`
-	const iconClasses = `${icon && iconPos === 'left' && buttonText ? 'mr-2' : ''} ${
-		icon && iconPos === 'right' && buttonText ? 'ml-2' : ''
-	}`
+	const buttonClasses = `${styles.button} ${variant ? styles[variant] : ''} ${buttonStyles}`
+	const iconClasses = `inline-block ${styles[iconPos]}`
 	let pressed = false
 	const handleClick = (event: MouseEvent) => {
 		if (!disabled && onClick) {
@@ -47,15 +44,9 @@ const Button: FC<ButtonProps> = ({
 			onClick={handleClick}
 			type={type}
 		>
-			<>
-				{icon && iconPos === 'left' && (
-					<span className={iconClasses}>{isLoading ? <span className={styles.spinner}></span> : icon}</span>
-				)}
-				<span>{buttonText}</span>
-				{icon && iconPos === 'right' && (
-					<span className={iconClasses}>{isLoading ? <span className={styles.spinner}></span> : icon}</span>
-				)}
-			</>
+			{isLoading && <span className={`${styles.spinner} ${iconClasses}`}></span>}
+			{icon && !isLoading && <span className={iconClasses}>{icon}</span>}
+			<span>{buttonText}</span>
 		</button>
 	)
 }

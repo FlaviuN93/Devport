@@ -22,9 +22,7 @@ export const useValidateResult = (errorTypes: ValidateResult, initialState: Vali
 				if (typeof errorTypes === 'string' || Array.isArray(errorTypes)) {
 					setIsValid(true)
 					return state.map((error) =>
-						errorTypes.includes(error.type)
-							? { ...error, isActive: false }
-							: { ...error, isActive: true }
+						errorTypes.includes(error.type) ? { ...error, isActive: false } : { ...error, isActive: true }
 					)
 				}
 			} else hasMounted.current = true

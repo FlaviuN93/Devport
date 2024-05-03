@@ -1,12 +1,14 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import GithubIcon from '../assets/github.svg?react'
 import Button from '../components/UI/Button'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { LoginType, loginSchema } from '../utils/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
-import { login } from '../services/api.requests'
+import { useLogin } from '../services/queries'
+import { useEffect } from 'react'
+import { useUserContext } from '../contexts/contextHooks'
 
 const Login = () => {
 	const {
@@ -16,14 +18,19 @@ const Login = () => {
 	} = useForm<LoginType>({
 		resolver: zodResolver(loginSchema),
 	})
+	const { error, mutate, isPending, isSuccess, data } = useLogin()
+	const { handleSetUser } = useUserContext()
+	const navigate = useNavigate()
+
+	useEffect(() => {
+		if (isSuccess) {
+			handleSetUser(data.user)
+			navigate('/project-settings')
+		}
+	}, [navigate, isSuccess, data, handleSetUser])
+
 	const handleGithubSignup = () => {
 		console.log('Github')
-	}
-
-	const loginData: SubmitHandler<LoginType> = async (data) => {
-		console.log('Submitted Data', data, errors, 'helrolsd')
-		const response = await login(data)
-		console.log(response)
 	}
 
 	return (
@@ -40,7 +47,7 @@ const Login = () => {
 			/>
 			<div className='borderWord'>or</div>
 
-			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit(loginData)}>
+			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => mutate(data))}>
 				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />
 
 				<Password
@@ -53,7 +60,12 @@ const Login = () => {
 				<Link to='/auth/forgot-password' className='place-self-end -mt-2'>
 					<Button buttonText='Forgot Password' variant='text' />
 				</Link>
-				<Button buttonText='Sign In' type='submit' buttonStyles='bg-violet text-white w-full' />
+				<Button
+					buttonText='Sign In'
+					isLoading={isPending}
+					type='submit'
+					buttonStyles='bg-violet text-white w-full'
+				/>
 			</form>
 
 			<div className='-mt-3 text-start'>

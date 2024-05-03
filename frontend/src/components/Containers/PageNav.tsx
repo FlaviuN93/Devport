@@ -4,8 +4,10 @@ import LogoIcon from '../../assets/Logo.svg?react'
 import { Dropdown, DropdownDivider, DropdownItem, DropdownMenu, DropdownToggle } from '../UI/Dropdown'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import Avatar from '../UI/Avatar'
+import { useUserContext } from '../../contexts/contextHooks'
 
 const PageNav = () => {
+	const { user } = useUserContext()
 	return (
 		<nav className={styles.navContainer}>
 			<Link to='/home'>
@@ -19,7 +21,7 @@ const PageNav = () => {
 						<Avatar icon={<UserCircleIcon className='h-6 w-6' />} avatarStyles='w-10 h-10' />
 						<div className='text-start -mt-1'>
 							<h5>Tyler Johnson</h5>
-							<p className='text-xs text-gray'>tyler.johnson@gmail.com</p>
+							<p className='text-xs text-gray'>{user.email}</p>
 						</div>
 					</DropdownItem>
 					<DropdownDivider />

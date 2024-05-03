@@ -12,3 +12,12 @@ export const getMessageForValidation = (messageKey: PasswordValidationType): str
 
 	return validationRules[messageKey]
 }
+export const getValueFromStorage = <T>(key: string, initialValue: T) => {
+	if (typeof window.localStorage === 'undefined') console.log('localStorage is not supported')
+	const item = window.localStorage.getItem(key)
+	if (!item) return initialValue
+
+	const data: T = JSON.parse(item)
+
+	return data
+}

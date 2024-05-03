@@ -33,10 +33,18 @@ const descriptionSchema = z
 
 const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
 
-const fileSchema = z.instanceof(File).refine((file) => {
-	const allowedMimeTypes = ['image/png', 'image/jpeg']
-	return allowedMimeTypes.includes(file.type)
-}, 'File must be a valid image (PNG, JPEG)')
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+const fileSchema = z
+	.any()
+	.refine((file: File) => {
+		return file === undefined
+	}, 'File is not selected')
+	.refine((file: File) => {
+		console.log(file, 'checkFile')
+		// if (!file) return
+		console.log(file, 'checkFile2')
+		return ACCEPTED_IMAGE_TYPES.includes(file.type)
+	}, 'File must be a valid image (PNG, JPEG, JPG, WEBP)')
 
 // Auth Schemas
 export const signupSchema = z.object({
@@ -70,33 +78,48 @@ export const resetPasswordSchema = z
 const MAX_FILE_SIZE = 1024 * 1024 * 2
 const AVATAR_FILE_SIZE = 1024 * 1024
 
-export const projectSettingsSchema = z
-	.object({
-		imageFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB').optional(),
-		name: nameSchema,
-		demoUrl: urlSchema,
-		repositoryUrl: urlSchema,
-		description: descriptionSchema,
-		technologies: z
-			.array(z.string())
-			.min(2, 'Select a minimum of 2 technologies')
-			.max(5, 'Select a maximum of 5 technologies'),
-	})
-	.partial()
+export const projectSettingsSchema = z.object({
+	imageFile: fileSchema.refine((file: File) => {
+		if (!file) return
+		file.size <= MAX_FILE_SIZE, 'File must be under 2MB'
+	}),
+	name: nameSchema,
+	demoUrl: urlSchema,
+	repositoryUrl: urlSchema,
+	description: descriptionSchema,
+	technologies: z
+		.array(z.string())
+		.min(2, 'Select a minimum of 2 technologies')
+		.max(5, 'Select a maximum of 5 technologies'),
+})
 
 export const profileSettingsSchema = z.object({
-	coverFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB').optional(),
-	avatarFile: fileSchema.refine((file) => file.size <= AVATAR_FILE_SIZE, 'File must be under 1MB').optional(),
-	email: emailSchema.optional(),
-	name: nameSchema.optional(),
-	jobTitle: z
-		.string()
-		.trim()
-		.max(30, 'Job title is maximum 30 characters long')
-		.regex(/^[a-zA-Z]+$/, 'Position can only contain letters')
-		.optional(),
-	linkedin: urlSchema.optional(),
-	bio: descriptionSchema.optional(),
+	coverFile: z.union([
+		fileSchema.refine((file) => {
+			if (!file) return
+			file.size <= MAX_FILE_SIZE
+		}, 'File must be under 2MB'),
+		z.undefined(),
+	]),
+	avatarFile: z.union([
+		fileSchema.refine((file) => {
+			if (!file) return
+			file.size <= AVATAR_FILE_SIZE
+		}, 'File must be under 1MB'),
+		z.undefined(),
+	]),
+	email: z.union([emailSchema, z.literal('')]),
+	name: z.union([nameSchema, z.literal('')]),
+	jobTitle: z.union([
+		z
+			.string()
+			.trim()
+			.max(30, 'Job title is maximum 30 characters long')
+			.regex(/^[a-zA-Z]+$/, 'Position can only contain letters'),
+		z.literal(''),
+	]),
+	linkedin: z.union([urlSchema, z.literal('')]),
+	bio: z.union([descriptionSchema, z.literal('')]),
 })
 
 export type ResetPasswordType = z.infer<typeof resetPasswordSchema>
@@ -106,20 +129,20 @@ export type SignupType = z.infer<typeof signupSchema>
 export type LoginType = z.infer<typeof loginSchema>
 
 export interface IProfileSettings {
-	coverFile?: File | undefined
-	avatarFile?: File | undefined
-	email?: string | undefined
-	name?: string | undefined
-	jobTitle?: string | undefined
-	linkedin?: string | undefined
-	bio?: string | undefined
+	coverFile?: File
+	avatarFile?: File
+	email?: string
+	name?: string
+	jobTitle?: string
+	linkedin?: string
+	bio?: string
 }
 
 export interface IProjectSettings {
-	imageFile?: File | undefined
-	name?: string | undefined
-	demoUrl?: string | undefined
-	repositoryUrl?: string | undefined
-	description?: string | undefined
-	technologies?: string[] | undefined
+	imageFile?: File
+	name?: string
+	demoUrl?: string
+	repositoryUrl?: string
+	description?: string
+	technologies?: string[]
 }

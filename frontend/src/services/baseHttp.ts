@@ -6,6 +6,7 @@ const instance = axios.create({
 	withCredentials: true,
 	timeout: 1000,
 })
+
 const request = async <D, B = undefined>(
 	method: Method,
 	url: string,
@@ -25,20 +26,22 @@ const request = async <D, B = undefined>(
 	} catch (err) {
 		if (err instanceof AxiosError) {
 			if (!err.response)
-				throw { statusCode: 500, statusText: 'Server Error', type: err.code, message: err.message }
+				throw {
+					statusTitle: `500: ${err.code}`,
+					type: err.code,
+					message: 'Unexpected Error. Please give us some time to fix the problem.',
+				}
 			const error = err.response
 
 			throw {
-				statusCode: error.status,
-				statusText: error.statusText,
+				statusTitle: `${error.status}: ${error.statusText}`,
 				type: error.data.type,
 				message: error.data.message,
 			}
 		}
 
 		throw {
-			statusCode: 500,
-			statusText: 'Server Error',
+			statusTitle: '500: Server Error',
 			type: '',
 			message: 'Unexpected Error. Please give us some time to fix the problem.',
 		}

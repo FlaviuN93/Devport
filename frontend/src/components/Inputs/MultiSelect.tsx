@@ -55,7 +55,6 @@ const MultiSelect: FC<MultiSelectProps> = ({
 
 	const isItemActive = (item: string) => selectedItems.includes(item)
 	const inputClasses = `${styles.input} ${error ? styles.error : ''}`
-
 	return (
 		<div className='w-full'>
 			<label className={styles.label} htmlFor={label} aria-label={label}>
@@ -65,6 +64,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
 				<input
 					className={inputClasses}
 					value={selectedItem}
+					id={label}
 					onChange={() => {}}
 					placeholder={placeholder}
 					onClick={() => setIsOpen((prevIsOpen) => !prevIsOpen)}

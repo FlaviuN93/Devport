@@ -32,6 +32,7 @@ const File = <T extends FieldValues>({
 	const uniqueId = useId()
 	const divRef = useRef<HTMLDivElement>(null)
 	const [size, setSize] = useState({ width: '0', height: '0' })
+	const [showTooltip, setShowTooltip] = useState(false)
 
 	useEffect(() => {
 		const width = `${divRef.current?.offsetWidth}px`
@@ -44,16 +45,24 @@ const File = <T extends FieldValues>({
 
 	const isLaptop = useMediaQuery('(min-width:1024px)')
 	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''}`
-	const fileClasses = `${styles.fileButton} ${fileStyles} relative`
+	const fileClasses = `${styles.fileButton} ${fileStyles} ${error ? styles.error : ''} relative`
 
 	return (
 		<div className={fileContainerClasses}>
 			<label className={styles.label} htmlFor={label}>
 				{label}
 			</label>
-			<div className={fileClasses} ref={divRef} role='button' tabIndex={0}>
+			<div
+				className={fileClasses}
+				ref={divRef}
+				role='button'
+				tabIndex={0}
+				onMouseOver={() => setShowTooltip(true)}
+				onMouseOut={() => setShowTooltip(false)}
+			>
 				{icon && <span className='mr-1.5'>{icon}</span>}
 				<span className='font-medium'>{buttonText}</span>
+
 				<motion.input
 					animate={size}
 					name={name}
@@ -69,6 +78,8 @@ const File = <T extends FieldValues>({
 						content={error}
 						position={isLaptop ? 'right' : 'left'}
 						tooltipStyles={tooltipStyles}
+						showIcon={false}
+						hoverTooltip={showTooltip}
 					/>
 				)}
 			</div>

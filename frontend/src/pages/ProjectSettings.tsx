@@ -1,5 +1,5 @@
 import Button from '../components/UI/Button'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { IProjectSettings, projectSettingsSchema } from '../utils/schemas'
@@ -11,6 +11,7 @@ import ProjectIcon from '../assets/project.svg?react'
 import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
 import MultiSelect from '../components/Inputs/MultiSelect'
+import { useEffect, useState } from 'react'
 // import { useQuery } from '@tanstack/react-query'
 
 const itemsForMultiSelect = ['Java', 'Javascript', 'Python', 'NodeJS', 'React', 'Angular']
@@ -20,56 +21,72 @@ const ProjectSettings = () => {
 		handleSubmit,
 		register,
 		control,
+		getValues,
+		setValue,
 		formState: { errors },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
 	})
 
-	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
-	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
+	const [selectedImage, setSelectedImage] = useState<File | undefined>(undefined)
+	const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : undefined
 
 	const handleFile = (selectedFile: File) => {
-		if (!selectedFile) return
-		// console.log(selectedFile, 'selectedFile')
-		// setValue('imageFile', selectedFile, { shouldValidate: true })
-		// console.log(errors.imageFile, 'hello')
-		// setSelectedImage(selectedFile)
+		if (!selectedFile) throw new Error('no file selected')
+		setValue('imageFile', selectedFile, { shouldValidate: true })
 	}
+
+	useEffect(() => {
+		if (!errors.imageFile) setSelectedImage(getValues().imageFile)
+	}, [errors.imageFile, getValues])
 
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		console.log('handleSubmit data', data)
+		console.log(getValues())
 	}
 
 	return (
 		<section className='settingsContainer'>
-			<h4 className='mt-2 mb-4'>Project Settings</h4>
+			<h4 className='mb-4'>Project Settings</h4>
+
 			<form onSubmit={handleSubmit(projectData)} className='formSettingsContainer'>
 				<div className='imageFileContainer'>
-					<img src='' alt='' />
-					<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
-					<p className='text-gray text-sm text-center font-medium px-4'>
-						Image must be PNG or JPEG - max 2MB
-					</p>
+					{previewUrl ? (
+						<div className='relative'>
+							<XMarkIcon
+								onClick={() => setSelectedImage(undefined)}
+								className='h-6 w-6 absolute top-0 right-2'
+							/>
+							<img className='w-24' src={previewUrl} />
+						</div>
+					) : (
+						<>
+							<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
+							<p className='text-gray text-sm text-center font-medium px-4'>
+								Image must be PNG or JPEG - max 2MB
+							</p>
 
-					<div className='flex items-center flex-col sm:flex-row gap-3 -mt-1'>
-						<File
-							buttonText='Upload Image'
-							icon={<UploadIcon />}
-							register={register}
-							name='imageFile'
-							onFileUpload={handleFile}
-							error={errors.imageFile?.message}
-						/>
+							<div className='flex items-center flex-col sm:flex-row gap-3 -mt-1'>
+								<File
+									buttonText='Upload Image'
+									icon={<UploadIcon />}
+									name='imageFile'
+									register={register}
+									onFileUpload={handleFile}
+									error={errors.imageFile?.message}
+								/>
 
-						<Button
-							buttonText='Delete Image'
-							buttonStyles='text-danger bg-white border-0'
-							iconPos='left'
-							variant='transparent'
-							icon={<TrashIcon />}
-							// onClick={() => setSelectedImage(null)}
-						/>
-					</div>
+								<Button
+									buttonText='Delete Image'
+									buttonStyles='text-danger bg-white border-0'
+									iconPos='left'
+									variant='transparent'
+									icon={<TrashIcon />}
+									onClick={() => setSelectedImage(undefined)}
+								/>
+							</div>
+						</>
+					)}
 				</div>
 				<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
 					<Text
@@ -128,6 +145,7 @@ const ProjectSettings = () => {
 						icon={<TrashIcon2 className='h-5 w-5' />}
 						iconPos='left'
 					/>
+
 					<Button
 						icon={<PlusIcon className='h-5 w-5' />}
 						iconPos='left'

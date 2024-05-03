@@ -11,7 +11,8 @@ import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import { PencilSquareIcon } from '@heroicons/react/16/solid'
-import { useDeleteMe, useGetMe, useGetMyProject, useUpdateMe } from '../services/queries'
+import { useDeleteMe, useGetMe, useUpdateMe } from '../services/queries'
+import Alert from '../components/UI/Alert'
 
 const ProfileSettings = () => {
 	const {
@@ -40,6 +41,9 @@ const ProfileSettings = () => {
 
 	return (
 		<section className='settingsContainer'>
+			{getUserError && (
+				<Alert message={getUserError?.message} statusTitle={getUserError?.statusTitle} onClose={() => {}} />
+			)}
 			<h4 className='mt-2 mb-4'>Profile Settings</h4>
 			<form onSubmit={handleSubmit((data) => mutateUpdate(data))} className='formSettingsContainer'>
 				<div className='imageFileContainer'>

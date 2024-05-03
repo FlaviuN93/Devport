@@ -94,12 +94,20 @@ export const useDeleteMyProject = () =>
 
 // Authentication Mutations
 
-export const useRegister = () => useMutation<IRegister, IDefaultError, SignupType>({ mutationFn: register })
+export const useRegister = () =>
+	useMutation<IRegister, IDefaultError, SignupType>({
+		mutationFn: register,
+	})
 
-export const useLogin = () => useMutation<ILogin, IDefaultError, LoginType>({ mutationFn: login })
+export const useLogin = () =>
+	useMutation<ILogin, IDefaultError, LoginType>({
+		mutationFn: login,
+	})
 
 export const useForgotPassword = () =>
 	useMutation<IDefaultSuccess, IDefaultError, { email: string }>({ mutationFn: forgotPassword })
 
 export const useResetPassword = () =>
-	useMutation<ILogin, IDefaultError, HttpParamsType<ResetPasswordType>>({ mutationFn: resetPassword })
+	useMutation<ILogin, IDefaultError, HttpParamsType<ResetPasswordType>>({
+		mutationFn: resetPassword,
+	})

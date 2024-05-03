@@ -16,7 +16,6 @@
 }
 
 .tooltipContent {
-	visibility: hidden;
 	position: absolute;
 	max-width: 150px;
 	width: max-content;
@@ -27,10 +26,6 @@
 	text-align: start;
 	color: var(--light);
 	background-color: var(--error);
-}
-
-.tooltipContainer:hover .tooltipContent {
-	visibility: visible;
 }
 
 .top {

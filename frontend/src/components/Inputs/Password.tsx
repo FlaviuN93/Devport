@@ -48,7 +48,7 @@ const Password = <T extends FieldValues>({
 					{...register(name)}
 					className={passwordClasses}
 					name={name}
-					id={uniqueId}
+					id={label}
 					placeholder={placeholder}
 					aria-placeholder={placeholder}
 					aria-describedby={`${uniqueId}-${name}`}
@@ -58,7 +58,7 @@ const Password = <T extends FieldValues>({
 				/>
 
 				{showPasswordBtn && !error && (
-					<button className={styles.passwordIcon} onClick={handleTogglePassword}>
+					<button className={styles.passwordIcon} type='button' onClick={handleTogglePassword}>
 						{showPassword ? <EyeIcon className='h-6 w-6' /> : <EyeSlashIcon className='h-6 w-6' />}
 					</button>
 				)}
