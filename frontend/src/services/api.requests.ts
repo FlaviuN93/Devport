@@ -8,7 +8,6 @@ import {
 	IRegister,
 	ITechnologies,
 	IUser,
-	IUserAndProjects,
 } from './types'
 import {
 	IProfileSettings,
@@ -28,7 +27,7 @@ export const deleteMe = () => remove<IDefaultSuccess>('/users/currentUser')
 
 // I will get access to userId from the url with react router
 export const getUserAndProjects = (userId: string) =>
-	get<IUserAndProjects>('/users/projects/:userId', {
+	get<IUser>('/users/projects/:userId', {
 		query: { userId },
 	})
 

@@ -20,7 +20,7 @@ export const getTechnologiesData = async (req: Request, res: Response, next: Nex
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		data: technologies,
+		technologies,
 	})
 }
 
@@ -32,7 +32,7 @@ export const getMyProjectsData = async (req: Request, res: Response, next: NextF
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		data: projects,
+		projects,
 	})
 }
 
@@ -45,7 +45,7 @@ export const getMyProjectData = catchAsync(async (req: Request, res: Response, n
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		data: project,
+		project,
 	})
 })
 

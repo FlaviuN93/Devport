@@ -15,7 +15,7 @@ export const getUserAndProjectsHandler = catchAsync(
 
 		res.status(statusCode).json({
 			message: getSuccessMessage(statusCode, statusText),
-			data: userWithProjects,
+			user: userWithProjects,
 		})
 	}
 )
@@ -26,7 +26,7 @@ export const getMeHandler = async (req: Request, res: Response, next: NextFuncti
 	const { user, statusCode, statusText } = response
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		data: user,
+		user,
 	})
 }
 

@@ -3,13 +3,14 @@ import styles from './MultiSelect.module.css'
 
 import { CheckIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
-import { TailwindClasses } from '../../utils/types'
 import Tooltip from '../UI/Tooltip'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import { Technology } from '../../services/types'
+import { TailwindClasses } from '../../utils/types'
 
 interface MultiSelectProps {
 	onChange: (selectedValue: string[]) => void
-	items: string[]
+	items: Technology[] | undefined
 	selectedItem: string[] | undefined
 	placeholder: string
 	error?: string
@@ -18,7 +19,7 @@ interface MultiSelectProps {
 }
 
 const MultiSelect: FC<MultiSelectProps> = ({
-	items,
+	items = [],
 	placeholder,
 	label,
 	error,
@@ -82,12 +83,12 @@ const MultiSelect: FC<MultiSelectProps> = ({
 				<ul className={styles.itemList} ref={selectRef}>
 					{items.map((item) => (
 						<li
-							key={item}
-							onClick={() => handleToggleItem(item)}
-							className={`${styles.item}  ${isItemActive(item) ? styles.isActive : ''}`}
+							key={item.id}
+							onClick={() => handleToggleItem(item.name)}
+							className={`${styles.item}  ${isItemActive(item.name) ? styles.isActive : ''}`}
 						>
-							{item}
-							{isItemActive(item) ? <CheckIcon className='h-6 w-6' /> : null}
+							{item.name}
+							{isItemActive(item.name) ? <CheckIcon className='h-6 w-6' /> : null}
 						</li>
 					))}
 				</ul>

@@ -26,7 +26,6 @@ import {
 	IRegister,
 	ITechnologies,
 	IUser,
-	IUserAndProjects,
 } from './types'
 import {
 	IProfileSettings,
@@ -53,7 +52,7 @@ export const useUpdateMe = () =>
 export const useDeleteMe = () => useMutation<IDefaultSuccess, IDefaultError>({ mutationFn: deleteMe })
 
 export const useGetUserAndProjects = (userId: string) =>
-	useQuery<IUserAndProjects, IDefaultError>({
+	useQuery<IUser, IDefaultError>({
 		queryKey: ['myPortfolio', userId],
 		queryFn: () => getUserAndProjects(userId),
 	})

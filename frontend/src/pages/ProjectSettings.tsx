@@ -13,8 +13,6 @@ import Text from '../components/Inputs/Text'
 import MultiSelect from '../components/Inputs/MultiSelect'
 import { useGetTechnologies } from '../services/queries'
 
-const itemsForMultiSelect = ['Java', 'Javascript', 'Python', 'NodeJS', 'React', 'Angular']
-
 const ProjectSettings = () => {
 	const {
 		handleSubmit,
@@ -28,8 +26,8 @@ const ProjectSettings = () => {
 		resolver: zodResolver(projectSettingsSchema),
 	})
 
-	const { data: technologies, error: technologiesError } = useGetTechnologies()
-	console.log(technologies, 'hello')
+	const { data, error: technologiesError } = useGetTechnologies()
+
 	const motionVariants = {
 		hidden: { display: 'none', opacity: 0 },
 		visible: { display: 'flex', opacity: 1 },
@@ -127,7 +125,7 @@ const ProjectSettings = () => {
 								onChange={onChange}
 								selectedItem={value}
 								error={error?.message}
-								items={itemsForMultiSelect}
+								items={data?.technologies}
 								placeholder='Select technologies from the list'
 								label='Technologies'
 							/>
