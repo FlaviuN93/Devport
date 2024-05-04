@@ -154,7 +154,6 @@ export const protect = async (reqToken: string): Promise<{ userId: string } | Ap
 	if (decodedToken instanceof AppError) return decodedToken
 
 	const { data: user } = await supabase.from('users').select('*').eq('id', decodedToken.userId).single()
-
 	if (!user) return new AppError(404)
 	if (!decodedToken.iat) return new AppError(500, 'Something went wrong. Please log in again')
 

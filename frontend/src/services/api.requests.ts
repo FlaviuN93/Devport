@@ -6,6 +6,7 @@ import {
 	IProject,
 	IProjects,
 	IRegister,
+	ITechnologies,
 	IUser,
 	IUserAndProjects,
 } from './types'
@@ -50,6 +51,8 @@ export const deleteMyProject = (projectId: string) =>
 	remove<IDefaultSuccess>('projects/currentUser/:projectId', {
 		query: { projectId },
 	})
+
+export const getTechnologies = () => get<ITechnologies>('/projects/currentUser/technologies')
 
 // Authentication Routes
 export const register = (body: SignupType) => post<IRegister, SignupType>('/auth/register', { body })

@@ -37,6 +37,10 @@ export interface IProject extends IDefaultSuccess {
 	project: Project
 }
 
+export interface ITechnologies extends IDefaultSuccess {
+	technologies: Technology[]
+}
+
 export interface IUserAndProjects extends IDefaultSuccess {
 	user: User
 }
@@ -59,4 +63,9 @@ export interface User {
 	linkedin?: string
 	bio?: string
 	projects?: Project[]
+}
+
+interface Technology {
+	id: number
+	name: string
 }

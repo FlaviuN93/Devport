@@ -1,18 +1,17 @@
+import { motion } from 'framer-motion'
 import Button from '../components/UI/Button'
 import { PlusIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { IProjectSettings, projectSettingsSchema } from '../utils/schemas'
 import File from '../components/Inputs/File'
-import TrashIcon from '../assets/Trash.svg?react'
 import TrashIcon2 from '../assets/Trash-1.svg?react'
 import UploadIcon from '../assets/upload.svg?react'
 import ProjectIcon from '../assets/project.svg?react'
 import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
 import MultiSelect from '../components/Inputs/MultiSelect'
-import { useEffect, useState } from 'react'
-// import { useQuery } from '@tanstack/react-query'
+import { useGetTechnologies } from '../services/queries'
 
 const itemsForMultiSelect = ['Java', 'Javascript', 'Python', 'NodeJS', 'React', 'Angular']
 
@@ -23,22 +22,26 @@ const ProjectSettings = () => {
 		control,
 		getValues,
 		setValue,
+		resetField,
 		formState: { errors },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
 	})
 
-	const [selectedImage, setSelectedImage] = useState<File | undefined>(undefined)
-	const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : undefined
+	const { data: technologies, error: technologiesError } = useGetTechnologies()
+	console.log(technologies, 'hello')
+	const motionVariants = {
+		hidden: { display: 'none', opacity: 0 },
+		visible: { display: 'flex', opacity: 1 },
+	}
 
-	const handleFile = (selectedFile: File) => {
+	const previewUrl =
+		getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile) : null
+
+	const handleFile = (selectedFile: any) => {
 		if (!selectedFile) throw new Error('no file selected')
 		setValue('imageFile', selectedFile, { shouldValidate: true })
 	}
-
-	useEffect(() => {
-		if (!errors.imageFile) setSelectedImage(getValues().imageFile)
-	}, [errors.imageFile, getValues])
 
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		console.log('handleSubmit data', data)
@@ -50,44 +53,46 @@ const ProjectSettings = () => {
 			<h4 className='mb-4'>Project Settings</h4>
 
 			<form onSubmit={handleSubmit(projectData)} className='formSettingsContainer'>
-				<div className='imageFileContainer'>
-					{previewUrl ? (
-						<div className='relative'>
-							<XMarkIcon
-								onClick={() => setSelectedImage(undefined)}
-								className='h-6 w-6 absolute top-0 right-2'
-							/>
-							<img className='w-24' src={previewUrl} />
-						</div>
-					) : (
+				<motion.div
+					initial='hidden'
+					animate={previewUrl ? 'visible' : 'hidden'}
+					variants={motionVariants}
+					transition={{ duration: 0.5 }}
+					className='relative justify-center bg-light2 py-4 rounded-lg'
+				>
+					{previewUrl && (
 						<>
-							<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
-							<p className='text-gray text-sm text-center font-medium px-4'>
-								Image must be PNG or JPEG - max 2MB
-							</p>
-
-							<div className='flex items-center flex-col sm:flex-row gap-3 -mt-1'>
-								<File
-									buttonText='Upload Image'
-									icon={<UploadIcon />}
-									name='imageFile'
-									register={register}
-									onFileUpload={handleFile}
-									error={errors.imageFile?.message}
-								/>
-
-								<Button
-									buttonText='Delete Image'
-									buttonStyles='text-danger bg-white border-0'
-									iconPos='left'
-									variant='transparent'
-									icon={<TrashIcon />}
-									onClick={() => setSelectedImage(undefined)}
-								/>
-							</div>
+							<XMarkIcon
+								onClick={() => resetField('imageFile')}
+								className='h-6 w-6 absolute top-2 right-2 text-black cursor-pointer'
+							/>
+							<img src={previewUrl} className='object-cover h-[195px] aspect-video' />
 						</>
 					)}
-				</div>
+				</motion.div>
+
+				<motion.div
+					initial='hidden'
+					animate={!previewUrl ? 'visible' : 'hidden'}
+					variants={motionVariants}
+					transition={{ duration: 0.5 }}
+					className='imageFileContainer'
+				>
+					<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
+					<p className='text-gray text-sm text-center font-medium px-4'>
+						Image must be PNG, JPEG, JPG, WEBP - max 2MB
+					</p>
+
+					<File
+						buttonText='Upload Project Image'
+						icon={<UploadIcon />}
+						name='imageFile'
+						register={register}
+						onFileUpload={handleFile}
+						error={errors.imageFile?.message}
+					/>
+				</motion.div>
+
 				<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
 					<Text
 						label='Project Name'

@@ -8,6 +8,7 @@ import {
 	getMe,
 	getMyProject,
 	getMyProjects,
+	getTechnologies,
 	getUserAndProjects,
 	login,
 	register,
@@ -23,6 +24,7 @@ import {
 	IProject,
 	IProjects,
 	IRegister,
+	ITechnologies,
 	IUser,
 	IUserAndProjects,
 } from './types'
@@ -90,6 +92,12 @@ export const useDeleteMyProject = () =>
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['myProjects'] })
 		},
+	})
+
+export const useGetTechnologies = () =>
+	useQuery<ITechnologies, IDefaultError>({
+		queryKey: ['myProjects', 'technologies'],
+		queryFn: getTechnologies,
 	})
 
 // Authentication Mutations

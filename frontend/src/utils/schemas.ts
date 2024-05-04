@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { getImageFormat } from './functions'
 
 // Base Schemas
 const emailSchema = z
@@ -34,17 +35,14 @@ const descriptionSchema = z
 const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+
 const fileSchema = z
 	.any()
-	.refine((file: File) => {
-		return file === undefined
-	}, 'File is not selected')
-	.refine((file: File) => {
-		console.log(file, 'checkFile')
-		// if (!file) return
-		console.log(file, 'checkFile2')
-		return ACCEPTED_IMAGE_TYPES.includes(file.type)
-	}, 'File must be a valid image (PNG, JPEG, JPG, WEBP)')
+	.refine((file: File) => file !== undefined, 'No file has been selected')
+	.refine(
+		(file: File) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
+		'File must be a valid image (PNG, JPEG, JPG, WEBP)'
+	)
 
 // Auth Schemas
 export const signupSchema = z.object({
@@ -75,14 +73,16 @@ export const resetPasswordSchema = z
 	})
 
 // Settings Schemas
-const MAX_FILE_SIZE = 1024 * 1024 * 2
+const MAX_FILE_SIZE = 1024 * 1024 * 5
 const AVATAR_FILE_SIZE = 1024 * 1024
 
 export const projectSettingsSchema = z.object({
-	imageFile: fileSchema.refine((file: File) => {
-		if (!file) return
-		file.size <= MAX_FILE_SIZE, 'File must be under 2MB'
-	}),
+	imageFile: fileSchema
+		.refine((file: File) => !file || file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
+		.refine(
+			async (file: File) => !file || (await getImageFormat('landscape', file)),
+			'Image must have a landscape format.'
+		),
 	name: nameSchema,
 	demoUrl: urlSchema,
 	repositoryUrl: urlSchema,
@@ -95,17 +95,21 @@ export const projectSettingsSchema = z.object({
 
 export const profileSettingsSchema = z.object({
 	coverFile: z.union([
-		fileSchema.refine((file) => {
-			if (!file) return
-			file.size <= MAX_FILE_SIZE
-		}, 'File must be under 2MB'),
+		fileSchema
+			.refine((file) => !file || file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
+			.refine(
+				async (file: File) => !file || (await getImageFormat('landscape', file)),
+				'Image must have a landscape format.'
+			),
 		z.undefined(),
 	]),
 	avatarFile: z.union([
-		fileSchema.refine((file) => {
-			if (!file) return
-			file.size <= AVATAR_FILE_SIZE
-		}, 'File must be under 1MB'),
+		fileSchema
+			.refine((file) => !file || file.size <= AVATAR_FILE_SIZE, 'Image must be under 1MB')
+			.refine(
+				async (file: File) => !file || (await getImageFormat('portrait', file)),
+				'Image must have a portrait format.'
+			),
 		z.undefined(),
 	]),
 	email: z.union([emailSchema, z.literal('')]),
@@ -139,10 +143,10 @@ export interface IProfileSettings {
 }
 
 export interface IProjectSettings {
-	imageFile?: File
-	name?: string
-	demoUrl?: string
-	repositoryUrl?: string
-	description?: string
-	technologies?: string[]
+	imageFile: File
+	name: string
+	demoUrl: string
+	repositoryUrl: string
+	description: string
+	technologies: string[]
 }

@@ -2,7 +2,20 @@ import { z } from 'zod'
 import { createProjectSchema, updateProjectSchema } from '../services/routeSchema'
 import supabase from '../services/supabase'
 import AppError from '../utils/appError'
-import { IDefault, IProjects, IProject } from './types'
+import { IDefault, IProjects, IProject, ITechnologies } from './types'
+
+export const getTechnologies = async (): Promise<ITechnologies | AppError> => {
+	const { data: technologies, error, status } = await supabase.from('technologies').select('id,name')
+
+	if (error) return new AppError(status)
+	if (technologies.length === 0) return new AppError(500)
+
+	return {
+		technologies,
+		statusCode: 200,
+		statusText: ['retrieve', 'technologies have been sent successfully'],
+	}
+}
 
 export const getMyProjects = async (userId: string): Promise<IProjects | AppError> => {
 	const {

@@ -21,3 +21,17 @@ export const getValueFromStorage = <T>(key: string, initialValue: T) => {
 
 	return data
 }
+
+export const getImageFormat = (format: 'landscape' | 'portrait', file: File) => {
+	return new Promise<boolean>((resolve) => {
+		const img = document.createElement('img')
+		img.onload = function () {
+			const aspectRatio = img.width / img.height
+			if (format === 'landscape' && aspectRatio < 1.3) resolve(false)
+			if (format === 'portrait' && aspectRatio > 0.9) resolve(false)
+			resolve(true)
+		}
+
+		img.src = URL.createObjectURL(file)
+	})
+}

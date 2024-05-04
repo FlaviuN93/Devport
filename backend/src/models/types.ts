@@ -1,5 +1,4 @@
 import { JwtPayload } from 'jsonwebtoken'
-import { UpdateProject } from './projectModel'
 
 export interface LoginUser {
 	avatarURL: string
@@ -55,6 +54,10 @@ export interface IProject extends IDefault {
 	project: Project
 }
 
+export interface ITechnologies extends IDefault {
+	technologies: Technology[]
+}
+
 // Auth Types
 
 export interface IRegisterUser extends IDefault {
@@ -67,4 +70,9 @@ export interface TokenPayload extends JwtPayload {
 
 export interface ILoginUser extends IDefault {
 	user: LoginUser
+}
+
+interface Technology {
+	id: number
+	name: string
 }

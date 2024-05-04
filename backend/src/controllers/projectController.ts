@@ -6,10 +6,23 @@ import {
 	deleteMyProject,
 	getMyProject,
 	getMyProjects,
+	getTechnologies,
 	updateMyProject,
 } from '../models/projectModel'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { idSchema } from '../services/baseSchema'
+
+export const getTechnologiesData = async (req: Request, res: Response, next: NextFunction) => {
+	const response = await getTechnologies()
+
+	if (response instanceof AppError) return next(response)
+	const { technologies, statusCode, statusText } = response
+
+	res.status(statusCode).json({
+		message: getSuccessMessage(statusCode, statusText),
+		data: technologies,
+	})
+}
 
 export const getMyProjectsData = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getMyProjects(req.userId)

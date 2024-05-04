@@ -7,9 +7,12 @@ import {
 	updateMyProjectData,
 	deleteMyProjectData,
 	getMyProjectData,
+	getTechnologiesData,
 } from '../controllers/projectController'
 
 const projectRouter = express.Router()
+
+projectRouter.route('/currentUser/technologies').get(protectHandler, getTechnologiesData)
 
 projectRouter
 	.route('/currentUser')
