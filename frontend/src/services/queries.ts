@@ -22,10 +22,10 @@ import {
 	IDefaultSuccess,
 	ILogin,
 	IProject,
-	IProjects,
 	IRegister,
 	ITechnologies,
 	IUser,
+	Project,
 } from './types'
 import {
 	IProfileSettings,
@@ -63,7 +63,7 @@ export const useChangePassword = () =>
 //Project Queries and Mutations
 
 export const useGetMyProjects = () =>
-	useQuery<IProjects, IDefaultError>({ queryKey: ['myProjects'], queryFn: getMyProjects })
+	useQuery<Project[], IDefaultError>({ queryKey: ['myProjects'], queryFn: getMyProjects })
 
 export const useGetMyProject = (projectId: string) =>
 	useQuery<IProject, IDefaultError>({

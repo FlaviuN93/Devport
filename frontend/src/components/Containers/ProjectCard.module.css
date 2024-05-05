@@ -5,6 +5,7 @@
 	border-radius: 6px;
 	padding: 1rem;
 	gap: 1.5rem;
+	background-color: white;
 }
 
 .articleContainer {
@@ -23,6 +24,11 @@
 
 .articleDescription {
 	color: var(--gray);
+}
+
+.articleTechnologies {
+	font-weight: 500;
+	margin-bottom: 2px;
 }
 
 .buttonContainer {

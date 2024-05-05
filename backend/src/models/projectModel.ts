@@ -41,7 +41,7 @@ export const getMyProject = async (userId: string, projectId: string): Promise<I
 		status,
 	} = await supabase
 		.from('projects')
-		.select('id, imageURL, name, demoURL, repositoryURL, technologies, description')
+		.select('id,imageURL,name,demoURL,repositoryURL,technologies,description')
 		.eq('id', projectId)
 		.eq('user_id', userId)
 		.single()

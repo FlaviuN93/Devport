@@ -55,7 +55,7 @@ export interface IProject extends IDefault {
 }
 
 export interface ITechnologies extends IDefault {
-	technologies: Technology[]
+	technologies: Item[]
 }
 
 // Auth Types
@@ -72,7 +72,7 @@ export interface ILoginUser extends IDefault {
 	user: LoginUser
 }
 
-interface Technology {
+interface Item {
 	id: number
 	name: string
 }

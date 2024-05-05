@@ -30,10 +30,7 @@ export const getMyProjectsData = async (req: Request, res: Response, next: NextF
 	if (response instanceof AppError) return next(response)
 	const { projects, statusCode, statusText } = response
 
-	res.status(statusCode).json({
-		message: getSuccessMessage(statusCode, statusText),
-		projects,
-	})
+	res.status(statusCode).send(projects)
 }
 
 export const getMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -41,12 +38,9 @@ export const getMyProjectData = catchAsync(async (req: Request, res: Response, n
 	const response = await getMyProject(req.userId, projectId)
 
 	if (response instanceof AppError) return next(response)
-	const { project, statusCode, statusText } = response
+	const { project, statusCode } = response
 
-	res.status(statusCode).json({
-		message: getSuccessMessage(statusCode, statusText),
-		project,
-	})
+	res.status(statusCode).send(project)
 })
 
 export const createMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

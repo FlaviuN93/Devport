@@ -55,7 +55,7 @@ export const updateProjectSchema = z.object({
 	imageFile: fileSchema.refine((file) => file.size <= MAX_FILE_SIZE, 'File must be under 2MB'),
 	name: z.union([nameSchema, z.literal('')]),
 	demoUrl: z.union([urlSchema, z.literal('')]),
-	repositoryUrl: z.union([urlSchema, z.literal('')]),
+	repositoryURL: z.union([urlSchema, z.literal('')]),
 	description: z.union([descriptionSchema, z.literal('')]),
 	technologies: z.union([
 		z

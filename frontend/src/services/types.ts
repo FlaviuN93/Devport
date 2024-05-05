@@ -29,19 +29,16 @@ export interface IUser extends IDefaultSuccess {
 	user: User
 }
 
-export interface IProjects extends IDefaultSuccess {
-	projects: Project[]
-}
-
 export interface IProject extends IDefaultSuccess {
 	project: Project
 }
 
 export interface ITechnologies extends IDefaultSuccess {
-	technologies: Technology[]
+	technologies: Item[]
 }
 
 export interface Project {
+	id: number
 	imageURL: string
 	name: string
 	demoURL: string
@@ -61,7 +58,7 @@ export interface User {
 	projects?: Project[]
 }
 
-export interface Technology {
+export interface Item {
 	id: number
 	name: string
 }

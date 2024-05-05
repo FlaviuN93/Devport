@@ -11,7 +11,8 @@ import ProjectIcon from '../assets/project.svg?react'
 import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
 import MultiSelect from '../components/Inputs/MultiSelect'
-import { useGetTechnologies } from '../services/queries'
+import { useGetMyProjects, useGetTechnologies } from '../services/queries'
+import ProjectCard from '../components/Containers/ProjectCard'
 
 const ProjectSettings = () => {
 	const {
@@ -21,12 +22,14 @@ const ProjectSettings = () => {
 		getValues,
 		setValue,
 		resetField,
+		reset,
 		formState: { errors },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
 	})
 
 	const { data, error: technologiesError } = useGetTechnologies()
+	const { data: projects, error } = useGetMyProjects()
 
 	const motionVariants = {
 		hidden: { display: 'none', opacity: 0 },
@@ -120,10 +123,10 @@ const ProjectSettings = () => {
 					<Controller
 						control={control}
 						name='technologies'
-						render={({ field: { value, onChange }, fieldState: { error } }) => (
+						render={({ field: { value: selectedItems, onChange }, fieldState: { error } }) => (
 							<MultiSelect
 								onChange={onChange}
-								selectedItem={value}
+								placeholderValue={selectedItems}
 								error={error?.message}
 								items={data?.technologies}
 								placeholder='Select technologies from the list'
@@ -143,9 +146,10 @@ const ProjectSettings = () => {
 				/>
 				<div className='place-self-end mb-2 flex flex-col w-full gap-4 sm:flex-row sm:w-auto'>
 					<Button
-						buttonText='Remove'
+						buttonText='Clear'
 						buttonStyles='text-darkBlue bg-light3 border-0'
 						icon={<TrashIcon2 className='h-5 w-5' />}
+						onClick={() => reset()}
 						iconPos='left'
 					/>
 
@@ -159,6 +163,22 @@ const ProjectSettings = () => {
 					/>
 				</div>
 			</form>
+			<div className='flex flex-col gap-4 mt-4'>
+				{projects?.map((project) => {
+					return (
+						<ProjectCard
+							key={project.id}
+							demoURL={project.demoURL}
+							description={project.description}
+							repositoryURL={project.repositoryURL}
+							technologies={project.technologies}
+							title={project.name}
+							cardState='edit'
+							imageURL={project.imageURL}
+						/>
+					)
+				})}
+			</div>
 		</section>
 	)
 }

@@ -4,10 +4,10 @@ import {
 	IDefaultSuccess,
 	ILogin,
 	IProject,
-	IProjects,
 	IRegister,
 	ITechnologies,
 	IUser,
+	Project,
 } from './types'
 import {
 	IProfileSettings,
@@ -32,7 +32,7 @@ export const getUserAndProjects = (userId: string) =>
 	})
 
 // Project Routes
-export const getMyProjects = () => get<IProjects>('/projects/currentUser')
+export const getMyProjects = () => get<Project[]>('/projects/currentUser')
 
 export const getMyProject = (projectId: string) =>
 	get<IProject>('/projects/currentUser/:projectId', { query: { projectId } })
