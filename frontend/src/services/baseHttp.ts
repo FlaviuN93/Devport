@@ -25,25 +25,25 @@ const request = async <D, B = undefined>(
 		return data
 	} catch (err) {
 		if (err instanceof AxiosError) {
-			if (!err.response)
+			if (!err.response) {
+				if (err.code === 'ECONNABORTED') err.code = 'CONNECTION ISSUES'
+				if (err.code === 'ERR_NETWORK') err.code = 'NETWORK ERROR'
 				throw {
 					statusTitle: `500: ${err.code}`,
-					type: err.code,
-					message: 'Unexpected Error. Please give us some time to fix the problem.',
+					message: 'Something went wrong. Please give us some time to fix the problem.',
 				}
-			const error = err.response
+			}
 
+			const error = err.response
 			throw {
-				statusTitle: `${error.status}: ${error.statusText}`,
-				type: error.data.type,
+				statusTitle: `${error.status} ${error.statusText}`,
 				message: error.data.message,
 			}
 		}
 
 		throw {
 			statusTitle: '500: Server Error',
-			type: '',
-			message: 'Unexpected Error. Please give us some time to fix the problem.',
+			message: 'Something went wrong. Please give us some time to fix the problem.',
 		}
 	}
 }

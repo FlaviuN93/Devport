@@ -24,7 +24,7 @@ export const registerUserHandler = catchAsync(async (req: Request, res: Response
 	const response = await registerUser(email, password)
 	if (response instanceof AppError) return next(response)
 
-	const { email: userEmail, token, statusCode, statusText } = response
+	const { email: userEmail, token, statusCode, statusText = [] } = response
 	sendTokenByCookie(token, res, next)
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
@@ -37,7 +37,7 @@ export const loginUserHandler = catchAsync(async (req: Request, res: Response, n
 	const response = await loginUser(email, password)
 
 	if (response instanceof AppError) return next(response)
-	const { user, token, statusCode, statusText } = response
+	const { user, token, statusCode, statusText = [] } = response
 	sendTokenByCookie(token, res, next)
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
@@ -50,7 +50,7 @@ export const updatePasswordHandler = catchAsync(async (req: Request, res: Respon
 
 	const response = await updatePassword(passwords, req.userId)
 	if (response instanceof AppError) return next(response)
-	const { user, token, statusCode, statusText } = response
+	const { user, token, statusCode, statusText = [] } = response
 
 	sendTokenByCookie(token, res, next)
 	res.status(statusCode).json({
@@ -66,7 +66,7 @@ export const forgotPasswordHandler = catchAsync(async (req: Request, res: Respon
 	const response = await forgotPassword(email, resetUrl)
 
 	if (response instanceof AppError) return next(response)
-	const { statusCode, statusText } = response
+	const { statusCode, statusText = [] } = response
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
@@ -78,7 +78,7 @@ export const resetPasswordHandler = catchAsync(async (req: Request, res: Respons
 	const response = await resetPassword(password, req.params.token)
 
 	if (response instanceof AppError) return next(response)
-	const { user, token, statusCode, statusText } = response
+	const { user, token, statusCode, statusText = [] } = response
 
 	sendTokenByCookie(token, res, next)
 	res.status(statusCode).json({

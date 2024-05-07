@@ -4,39 +4,6 @@ import Button from '../components/UI/Button'
 import { Link } from 'react-router-dom'
 import LinkedinIcon from '../assets/linkedin.svg?react'
 import EnvelopeIcon from '../assets/envelope.svg?react'
-import ProjectCard from '../components/Containers/ProjectCard'
-import { tCardState } from '../utils/types'
-
-interface ProjectCardProps {
-	demoUrl: string
-	repositoryUrl: string
-	title: string
-	description: string
-	imageUrl?: string
-	cardState?: tCardState
-}
-
-const projects: ProjectCardProps[] = [
-	{
-		title: 'Test1',
-		imageUrl: 'www.google.com',
-		demoUrl: 'www.google.com',
-		repositoryUrl: 'www.google.com',
-		cardState: 'presentation',
-		description: `I was Junior Front-End Developers,who are responsible for implementing visual 
-			and interactive elements that users see and interact with in a web application.`,
-	},
-
-	{
-		title: 'Test2',
-		imageUrl: 'www.google.com',
-		demoUrl: 'www.google.com',
-		repositoryUrl: 'www.google.com',
-		cardState: 'presentation',
-		description: `This challenge is a great to practice working with external API. 
-		The challenge is to create a simple movie search to speech application that requires you to work with advanced JavaScript functionalities.`,
-	},
-]
 
 const Portfolio = () => {
 	return (
@@ -83,9 +50,6 @@ const Portfolio = () => {
 				<hr className='border-lightGray my-3' />
 
 				<h2 className='text-gray font-medium'>Projects</h2>
-				{projects.map((project) => (
-					<ProjectCard {...project} key={project.title} />
-				))}
 			</div>
 		</section>
 	)

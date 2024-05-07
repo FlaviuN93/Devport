@@ -23,9 +23,10 @@ import {
 	ILogin,
 	IProject,
 	IRegister,
-	ITechnologies,
+	Technology,
 	IUser,
 	Project,
+	User,
 } from './types'
 import {
 	IProfileSettings,
@@ -39,10 +40,10 @@ const queryClient = new QueryClient()
 
 // User Queries and Mutations
 export const useGetMe = () =>
-	useQuery<IUser, IDefaultError>({ queryKey: ['profileSettings', 'getUser'], queryFn: getMe, enabled: false })
+	useQuery<User, IDefaultError>({ queryKey: ['profileSettings', 'getUser'], queryFn: getMe, enabled: false })
 
 export const useUpdateMe = () =>
-	useMutation<IDefaultSuccess, IDefaultError, IProfileSettings>({
+	useMutation<IUser, IDefaultError, IProfileSettings>({
 		mutationFn: updateMe,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['profileSettings', 'getUser'] })
@@ -52,7 +53,7 @@ export const useUpdateMe = () =>
 export const useDeleteMe = () => useMutation<IDefaultSuccess, IDefaultError>({ mutationFn: deleteMe })
 
 export const useGetUserAndProjects = (userId: string) =>
-	useQuery<IUser, IDefaultError>({
+	useQuery<User, IDefaultError>({
 		queryKey: ['myPortfolio', userId],
 		queryFn: () => getUserAndProjects(userId),
 	})
@@ -63,10 +64,13 @@ export const useChangePassword = () =>
 //Project Queries and Mutations
 
 export const useGetMyProjects = () =>
-	useQuery<Project[], IDefaultError>({ queryKey: ['myProjects'], queryFn: getMyProjects })
+	useQuery<Project[], IDefaultError>({
+		queryKey: ['myProjects'],
+		queryFn: getMyProjects,
+	})
 
 export const useGetMyProject = (projectId: string) =>
-	useQuery<IProject, IDefaultError>({
+	useQuery<Project, IDefaultError>({
 		queryKey: ['myProject', projectId],
 		queryFn: () => getMyProject(projectId),
 		enabled: false,
@@ -94,7 +98,7 @@ export const useDeleteMyProject = () =>
 	})
 
 export const useGetTechnologies = () =>
-	useQuery<ITechnologies, IDefaultError>({
+	useQuery<Technology[], IDefaultError>({
 		queryKey: ['myProjects', 'technologies'],
 		queryFn: getTechnologies,
 	})

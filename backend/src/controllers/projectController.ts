@@ -16,19 +16,16 @@ export const getTechnologiesData = async (req: Request, res: Response, next: Nex
 	const response = await getTechnologies()
 
 	if (response instanceof AppError) return next(response)
-	const { technologies, statusCode, statusText } = response
+	const { technologies, statusCode } = response
 
-	res.status(statusCode).json({
-		message: getSuccessMessage(statusCode, statusText),
-		technologies,
-	})
+	res.status(statusCode).send(technologies)
 }
 
 export const getMyProjectsData = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getMyProjects(req.userId)
 
 	if (response instanceof AppError) return next(response)
-	const { projects, statusCode, statusText } = response
+	const { projects, statusCode } = response
 
 	res.status(statusCode).send(projects)
 }
@@ -49,7 +46,7 @@ export const createMyProjectData = catchAsync(async (req: Request, res: Response
 
 	const response = await createMyProject(projectData)
 	if (response instanceof AppError) return next(response)
-	const { project, statusCode, statusText } = response
+	const { project, statusCode, statusText = [] } = response
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
@@ -64,7 +61,7 @@ export const updateMyProjectData = catchAsync(async (req: Request, res: Response
 
 	const response = await updateMyProject(projectData, projectId)
 	if (response instanceof AppError) return next(response)
-	const { project: updatedProject, statusCode, statusText } = response
+	const { project: updatedProject, statusCode, statusText = [] } = response
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
@@ -77,7 +74,7 @@ export const deleteMyProjectData = catchAsync(async (req: Request, res: Response
 
 	const response = await deleteMyProject(projectId)
 	if (response instanceof AppError) return next(response)
-	const { statusCode, statusText } = response
+	const { statusCode, statusText = [] } = response
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),

@@ -19,7 +19,6 @@ export const getUserAndProjects = async (userId: string): Promise<IGetUserAndPro
 	return {
 		userWithProjects: newUser,
 		statusCode: 200,
-		statusText: ['retrieve', 'user and projects have been sent successfully'],
 	}
 }
 
@@ -31,7 +30,7 @@ export const getUser = async (userId: string): Promise<IUser | AppError> => {
 	if (!user) return new AppError(404)
 
 	const newUser = removeUserColumns<User>(user)
-	return { user: newUser, statusCode: 200, statusText: ['retrieve', 'user has been sent successfully'] }
+	return { user: newUser, statusCode: 200 }
 }
 
 export const updateUser = async (reqBody: UpdateUserType, userId: string): Promise<IUser | AppError> => {

@@ -1,0 +1,17 @@
+.errorBackground {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.errorBox {
+	background-color: var(--light-2);
+	padding: 4rem;
+	margin: 1rem;
+	margin-top: -1rem;
+	flex: 0 1 96rem;
+	text-align: center;
+	border: 2px solid var(--light);
+	border-radius: 8px;
+}

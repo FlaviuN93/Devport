@@ -13,21 +13,15 @@ export const getUserAndProjectsHandler = catchAsync(
 		if (response instanceof AppError) return next(response)
 		const { userWithProjects, statusCode, statusText } = response
 
-		res.status(statusCode).json({
-			message: getSuccessMessage(statusCode, statusText),
-			user: userWithProjects,
-		})
+		res.status(statusCode).send(userWithProjects)
 	}
 )
 
 export const getMeHandler = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getUser(req.userId)
 	if (response instanceof AppError) return next(response)
-	const { user, statusCode, statusText } = response
-	res.status(statusCode).json({
-		message: getSuccessMessage(statusCode, statusText),
-		user,
-	})
+	const { user, statusCode } = response
+	res.status(statusCode).send(user)
 }
 
 export const updateMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -35,18 +29,20 @@ export const updateMeHandler = catchAsync(async (req: Request, res: Response, ne
 	const response = await updateUser(userData, req.userId)
 
 	if (response instanceof AppError) return next(response)
-	const { statusCode, statusText } = response
+	const { user, statusCode, statusText = [] } = response
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
+		user,
 	})
 })
 
 export const deleteMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const response = await deleteUser(req.userId)
 	if (response instanceof AppError) return next(response)
+	const { statusCode, statusText = [] } = response
 
-	res.status(response.statusCode).json({
-		message: getSuccessMessage(response.statusCode, response.statusText),
+	res.status(statusCode).json({
+		message: getSuccessMessage(statusCode, statusText),
 	})
 })

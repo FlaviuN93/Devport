@@ -28,21 +28,16 @@ const ProjectSettings = () => {
 		resolver: zodResolver(projectSettingsSchema),
 	})
 
-	const { data, error: technologiesError } = useGetTechnologies()
-	const { data: projects, error } = useGetMyProjects()
-
+	const { data, error } = useGetTechnologies()
+	const { data: projects, error: error2 } = useGetMyProjects()
 	const motionVariants = {
 		hidden: { display: 'none', opacity: 0 },
 		visible: { display: 'flex', opacity: 1 },
 	}
-
+	console.log(error, error2, 'ehllo')
+	console.log(projects, 'projects!!!')
 	const previewUrl =
 		getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile) : null
-
-	const handleFile = (selectedFile: any) => {
-		if (!selectedFile) throw new Error('no file selected')
-		setValue('imageFile', selectedFile, { shouldValidate: true })
-	}
 
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		console.log('handleSubmit data', data)
@@ -89,7 +84,9 @@ const ProjectSettings = () => {
 						icon={<UploadIcon />}
 						name='imageFile'
 						register={register}
-						onFileUpload={handleFile}
+						onFileUpload={(selectedFile: File) =>
+							setValue('imageFile', selectedFile, { shouldValidate: true })
+						}
 						error={errors.imageFile?.message}
 					/>
 				</motion.div>
@@ -164,20 +161,21 @@ const ProjectSettings = () => {
 				</div>
 			</form>
 			<div className='flex flex-col gap-4 mt-4'>
-				{projects?.map((project) => {
-					return (
-						<ProjectCard
-							key={project.id}
-							demoURL={project.demoURL}
-							description={project.description}
-							repositoryURL={project.repositoryURL}
-							technologies={project.technologies}
-							title={project.name}
-							cardState='edit'
-							imageURL={project.imageURL}
-						/>
-					)
-				})}
+				{projects &&
+					projects.map((project) => {
+						return (
+							<ProjectCard
+								key={project.id}
+								demoURL={project.demoURL}
+								description={project.description}
+								repositoryURL={project.repositoryURL}
+								technologies={project.technologies}
+								title={project.name}
+								cardState='edit'
+								imageURL={project.imageURL}
+							/>
+						)
+					})}
 			</div>
 		</section>
 	)

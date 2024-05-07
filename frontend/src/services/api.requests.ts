@@ -5,9 +5,10 @@ import {
 	ILogin,
 	IProject,
 	IRegister,
-	ITechnologies,
 	IUser,
 	Project,
+	Technology,
+	User,
 } from './types'
 import {
 	IProfileSettings,
@@ -18,16 +19,16 @@ import {
 } from '../utils/schemas'
 
 // User Routes
-export const getMe = () => get<IUser>('/users/currentUser')
+export const getMe = () => get<User>('/users/currentUser')
 
 export const updateMe = (body: IProfileSettings) =>
-	patch<IDefaultSuccess, IProfileSettings>('/users/currentUser', { body })
+	patch<IUser, IProfileSettings>('/users/currentUser', { body })
 
 export const deleteMe = () => remove<IDefaultSuccess>('/users/currentUser')
 
 // I will get access to userId from the url with react router
 export const getUserAndProjects = (userId: string) =>
-	get<IUser>('/users/projects/:userId', {
+	get<User>('/users/projects/:userId', {
 		query: { userId },
 	})
 
@@ -35,7 +36,7 @@ export const getUserAndProjects = (userId: string) =>
 export const getMyProjects = () => get<Project[]>('/projects/currentUser')
 
 export const getMyProject = (projectId: string) =>
-	get<IProject>('/projects/currentUser/:projectId', { query: { projectId } })
+	get<Project>('/projects/currentUser/:projectId', { query: { projectId } })
 
 export const createMyProject = (body: IProjectSettings) =>
 	post<IProject, IProjectSettings>('projects/currentUser', { body })
@@ -51,7 +52,7 @@ export const deleteMyProject = (projectId: string) =>
 		query: { projectId },
 	})
 
-export const getTechnologies = () => get<ITechnologies>('/projects/currentUser/technologies')
+export const getTechnologies = () => get<Technology[]>('/projects/currentUser/technologies')
 
 // Authentication Routes
 export const register = (body: SignupType) => post<IRegister, SignupType>('/auth/register', { body })

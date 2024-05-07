@@ -81,9 +81,10 @@ const MultiSelect: FC<MultiSelectProps> = ({
 						{items.map((item) => (
 							<label key={item.id} className={styles.item}>
 								<input
+									name={item.name}
 									type='checkbox'
 									checked={selectedItems.includes(item.name)}
-									onClick={() => handleToggleItem(item)}
+									onChange={() => handleToggleItem(item)}
 									className={styles.checkboxItem}
 								/>
 								{item.name}

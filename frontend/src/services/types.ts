@@ -13,7 +13,7 @@ export interface IDefaultSuccess {
 
 export interface IDefaultError {
 	statusTitle: string
-	type: 'clientError' | 'serverError' | 'zodError' | 'ERR_NETWORK' | 'ECONNABORTED'
+	type: 'clientError' | 'serverError' | 'zodError' | 'NETWORK ERROR' | 'CONNECTION ISSUES'
 	message: string | string[]
 }
 
@@ -31,10 +31,6 @@ export interface IUser extends IDefaultSuccess {
 
 export interface IProject extends IDefaultSuccess {
 	project: Project
-}
-
-export interface ITechnologies extends IDefaultSuccess {
-	technologies: Item[]
 }
 
 export interface Project {
@@ -58,7 +54,7 @@ export interface User {
 	projects?: Project[]
 }
 
-export interface Item {
+export interface Technology {
 	id: number
 	name: string
 }

@@ -13,7 +13,6 @@ export const getTechnologies = async (): Promise<ITechnologies | AppError> => {
 	return {
 		technologies,
 		statusCode: 200,
-		statusText: ['retrieve', 'technologies have been sent successfully'],
 	}
 }
 
@@ -31,7 +30,7 @@ export const getMyProjects = async (userId: string): Promise<IProjects | AppErro
 	if (projects === null || projects.length === 0)
 		return new AppError(404, 'User does not have any projects created')
 
-	return { projects, statusCode: 200, statusText: ['retrieve', 'projects have been sent successfully'] }
+	return { projects, statusCode: 200 }
 }
 
 export const getMyProject = async (userId: string, projectId: string): Promise<IProject | AppError> => {
@@ -49,7 +48,7 @@ export const getMyProject = async (userId: string, projectId: string): Promise<I
 	if (error) return new AppError(status)
 	if (!project) return new AppError(400)
 
-	return { project, statusCode: 200, statusText: ['retrieve', 'project has been sent successfully'] }
+	return { project, statusCode: 200 }
 }
 
 export const createMyProject = async (reqBody: CreateProject): Promise<IProject | AppError> => {

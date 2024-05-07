@@ -1,4 +1,4 @@
-import { FC, MouseEvent } from 'react'
+import { FC } from 'react'
 import styles from './ProjectCard.module.css'
 import Button from '../UI/Button'
 import {
@@ -9,6 +9,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 import { tCardState } from '../../utils/types'
+import { Project } from '../../services/types'
 
 interface ProjectCardProps {
 	demoURL: string
@@ -18,6 +19,7 @@ interface ProjectCardProps {
 	description: string
 	imageURL?: string
 	cardState?: tCardState
+	projectToEdit?: Project
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
@@ -29,11 +31,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
 	description,
 	cardState = 'presentation',
 }) => {
-	const handleClick = (e: MouseEvent) => {
-		console.log(e)
-	}
 	const techJoin = technologies.join(', ')
-	console.log(technologies, 'helloFromProjectCard')
+
 	return (
 		<div className={styles.cardContainer}>
 			{imageURL ? (
@@ -74,13 +73,13 @@ const ProjectCard: FC<ProjectCardProps> = ({
 							<Button
 								buttonText='Edit'
 								variant='primary'
-								onClick={handleClick}
+								// onClick={h}
 								icon={<PencilSquareIcon className='h-5 w-5' />}
 							/>
 							<Button
 								buttonText='Remove'
 								buttonStyles='text-darkBlue bg-light3 border-0'
-								onClick={handleClick}
+								// onClick={handleClick}
 								icon={<TrashIcon className='h-5 w-5' />}
 							/>
 						</div>

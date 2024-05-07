@@ -20,6 +20,7 @@ const Alert: FC<IAlert> = ({ message = '', type = 'error', onClose, statusTitle 
 		if (onClose) onClose()
 	}
 
+	// Not done yet
 	return (
 		isVisible && (
 			<div className={alertClasses}>
