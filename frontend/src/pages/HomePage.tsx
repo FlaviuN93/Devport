@@ -77,11 +77,7 @@ export default function HomePage() {
 				onClick={(e) => console.log(e, 'hellofromEvent')}
 			/>
 
-			<Button
-				buttonText='Delete Image'
-				icon={<Trash />}
-				onClick={(e) => console.log(e, 'hellofromEvent')}
-			/>
+			<Button buttonText='Delete Image' icon={<Trash />} onClick={(e) => console.log(e, 'hellofromEvent')} />
 			<Button
 				buttonText='Create an account'
 				variant='text'
@@ -98,8 +94,9 @@ export default function HomePage() {
 			<Avatar />
 
 			<ProjectCard
-				demoUrl='https://www.google.com'
-				repositoryUrl='https://www.google.com'
+				demoURL='https://www.google.com'
+				repositoryURL='https://www.google.com'
+				technologies={[]}
 				title='Music Player'
 				description='I was Junior Front-End Developers, who are responsible for implementing visual and interactive elements that users see and interact with in a web users see and interact with in a web users see and interact with in a web'
 			/>

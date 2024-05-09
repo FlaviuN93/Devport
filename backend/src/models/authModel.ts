@@ -41,7 +41,7 @@ export const loginUser = async (email: string, loginPassword: string): Promise<I
 	if (!user) return new AppError(400, `Your user credentials don't match. Try again.`)
 
 	const arePasswordsEqual = await bcrypt.compare(loginPassword, user.password)
-	if (!arePasswordsEqual) return new AppError(401, `Hmm, that password doesn't seem to match. Try again.`)
+	if (!arePasswordsEqual) return new AppError(401, `Hmm, your user credentials don't match. Try again`)
 
 	const token = signToken(user.id)
 	const loginUser = removeUserPassword<LoginUser>(user)
@@ -61,7 +61,7 @@ export const updatePassword = async (
 	if (!user) return new AppError(404, 'User token has probably expired. Try to log in again.')
 
 	const arePasswordsEqual = await bcrypt.compare(passwords.currentPassword, user.password)
-	if (!arePasswordsEqual) return new AppError(401, `Hmm, that password doesn't seem to match. Try again.`)
+	if (!arePasswordsEqual) return new AppError(401, `Hmm, your user credentials don't match. Try again`)
 
 	const hashedPassword = bcrypt.hash(passwords.newPassword, 12)
 	const { error } = await supabase

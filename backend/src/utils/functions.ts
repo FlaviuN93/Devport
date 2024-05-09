@@ -2,6 +2,7 @@ import jwt, { JsonWebTokenError, NotBeforeError, TokenExpiredError } from 'jsonw
 import AppError from './appError'
 import crypto from 'crypto'
 import { NextFunction, Response } from 'express'
+import { array } from 'zod'
 
 // Remove User Data that should not be returned
 export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T => {
@@ -47,6 +48,8 @@ export const verifyToken = <T extends jwt.JwtPayload>(reqToken: string): T | App
 export const hasPasswordChanged = (JWTTimestamp: number, passwordTimestamp: string) =>
 	JWTTimestamp < Date.parse(passwordTimestamp) / 1000
 
+export const isEmptyObject = (obj: Object<unknown>) => Object.keys(obj).length === 0
+
 export const createPasswordResetToken = (): PasswordResetTokenData => {
 	const resetToken = crypto.randomBytes(32).toString('hex')
 	const encryptedResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
@@ -77,4 +80,8 @@ type PasswordResetTokenData = {
 	resetToken: string
 	encryptedResetToken: string
 	tokenExpiresIn: number
+}
+
+interface Object<T> {
+	[key: string]: T
 }

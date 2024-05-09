@@ -1,60 +1,84 @@
-import { FC, ReactNode } from 'react'
+import { FC, ReactElement, ReactNode, cloneElement } from 'react'
 import { motion } from 'framer-motion'
 import styles from './Modal.module.css'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { createPortal } from 'react-dom'
+import { ModalProvider } from '../../contexts/ModalContext'
+import { useModalContext } from '../../contexts/contextHooks'
+import { useCalculateHeight } from '../../hooks/useCalculateHeight'
+import { TailwindClasses } from '../../utils/types'
+import { useOutsideClick } from '../../hooks/useOutsideClick'
 
-interface IModal {
-	showModal: boolean
-	onHide: () => void
+interface IModalWindow {
+	modalName: string
 	children: ReactNode
+	modalWindowStyles: TailwindClasses
+	showCloseIcon?: boolean
 }
 
-interface IModalHeader {
-	closeButton: boolean
-	children: ReactNode
+export const Modal: FC<{ children: ReactNode }> = ({ children }) => {
+	return <ModalProvider>{children}</ModalProvider>
 }
 
-export const Modal: FC<IModal> = ({ children, showModal, onHide }) => {
-	return createPortal(<div className={styles.modalOverlay}>{children}</div>, document.body)
+export const ModalOpen: FC<{ openedModalName: string; children: ReactElement }> = ({
+	children,
+	openedModalName,
+}) => {
+	const { setOpenModal } = useModalContext()
+
+	return cloneElement(children, { onClick: () => setOpenModal(openedModalName) })
 }
 
-export const ModalOpen: FC<{ htmlFor: string; children: ReactNode }> = ({ htmlFor, children }) => {
-	return <div>{children}</div>
-}
+export const ModalWindow: FC<IModalWindow> = ({
+	modalName,
+	children,
+	showCloseIcon = true,
+	modalWindowStyles,
+}) => {
+	const { openModal, close, modalWindowRef } = useModalContext()
+	const isModalOpen = openModal.length > 0
+	const overlayRef = useCalculateHeight(isModalOpen)
+	useOutsideClick(modalWindowRef, close)
 
-export const ModalWindow = () => {
+	const modalWindowClasses = `${styles.modalContainer} ${modalWindowStyles}`
+
 	const motionVariants = {
-		hidden: { display: 'none', opacity: 0 },
-		visible: { display: 'flex', opacity: 1 },
+		hidden: { opacity: 0 },
+		visible: { opacity: 1 },
 	}
 
-	return (
+	if (modalName !== openModal) return null
+
+	return createPortal(
 		<motion.div
 			initial='hidden'
-			animate={showModal ? 'visible' : 'hidden'}
+			animate={isModalOpen ? 'visible' : 'hidden'}
 			variants={motionVariants}
-			transition={{ duration: 0.5 }}
-			className={styles.modalContainer}
+			transition={{ duration: 0.2 }}
+			className={styles.modalOverlay}
+			ref={overlayRef}
 		>
-			<label htmlFor=''></label>
-		</motion.div>
+			<div className={styles.modalWrapper}>
+				<motion.div
+					ref={modalWindowRef}
+					initial='hidden'
+					animate={isModalOpen ? 'visible' : 'hidden'}
+					variants={motionVariants}
+					transition={{ duration: 0.2 }}
+					className={modalWindowClasses}
+				>
+					{showCloseIcon && (
+						<XMarkIcon onClick={close} className='h-6 w-6 cursor-pointer absolute top-1.5 right-1.5' />
+					)}
+					{children}
+				</motion.div>
+			</div>
+		</motion.div>,
+		document.body
 	)
 }
 
-export const ModalHeader: FC<IModalHeader> = ({ closeButton, children }) => {
-	return (
-		<div className={styles.modalHeader}>
-			<span className={styles.modalCloseButton}>{closeButton && <XMarkIcon className='h-5 w-5' />}</span>
-			{children}
-		</div>
-	)
-}
-
-export const ModalBody: FC<{ children: ReactNode }> = ({ children }) => {
-	return <div className={styles.modalBody}>{children}</div>
-}
-
-export const ModalFooter: FC<{ children: ReactNode }> = ({ children }) => {
-	return <div className={styles.modalFooter}>{children}</div>
+export const ModalClose: FC<{ children: ReactElement }> = ({ children }) => {
+	const { close } = useModalContext()
+	return cloneElement(children, { onClick: close })
 }

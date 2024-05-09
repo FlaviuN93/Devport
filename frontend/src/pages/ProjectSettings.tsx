@@ -13,6 +13,7 @@ import Text from '../components/Inputs/Text'
 import MultiSelect from '../components/Inputs/MultiSelect'
 import { useGetMyProjects, useGetTechnologies } from '../services/queries'
 import ProjectCard from '../components/Containers/ProjectCard'
+import { Modal, ModalClose, ModalOpen, ModalWindow } from '../components/UI/Modal'
 
 const ProjectSettings = () => {
 	const {
@@ -28,14 +29,14 @@ const ProjectSettings = () => {
 		resolver: zodResolver(projectSettingsSchema),
 	})
 
-	const { data, error } = useGetTechnologies()
-	const { data: projects, error: error2 } = useGetMyProjects()
+	const { data: technologies } = useGetTechnologies()
+	const { data: projects } = useGetMyProjects()
+
 	const motionVariants = {
 		hidden: { display: 'none', opacity: 0 },
 		visible: { display: 'flex', opacity: 1 },
 	}
-	console.log(error, error2, 'ehllo')
-	console.log(projects, 'projects!!!')
+
 	const previewUrl =
 		getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile) : null
 
@@ -47,7 +48,17 @@ const ProjectSettings = () => {
 	return (
 		<section className='settingsContainer'>
 			<h4 className='mb-4'>Project Settings</h4>
-
+			<Modal>
+				<ModalOpen openedModalName='removeProject'>
+					<Button buttonText='OpenModal' variant='primary' />
+				</ModalOpen>
+				<ModalWindow modalName='removeProject'>
+					<h4>Check My modal</h4>
+					<ModalClose>
+						<Button buttonText='CloseModal' />
+					</ModalClose>
+				</ModalWindow>
+			</Modal>
 			<form onSubmit={handleSubmit(projectData)} className='formSettingsContainer'>
 				<motion.div
 					initial='hidden'
@@ -125,7 +136,7 @@ const ProjectSettings = () => {
 								onChange={onChange}
 								placeholderValue={selectedItems}
 								error={error?.message}
-								items={data?.technologies}
+								items={technologies}
 								placeholder='Select technologies from the list'
 								label='Technologies'
 							/>

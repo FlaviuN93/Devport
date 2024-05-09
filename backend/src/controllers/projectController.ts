@@ -14,8 +14,8 @@ import { idSchema } from '../services/baseSchema'
 
 export const getTechnologiesData = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getTechnologies()
-
 	if (response instanceof AppError) return next(response)
+
 	const { technologies, statusCode } = response
 
 	res.status(statusCode).send(technologies)

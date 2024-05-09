@@ -5,11 +5,27 @@
 	width: 100%;
 	height: 100vh;
 	background-color: var(--backdrop-color);
-	backdrop-filter: blur(4px);
+	backdrop-filter: blur(2px);
 	z-index: 1000;
 }
 
-.modal {
-	width: 220px;
+.modalWrapper {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.modalContainer {
+	width: auto;
+	height: auto;
+	max-width: 600px;
 	background-color: var(--light);
+	box-shadow: var(--shadow-md);
+	border: 1px solid var(--light-gray);
+	border-radius: 8px;
+	padding: 1rem 1.5rem;
+	position: relative;
+
+	z-index: 200;
 }

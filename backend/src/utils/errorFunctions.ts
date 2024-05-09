@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import AppError from './appError'
 import { ZodError } from 'zod'
+import { isEmptyObject } from './functions'
 
 // Helper Functions
 const sendError = (err: AppError, res: Response, type: 'clientError' | 'serverError'): void => {
@@ -13,15 +14,20 @@ const sendError = (err: AppError, res: Response, type: 'clientError' | 'serverEr
 
 const sendZodError = (err: ZodError, res: Response): void => {
 	const formattedErrors = err.flatten()
+	const errorMessage = isEmptyObject(formattedErrors.fieldErrors)
+		? formattedErrors.formErrors
+		: formattedErrors.fieldErrors
 
+	// if(formattedErrors.fieldErrors)
 	res.status(400).json({
 		type: 'zodError',
-		message: formattedErrors.fieldErrors,
+		message: errorMessage,
 	})
 }
 
 const sendErrorInDev = (err: AppError, res: Response) => {
 	// Order matters. This check is first
+	// console.log(err, 'err')
 	if (err instanceof ZodError) return sendZodError(err, res)
 
 	if (!err.isClientError) return sendError(err, res, 'serverError')

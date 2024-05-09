@@ -80,11 +80,12 @@ function App() {
 
 			<Toaster
 				position='top-center'
+				gutter={12}
+				reverseOrder={true}
 				toastOptions={{
 					success: { duration: 3000 },
 					error: {
 						duration: 5000,
-						style: { background: 'var(--light)', color: 'var(--black)' },
 					},
 					style: {
 						fontSize: '1rem',
@@ -92,6 +93,8 @@ function App() {
 						fontWeight: 'normal',
 						textAlign: 'center',
 						padding: '1rem 1.5rem',
+						background: 'var(--light)',
+						color: 'var(--black)',
 					},
 				}}
 			/>
