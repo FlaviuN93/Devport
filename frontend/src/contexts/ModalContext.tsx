@@ -1,9 +1,11 @@
-import { FC, ReactNode, RefObject, createContext, useRef, useState } from 'react'
+import { Dispatch, FC, ReactNode, RefObject, SetStateAction, createContext, useRef, useState } from 'react'
 
 interface IModalContextProps {
 	openModal: string
-	setOpenModal: React.Dispatch<React.SetStateAction<string>>
+	setOpenModal: Dispatch<SetStateAction<string>>
 	close: () => void
+	setModalPosition: Dispatch<SetStateAction<{ xPosition: string; yPosition: string }>>
+	modalPosition: { xPosition: string; yPosition: string }
 	modalWindowRef: RefObject<HTMLDivElement>
 }
 
@@ -11,14 +13,18 @@ export const ModalContext = createContext<IModalContextProps>({} as IModalContex
 
 export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [openModal, setOpenModal] = useState('')
+	const [modalPosition, setModalPosition] = useState({
+		xPosition: '',
+		yPosition: '',
+	})
 	const modalWindowRef = useRef<HTMLDivElement>(null)
 
-	// const modalRef = useRef(null)
-	// const modal2Ref = useRef(null)
 	const close = () => setOpenModal('')
 
 	return (
-		<ModalContext.Provider value={{ openModal, setOpenModal, close, modalWindowRef }}>
+		<ModalContext.Provider
+			value={{ openModal, setOpenModal, close, modalWindowRef, modalPosition, setModalPosition }}
+		>
 			{children}
 		</ModalContext.Provider>
 	)

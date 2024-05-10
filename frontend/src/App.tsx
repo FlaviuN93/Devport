@@ -16,6 +16,7 @@ import AuthLayout from './components/Layouts/AuthLayout'
 import AppLayout from './components/Layouts/AppLayout'
 import PageNotFound from './pages/PageNotFound'
 import { IDefaultError, IDefaultSuccess } from './services/types'
+import { ProjectProvider } from './contexts/ProjectContext'
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -57,25 +58,27 @@ function App() {
 		<QueryClientProvider client={queryClient}>
 			<ReactQueryDevtools initialIsOpen={false} />
 			<UserProvider>
-				<BrowserRouter>
-					<Routes>
-						<Route path='/home' element={<HomePage />} />
-						<Route path='/' element={<Portfolio />} />
-						<Route path='/' element={<AppLayout />}>
-							<Route path='project-settings' element={<ProjectSettings />} />
-							<Route path='profile-settings' element={<ProfileSettings />} />
-						</Route>
+				<ProjectProvider>
+					<BrowserRouter>
+						<Routes>
+							<Route path='/home' element={<HomePage />} />
+							<Route path='/' element={<Portfolio />} />
+							<Route path='/' element={<AppLayout />}>
+								<Route path='project-settings' element={<ProjectSettings />} />
+								<Route path='profile-settings' element={<ProfileSettings />} />
+							</Route>
 
-						<Route path='/auth' element={<AuthLayout />}>
-							<Route index element={<SignUp />} />
-							<Route path='login' element={<Login />} />
-							<Route path='forgot-password' element={<ForgotPassword />} />
-							<Route path='reset-password' element={<ResetPassword />} />
-						</Route>
+							<Route path='/auth' element={<AuthLayout />}>
+								<Route index element={<SignUp />} />
+								<Route path='login' element={<Login />} />
+								<Route path='forgot-password' element={<ForgotPassword />} />
+								<Route path='reset-password' element={<ResetPassword />} />
+							</Route>
 
-						<Route path='*' element={<PageNotFound />} />
-					</Routes>
-				</BrowserRouter>
+							<Route path='*' element={<PageNotFound />} />
+						</Routes>
+					</BrowserRouter>
+				</ProjectProvider>
 			</UserProvider>
 
 			<Toaster

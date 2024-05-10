@@ -51,36 +51,27 @@ export const getMyProject = async (userId: string, projectId: string): Promise<I
 	return { project, statusCode: 200 }
 }
 
-export const createMyProject = async (reqBody: CreateProject): Promise<IProject | AppError> => {
-	const {
-		data: project,
-		error,
-		status,
-	} = await supabase.from('projects').insert(reqBody).select('*').single()
+export const createMyProject = async (reqBody: CreateProject): Promise<IDefault | AppError> => {
+	const { error, status } = await supabase.from('projects').insert(reqBody)
 
 	if (error) return new AppError(status)
 
-	return { project, statusCode: 201, statusText: ['project', 'created'] }
+	return { statusCode: 201, statusText: ['project', 'created'] }
 }
 
 export const updateMyProject = async (
 	reqBody: UpdateProject,
 	projectId: string
-): Promise<IProject | AppError> => {
-	const {
-		data: project,
-		error,
-		status,
-	} = await supabase.from('projects').update(reqBody).eq('id', projectId).select('*').single()
+): Promise<IDefault | AppError> => {
+	const { error, status } = await supabase.from('projects').update(reqBody).eq('id', projectId)
 
 	if (error) return new AppError(status)
 
-	return { project, statusCode: 200, statusText: ['update', 'project has been updated successfully'] }
+	return { statusCode: 200, statusText: ['update', 'project has been updated successfully'] }
 }
 
 export const deleteMyProject = async (id: string): Promise<IDefault | AppError> => {
 	const { error } = await supabase.from('projects').delete().eq('id', id).select('id').single()
-
 	if (error) return new AppError(404, 'The project you tried to delete does not exist')
 
 	return { statusCode: 200, statusText: ['delete', 'project has been deleted'] }

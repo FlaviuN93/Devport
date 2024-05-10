@@ -46,11 +46,10 @@ export const createMyProjectData = catchAsync(async (req: Request, res: Response
 
 	const response = await createMyProject(projectData)
 	if (response instanceof AppError) return next(response)
-	const { project, statusCode, statusText = [] } = response
+	const { statusCode, statusText = [] } = response
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		project,
 	})
 })
 
@@ -61,11 +60,10 @@ export const updateMyProjectData = catchAsync(async (req: Request, res: Response
 
 	const response = await updateMyProject(projectData, projectId)
 	if (response instanceof AppError) return next(response)
-	const { project: updatedProject, statusCode, statusText = [] } = response
+	const { statusCode, statusText = [] } = response
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		project: updatedProject,
 	})
 })
 

@@ -11,9 +11,16 @@ import ProjectIcon from '../assets/project.svg?react'
 import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
 import MultiSelect from '../components/Inputs/MultiSelect'
-import { useGetMyProjects, useGetTechnologies } from '../services/queries'
+import {
+	useCreateMyProject,
+	useGetMyProjects,
+	useGetTechnologies,
+	useUpdateMyProject,
+} from '../services/queries'
 import ProjectCard from '../components/Containers/ProjectCard'
-import { Modal, ModalClose, ModalOpen, ModalWindow } from '../components/UI/Modal'
+import { useProjectContext } from '../contexts/contextHooks'
+import Loading from '../components/UI/Loading'
+import { useEffect } from 'react'
 
 const ProjectSettings = () => {
 	const {
@@ -24,13 +31,18 @@ const ProjectSettings = () => {
 		setValue,
 		resetField,
 		reset,
+
 		formState: { errors },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
 	})
 
+	const { isProjectSelected, selectedProject, disableProjectEdit } = useProjectContext()
+
 	const { data: technologies } = useGetTechnologies()
-	const { data: projects } = useGetMyProjects()
+	const { data: projects, isLoading } = useGetMyProjects()
+	const { isPending: IsPendingUpdate, mutate: updateMutation } = useUpdateMyProject(selectedProject.id)
+	const { isPending: IsPendingCreate, mutate: createMutation } = useCreateMyProject()
 
 	const motionVariants = {
 		hidden: { display: 'none', opacity: 0 },
@@ -40,25 +52,25 @@ const ProjectSettings = () => {
 	const previewUrl =
 		getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile) : null
 
+	// Next challenge. Need to upload a url somehow from the database to the frontend as a preview.
+	// useEffect(() => {
+	// 	if (isProjectSelected) reset()
+	// }, [isProjectSelected, selectedProject])
+
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
-		console.log('handleSubmit data', data)
-		console.log(getValues())
+		if (isProjectSelected) return updateMutation(data)
+		createMutation(data)
+	}
+
+	const handleResetForm = () => {
+		reset()
+		disableProjectEdit()
 	}
 
 	return (
 		<section className='settingsContainer'>
 			<h4 className='mb-4'>Project Settings</h4>
-			<Modal>
-				<ModalOpen openedModalName='removeProject'>
-					<Button buttonText='OpenModal' variant='primary' />
-				</ModalOpen>
-				<ModalWindow modalName='removeProject'>
-					<h4>Check My modal</h4>
-					<ModalClose>
-						<Button buttonText='CloseModal' />
-					</ModalClose>
-				</ModalWindow>
-			</Modal>
+
 			<form onSubmit={handleSubmit(projectData)} className='formSettingsContainer'>
 				<motion.div
 					initial='hidden'
@@ -157,26 +169,28 @@ const ProjectSettings = () => {
 						buttonText='Clear'
 						buttonStyles='text-darkBlue bg-light3 border-0'
 						icon={<TrashIcon2 className='h-5 w-5' />}
-						onClick={() => reset()}
+						onClick={handleResetForm}
 						iconPos='left'
 					/>
-
 					<Button
 						icon={<PlusIcon className='h-5 w-5' />}
 						iconPos='left'
-						buttonText='Add'
+						buttonText={`${isProjectSelected ? 'Update' : 'Save'}`}
 						buttonStyles='px-3'
 						variant='primary'
+						isLoading={isProjectSelected ? IsPendingUpdate : IsPendingCreate}
 						type='submit'
 					/>
 				</div>
 			</form>
 			<div className='flex flex-col gap-4 mt-4'>
+				{isLoading && <Loading />}
 				{projects &&
 					projects.map((project) => {
 						return (
 							<ProjectCard
 								key={project.id}
+								projectId={project.id}
 								demoURL={project.demoURL}
 								description={project.description}
 								repositoryURL={project.repositoryURL}

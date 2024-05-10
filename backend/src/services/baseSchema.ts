@@ -43,7 +43,11 @@ export const descriptionSchema = z
 
 export const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
 
-export const fileSchema = z.instanceof(File).refine((file) => {
-	const allowedMimeTypes = ['image/png', 'image/jpeg']
-	return allowedMimeTypes.includes(file.type)
-}, 'File must be a valid image (PNG, JPEG)')
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+export const fileSchema = z
+	.any()
+	.refine((file: File) => file !== undefined, 'No file has been selected')
+	.refine(
+		(file: File) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
+		'File must be a valid image (PNG, JPEG, JPG, WEBP)'
+	)

@@ -15,7 +15,8 @@ import cookieParser from 'cookie-parser'
 const app = express()
 
 const limiter = rateLimit({
-	max: 100,
+	//Remember to change later
+	max: 1000,
 	windowMs: 60 * 60 * 1000,
 	message: errorMessage[429],
 })

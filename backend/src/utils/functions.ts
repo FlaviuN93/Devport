@@ -76,6 +76,22 @@ export const sendTokenByCookie = (token: string | undefined, res: Response, next
 	res.cookie('jwt', token, cookieOptions)
 }
 
+// This one doesn't work. I will have to come up with another function for backend
+// I will look at Multer when the time comes
+export const getImageFormat = (format: 'landscape' | 'portrait', file: File) => {
+	return new Promise<boolean>((resolve) => {
+		const img = document.createElement('img')
+		img.onload = function () {
+			const aspectRatio = img.width / img.height
+			if (format === 'landscape' && aspectRatio < 1.3) resolve(false)
+			if (format === 'portrait' && aspectRatio > 0.9) resolve(false)
+			resolve(true)
+		}
+
+		img.src = URL.createObjectURL(file)
+	})
+}
+
 type PasswordResetTokenData = {
 	resetToken: string
 	encryptedResetToken: string

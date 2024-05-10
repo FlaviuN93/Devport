@@ -2,6 +2,7 @@ import { useContext } from 'react'
 import { DropdownContext } from './DropdownContext'
 import { UserContext } from './UserContext'
 import { ModalContext } from './ModalContext'
+import { ProjectContext } from './ProjectContext'
 
 export const useDropdownContext = () => {
 	const context = useContext(DropdownContext)
@@ -26,6 +27,15 @@ export const useModalContext = () => {
 
 	if (!context) {
 		throw new Error('Modal context must be used within a ModalProvider')
+	}
+
+	return context
+}
+
+export const useProjectContext = () => {
+	const context = useContext(ProjectContext)
+	if (!context) {
+		throw new Error('Project context must be used within a ProjectProvider')
 	}
 
 	return context

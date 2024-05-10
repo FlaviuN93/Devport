@@ -1,15 +1,5 @@
-import { remove, get, patch, post } from './baseHttp'
-import {
-	HttpParamsType,
-	IDefaultSuccess,
-	ILogin,
-	IProject,
-	IRegister,
-	IUser,
-	Project,
-	Technology,
-	User,
-} from './types'
+import { remove, get, patch, post, put } from './baseHttp'
+import { HttpParamsType, IDefaultSuccess, ILogin, IRegister, IUser, Project, Technology, User } from './types'
 import {
 	IProfileSettings,
 	IProjectSettings,
@@ -27,30 +17,23 @@ export const updateMe = (body: IProfileSettings) =>
 export const deleteMe = () => remove<IDefaultSuccess>('/users/currentUser')
 
 // I will get access to userId from the url with react router
-export const getUserAndProjects = (userId: string) =>
-	get<User>('/users/projects/:userId', {
-		query: { userId },
-	})
+export const getUserAndProjects = (userId: string) => get<User>(`/users/projects/${userId}`)
 
 // Project Routes
 export const getMyProjects = () => get<Project[]>('/projects/currentUser')
 
-export const getMyProject = (projectId: string) =>
-	get<Project>('/projects/currentUser/:projectId', { query: { projectId } })
+export const getMyProject = (projectId: number) => get<Project>(`/projects/currentUser/${projectId}`)
 
 export const createMyProject = (body: IProjectSettings) =>
-	post<IProject, IProjectSettings>('projects/currentUser', { body })
+	post<IDefaultSuccess, IProjectSettings>('projects/currentUser', { body })
 
-export const updateMyProject = (httpParams: HttpParamsType<IProjectSettings>) =>
-	patch<IProject, IProjectSettings>('projects/currentUser/:projectId', {
-		query: httpParams.query,
-		body: httpParams.body,
+export const updateMyProject = (projectId: number, body: IProjectSettings) =>
+	put<IDefaultSuccess, IProjectSettings>(`projects/currentUser/${projectId}`, {
+		body,
 	})
 
-export const deleteMyProject = (projectId: string) =>
-	remove<IDefaultSuccess>('projects/currentUser/:projectId', {
-		query: { projectId },
-	})
+export const deleteMyProject = (projectId: number) =>
+	remove<IDefaultSuccess>(`projects/currentUser/${projectId}`)
 
 export const getTechnologies = () => get<Technology[]>('/projects/currentUser/technologies')
 

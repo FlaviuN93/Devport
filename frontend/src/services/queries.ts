@@ -21,7 +21,6 @@ import {
 	IDefaultError,
 	IDefaultSuccess,
 	ILogin,
-	IProject,
 	IRegister,
 	Technology,
 	IUser,
@@ -69,7 +68,7 @@ export const useGetMyProjects = () =>
 		queryFn: getMyProjects,
 	})
 
-export const useGetMyProject = (projectId: string) =>
+export const useGetMyProject = (projectId: number) =>
 	useQuery<Project, IDefaultError>({
 		queryKey: ['myProject', projectId],
 		queryFn: () => getMyProject(projectId),
@@ -77,21 +76,21 @@ export const useGetMyProject = (projectId: string) =>
 	})
 
 export const useCreateMyProject = () =>
-	useMutation<IProject, IDefaultError, IProjectSettings>({
+	useMutation<IDefaultSuccess, IDefaultError, IProjectSettings>({
 		mutationFn: createMyProject,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['myProjects'] })
 		},
 	})
 
-export const useUpdateMyProject = () =>
-	useMutation<IProject, IDefaultError, HttpParamsType<IProjectSettings>>({
-		mutationFn: updateMyProject,
+export const useUpdateMyProject = (projectId: number) =>
+	useMutation<IDefaultSuccess, IDefaultError, IProjectSettings>({
+		mutationFn: (body: IProjectSettings) => updateMyProject(projectId, body),
 	})
 
-export const useDeleteMyProject = () =>
-	useMutation<IDefaultSuccess, IDefaultError, string>({
-		mutationFn: deleteMyProject,
+export const useDeleteMyProject = (projectId: number) =>
+	useMutation<IDefaultSuccess, IDefaultError>({
+		mutationFn: () => deleteMyProject(projectId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['myProjects'] })
 		},

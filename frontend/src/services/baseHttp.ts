@@ -25,6 +25,7 @@ const request = async <D, B = undefined>(
 		return data
 	} catch (err) {
 		if (err instanceof AxiosError) {
+			console.log(err, 'errorCheck')
 			if (!err.response) {
 				if (err.code === 'ECONNABORTED') err.code = 'CONNECTION ISSUES'
 				if (err.code === 'ERR_NETWORK') err.code = 'NETWORK ERROR'
@@ -55,7 +56,10 @@ export const post = <D, B = undefined>(url: string, paramsData?: HttpParamsType<
 	request<D, B>('post', url, paramsData)
 
 export const patch = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
-	request<D, B>('post', url, paramsData)
+	request<D, B>('patch', url, paramsData)
+
+export const put = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
+	request<D, B>('put', url, paramsData)
 
 export const remove = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
-	request<D, B>('post', url, paramsData)
+	request<D, B>('delete', url, paramsData)

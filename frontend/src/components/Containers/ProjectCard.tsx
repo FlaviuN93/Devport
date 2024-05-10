@@ -9,20 +9,23 @@ import {
 } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 import { tCardState } from '../../utils/types'
-import { Project } from '../../services/types'
+import { Modal, ModalClose, ModalOpen, ModalWindow } from '../UI/Modal'
+import { useDeleteMyProject } from '../../services/queries'
+import { useProjectContext } from '../../contexts/contextHooks'
 
 interface ProjectCardProps {
+	projectId: number
 	demoURL: string
 	repositoryURL: string
 	technologies: string[]
 	title: string
 	description: string
-	imageURL?: string
+	imageURL: string
 	cardState?: tCardState
-	projectToEdit?: Project
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
+	projectId,
 	imageURL,
 	demoURL,
 	repositoryURL,
@@ -32,6 +35,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
 	cardState = 'presentation',
 }) => {
 	const techJoin = technologies.join(', ')
+	const { isPending, mutate: deleteAction } = useDeleteMyProject(projectId)
+	const { handleProjectSelect } = useProjectContext()
 
 	return (
 		<div className={styles.cardContainer}>
@@ -73,15 +78,45 @@ const ProjectCard: FC<ProjectCardProps> = ({
 							<Button
 								buttonText='Edit'
 								variant='primary'
-								// onClick={h}
+								onClick={() =>
+									handleProjectSelect({
+										id: projectId,
+										name: title,
+										demoURL,
+										repositoryURL,
+										description,
+										imageURL,
+										technologies,
+									})
+								}
 								icon={<PencilSquareIcon className='h-5 w-5' />}
 							/>
-							<Button
-								buttonText='Remove'
-								buttonStyles='text-darkBlue bg-light3 border-0'
-								// onClick={handleClick}
-								icon={<TrashIcon className='h-5 w-5' />}
-							/>
+							<Modal>
+								<ModalOpen openedModalName='removeProject'>
+									<Button
+										buttonText='Remove'
+										buttonStyles='text-darkBlue bg-light3 border-0'
+										icon={<TrashIcon className='h-5 w-5' />}
+									/>
+								</ModalOpen>
+								<ModalWindow modalName='removeProject'>
+									<div className='flex flex-col gap-3 mt-2'>
+										<h4 className=''>Delete Project</h4>
+										<p>Are you sure you want to remove {title}?</p>
+										<ModalClose>
+											<div className='flex gap-2 justify-end'>
+												<Button
+													variant='primary'
+													buttonText='Yes'
+													isLoading={isPending}
+													onClick={() => deleteAction()}
+												/>
+												<Button variant='transparent' buttonText='No' />
+											</div>
+										</ModalClose>
+									</div>
+								</ModalWindow>
+							</Modal>
 						</div>
 					)}
 				</div>

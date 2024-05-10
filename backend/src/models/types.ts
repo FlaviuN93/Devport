@@ -18,12 +18,17 @@ export interface User {
 
 interface Project {
 	id: number
-	imageURL: File
+	imageURL: string
 	name: string
 	demoURL: string
 	repositoryURL: string
 	technologies: string[]
 	description: string
+}
+
+interface Item {
+	id: number
+	name: string
 }
 
 export interface IDefault {
@@ -70,9 +75,4 @@ export interface TokenPayload extends JwtPayload {
 
 export interface ILoginUser extends IDefault {
 	user: LoginUser
-}
-
-interface Item {
-	id: number
-	name: string
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 
-export const useCalculateHeight = (isOpen: boolean) => {
+export const useCalculateWindowHeight = (isOpen: boolean) => {
 	const containerRef = useRef<HTMLDivElement>(null)
 	useEffect(() => {
 		if (isOpen) {

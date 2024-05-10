@@ -9,13 +9,6 @@
 	z-index: 1000;
 }
 
-.modalWrapper {
-	height: 100vh;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
 .modalContainer {
 	width: auto;
 	height: auto;
@@ -26,6 +19,8 @@
 	border-radius: 8px;
 	padding: 1rem 1.5rem;
 	position: relative;
-
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 	z-index: 200;
 }
