@@ -78,7 +78,6 @@ const File = <T extends FieldValues>({
 						content={error}
 						position={isLaptop ? 'right' : 'left'}
 						tooltipStyles={tooltipStyles}
-						showIcon={false}
 						hoverTooltip={showTooltip}
 					/>
 				)}

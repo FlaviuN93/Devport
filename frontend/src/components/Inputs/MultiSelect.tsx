@@ -1,18 +1,18 @@
-import { useState, useRef, FC, useEffect } from 'react'
+import { useState, useRef, FC, useEffect, MutableRefObject } from 'react'
 import styles from './MultiSelect.module.css'
-
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import Tooltip from '../UI/Tooltip'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import { Item } from '../../services/types'
+import { Technology } from '../../services/types'
 import { TailwindClasses } from '../../utils/types'
 
 interface MultiSelectProps {
 	onChange: (selectedItem: string[]) => void
-	items: Item[] | undefined
+	items: Technology[] | undefined
 	placeholderValue: string[]
 	placeholder: string
+	resetRef: MutableRefObject<() => void>
 	error?: string
 	label?: string
 	tooltipStyles?: TailwindClasses
@@ -24,7 +24,8 @@ const MultiSelect: FC<MultiSelectProps> = ({
 	label,
 	error,
 	tooltipStyles,
-	placeholderValue = '',
+	placeholderValue,
+	resetRef,
 	onChange,
 }) => {
 	const [selectedItems, setSelectedItems] = useState<string[]>([])
@@ -33,6 +34,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
 	const selectRef = useRef(null)
 	const divRef = useRef(null)
 	const inputClasses = `${styles.input} ${error ? styles.error : ''}`
+	const [showTooltip, setShowTooltip] = useState(false)
 
 	const handleClose = () => setIsOpen(false)
 	useOutsideClick(selectRef, handleClose, divRef)
@@ -42,13 +44,17 @@ const MultiSelect: FC<MultiSelectProps> = ({
 		setIsOpen(false)
 	}
 
-	const handleToggleItem = async (selectedItem: Item) => {
+	const handleToggleItem = async (selectedItem: Technology) => {
 		setSelectedItems((prevItems) => {
 			const index = prevItems.indexOf(selectedItem.name)
 			if (index === -1) return [...prevItems, selectedItem.name]
 			else return prevItems.filter((item) => item !== selectedItem.name)
 		})
 	}
+
+	useEffect(() => {
+		resetRef.current = handleResetItems
+	}, [resetRef])
 
 	useEffect(() => {
 		onChange(selectedItems)
@@ -59,19 +65,29 @@ const MultiSelect: FC<MultiSelectProps> = ({
 			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>
-			<div className='relative mt-1' ref={divRef}>
+			<div
+				className='relative mt-1'
+				ref={divRef}
+				onMouseOver={() => setShowTooltip(true)}
+				onMouseOut={() => setShowTooltip(false)}
+			>
 				<input
 					className={inputClasses}
 					value={placeholderValue}
 					id={label}
-					onChange={() => {}}
 					placeholder={placeholder}
+					readOnly
 					onClick={() => setIsOpen((prevIsOpen) => !prevIsOpen)}
 				/>
 				{error && (
-					<Tooltip content={error} position={isLaptop ? 'right' : 'top'} tooltipStyles={tooltipStyles} />
+					<Tooltip
+						content={error}
+						position={isLaptop ? 'right' : 'top'}
+						hoverTooltip={showTooltip}
+						tooltipStyles={tooltipStyles}
+					/>
 				)}
-				{selectedItems.length > 0 && !error && (
+				{placeholderValue.length > 0 && !error && (
 					<button className={styles.inputIcon} onClick={handleResetItems}>
 						<XMarkIcon className='h-6 w-6' />
 					</button>
@@ -83,7 +99,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
 								<input
 									name={item.name}
 									type='checkbox'
-									checked={selectedItems.includes(item.name)}
+									checked={placeholderValue.includes(item.name)}
 									onChange={() => handleToggleItem(item)}
 									className={styles.checkboxItem}
 								/>

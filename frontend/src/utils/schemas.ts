@@ -23,14 +23,14 @@ const nameSchema = z
 	.trim()
 	.min(4, 'Name must be at least 4 characters')
 	.max(30, 'Name must be maximum 30 characters')
-	.regex(/^[a-zA-Z]+$/, 'Name can only contain letters')
+	.regex(/^[a-zA-Z_-\s]+$/, 'Name can only contain letters')
 
 const descriptionSchema = z
 	.string()
 	.trim()
 	.min(30, 'Description must be at least 30 characters long.')
-	.max(80, 'Description cannot exceed 80 characters.')
-	.regex(/^[a-zA-Z0-9\s]+$/, 'Description can only contain letters and numbers.')
+	.max(120, 'Description cannot exceed 80 characters.')
+	.regex(/^[a-zA-Z0-9,.-\s]+$/, 'Description can only contain letters and numbers.')
 
 const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
 
@@ -84,8 +84,8 @@ export const projectSettingsSchema = z.object({
 			'Image must have a landscape format.'
 		),
 	name: nameSchema,
-	demoUrl: urlSchema,
-	repositoryUrl: urlSchema,
+	demoURL: urlSchema,
+	repositoryURL: urlSchema,
 	description: descriptionSchema,
 	technologies: z
 		.array(z.string())
@@ -145,8 +145,8 @@ export interface IProfileSettings {
 export interface IProjectSettings {
 	imageFile: File
 	name: string
-	demoUrl: string
-	repositoryUrl: string
+	demoURL: string
+	repositoryURL: string
 	description: string
 	technologies: string[]
 }

@@ -1,4 +1,4 @@
-import { useId } from 'react'
+import { useId, useState } from 'react'
 import { TailwindClasses } from '../../utils/types'
 import styles from './Text.module.css'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
@@ -35,14 +35,18 @@ const Text = <T extends FieldValues>({
 	const uniqueId = useId()
 	const isLaptop = useMediaQuery('(min-width:1024px)')
 	const textClasses = `${styles.text} ${textStyles} ${error ? styles.error : ''}`
-
+	const [showTooltip, setShowTooltip] = useState(false)
 	return (
 		<div className='w-full'>
 			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>
 
-			<div className='relative mt-1'>
+			<div
+				className='relative mt-1'
+				onMouseOver={() => setShowTooltip(true)}
+				onMouseOut={() => setShowTooltip(false)}
+			>
 				{variant === 'input' ? (
 					<input
 						{...register(name)}
@@ -70,7 +74,12 @@ const Text = <T extends FieldValues>({
 					/>
 				)}{' '}
 				{error && typeof error === 'string' && (
-					<Tooltip position={isLaptop ? 'right' : 'top'} content={error} tooltipStyles={tooltipStyles} />
+					<Tooltip
+						position={isLaptop ? 'right' : 'top'}
+						content={error}
+						hoverTooltip={showTooltip}
+						tooltipStyles={tooltipStyles}
+					/>
 				)}
 			</div>
 		</div>

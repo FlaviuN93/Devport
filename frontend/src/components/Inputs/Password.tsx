@@ -30,6 +30,7 @@ const Password = <T extends FieldValues>({
 	error,
 }: PasswordProps<T>) => {
 	const [showPassword, setShowPassword] = useState(false)
+	const [showTooltip, setShowTooltip] = useState(false)
 	const uniqueId = useId()
 	const isLaptop = useMediaQuery('(min-width:1024px)')
 	const handleTogglePassword = () => {
@@ -43,7 +44,11 @@ const Password = <T extends FieldValues>({
 				{label}
 			</label>
 
-			<div className='relative mt-1'>
+			<div
+				className='relative mt-1'
+				onMouseOver={() => setShowTooltip(true)}
+				onMouseOut={() => setShowTooltip(false)}
+			>
 				<input
 					{...register(name)}
 					className={passwordClasses}
@@ -64,7 +69,12 @@ const Password = <T extends FieldValues>({
 				)}
 
 				{error && typeof error === 'string' && (
-					<Tooltip position={isLaptop ? 'right' : 'top'} content={error} tooltipStyles={tooltipStyles} />
+					<Tooltip
+						position={isLaptop ? 'right' : 'top'}
+						hoverTooltip={showTooltip}
+						content={error}
+						tooltipStyles={tooltipStyles}
+					/>
 				)}
 			</div>
 		</div>

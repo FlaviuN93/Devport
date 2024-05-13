@@ -20,51 +20,69 @@ import {
 import ProjectCard from '../components/Containers/ProjectCard'
 import { useProjectContext } from '../contexts/contextHooks'
 import Loading from '../components/UI/Loading'
-import { useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const ProjectSettings = () => {
 	const {
 		handleSubmit,
 		register,
 		control,
-		getValues,
 		setValue,
-		resetField,
 		reset,
-
 		formState: { errors },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
+		mode: 'onSubmit',
 	})
 
 	const { isProjectSelected, selectedProject, disableProjectEdit } = useProjectContext()
-
 	const { data: technologies } = useGetTechnologies()
 	const { data: projects, isLoading } = useGetMyProjects()
 	const { isPending: IsPendingUpdate, mutate: updateMutation } = useUpdateMyProject(selectedProject.id)
 	const { isPending: IsPendingCreate, mutate: createMutation } = useCreateMyProject()
+
+	const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined)
+	const resetMultiSelect = useRef<() => void>(() => {})
 
 	const motionVariants = {
 		hidden: { display: 'none', opacity: 0 },
 		visible: { display: 'flex', opacity: 1 },
 	}
 
-	const previewUrl =
-		getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile) : null
+	useEffect(() => {
+		if (isProjectSelected) {
+			setPreviewUrl(selectedProject.imageURL)
+			reset({
+				demoURL: selectedProject.demoURL,
+				description: selectedProject.description,
+				name: selectedProject.name,
+				repositoryURL: selectedProject.repositoryURL,
+				technologies: selectedProject.technologies,
+			})
+		}
+	}, [isProjectSelected, selectedProject, reset])
 
-	// Next challenge. Need to upload a url somehow from the database to the frontend as a preview.
-	// useEffect(() => {
-	// 	if (isProjectSelected) reset()
-	// }, [isProjectSelected, selectedProject])
+	const handleFileUpload = (selectedFile: File) => {
+		setValue('imageFile', selectedFile, { shouldValidate: true })
+		setPreviewUrl(URL.createObjectURL(selectedFile))
+	}
+
+	const handleResetForm = () => {
+		reset({
+			demoURL: '',
+			description: '',
+			imageFile: undefined,
+			name: '',
+			repositoryURL: '',
+			technologies: [],
+		})
+		resetMultiSelect.current()
+		disableProjectEdit()
+	}
 
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		if (isProjectSelected) return updateMutation(data)
 		createMutation(data)
-	}
-
-	const handleResetForm = () => {
-		reset()
-		disableProjectEdit()
 	}
 
 	return (
@@ -82,7 +100,7 @@ const ProjectSettings = () => {
 					{previewUrl && (
 						<>
 							<XMarkIcon
-								onClick={() => resetField('imageFile')}
+								onClick={() => setPreviewUrl(undefined)}
 								className='h-6 w-6 absolute top-2 right-2 text-black cursor-pointer'
 							/>
 							<img src={previewUrl} className='object-cover h-[195px] aspect-video' />
@@ -107,10 +125,8 @@ const ProjectSettings = () => {
 						icon={<UploadIcon />}
 						name='imageFile'
 						register={register}
-						onFileUpload={(selectedFile: File) =>
-							setValue('imageFile', selectedFile, { shouldValidate: true })
-						}
-						error={errors.imageFile?.message}
+						onFileUpload={handleFileUpload}
+						error={!isProjectSelected ? errors.imageFile?.message : ''}
 					/>
 				</motion.div>
 
@@ -126,29 +142,30 @@ const ProjectSettings = () => {
 					<Text
 						label='Demo URL'
 						register={register}
-						name='demoUrl'
+						name='demoURL'
 						placeholder='Enter the demo URL'
-						error={errors.demoUrl?.message}
+						error={errors.demoURL?.message}
 					/>
 				</div>
 				<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
 					<Text
 						label='Repository URL'
 						register={register}
-						name='repositoryUrl'
+						name='repositoryURL'
 						placeholder='Enter the repository URL'
-						error={errors.repositoryUrl?.message}
+						error={errors.repositoryURL?.message}
 					/>
 
 					<Controller
 						control={control}
 						name='technologies'
-						render={({ field: { value: selectedItems, onChange }, fieldState: { error } }) => (
+						render={({ field: { value: selectedItems, onChange } }) => (
 							<MultiSelect
 								onChange={onChange}
-								placeholderValue={selectedItems}
-								error={error?.message}
+								placeholderValue={selectedItems || []}
+								error={errors.technologies?.message}
 								items={technologies}
+								resetRef={resetMultiSelect}
 								placeholder='Select technologies from the list'
 								label='Technologies'
 							/>

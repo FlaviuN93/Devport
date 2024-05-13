@@ -3,7 +3,7 @@
 	padding: 0.5rem 1rem;
 	font-family: inherit;
 	padding-right: 3rem;
-	border: 1px solid var(--light-2);
+	/* border: 1px solid var(--light-2); */
 	border-radius: 8px;
 	background-color: rgba(255, 255, 255, 0.4);
 	transition: border 0.2s, box-shadow 0.2s;
@@ -17,7 +17,7 @@
 }
 
 .input:read-only {
-	background-color: var(--light-gray);
+	background-color: var(--light-2);
 }
 
 .input::placeholder {
@@ -28,7 +28,7 @@
 .input:focus {
 	outline: none;
 	box-shadow: var(--shadow-sm);
-	background-color: rgba(255, 255, 255, 0.5);
+	background-color: var(--light-2);
 }
 
 .label {
@@ -86,7 +86,7 @@
 }
 
 .error {
-	border: 1.5px solid var(--error);
+	border: 1px solid var(--error);
 	box-shadow: 0 1px 2px rgba(242, 170, 170, 0.2);
 }
 
