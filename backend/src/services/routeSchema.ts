@@ -40,12 +40,16 @@ export const updatePasswordSchema = z.object({
 
 // Project Schema
 export const createProjectSchema = z.object({
-	imageFile: fileSchema
-		.refine((file: File) => !file || file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
-		.refine(
-			async (file: File) => !file || (await getImageFormat('landscape', file)),
-			'Image must have a landscape format.'
-		),
+	imageFile: z.union([
+		fileSchema
+			.refine((file: File | null) => {
+				file && file.size <= MAX_FILE_SIZE
+			}, 'Image must be under 2MB')
+			.refine(async (file: File | null) => {
+				file && (await getImageFormat('landscape', file))
+			}, 'Image must have a landscape format.'),
+		z.null(),
+	]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,
@@ -55,29 +59,6 @@ export const createProjectSchema = z.object({
 		.max(5, 'Select a maximum of 5 technologies'),
 	description: descriptionSchema,
 	user_id: z.string(),
-})
-
-export const updateProjectSchema = z.object({
-	imageFile: z.union([
-		fileSchema
-			.refine((file: File) => !file || file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
-			.refine(
-				async (file: File) => !file || (await getImageFormat('landscape', file)),
-				'Image must have a landscape format.'
-			),
-		z.undefined(),
-	]),
-	name: z.union([nameSchema, z.literal('')]),
-	demoUrl: z.union([urlSchema, z.literal('')]),
-	repositoryURL: z.union([urlSchema, z.literal('')]),
-	description: z.union([descriptionSchema, z.literal('')]),
-	technologies: z.union([
-		z
-			.array(z.string())
-			.min(2, 'Select a minimum of 2 technologies')
-			.max(5, 'Select a maximum of 5 technologies'),
-		z.undefined(),
-	]),
 })
 
 // User Schema

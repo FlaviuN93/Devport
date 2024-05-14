@@ -25,7 +25,6 @@ const request = async <D, B = undefined>(
 		return data
 	} catch (err) {
 		if (err instanceof AxiosError) {
-			console.log(err, 'errorCheck')
 			if (!err.response) {
 				if (err.code === 'ECONNABORTED') err.code = 'CONNECTION ISSUES'
 				if (err.code === 'ERR_NETWORK') err.code = 'NETWORK ERROR'

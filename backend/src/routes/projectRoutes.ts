@@ -22,7 +22,7 @@ projectRouter
 projectRouter
 	.route('/currentUser/:projectId')
 	.get(protectHandler, getMyProjectData)
-	.patch(protectHandler, updateMyProjectData)
+	.put(protectHandler, updateMyProjectData)
 	.delete(protectHandler, deleteMyProjectData)
 
 export default projectRouter

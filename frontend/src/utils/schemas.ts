@@ -22,7 +22,7 @@ const nameSchema = z
 	.string()
 	.trim()
 	.min(4, 'Name must be at least 4 characters')
-	.max(30, 'Name must be maximum 30 characters')
+	.max(50, 'Name must be maximum 50 characters')
 	.regex(/^[a-zA-Z_-\s]+$/, 'Name can only contain letters')
 
 const descriptionSchema = z
@@ -38,9 +38,8 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 
 const fileSchema = z
 	.any()
-	.refine((file: File) => file !== undefined, 'No file has been selected')
 	.refine(
-		(file: File) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
+		(file: File | null) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
 		'File must be a valid image (PNG, JPEG, JPG, WEBP)'
 	)
 
@@ -77,12 +76,15 @@ const MAX_FILE_SIZE = 1024 * 1024 * 5
 const AVATAR_FILE_SIZE = 1024 * 1024
 
 export const projectSettingsSchema = z.object({
-	imageFile: fileSchema
-		.refine((file: File) => !file || file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
-		.refine(
-			async (file: File) => !file || (await getImageFormat('landscape', file)),
-			'Image must have a landscape format.'
-		),
+	imageFile: z.union([
+		fileSchema
+			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
+			.refine(
+				async (file: File | null) => file && (await getImageFormat('landscape', file)),
+				'Image must have a landscape format.'
+			),
+		z.null(),
+	]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,
@@ -96,21 +98,21 @@ export const projectSettingsSchema = z.object({
 export const profileSettingsSchema = z.object({
 	coverFile: z.union([
 		fileSchema
-			.refine((file) => !file || file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
+			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
 			.refine(
-				async (file: File) => !file || (await getImageFormat('landscape', file)),
+				async (file: File | null) => file && (await getImageFormat('landscape', file)),
 				'Image must have a landscape format.'
 			),
-		z.undefined(),
+		z.null(),
 	]),
 	avatarFile: z.union([
 		fileSchema
-			.refine((file) => !file || file.size <= AVATAR_FILE_SIZE, 'Image must be under 1MB')
+			.refine((file: File | null) => file && file.size <= AVATAR_FILE_SIZE, 'Image must be under 1MB')
 			.refine(
-				async (file: File) => !file || (await getImageFormat('portrait', file)),
+				async (file: File | null) => file && (await getImageFormat('portrait', file)),
 				'Image must have a portrait format.'
 			),
-		z.undefined(),
+		z.null(),
 	]),
 	email: z.union([emailSchema, z.literal('')]),
 	name: z.union([nameSchema, z.literal('')]),
@@ -133,8 +135,8 @@ export type SignupType = z.infer<typeof signupSchema>
 export type LoginType = z.infer<typeof loginSchema>
 
 export interface IProfileSettings {
-	coverFile?: File
-	avatarFile?: File
+	coverFile: File | null
+	avatarFile: File | null
 	email?: string
 	name?: string
 	jobTitle?: string
@@ -143,7 +145,7 @@ export interface IProfileSettings {
 }
 
 export interface IProjectSettings {
-	imageFile: File
+	imageFile: File | null
 	name: string
 	demoURL: string
 	repositoryURL: string

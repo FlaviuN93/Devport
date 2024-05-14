@@ -1,3 +1,4 @@
+import { IDefaultError } from '../services/types'
 import { PasswordValidationType } from './types'
 
 export const getMessageForValidation = (messageKey: PasswordValidationType): string => {
@@ -34,4 +35,18 @@ export const getImageFormat = (format: 'landscape' | 'portrait', file: File) => 
 
 		img.src = URL.createObjectURL(file)
 	})
+}
+
+export const createZodErrorMessage = (error: IDefaultError): string | null => {
+	if (error.type === 'zodError' && typeof error.message === 'object') {
+		let toastMessage = `${error.statusTitle}\n Errors: \n`
+
+		for (const [field, errorMessage] of Object.entries(error.message)) {
+			toastMessage += `- ${field}: ${Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage}\n`
+		}
+
+		return toastMessage
+	}
+
+	return null
 }

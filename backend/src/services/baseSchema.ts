@@ -28,7 +28,7 @@ export const nameSchema = z
 	.string()
 	.trim()
 	.min(4, 'Name must be at least 4 characters')
-	.max(30, 'Name must be maximum 30 characters')
+	.max(50, 'Name must be maximum 50 characters')
 	.regex(/^[a-zA-Z0-9-\s]+$/, 'Name can only contain letters and numbers')
 
 export const descriptionSchema = z
@@ -46,8 +46,7 @@ export const urlSchema = z.string().trim().min(1, 'Please enter a repository URL
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 export const fileSchema = z
 	.any()
-	.refine((file: File) => file !== undefined, 'No file has been selected')
 	.refine(
-		(file: File) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
+		(file: File | null) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
 		'File must be a valid image (PNG, JPEG, JPG, WEBP)'
 	)

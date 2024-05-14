@@ -1,4 +1,4 @@
-import { useState, useRef, FC, useEffect, MutableRefObject } from 'react'
+import { useState, useRef, FC, useEffect, MutableRefObject, MouseEvent } from 'react'
 import styles from './MultiSelect.module.css'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
@@ -12,7 +12,7 @@ interface MultiSelectProps {
 	items: Technology[] | undefined
 	placeholderValue: string[]
 	placeholder: string
-	resetRef: MutableRefObject<() => void>
+	resetRef: MutableRefObject<(event: MouseEvent) => void>
 	error?: string
 	label?: string
 	tooltipStyles?: TailwindClasses
@@ -39,7 +39,8 @@ const MultiSelect: FC<MultiSelectProps> = ({
 	const handleClose = () => setIsOpen(false)
 	useOutsideClick(selectRef, handleClose, divRef)
 
-	const handleResetItems = () => {
+	const handleResetItems = (event: MouseEvent) => {
+		if (event) event.preventDefault()
 		setSelectedItems([])
 		setIsOpen(false)
 	}

@@ -28,20 +28,22 @@ const ProjectSettings = () => {
 		register,
 		control,
 		setValue,
+		getValues,
 		reset,
 		formState: { errors },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
-		mode: 'onSubmit',
 	})
 
-	const { isProjectSelected, selectedProject, disableProjectEdit } = useProjectContext()
+	const { isProjectSelected, selectedProject, resetImageUrl, disableProjectEdit } = useProjectContext()
 	const { data: technologies } = useGetTechnologies()
 	const { data: projects, isLoading } = useGetMyProjects()
 	const { isPending: IsPendingUpdate, mutate: updateMutation } = useUpdateMyProject(selectedProject.id)
 	const { isPending: IsPendingCreate, mutate: createMutation } = useCreateMyProject()
 
-	const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined)
+	const url =
+		getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile as File) : null
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const resetMultiSelect = useRef<() => void>(() => {})
 
 	const motionVariants = {
@@ -49,10 +51,16 @@ const ProjectSettings = () => {
 		visible: { display: 'flex', opacity: 1 },
 	}
 
+	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
+	useEffect(() => {
+		if (isProjectSelected && selectedProject.imageURL) setPreviewUrl(selectedProject.imageURL)
+		else setPreviewUrl(url)
+	}, [selectedProject.imageURL, getValues().imageFile, isProjectSelected])
+
 	useEffect(() => {
 		if (isProjectSelected) {
-			setPreviewUrl(selectedProject.imageURL)
 			reset({
+				imageFile: null,
 				demoURL: selectedProject.demoURL,
 				description: selectedProject.description,
 				name: selectedProject.name,
@@ -61,11 +69,6 @@ const ProjectSettings = () => {
 			})
 		}
 	}, [isProjectSelected, selectedProject, reset])
-
-	const handleFileUpload = (selectedFile: File) => {
-		setValue('imageFile', selectedFile, { shouldValidate: true })
-		setPreviewUrl(URL.createObjectURL(selectedFile))
-	}
 
 	const handleResetForm = () => {
 		reset({
@@ -100,7 +103,10 @@ const ProjectSettings = () => {
 					{previewUrl && (
 						<>
 							<XMarkIcon
-								onClick={() => setPreviewUrl(undefined)}
+								onClick={() => {
+									setPreviewUrl(null)
+									resetImageUrl()
+								}}
 								className='h-6 w-6 absolute top-2 right-2 text-black cursor-pointer'
 							/>
 							<img src={previewUrl} className='object-cover h-[195px] aspect-video' />
@@ -125,8 +131,10 @@ const ProjectSettings = () => {
 						icon={<UploadIcon />}
 						name='imageFile'
 						register={register}
-						onFileUpload={handleFileUpload}
-						error={!isProjectSelected ? errors.imageFile?.message : ''}
+						onFileUpload={(selectedFile: File) =>
+							setValue('imageFile', selectedFile, { shouldValidate: true })
+						}
+						error={errors.imageFile?.message}
 					/>
 				</motion.div>
 
@@ -192,7 +200,7 @@ const ProjectSettings = () => {
 					<Button
 						icon={<PlusIcon className='h-5 w-5' />}
 						iconPos='left'
-						buttonText={`${isProjectSelected ? 'Update' : 'Save'}`}
+						buttonText={isProjectSelected ? 'Update' : 'Save'}
 						buttonStyles='px-3'
 						variant='primary'
 						isLoading={isProjectSelected ? IsPendingUpdate : IsPendingCreate}

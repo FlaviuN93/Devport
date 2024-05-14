@@ -27,7 +27,7 @@ const sendZodError = (err: ZodError, res: Response): void => {
 
 const sendErrorInDev = (err: AppError, res: Response) => {
 	// Order matters. This check is first
-	// console.log(err, 'err')
+
 	if (err instanceof ZodError) return sendZodError(err, res)
 
 	if (!err.isClientError) return sendError(err, res, 'serverError')

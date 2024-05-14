@@ -17,6 +17,7 @@ import AppLayout from './components/Layouts/AppLayout'
 import PageNotFound from './pages/PageNotFound'
 import { IDefaultError, IDefaultSuccess } from './services/types'
 import { ProjectProvider } from './contexts/ProjectContext'
+import { createZodErrorMessage } from './utils/functions'
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -38,6 +39,9 @@ const queryClient = new QueryClient({
 	queryCache: new QueryCache({
 		onError: (error: unknown) => {
 			const defaultError = error as IDefaultError
+			const toastMessage = createZodErrorMessage(defaultError)
+			if (toastMessage) return toast.error(toastMessage)
+
 			return toast.error(`${defaultError.statusTitle}: ${defaultError.message}`)
 		},
 	}),
@@ -48,6 +52,8 @@ const queryClient = new QueryClient({
 		},
 		onError: (error: unknown) => {
 			const defaultError = error as IDefaultError
+			const toastMessage = createZodErrorMessage(defaultError)
+			if (toastMessage) return toast.error(toastMessage)
 			return toast.error(`${defaultError.statusTitle}: ${defaultError.message}`)
 		},
 	}),

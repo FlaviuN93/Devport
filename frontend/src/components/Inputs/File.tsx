@@ -1,4 +1,4 @@
-import { ReactNode, useId, useRef, useEffect, useState } from 'react'
+import { ReactNode, useId, useRef, useEffect, useState, ChangeEvent } from 'react'
 import { TailwindClasses } from '../../utils/types'
 import { motion } from 'framer-motion'
 import styles from './File.module.css'
@@ -47,6 +47,13 @@ const File = <T extends FieldValues>({
 	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''}`
 	const fileClasses = `${styles.fileButton} ${fileStyles} ${error ? styles.error : ''} relative`
 
+	const handleSetFile = (event: ChangeEvent<HTMLInputElement>) => {
+		if (event.target.files) {
+			onFileUpload(event.target.files[0])
+			event.target.value = ''
+		}
+	}
+
 	return (
 		<div className={fileContainerClasses}>
 			<label className={styles.label} htmlFor={label}>
@@ -68,7 +75,7 @@ const File = <T extends FieldValues>({
 					name={name}
 					className='absolute opacity-0'
 					id={uniqueId}
-					onChange={(event) => event.target.files && onFileUpload(event.target.files[0])}
+					onChange={handleSetFile}
 					ref={() => register(name)}
 					aria-describedby={`${uniqueId}-${name}`}
 					type='file'

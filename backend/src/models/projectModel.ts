@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { createProjectSchema, updateProjectSchema } from '../services/routeSchema'
+import { createProjectSchema } from '../services/routeSchema'
 import supabase from '../services/supabase'
 import AppError from '../utils/appError'
 import { IDefault, IProjects, IProject, ITechnologies } from './types'
@@ -60,7 +60,7 @@ export const createMyProject = async (reqBody: CreateProject): Promise<IDefault 
 }
 
 export const updateMyProject = async (
-	reqBody: UpdateProject,
+	reqBody: CreateProject,
 	projectId: string
 ): Promise<IDefault | AppError> => {
 	const { error, status } = await supabase.from('projects').update(reqBody).eq('id', projectId)
@@ -78,4 +78,3 @@ export const deleteMyProject = async (id: string): Promise<IDefault | AppError> 
 }
 
 export type CreateProject = z.infer<typeof createProjectSchema>
-export type UpdateProject = z.infer<typeof updateProjectSchema>

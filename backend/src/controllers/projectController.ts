@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { createProjectSchema, updateProjectSchema } from '../services/routeSchema'
+import { createProjectSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import {
 	createMyProject,
@@ -42,7 +42,7 @@ export const getMyProjectData = catchAsync(async (req: Request, res: Response, n
 
 export const createMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	req.body.user_id = req.userId
-	const projectData = createProjectSchema.parse(req.body)
+	const projectData = await createProjectSchema.parseAsync(req.body)
 
 	const response = await createMyProject(projectData)
 	if (response instanceof AppError) return next(response)
@@ -55,7 +55,7 @@ export const createMyProjectData = catchAsync(async (req: Request, res: Response
 
 export const updateMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	req.body.user_id = req.userId
-	const projectData = updateProjectSchema.parse(req.body)
+	const projectData = await createProjectSchema.parseAsync(req.body)
 	const projectId = idSchema.parse(req.params.projectId).toString()
 
 	const response = await updateMyProject(projectData, projectId)
