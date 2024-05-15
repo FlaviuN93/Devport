@@ -1,5 +1,4 @@
 import { protectHandler } from '../controllers/authController'
-
 import express from 'express'
 import {
 	deleteMeHandler,

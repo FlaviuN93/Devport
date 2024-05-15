@@ -7,7 +7,6 @@ import {
 	urlSchema,
 } from '../services/baseSchema'
 import { z } from 'zod'
-import { getImageFormat } from '../utils/functions'
 
 // Constants
 const MAX_FILE_SIZE = 1024 * 1024 * 2
@@ -40,16 +39,13 @@ export const updatePasswordSchema = z.object({
 
 // Project Schema
 export const createProjectSchema = z.object({
-	imageFile: z.union([
-		fileSchema
-			.refine((file: File | null) => {
-				file && file.size <= MAX_FILE_SIZE
-			}, 'Image must be under 2MB')
-			.refine(async (file: File | null) => {
-				file && (await getImageFormat('landscape', file))
-			}, 'Image must have a landscape format.'),
-		z.null(),
-	]),
+	// imageFile: z.union([
+	// 	fileSchema.refine((file: File | null) => {
+	// 		file && file.size <= MAX_FILE_SIZE
+	// 	}, 'Image must be under 2MB'),
+
+	// 	z.null(),
+	// ]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,
@@ -64,21 +60,11 @@ export const createProjectSchema = z.object({
 // User Schema
 export const updateUserSchema = z.object({
 	coverFile: z.union([
-		fileSchema
-			.refine((file) => !file || file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
-			.refine(
-				async (file: File) => !file || (await getImageFormat('landscape', file)),
-				'Image must have a landscape format.'
-			),
+		fileSchema.refine((file) => !file || file.size <= MAX_FILE_SIZE, 'Image must be under 2MB'),
 		z.undefined(),
 	]),
 	avatarFile: z.union([
-		fileSchema
-			.refine((file) => !file || file.size <= AVATAR_FILE_SIZE, 'Image must be under 1MB')
-			.refine(
-				async (file: File) => !file || (await getImageFormat('portrait', file)),
-				'Image must have a portrait format.'
-			),
+		fileSchema.refine((file) => !file || file.size <= AVATAR_FILE_SIZE, 'Image must be under 1MB'),
 		z.undefined(),
 	]),
 	email: z.union([emailSchema, z.literal('')]),

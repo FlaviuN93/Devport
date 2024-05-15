@@ -21,6 +21,7 @@ import ProjectCard from '../components/Containers/ProjectCard'
 import { useProjectContext } from '../contexts/contextHooks'
 import Loading from '../components/UI/Loading'
 import { useEffect, useRef, useState } from 'react'
+import { convertToFormData } from '../utils/functions'
 
 const ProjectSettings = () => {
 	const {
@@ -84,8 +85,10 @@ const ProjectSettings = () => {
 	}
 
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
-		if (isProjectSelected) return updateMutation(data)
-		createMutation(data)
+		const projectFormData = convertToFormData(data)
+
+		if (isProjectSelected) return updateMutation(projectFormData)
+		createMutation(projectFormData)
 	}
 
 	return (

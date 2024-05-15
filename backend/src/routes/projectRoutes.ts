@@ -8,6 +8,8 @@ import {
 	deleteMyProjectData,
 	getMyProjectData,
 	getTechnologiesData,
+	uploadProjectImage,
+	resizeProjectImage,
 } from '../controllers/projectController'
 
 const projectRouter = express.Router()
@@ -17,12 +19,12 @@ projectRouter.route('/currentUser/technologies').get(protectHandler, getTechnolo
 projectRouter
 	.route('/currentUser')
 	.get(protectHandler, getMyProjectsData)
-	.post(protectHandler, createMyProjectData)
+	.post(protectHandler, uploadProjectImage, resizeProjectImage, createMyProjectData)
 
 projectRouter
 	.route('/currentUser/:projectId')
 	.get(protectHandler, getMyProjectData)
-	.put(protectHandler, updateMyProjectData)
+	.put(protectHandler, uploadProjectImage, updateMyProjectData)
 	.delete(protectHandler, deleteMyProjectData)
 
 export default projectRouter

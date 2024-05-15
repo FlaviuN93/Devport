@@ -13,3 +13,7 @@ export type PasswordValidationType =
 	| 'specialChar'
 
 export type tCardState = 'presentation' | 'edit'
+
+export interface ObjectType {
+	[key: string]: any
+}

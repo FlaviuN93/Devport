@@ -1,5 +1,5 @@
 import { IDefaultError } from '../services/types'
-import { PasswordValidationType } from './types'
+import { ObjectType, PasswordValidationType } from './types'
 
 export const getMessageForValidation = (messageKey: PasswordValidationType): string => {
 	const validationRules = {
@@ -49,4 +49,15 @@ export const createZodErrorMessage = (error: IDefaultError): string | null => {
 	}
 
 	return null
+}
+
+export const convertToFormData = (data: ObjectType): FormData => {
+	const formData = new FormData()
+	const fileKeys = Object.keys(data).filter((key: string) => key.endsWith('File'))
+	const bodyData = { ...data }
+	fileKeys.forEach((key) => formData.append(key, data[key]))
+
+	fileKeys.forEach((key) => delete bodyData[key])
+	formData.append('body', JSON.stringify(bodyData))
+	return formData
 }

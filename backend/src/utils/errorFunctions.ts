@@ -2,8 +2,19 @@ import { NextFunction, Request, Response } from 'express'
 import AppError from './appError'
 import { ZodError } from 'zod'
 import { isEmptyObject } from './functions'
+import { MulterError } from 'multer'
 
+const unknownErrorMessage = 'Something went wrong on our end. Please give us time to fix the problem.'
 // Helper Functions
+
+const unknownError = (err: Error, res: Response, message?: string): void => {
+	console.log(err.message)
+	res.status(500).json({
+		type: 'serverError',
+		message: message ? message : err.message,
+	})
+}
+
 const sendError = (err: AppError, res: Response, type: 'clientError' | 'serverError'): void => {
 	res.status(err.statusCode).json({
 		type,
@@ -25,26 +36,36 @@ const sendZodError = (err: ZodError, res: Response): void => {
 	})
 }
 
+const sendMulterError = (err: MulterError, res: Response): void => {
+	if (process.env.NODE_ENV === 'development') {
+		console.log(err.field, err.code, err.message, 'multerError')
+	}
+
+	res.status(400).json({
+		type: 'clientError',
+		message: err.message,
+	})
+}
+
 const sendErrorInDev = (err: AppError, res: Response) => {
 	// Order matters. This check is first
-
+	if (err instanceof TypeError) return unknownError(err, res)
 	if (err instanceof ZodError) return sendZodError(err, res)
+	if (err instanceof MulterError) return sendMulterError(err, res)
 
-	if (!err.isClientError) return sendError(err, res, 'serverError')
+	if (!err.isClientError) return unknownError(err, res)
 
 	sendError(err, res, 'clientError')
 }
 
 const sendErrorInProd = (err: AppError, res: Response) => {
 	// Order matters. This check is first
-	if (err instanceof ZodError) return sendZodError(err, res)
+	if (err instanceof TypeError) return unknownError(err, res, unknownErrorMessage)
 
-	if (!err.isClientError) {
-		return res.status(500).json({
-			type: 'serverError',
-			message: 'Something went very wrong!',
-		})
-	}
+	if (err instanceof ZodError) return sendZodError(err, res)
+	if (err instanceof MulterError) return sendMulterError(err, res)
+
+	if (!err.isClientError) return unknownError(err, res, unknownErrorMessage)
 
 	res.status(err.statusCode).json({
 		type: 'clientError',

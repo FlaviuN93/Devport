@@ -3,6 +3,7 @@ import AppError from './appError'
 import crypto from 'crypto'
 import { NextFunction, Response } from 'express'
 import { array } from 'zod'
+import { CreateProject } from '../models/projectModel'
 
 // Remove User Data that should not be returned
 export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T => {
@@ -74,22 +75,6 @@ export const sendTokenByCookie = (token: string | undefined, res: Response, next
 	if (process.env.NODE_ENV === 'production') cookieOptions.secure = true
 
 	res.cookie('jwt', token, cookieOptions)
-}
-
-// This one doesn't work. I will have to come up with another function for backend
-// I will look at Multer when the time comes
-export const getImageFormat = (format: 'landscape' | 'portrait', file: File) => {
-	return new Promise<boolean>((resolve) => {
-		const img = document.createElement('img')
-		img.onload = function () {
-			const aspectRatio = img.width / img.height
-			if (format === 'landscape' && aspectRatio < 1.3) resolve(false)
-			if (format === 'portrait' && aspectRatio > 0.9) resolve(false)
-			resolve(true)
-		}
-
-		img.src = URL.createObjectURL(file)
-	})
 }
 
 type PasswordResetTokenData = {

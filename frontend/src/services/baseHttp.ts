@@ -18,9 +18,6 @@ const request = async <D, B = undefined>(
 			url,
 			data: paramsData?.body,
 			params: paramsData?.query,
-			headers: {
-				'content-type': paramsData?.body instanceof FormData ? 'multipart/form-data' : 'application/json',
-			},
 		})
 		return data
 	} catch (err) {
