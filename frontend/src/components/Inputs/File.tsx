@@ -43,7 +43,7 @@ const File = <T extends FieldValues>({
 		})
 	}, [size.width, size.height])
 
-	const isLaptop = useMediaQuery('(min-width:1024px)')
+	const isMobile = useMediaQuery('(max-width:480px)')
 	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''}`
 	const fileClasses = `${styles.fileButton} ${fileStyles} ${error ? styles.error : ''} relative`
 
@@ -83,7 +83,7 @@ const File = <T extends FieldValues>({
 				{error && (
 					<Tooltip
 						content={error}
-						position={isLaptop ? 'right' : 'left'}
+						position={isMobile ? 'top' : 'right'}
 						tooltipStyles={tooltipStyles}
 						hoverTooltip={showTooltip}
 					/>

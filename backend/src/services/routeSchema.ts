@@ -39,13 +39,7 @@ export const updatePasswordSchema = z.object({
 
 // Project Schema
 export const createProjectSchema = z.object({
-	// imageFile: z.union([
-	// 	fileSchema.refine((file: File | null) => {
-	// 		file && file.size <= MAX_FILE_SIZE
-	// 	}, 'Image must be under 2MB'),
-
-	// 	z.null(),
-	// ]),
+	imageFile: z.union([urlSchema, z.null()]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,

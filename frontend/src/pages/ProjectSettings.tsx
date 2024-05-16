@@ -54,14 +54,13 @@ const ProjectSettings = () => {
 
 	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
 	useEffect(() => {
-		if (isProjectSelected && selectedProject.imageURL) setPreviewUrl(selectedProject.imageURL)
+		if (selectedProject.imageFile) setPreviewUrl(selectedProject.imageFile)
 		else setPreviewUrl(url)
-	}, [selectedProject.imageURL, getValues().imageFile, isProjectSelected])
+	}, [selectedProject.imageFile, getValues().imageFile])
 
 	useEffect(() => {
 		if (isProjectSelected) {
 			reset({
-				imageFile: null,
 				demoURL: selectedProject.demoURL,
 				description: selectedProject.description,
 				name: selectedProject.name,
@@ -225,7 +224,7 @@ const ProjectSettings = () => {
 								technologies={project.technologies}
 								title={project.name}
 								cardState='edit'
-								imageURL={project.imageURL}
+								imageFile={project.imageFile}
 							/>
 						)
 					})}

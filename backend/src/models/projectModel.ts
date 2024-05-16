@@ -4,6 +4,22 @@ import supabase from '../services/supabase'
 import AppError from '../utils/appError'
 import { IDefault, IProjects, IProject, ITechnologies } from './types'
 
+export const addProjectImageToSupabase = async (
+	file: Express.Multer.File | undefined
+): Promise<string | AppError> => {
+	if (!file) return new AppError(400)
+
+	const { data: url, error } = await supabase.storage
+		.from('project-images')
+		.upload(file.filename, file.buffer, { contentType: file.mimetype })
+	console.log(error, 'error')
+	if (error) return new AppError(400)
+
+	const { data } = supabase.storage.from('project-images').getPublicUrl(url.path)
+
+	return data.publicUrl
+}
+
 export const getTechnologies = async (): Promise<ITechnologies | AppError> => {
 	const { data: technologies, error, status } = await supabase.from('technologies').select('id,name')
 
@@ -23,7 +39,7 @@ export const getMyProjects = async (userId: string): Promise<IProjects | AppErro
 		status,
 	} = await supabase
 		.from('projects')
-		.select('id,imageURL,name,demoURL,repositoryURL,technologies,description')
+		.select('id,imageFile,name,demoURL,repositoryURL,technologies,description')
 		.eq('user_id', userId)
 
 	if (error) return new AppError(status)
@@ -40,7 +56,7 @@ export const getMyProject = async (userId: string, projectId: string): Promise<I
 		status,
 	} = await supabase
 		.from('projects')
-		.select('id,imageURL,name,demoURL,repositoryURL,technologies,description')
+		.select('id,imageFile,name,demoURL,repositoryURL,technologies,description')
 		.eq('id', projectId)
 		.eq('user_id', userId)
 		.single()
@@ -64,7 +80,7 @@ export const updateMyProject = async (
 	projectId: string
 ): Promise<IDefault | AppError> => {
 	const { error, status } = await supabase.from('projects').update(reqBody).eq('id', projectId)
-
+	console.log(error, 'error')
 	if (error) return new AppError(status)
 
 	return { statusCode: 200, statusText: ['update', 'project has been updated successfully'] }

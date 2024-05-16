@@ -17,12 +17,12 @@ export const idSchema = z.coerce
 export const passwordSchema = z
 	.string()
 	.trim()
-	.regex(/^.{8,}/, 'Password must have at least 8 characters')
-	.regex(/^.{1,20}$/, 'Password must have a maximum of 20 characters')
-	.regex(/[a-z]/, 'Password must have one lowercase character')
-	.regex(/[A-Z]/, 'Password must have one uppercase character')
-	.regex(/\d/, 'Password must contain one number')
-	.regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, 'Password must contain a special characters')
+	.regex(/^.{8,}/, ' Must have at least 8 characters')
+	.regex(/^.{1,20}$/, ' Must have a maximum of 20 characters')
+	.regex(/[a-z]/, ' Must have one lowercase character')
+	.regex(/[A-Z]/, ' Must have one uppercase character')
+	.regex(/\d/, ' Must contain one number')
+	.regex(/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/, 'Must contain a special characters')
 
 export const nameSchema = z
 	.string()
@@ -34,12 +34,9 @@ export const nameSchema = z
 export const descriptionSchema = z
 	.string()
 	.trim()
-	.min(75, 'Description must be at least 75 characters long.')
-	.max(150, 'Description cannot exceed 150 characters.')
-	.regex(
-		/^[a-zA-Z0-9\s\.\!\?\'\,\-]+$/,
-		'Description cannot contain special characters. Keep it simple and clean.'
-	)
+	.min(100, 'Must be at least 100 characters long.')
+	.max(175, 'Cannot exceed 175 characters.')
+	.regex(/^[a-zA-Z0-9\s\.\!\?\'\,\-]+$/, 'Cannot contain special characters. Keep it simple and clean.')
 
 export const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
 

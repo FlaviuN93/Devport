@@ -4,7 +4,7 @@ import { HttpParamsType } from './types'
 const instance = axios.create({
 	baseURL: import.meta.env.VITE_LOCAL_DOMAIN,
 	withCredentials: true,
-	timeout: 1000,
+	timeout: 5000,
 })
 
 const request = async <D, B = undefined>(
@@ -19,6 +19,7 @@ const request = async <D, B = undefined>(
 			data: paramsData?.body,
 			params: paramsData?.query,
 		})
+
 		return data
 	} catch (err) {
 		if (err instanceof AxiosError) {
@@ -28,17 +29,19 @@ const request = async <D, B = undefined>(
 				throw {
 					statusTitle: `500: ${err.code}`,
 					message: 'Something went wrong. Please give us some time to fix the problem.',
+					type: err.code,
 				}
 			}
-
 			const error = err.response
 			throw {
 				statusTitle: `${error.status} ${error.statusText}`,
 				message: error.data.message,
+				type: error.data.type,
 			}
 		}
 
 		throw {
+			type: 'Server Error',
 			statusTitle: '500: Server Error',
 			message: 'Something went wrong. Please give us some time to fix the problem.',
 		}

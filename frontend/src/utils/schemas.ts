@@ -28,8 +28,8 @@ const nameSchema = z
 const descriptionSchema = z
 	.string()
 	.trim()
-	.min(30, 'Description must be at least 30 characters long.')
-	.max(120, 'Description cannot exceed 80 characters.')
+	.min(100, 'Description must be at least 100 characters long.')
+	.max(175, 'Description cannot exceed 175 characters.')
 	.regex(/^[a-zA-Z0-9,.-\s]+$/, 'Description can only contain letters and numbers.')
 
 const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
@@ -73,12 +73,12 @@ export const resetPasswordSchema = z
 
 // Settings Schemas
 const MAX_FILE_SIZE = 1024 * 1024 * 5
-const AVATAR_FILE_SIZE = 1024 * 1024
+const AVATAR_FILE_SIZE = 1024 * 1024 * 3
 
 export const projectSettingsSchema = z.object({
 	imageFile: z.union([
 		fileSchema
-			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
+			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
 			.refine(
 				async (file: File | null) => file && (await getImageFormat('landscape', file)),
 				'Image must have a landscape format.'
@@ -98,7 +98,7 @@ export const projectSettingsSchema = z.object({
 export const profileSettingsSchema = z.object({
 	coverFile: z.union([
 		fileSchema
-			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 2MB')
+			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
 			.refine(
 				async (file: File | null) => file && (await getImageFormat('landscape', file)),
 				'Image must have a landscape format.'
@@ -107,7 +107,7 @@ export const profileSettingsSchema = z.object({
 	]),
 	avatarFile: z.union([
 		fileSchema
-			.refine((file: File | null) => file && file.size <= AVATAR_FILE_SIZE, 'Image must be under 1MB')
+			.refine((file: File | null) => file && file.size <= AVATAR_FILE_SIZE, 'Image must be under 3MB')
 			.refine(
 				async (file: File | null) => file && (await getImageFormat('portrait', file)),
 				'Image must have a portrait format.'

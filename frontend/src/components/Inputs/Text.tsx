@@ -75,7 +75,7 @@ const Text = <T extends FieldValues>({
 				)}{' '}
 				{error && typeof error === 'string' && (
 					<Tooltip
-						position={isLaptop ? 'right' : 'top'}
+						position={isLaptop ? 'right' : 'bottom'}
 						content={error}
 						hoverTooltip={showTooltip}
 						tooltipStyles={tooltipStyles}

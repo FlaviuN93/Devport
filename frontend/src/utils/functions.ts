@@ -39,10 +39,11 @@ export const getImageFormat = (format: 'landscape' | 'portrait', file: File) => 
 
 export const createZodErrorMessage = (error: IDefaultError): string | null => {
 	if (error.type === 'zodError' && typeof error.message === 'object') {
-		let toastMessage = `${error.statusTitle}\n Errors: \n`
-
+		let toastMessage = `${error.statusTitle.toUpperCase()}:\n `
 		for (const [field, errorMessage] of Object.entries(error.message)) {
-			toastMessage += `- ${field}: ${Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage}\n`
+			toastMessage += `• ${field.toUpperCase()}: ${
+				Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage
+			}\n`
 		}
 
 		return toastMessage
@@ -57,7 +58,7 @@ export const convertToFormData = (data: ObjectType): FormData => {
 	const bodyData = { ...data }
 	fileKeys.forEach((key) => formData.append(key, data[key]))
 
-	fileKeys.forEach((key) => delete bodyData[key])
+	fileKeys.forEach((key) => (bodyData[key] = null))
 	formData.append('body', JSON.stringify(bodyData))
 	return formData
 }

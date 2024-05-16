@@ -18,7 +18,7 @@ export interface User {
 
 interface Project {
 	id: number
-	imageURL: string
+	imageFile: string
 	name: string
 	demoURL: string
 	repositoryURL: string

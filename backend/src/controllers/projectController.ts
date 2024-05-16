@@ -4,6 +4,7 @@ import sharp from 'sharp'
 import { createProjectSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import {
+	addProjectImageToSupabase,
 	createMyProject,
 	deleteMyProject,
 	getMyProject,
@@ -25,14 +26,17 @@ const upload = multer({
 })
 
 export const uploadProjectImage = upload.single('imageFile')
-export const resizeProjectImage = (req: Request, res: Response, next: NextFunction) => {
+export const resizeProjectImage = async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
 
-	sharp(req.file.buffer)
-		.resize(600, 400)
+	const reSizedBuffer = await sharp(req.file.buffer)
+		.resize(600, 400, { fit: 'inside' })
 		.toFormat('jpeg')
-		.jpeg({ quality: 90 })
-		.toFile(`public/img/projects/project-${req.userId}-${Date.now()}.jpeg`)
+		.toBuffer()
+
+	req.file.buffer = reSizedBuffer
+	req.file.mimetype = 'image/jpeg'
+	req.file.filename = `project-${req.userId}-${Date.now()}.jpeg`
 	next()
 }
 
@@ -83,13 +87,17 @@ export const updateMyProjectData = catchAsync(async (req: Request, res: Response
 	const projectData = createProjectSchema.parse(reqBody)
 	const projectId = idSchema.parse(req.params.projectId).toString()
 
-	// const response = await updateMyProject(projectData, projectId)
-	// if (response instanceof AppError) return next(response)
-	// const { statusCode, statusText = [] } = response
+	const url = await addProjectImageToSupabase(req.file)
+	if (url instanceof AppError) return next(url)
+	projectData.imageFile = url
 
-	// res.status(statusCode).json({
-	// 	message: getSuccessMessage(statusCode, statusText),
-	// })
+	const response = await updateMyProject(projectData, projectId)
+	if (response instanceof AppError) return next(response)
+	const { statusCode, statusText = [] } = response
+
+	res.status(statusCode).json({
+		message: getSuccessMessage(statusCode, statusText),
+	})
 })
 
 export const deleteMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

@@ -20,13 +20,13 @@ interface ProjectCardProps {
 	technologies: string[]
 	title: string
 	description: string
-	imageURL: string
+	imageFile: string
 	cardState?: tCardState
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
 	projectId,
-	imageURL,
+	imageFile,
 	demoURL,
 	repositoryURL,
 	technologies,
@@ -40,8 +40,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
 	return (
 		<div className={styles.cardContainer}>
-			{imageURL ? (
-				<img src={imageURL} alt='Image' className={styles.cardImage} />
+			{imageFile ? (
+				<img src={imageFile} alt='Image' className={styles.cardImage} />
 			) : (
 				<PhotoIcon className={styles.cardImage} />
 			)}
@@ -85,7 +85,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 										demoURL,
 										repositoryURL,
 										description,
-										imageURL,
+										imageFile,
 										technologies,
 									})
 								}

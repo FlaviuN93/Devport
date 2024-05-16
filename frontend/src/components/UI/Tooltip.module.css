@@ -29,22 +29,24 @@
 }
 
 .top {
-	bottom: 100%;
+	bottom: 50%;
 	right: 0;
-	margin-bottom: 2px;
+	margin-bottom: 5px;
+	transform: translateY(-25%);
 }
 
 .right {
 	bottom: 50%;
 	left: 100%;
 	transform: translateY(50%);
-	margin-left: 2px;
+	margin-left: 10px;
 }
 
 .bottom {
-	top: 100%;
-	left: 0;
-	margin-top: 2px;
+	top: 50%;
+	right: 0;
+	margin-top: 5px;
+	transform: translateY(25%);
 }
 
 .left {

@@ -35,7 +35,7 @@ export interface IProject extends IDefaultSuccess {
 
 export interface Project {
 	id: number
-	imageURL: string
+	imageFile: string
 	name: string
 	demoURL: string
 	repositoryURL: string

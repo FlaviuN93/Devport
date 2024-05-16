@@ -29,7 +29,6 @@ const sendZodError = (err: ZodError, res: Response): void => {
 		? formattedErrors.formErrors
 		: formattedErrors.fieldErrors
 
-	// if(formattedErrors.fieldErrors)
 	res.status(400).json({
 		type: 'zodError',
 		message: errorMessage,

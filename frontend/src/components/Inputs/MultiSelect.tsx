@@ -83,7 +83,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
 				{error && (
 					<Tooltip
 						content={error}
-						position={isLaptop ? 'right' : 'top'}
+						position={isLaptop ? 'right' : 'bottom'}
 						hoverTooltip={showTooltip}
 						tooltipStyles={tooltipStyles}
 					/>

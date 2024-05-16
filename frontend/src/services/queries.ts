@@ -80,6 +80,9 @@ export const useCreateMyProject = () =>
 export const useUpdateMyProject = (projectId: number) =>
 	useMutation<IDefaultSuccess, IDefaultError, FormData>({
 		mutationFn: (body) => updateMyProject(projectId, body),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['myProjects'] })
+		},
 	})
 
 export const useDeleteMyProject = (projectId: number) =>

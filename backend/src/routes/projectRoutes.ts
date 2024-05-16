@@ -24,7 +24,7 @@ projectRouter
 projectRouter
 	.route('/currentUser/:projectId')
 	.get(protectHandler, getMyProjectData)
-	.put(protectHandler, uploadProjectImage, updateMyProjectData)
+	.put(protectHandler, uploadProjectImage, resizeProjectImage, updateMyProjectData)
 	.delete(protectHandler, deleteMyProjectData)
 
 export default projectRouter

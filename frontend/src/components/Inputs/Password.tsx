@@ -70,7 +70,7 @@ const Password = <T extends FieldValues>({
 
 				{error && typeof error === 'string' && (
 					<Tooltip
-						position={isLaptop ? 'right' : 'top'}
+						position={isLaptop ? 'right' : 'bottom'}
 						hoverTooltip={showTooltip}
 						content={error}
 						tooltipStyles={tooltipStyles}
