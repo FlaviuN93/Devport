@@ -1,4 +1,4 @@
-import { QueryClient, useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import {
 	changePassword,
 	createMyProject,
@@ -28,8 +28,7 @@ import {
 	User,
 } from './types'
 import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
-
-const queryClient = new QueryClient()
+import { queryClient } from './queryClient'
 
 // User Queries and Mutations
 export const useGetMe = () =>

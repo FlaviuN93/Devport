@@ -20,6 +20,7 @@
 
 .cardImage {
 	aspect-ratio: 16/9;
+	stroke-width: 1px;
 }
 
 .articleDescription {
@@ -44,20 +45,18 @@
 	}
 }
 
-@media (min-width: 640px) {
+@media (min-width: 768px) {
+	.cardImage {
+		width: 35%;
+		min-width: 250px;
+	}
+
 	.cardContainer {
 		flex-direction: row;
 		gap: 1.5rem;
 	}
 
-	.cardImage {
-		min-width: 40%;
-	}
-}
-
-@media (min-width: 768px) {
-	.cardImage {
-		min-width: 35%;
-		aspect-ratio: 14/9;
+	.contentContainer {
+		width: 65%;
 	}
 }

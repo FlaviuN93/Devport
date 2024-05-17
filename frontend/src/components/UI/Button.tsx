@@ -25,7 +25,9 @@ const Button: FC<ButtonProps> = ({
 	iconPos = 'left',
 	buttonStyles,
 }) => {
-	const buttonClasses = `${styles.button} ${variant ? styles[variant] : ''} ${buttonStyles}`
+	const buttonClasses = `${styles.button} ${disabled ? styles.disabled : ''} ${
+		variant ? styles[variant] : ''
+	} ${buttonStyles}`
 	const iconClasses = `inline-block ${styles[iconPos]}`
 	let pressed = false
 	const handleClick = (event: MouseEvent) => {

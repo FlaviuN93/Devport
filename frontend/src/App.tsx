@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { UserProvider } from './contexts/UserContext'
-import toast, { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
 import ForgotPassword from './pages/ForgotPassword'
 import HomePage from './pages/HomePage'
 import Portfolio from './pages/Portfolio'
@@ -15,49 +15,8 @@ import Login from './pages/Login'
 import AuthLayout from './components/Layouts/AuthLayout'
 import AppLayout from './components/Layouts/AppLayout'
 import PageNotFound from './pages/PageNotFound'
-import { IDefaultError, IDefaultSuccess } from './services/types'
 import { ProjectProvider } from './contexts/ProjectContext'
-import { createZodErrorMessage } from './utils/functions'
-
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			staleTime: 60 * 1000,
-			retry: 1,
-			throwOnError: (error: unknown) => {
-				const defaultError = error as IDefaultError
-				return defaultError.statusTitle.startsWith('500')
-			},
-		},
-		mutations: {
-			throwOnError: (error: unknown) => {
-				const defaultError = error as IDefaultError
-				return defaultError.statusTitle.startsWith('500')
-			},
-		},
-	},
-	queryCache: new QueryCache({
-		onError: (error: unknown) => {
-			const defaultError = error as IDefaultError
-			const toastMessage = createZodErrorMessage(defaultError)
-			if (toastMessage) return toast.error(toastMessage)
-
-			return toast.error(`${defaultError.statusTitle}: ${defaultError.message}`)
-		},
-	}),
-	mutationCache: new MutationCache({
-		onSuccess: (data: unknown) => {
-			const { message } = data as IDefaultSuccess
-			return toast.success(`${message}`)
-		},
-		onError: (error: unknown) => {
-			const defaultError = error as IDefaultError
-			const toastMessage = createZodErrorMessage(defaultError)
-			if (toastMessage) return toast.error(toastMessage)
-			return toast.error(`${defaultError.statusTitle}: ${defaultError.message}`)
-		},
-	}),
-})
+import { queryClient } from './services/queryClient'
 
 function App() {
 	return (

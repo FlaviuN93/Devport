@@ -4,7 +4,6 @@ import sharp from 'sharp'
 import { createProjectSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import {
-	addProjectImageToSupabase,
 	createMyProject,
 	deleteMyProject,
 	getMyProject,
@@ -14,6 +13,7 @@ import {
 } from '../models/projectModel'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { idSchema } from '../services/baseSchema'
+import { removeProjectImage, updateProjectImage } from '../models/imagesModel'
 
 const upload = multer({
 	storage: multer.memoryStorage(),
@@ -69,9 +69,16 @@ export const getMyProjectData = catchAsync(async (req: Request, res: Response, n
 })
 
 export const createMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	req.body.user_id = req.userId
-	const projectData = await createProjectSchema.parseAsync(req.body)
+	const reqBody = JSON.parse(req.body.body)
+	reqBody.user_id = req.userId
 
+	if (req.file) {
+		const url = await updateProjectImage(req.file, undefined)
+		if (url instanceof AppError) return next(url)
+		reqBody.imageFile = url
+	}
+
+	const projectData = createProjectSchema.parse(reqBody)
 	const response = await createMyProject(projectData)
 	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText = [] } = response
@@ -84,15 +91,18 @@ export const createMyProjectData = catchAsync(async (req: Request, res: Response
 export const updateMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const reqBody = JSON.parse(req.body.body)
 	reqBody.user_id = req.userId
-	const projectData = createProjectSchema.parse(reqBody)
 	const projectId = idSchema.parse(req.params.projectId).toString()
 
-	const url = await addProjectImageToSupabase(req.file)
-	if (url instanceof AppError) return next(url)
-	projectData.imageFile = url
+	if (req.file) {
+		const url = await updateProjectImage(req.file, projectId)
+		if (url instanceof AppError) return next(url)
+		reqBody.imageFile = url
+	}
 
+	const projectData = createProjectSchema.parse(reqBody)
 	const response = await updateMyProject(projectData, projectId)
 	if (response instanceof AppError) return next(response)
+
 	const { statusCode, statusText = [] } = response
 
 	res.status(statusCode).json({
@@ -103,6 +113,8 @@ export const updateMyProjectData = catchAsync(async (req: Request, res: Response
 export const deleteMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const projectId = idSchema.parse(req.params.projectId).toString()
 
+	const imageResponse = await removeProjectImage(projectId)
+	if (imageResponse instanceof AppError) return next(imageResponse)
 	const response = await deleteMyProject(projectId)
 	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText = [] } = response

@@ -77,6 +77,8 @@ export const sendTokenByCookie = (token: string | undefined, res: Response, next
 	res.cookie('jwt', token, cookieOptions)
 }
 
+export const splitStringByPattern = (value: string, pattern: string): string => value.split(pattern)[1]
+
 type PasswordResetTokenData = {
 	resetToken: string
 	encryptedResetToken: string

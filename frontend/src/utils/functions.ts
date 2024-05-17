@@ -58,7 +58,7 @@ export const convertToFormData = (data: ObjectType): FormData => {
 	const bodyData = { ...data }
 	fileKeys.forEach((key) => formData.append(key, data[key]))
 
-	fileKeys.forEach((key) => (bodyData[key] = null))
+	fileKeys.forEach((key) => delete bodyData[key])
 	formData.append('body', JSON.stringify(bodyData))
 	return formData
 }

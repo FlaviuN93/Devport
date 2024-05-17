@@ -166,9 +166,9 @@ h6 {
 	margin: 0 auto;
 }
 
-@media (min-width: 320px) {
+@media (min-width: 480px) {
 	.settingsContainer {
-		width: calc(300px + (100vw - 320px) * 1);
+		width: calc(300px + (100vw - 320px) * 0.95);
 	}
 
 	.portfolioContainer {
@@ -181,18 +181,13 @@ h6 {
 		font-size: 1.1rem;
 	}
 
-	.settingsContainer {
-		width: calc(300px + (100vw - 320px) * 0.75);
-	}
-
 	.portfolioContainer {
-		width: calc(300px + (100vw - 320px) * 1);
 		padding: 0.25rem;
 	}
 }
 
 @media (min-width: 1024px) {
 	.settingsContainer {
-		width: calc(300px + (100vw - 320px) * 0.6);
+		width: calc(300px + (100vw - 320px) * 0.75);
 	}
 }

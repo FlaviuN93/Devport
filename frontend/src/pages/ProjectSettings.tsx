@@ -31,25 +31,42 @@ const ProjectSettings = () => {
 		setValue,
 		getValues,
 		reset,
-		formState: { errors },
+		formState: { errors, isDirty },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
+		defaultValues: { imageFile: null },
 	})
 
 	const { isProjectSelected, selectedProject, resetImageUrl, disableProjectEdit } = useProjectContext()
 	const { data: technologies } = useGetTechnologies()
 	const { data: projects, isLoading } = useGetMyProjects()
+
 	const { isPending: IsPendingUpdate, mutate: updateMutation } = useUpdateMyProject(selectedProject.id)
 	const { isPending: IsPendingCreate, mutate: createMutation } = useCreateMyProject()
 
 	const url =
 		getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile as File) : null
+
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const resetMultiSelect = useRef<() => void>(() => {})
 
 	const motionVariants = {
 		hidden: { display: 'none', opacity: 0 },
 		visible: { display: 'flex', opacity: 1 },
+	}
+
+	const handleResetForm = () => {
+		reset({
+			imageFile: null,
+			demoURL: '',
+			description: '',
+			name: '',
+			repositoryURL: '',
+			technologies: [],
+		})
+		resetMultiSelect.current()
+		resetImageUrl()
+		disableProjectEdit()
 	}
 
 	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
@@ -61,6 +78,7 @@ const ProjectSettings = () => {
 	useEffect(() => {
 		if (isProjectSelected) {
 			reset({
+				imageFile: null,
 				demoURL: selectedProject.demoURL,
 				description: selectedProject.description,
 				name: selectedProject.name,
@@ -70,22 +88,8 @@ const ProjectSettings = () => {
 		}
 	}, [isProjectSelected, selectedProject, reset])
 
-	const handleResetForm = () => {
-		reset({
-			demoURL: '',
-			description: '',
-			imageFile: undefined,
-			name: '',
-			repositoryURL: '',
-			technologies: [],
-		})
-		resetMultiSelect.current()
-		disableProjectEdit()
-	}
-
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		const projectFormData = convertToFormData(data)
-
 		if (isProjectSelected) return updateMutation(projectFormData)
 		createMutation(projectFormData)
 	}
@@ -204,6 +208,7 @@ const ProjectSettings = () => {
 						iconPos='left'
 						buttonText={isProjectSelected ? 'Update' : 'Save'}
 						buttonStyles='px-3'
+						disabled={!isDirty}
 						variant='primary'
 						isLoading={isProjectSelected ? IsPendingUpdate : IsPendingCreate}
 						type='submit'
