@@ -55,7 +55,8 @@ export const ModalWindow: FC<IModalWindow> = ({
 		}
 	}, [modalPosition, modalWindowRef])
 
-	const modalWindowClasses = `${styles.modalContainer} ${modalWindowStyles}`
+	const modalWindowClasses = `${styles.modalContainer} ${modalWindowStyles ? modalWindowStyles : ''}`
+
 	const motionVariants = {
 		hidden: { opacity: 0 },
 		visible: { opacity: 1 },
@@ -68,8 +69,8 @@ export const ModalWindow: FC<IModalWindow> = ({
 			initial='hidden'
 			animate={isModalOpen ? 'visible' : 'hidden'}
 			variants={motionVariants}
-			transition={{ duration: 0.2 }}
 			className={styles.modalOverlay}
+			transition={{ duration: 0.1 }}
 			ref={overlayRef}
 		>
 			<motion.div

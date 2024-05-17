@@ -22,6 +22,7 @@ import { useProjectContext } from '../contexts/contextHooks'
 import Loading from '../components/UI/Loading'
 import { useEffect, useRef, useState } from 'react'
 import { convertToFormData } from '../utils/functions'
+import { motionVariants } from '../utils/variables'
 
 const ProjectSettings = () => {
 	const {
@@ -49,11 +50,6 @@ const ProjectSettings = () => {
 
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const resetMultiSelect = useRef<() => void>(() => {})
-
-	const motionVariants = {
-		hidden: { display: 'none', opacity: 0 },
-		visible: { display: 'flex', opacity: 1 },
-	}
 
 	const handleResetForm = () => {
 		reset({

@@ -60,7 +60,6 @@ html {
 
 body {
 	container-type: inline-size;
-	overflow: auto;
 	min-height: 100vh;
 }
 

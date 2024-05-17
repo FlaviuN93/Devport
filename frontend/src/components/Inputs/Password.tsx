@@ -45,7 +45,7 @@ const Password = <T extends FieldValues>({
 			</label>
 
 			<div
-				className='relative mt-1'
+				className='relative mt-1.5'
 				onMouseOver={() => setShowTooltip(true)}
 				onMouseOut={() => setShowTooltip(false)}
 			>

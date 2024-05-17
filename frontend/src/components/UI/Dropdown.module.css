@@ -18,8 +18,7 @@
 }
 
 .active {
-	transition: all 0.2s ease-in;
-	text-decoration: underline;
+	text-decoration: none;
 	background-color: var(--light-2);
 	border-radius: 4px;
 }
@@ -34,7 +33,11 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-width: 2.5rem;
+	min-width: 2rem;
+}
+
+.dropdownToggle:focus {
+	outline: 1px solid var(--light-2);
 }
 
 .toggleImage {

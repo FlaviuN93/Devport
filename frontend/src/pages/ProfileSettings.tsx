@@ -9,43 +9,102 @@ import CheckCircleIcon from '../assets/check circle-1.svg?react'
 // import ProjectIcon from '../assets/project.svg?react'
 import Avatar from '../components/UI/Avatar'
 import Text from '../components/Inputs/Text'
-import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { EllipsisVerticalIcon, PhotoIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import { PencilSquareIcon } from '@heroicons/react/16/solid'
-import { useDeleteMe, useGetMe, useUpdateMe } from '../services/queries'
+import { useChangePassword, useDeleteMe, useGetMe, useUpdateMe } from '../services/queries'
 import Alert from '../components/UI/Alert'
+import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from '../components/UI/Dropdown'
+
+import { Modal, ModalOpen, ModalWindow, ModalClose } from '../components/UI/Modal'
+import ResetPasswordForm from '../components/Containers/ResetPasswordForm'
 
 const ProfileSettings = () => {
 	const {
 		handleSubmit,
 		register,
 		formState: { errors },
-		// setValue,
+		setValue,
+		getValues,
+		reset,
 	} = useForm<IProfileSettings>({
 		resolver: zodResolver(profileSettingsSchema),
 	})
 
 	const { data: getUser, error: getUserError, isSuccess, isLoading, refetch } = useGetMe()
-	const { error: updateUserError, isPending: pendingUpdate, mutate: mutateUpdate } = useUpdateMe()
-	const { error: deleteUserError, isPending: pendingDelete, mutate: mutateDelete } = useDeleteMe()
+	const { error: updateUserError, isPending: pendingUpdate, mutate: updateUser } = useUpdateMe()
+	const { error: deleteUserError, isPending: pendingDelete, mutate: deleteUser } = useDeleteMe()
+	const { error: changePasswordError, isPending, mutate: changePassword } = useChangePassword()
 	console.log(getUserError, 'hello')
-	// const [selectedImage, setSelectedImage] = useState<File | null>(null)
 	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
-
-	const handleFile = (selectedFile: File) => {
-		if (!selectedFile) return
-		// console.log(selectedFile, 'selectedFile')
-		// setValue('imageFile', selectedFile, { shouldValidate: true })
-		// console.log(errors.imageFile, 'hello')
-		// setSelectedImage(selectedFile)
-	}
 
 	return (
 		<section className='settingsContainer'>
 			{getUserError && (
 				<Alert message={getUserError?.message} statusTitle={getUserError?.statusTitle} onClose={() => {}} />
 			)}
-			<h4 className='mt-2 mb-4'>Profile Settings</h4>
-			<form onSubmit={handleSubmit((data) => mutateUpdate(data))} className='formSettingsContainer'>
+			<div className='flex justify-between items-center'>
+				<h4 className='mt-2 mb-4'>Profile Settings</h4>
+				<Dropdown>
+					<DropdownToggle
+						btnStyles='p-1 shadow-xs border-light2'
+						icon={<EllipsisVerticalIcon className='h-6 w-6' />}
+					/>
+					<DropdownMenu position='bottom'>
+						<DropdownItem itemId='changePassword'>
+							<Modal>
+								<ModalOpen openedModalName='changePassword'>
+									<Button variant='text' buttonText='Change Password' />
+								</ModalOpen>
+								<ModalWindow showCloseIcon={true} modalName='changePassword'>
+									<h2 className='mb-6'>Change Password</h2>
+									<ResetPasswordForm
+										formName='changePassword'
+										passwordLabel='Password'
+										confirmLabel='Confirm Password'
+										formStyles='mb-4'
+									/>
+									<ModalClose>
+										<div className='flex gap-2 justify-end'>
+											<Button type='button' variant='transparent' buttonText='Cancel' />
+											<Button formName='changePassword' type='submit' variant='primary' buttonText='Change' />
+										</div>
+									</ModalClose>
+								</ModalWindow>
+							</Modal>
+						</DropdownItem>
+						<DropdownItem itemId='deleteAccount' itemStyles='p-4'>
+							<Modal>
+								<ModalOpen openedModalName='deleteAccount'>
+									<Button
+										variant='text'
+										buttonText='Delete Account'
+										buttonStyles='text-darkBlue bg-light3 border-0'
+									/>
+								</ModalOpen>
+								<ModalWindow modalName='deleteAccount'>
+									<div className='flex flex-col gap-3 mt-2'>
+										<h4 className='text-danger'>Delete Account</h4>
+										<p>Are you sure you want to remove user?</p>
+										<ModalClose>
+											<div className='flex gap-2 justify-end'>
+												<Button
+													variant='primary'
+													buttonText='Yes'
+													buttonStyles='bg-danger'
+													isLoading={isLoading}
+													onClick={() => deleteUser()}
+												/>
+												<Button variant='transparent' buttonText='No' />
+											</div>
+										</ModalClose>
+									</div>
+								</ModalWindow>
+							</Modal>
+						</DropdownItem>
+					</DropdownMenu>
+				</Dropdown>
+			</div>
+			<form onSubmit={handleSubmit((data) => updateUser(data))} className='formSettingsContainer'>
 				<div className='imageFileContainer'>
 					<img src='' alt='' />
 					<Avatar icon={<UserCircleIcon className='w-6 h-6' />} avatarStyles='h-[52px] w-[52px]' />
@@ -59,8 +118,8 @@ const ProfileSettings = () => {
 							icon={<PhotoIcon className='h-6 w-6' />}
 							register={register}
 							name='coverFile'
-							onFileUpload={handleFile}
-							// error={errors.imageFile?.message}
+							onFileUpload={(coverFile: File) => setValue('coverFile', coverFile, { shouldValidate: true })}
+							error={errors.coverFile?.message}
 						/>
 
 						<File
@@ -68,18 +127,11 @@ const ProfileSettings = () => {
 							icon={<UserCircleIcon className='w-6 h-6' />}
 							register={register}
 							name='avatarFile'
-							onFileUpload={handleFile}
-							// error={errors.imageFile?.message}
+							onFileUpload={(avatarFile: File) =>
+								setValue('avatarFile', avatarFile, { shouldValidate: true })
+							}
+							error={errors.avatarFile?.message}
 						/>
-
-						{/* <Button
-							buttonText='Delete Image'
-							buttonStyles='text-danger bg-white border-0'
-							iconPos='left'
-							variant='transparent'
-							icon={<TrashIcon />}
-							// onClick={() => setSelectedImage(null)}
-						/> */}
 					</div>
 				</div>
 
@@ -139,7 +191,7 @@ const ProfileSettings = () => {
 					<Button
 						icon={<CheckCircleIcon className='h-5 w-5' />}
 						iconPos='left'
-						buttonText={isSuccess ? 'Update' : 'Add'}
+						buttonText='Save'
 						buttonStyles='mb-2 w-full sm:place-self-end sm:w-auto'
 						variant='primary'
 						isLoading={pendingUpdate}

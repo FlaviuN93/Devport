@@ -7,8 +7,10 @@ export const useOutsideClick = (
 ) => {
 	useEffect(() => {
 		const listener = (event: MouseEvent) => {
+			// if (!ref.current || ref.current.contains(event.target as Node)) return
 			if (!ref.current || ref.current.contains(event.target as Node)) return
-			if (optionalRef?.current && optionalRef.current.contains(event.target as Node)) return
+			if (!optionalRef?.current || optionalRef.current.contains(event.target as Node)) return
+			// if (optionalRef?.current && !ref.current.contains(event.target as Node)) return
 			handler()
 		}
 		// @ts-expect-error: Safe conversion, we know the listener matches the type

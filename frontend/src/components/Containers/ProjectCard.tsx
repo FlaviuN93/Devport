@@ -91,6 +91,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 								}
 								icon={<PencilSquareIcon className='h-5 w-5' />}
 							/>
+
 							<Modal>
 								<ModalOpen openedModalName='removeProject'>
 									<Button

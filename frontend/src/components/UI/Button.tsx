@@ -11,6 +11,7 @@ interface ButtonProps {
 	icon?: ReactNode
 	iconPos?: 'left' | 'right'
 	isLoading?: boolean
+	formName?: string
 	buttonStyles?: TailwindClasses
 }
 
@@ -23,6 +24,7 @@ const Button: FC<ButtonProps> = ({
 	type = 'button',
 	variant,
 	iconPos = 'left',
+	formName,
 	buttonStyles,
 }) => {
 	const buttonClasses = `${styles.button} ${disabled ? styles.disabled : ''} ${
@@ -45,6 +47,7 @@ const Button: FC<ButtonProps> = ({
 			aria-disabled={disabled ? 'true' : 'false'}
 			onClick={handleClick}
 			type={type}
+			form={formName}
 		>
 			{isLoading && <span className={`${styles.spinner} ${iconClasses}`}></span>}
 			{icon && !isLoading && <span className={iconClasses}>{icon}</span>}
