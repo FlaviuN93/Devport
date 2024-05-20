@@ -8,18 +8,25 @@
 }
 
 .item {
+	text-decoration: none;
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
 	font-size: 0.875rem;
-	font-weight: 500;
+	gap: 1rem;
 	margin-bottom: 0.75rem;
+	color: var(--black-1);
 	cursor: pointer;
+	transition: background-color 0.2s ease;
+	border: 1px solid white;
+	width: max-content;
+	transition: all 0.2s ease-out;
 }
 
-.active {
-	text-decoration: none;
-	background-color: var(--light-2);
+.item:hover,
+.item:active {
+	text-shadow: 0 5px 10px var(--gray);
+	/* border: 1px solid var(--light-gray); */
+	/* box-shadow: var(--shadow-sm); */
 	border-radius: 4px;
 }
 

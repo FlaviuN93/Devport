@@ -4,8 +4,9 @@ interface DropdownContextProps {
 	isOpen: boolean
 	handleClose: () => void
 	handleToggle: () => void
-	menuRef: RefObject<HTMLDivElement>
 	dropdownBtnRef: RefObject<HTMLButtonElement>
+	menuRef: RefObject<HTMLDivElement>
+	exclusionRef: RefObject<HTMLDivElement>
 	selectedItemId: string | null
 	handleSelect: (itemId: string) => void
 }
@@ -17,6 +18,7 @@ export const DropdownProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [selectedItemId, setSelectedItemId] = useState<string | null>(null)
 	const menuRef = useRef<HTMLDivElement>(null)
 	const dropdownBtnRef = useRef<HTMLButtonElement>(null)
+	const exclusionRef = useRef<HTMLDivElement>(null)
 
 	const handleSelect = (itemId: string) => setSelectedItemId(itemId)
 
@@ -34,6 +36,7 @@ export const DropdownProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				dropdownBtnRef,
 				selectedItemId,
 				handleSelect,
+				exclusionRef,
 			}}
 		>
 			{children}

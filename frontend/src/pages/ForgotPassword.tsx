@@ -36,7 +36,7 @@ const ForgotPassword = () => {
 				/>
 			</form>
 			<Link to='/auth/login' className='-mt-3 text-start'>
-				<Button buttonText='Back to login' variant='text' />
+				<Button buttonText='Back to login' variant='text' buttonStyles='text-violet' />
 			</Link>
 		</div>
 	)

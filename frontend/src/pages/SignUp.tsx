@@ -2,13 +2,16 @@ import Button from '../components/UI/Button'
 import GithubIcon from '../assets/github.svg?react'
 import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { SignupType, signupSchema } from '../utils/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useValidateResult } from '../hooks/useValidateResult'
 import PasswordValidation from '../components/Inputs/PasswordValidation'
 import { passwordInitialState } from '../utils/variables'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useUserContext } from '../contexts/contextHooks'
+import { useRegister } from '../services/queries'
+import { useValidateResult } from '../hooks/useValidateResult'
 
 const SignUp = () => {
 	const {
@@ -18,18 +21,24 @@ const SignUp = () => {
 	} = useForm<SignupType>({
 		resolver: zodResolver(signupSchema),
 		criteriaMode: 'all',
-		mode: 'onChange',
+		reValidateMode: 'onChange',
 	})
-
+	// Have to ask a friend what's the best approach, onSubmit first then onChange after or onChange from the start
+	const { data, isSuccess, mutate: registerUser, isPending } = useRegister()
+	const navigate = useNavigate()
 	const passwordErrorTypes = errors.password?.types?.invalid_string
 	const { errors: passwordErrors, isValid } = useValidateResult(passwordErrorTypes, passwordInitialState)
+	const { handleSetUser } = useUserContext()
+
+	useEffect(() => {
+		if (isSuccess) {
+			handleSetUser(data.user)
+			navigate('/project-settings')
+		}
+	}, [navigate, isSuccess, data, handleSetUser])
 
 	const handleGithubSignup = () => {
 		console.log('Github')
-	}
-
-	const signupData: SubmitHandler<SignupType> = (data) => {
-		console.log('Submitted Data', data, errors, 'helrolsd')
 	}
 
 	return (
@@ -46,7 +55,7 @@ const SignUp = () => {
 			/>
 			<div className='borderWord'>or</div>
 
-			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit(signupData)}>
+			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => registerUser(data))}>
 				<Text
 					name='email'
 					register={register}
@@ -67,13 +76,18 @@ const SignUp = () => {
 					))}
 				</div>
 
-				<Button buttonText='Create account' type='submit' buttonStyles='bg-violet text-white w-full' />
+				<Button
+					buttonText='Create account'
+					type='submit'
+					isLoading={isPending}
+					buttonStyles='bg-violet text-white w-full'
+				/>
 			</form>
 
 			<div className='-mt-3 text-start'>
 				<span className='text-[12px] text-gray mr-1'>Already have an account?</span>
 				<Link to={'login'}>
-					<Button variant='text' buttonText='Log in' />
+					<Button variant='text' buttonText='Log in' buttonStyles='text-violet' />
 				</Link>
 			</div>
 		</div>

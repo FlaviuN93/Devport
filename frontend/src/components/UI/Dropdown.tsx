@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react'
+import { FC, ReactElement, ReactNode } from 'react'
 import { TailwindClasses, tPositions } from '../../utils/types'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import styles from './Dropdown.module.css'
@@ -21,7 +21,7 @@ interface MenuProps {
 
 interface ItemProps {
 	itemId: string
-	children: ReactNode
+	children: ReactElement
 	itemStyles?: TailwindClasses
 }
 
@@ -34,8 +34,9 @@ const Dropdown: FC<{ children: ReactNode }> = ({ children }) => {
 }
 
 const DropdownMenu: FC<MenuProps> = ({ children, position = 'bottom', menuStyles = '' }) => {
-	const { isOpen, handleClose, menuRef, dropdownBtnRef } = useDropdownContext()
-	useOutsideClick(menuRef, handleClose, dropdownBtnRef)
+	const { isOpen, handleClose, menuRef, dropdownBtnRef, exclusionRef } = useDropdownContext()
+
+	useOutsideClick(menuRef, handleClose, dropdownBtnRef, exclusionRef)
 
 	const menuClasses = `${styles.menu} ${styles[position]} ${menuStyles}`
 
@@ -52,7 +53,6 @@ const DropdownMenu: FC<MenuProps> = ({ children, position = 'bottom', menuStyles
 
 const DropdownToggle: FC<ToggleProps> = ({ btnStyles = '', buttonText, icon, imageUrl }) => {
 	const { handleToggle, dropdownBtnRef } = useDropdownContext()
-
 	const buttonClasses = `${styles.dropdownToggle} ${btnStyles}`
 	const iconClasses = `${icon && buttonText && 'ml-2'}`
 

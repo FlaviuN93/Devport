@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ValidateResult } from 'react-hook-form'
 
 type ValidationError = {
@@ -9,26 +9,31 @@ type ValidationError = {
 export const useValidateResult = (errorTypes: ValidateResult, initialState: ValidationError[]) => {
 	const [errors, setErrors] = useState(initialState)
 	const [isValid, setIsValid] = useState(false)
-	const hasMounted = useRef(false)
+	const [hasUpdated, setHasUpdated] = useState(false)
 
 	useEffect(() => {
 		setErrors((state) => {
-			if (hasMounted.current) {
-				if (typeof errorTypes === 'undefined') {
-					setIsValid(false)
-					return state.map((error) => ({ ...error, isActive: true }))
-				}
+			// This is for initial render
+			if (typeof errorTypes === 'undefined' && !hasUpdated) {
+				return state.map((error) => ({ ...error, isActive: false }))
+			}
 
-				if (typeof errorTypes === 'string' || Array.isArray(errorTypes)) {
-					setIsValid(true)
-					return state.map((error) =>
-						errorTypes.includes(error.type) ? { ...error, isActive: false } : { ...error, isActive: true }
-					)
-				}
-			} else hasMounted.current = true
+			// This is for a succesful password
+			if (typeof errorTypes === 'undefined' && hasUpdated) {
+				setIsValid(false)
+				return state.map((error) => ({ ...error, isActive: true }))
+			}
+
+			if (typeof errorTypes === 'string' || Array.isArray(errorTypes)) {
+				setIsValid(true)
+				setHasUpdated(true)
+				return state.map((error) =>
+					errorTypes.includes(error.type) ? { ...error, isActive: false } : { ...error, isActive: true }
+				)
+			}
 			return state
 		})
-	}, [errorTypes])
+	}, [errorTypes, hasUpdated])
 
 	return { errors, isValid }
 }

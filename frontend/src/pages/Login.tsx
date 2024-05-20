@@ -18,7 +18,7 @@ const Login = () => {
 	} = useForm<LoginType>({
 		resolver: zodResolver(loginSchema),
 	})
-	const { mutate, isPending, isSuccess, data } = useLogin()
+	const { mutate: loginUser, isPending, isSuccess, data } = useLogin()
 	const { handleSetUser } = useUserContext()
 	const navigate = useNavigate()
 
@@ -47,7 +47,7 @@ const Login = () => {
 			/>
 			<div className='borderWord'>or</div>
 
-			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => mutate(data))}>
+			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => loginUser(data))}>
 				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />
 
 				<Password
@@ -58,7 +58,7 @@ const Login = () => {
 					error={errors.password?.message}
 				/>
 				<Link to='/auth/forgot-password' className='place-self-end -mt-2'>
-					<Button buttonText='Forgot Password' variant='text' />
+					<Button buttonText='Forgot Password' variant='text' buttonStyles='text-violet' />
 				</Link>
 				<Button
 					buttonText='Sign In'
@@ -71,7 +71,7 @@ const Login = () => {
 			<div className='-mt-3 text-start'>
 				<span className='text-[12px] text-gray mr-1'>Not a member?</span>
 				<Link to='/auth'>
-					<Button variant='text' buttonText='Create an account' />
+					<Button variant='text' buttonText='Create an account' buttonStyles='text-violet' />
 				</Link>
 			</div>
 		</div>

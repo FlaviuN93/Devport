@@ -53,7 +53,7 @@ const ProfileSettings = () => {
 						<DropdownItem itemId='changePassword'>
 							<Modal>
 								<ModalOpen openedModalName='changePassword'>
-									<Button variant='text' buttonText='Change Password' />
+									<span>Change Password</span>
 								</ModalOpen>
 								<ModalWindow showCloseIcon={true} modalName='changePassword'>
 									<h2 className='mb-6'>Change Password</h2>
@@ -72,14 +72,10 @@ const ProfileSettings = () => {
 								</ModalWindow>
 							</Modal>
 						</DropdownItem>
-						<DropdownItem itemId='deleteAccount' itemStyles='p-4'>
+						<DropdownItem itemId='deleteAccount'>
 							<Modal>
 								<ModalOpen openedModalName='deleteAccount'>
-									<Button
-										variant='text'
-										buttonText='Delete Account'
-										buttonStyles='text-darkBlue bg-light3 border-0'
-									/>
+									<span>Delete Account</span>
 								</ModalOpen>
 								<ModalWindow modalName='deleteAccount'>
 									<div className='flex flex-col gap-3 mt-2'>
@@ -92,7 +88,7 @@ const ProfileSettings = () => {
 													buttonText='Yes'
 													buttonStyles='bg-danger'
 													isLoading={isLoading}
-													onClick={() => deleteUser()}
+													// onClick={() => deleteUser()}
 												/>
 												<Button variant='transparent' buttonText='No' />
 											</div>

@@ -13,9 +13,7 @@ const PasswordValidation: FC<IProps> = ({ type, isActive }) => {
 	const messageKey = type as PasswordValidationType
 	const message = getMessageForValidation(messageKey)
 
-	const activeClass = `${
-		isActive && 'text-violet'
-	} w-4 h-4 text-lightGray transition-colors duration-300`
+	const activeClass = `${isActive && 'text-violet'} w-4 h-4 text-lightGray transition-colors duration-200`
 
 	return (
 		<div className={styles.container}>

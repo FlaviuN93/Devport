@@ -42,28 +42,23 @@ const ProjectSettings = () => {
 	const { data: technologies } = useGetTechnologies()
 	const { data: projects, isLoading } = useGetMyProjects()
 
-	const { isPending: IsPendingUpdate, mutate: updateMutation } = useUpdateMyProject(selectedProject.id)
-	const { isPending: IsPendingCreate, mutate: createMutation } = useCreateMyProject()
+	const {
+		isPending: IsPendingUpdate,
+		mutate: updateMutation,
+		isSuccess: isUpdateSuccess,
+	} = useUpdateMyProject(selectedProject.id)
+
+	const {
+		isPending: IsPendingCreate,
+		mutate: createMutation,
+		isSuccess: isCreateSuccess,
+	} = useCreateMyProject()
 
 	const url =
 		getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile as File) : null
 
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const resetMultiSelect = useRef<() => void>(() => {})
-
-	const handleResetForm = () => {
-		reset({
-			imageFile: null,
-			demoURL: '',
-			description: '',
-			name: '',
-			repositoryURL: '',
-			technologies: [],
-		})
-		resetMultiSelect.current()
-		resetImageUrl()
-		disableProjectEdit()
-	}
 
 	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
 	useEffect(() => {
@@ -84,10 +79,31 @@ const ProjectSettings = () => {
 		}
 	}, [isProjectSelected, selectedProject, reset])
 
+	const handleResetForm = () => {
+		reset({
+			imageFile: null,
+			demoURL: '',
+			description: '',
+			name: '',
+			repositoryURL: '',
+			technologies: [],
+		})
+
+		resetImageUrl()
+		resetMultiSelect.current()
+		disableProjectEdit()
+	}
+
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		const projectFormData = convertToFormData(data)
-		if (isProjectSelected) return updateMutation(projectFormData)
-		createMutation(projectFormData)
+		if (isProjectSelected) updateMutation(projectFormData)
+		else createMutation(projectFormData)
+
+		if (isUpdateSuccess || isCreateSuccess) {
+			setTimeout(() => {
+				handleResetForm()
+			}, 500)
+		}
 	}
 
 	return (

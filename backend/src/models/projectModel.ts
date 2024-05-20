@@ -8,7 +8,7 @@ export const getTechnologies = async (): Promise<ITechnologies | AppError> => {
 	const { data: technologies, error, status } = await supabase.from('technologies').select('id,name')
 
 	if (error) return new AppError(status)
-	if (technologies.length === 0) return new AppError(500)
+	if (technologies.length === 0) return { technologies: [], statusCode: 200 }
 
 	return {
 		technologies,
@@ -27,8 +27,7 @@ export const getMyProjects = async (userId: string): Promise<IProjects | AppErro
 		.eq('user_id', userId)
 
 	if (error) return new AppError(status)
-	if (projects === null || projects.length === 0)
-		return new AppError(404, 'User does not have any projects created')
+	if (projects === null || projects.length === 0) return { projects: [], statusCode: 200 }
 
 	return { projects, statusCode: 200 }
 }
@@ -63,6 +62,11 @@ export const updateMyProject = async (
 	reqBody: CreateProject,
 	projectId: string
 ): Promise<IDefault | AppError> => {
+	if (reqBody.imageFile === null) {
+		const { data } = await supabase.from('projects').select('imageFile').eq('id', projectId).single()
+		reqBody.imageFile = data?.imageFile
+	}
+
 	const { error, status } = await supabase.from('projects').update(reqBody).eq('id', projectId)
 	if (error) return new AppError(status)
 
