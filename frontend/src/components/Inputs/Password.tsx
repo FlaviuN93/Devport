@@ -7,11 +7,12 @@ import Tooltip from '../UI/Tooltip'
 import useMediaQuery from '../../hooks/useMediaQuery'
 
 export interface PasswordProps<T extends FieldValues> {
-	register: UseFormRegister<T>
 	name: Path<T>
 	placeholder: string
 	disabled?: boolean
+	register?: UseFormRegister<T>
 	label?: string
+	onChange?: (value: string) => void
 	showPasswordBtn?: boolean
 	tooltipStyles?: TailwindClasses
 	passwordStyles?: TailwindClasses
@@ -25,6 +26,7 @@ const Password = <T extends FieldValues>({
 	passwordStyles = '',
 	label,
 	name,
+	onChange,
 	register,
 	showPasswordBtn = false,
 	error,
@@ -50,10 +52,11 @@ const Password = <T extends FieldValues>({
 				onMouseOut={() => setShowTooltip(false)}
 			>
 				<input
-					{...register(name)}
+					{...register?.(name)}
 					className={passwordClasses}
 					name={name}
 					id={label}
+					onChange={(event) => onChange?.(event.target.value)}
 					placeholder={placeholder}
 					aria-placeholder={placeholder}
 					aria-describedby={`${uniqueId}-${name}`}

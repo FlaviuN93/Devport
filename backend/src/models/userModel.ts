@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import bcrypt from 'bcrypt'
 import supabase from '../services/supabase'
 import { updateUserSchema } from '../services/routeSchema'
 import AppError from '../utils/appError'
@@ -42,15 +43,29 @@ export const updateUser = async (reqBody: UpdateUserType, userId: string): Promi
 
 	const newUser = removeUserColumns<User>(user)
 
-	return { user: newUser, statusCode: 200, statusText: ['update', 'user has been updated successfully'] }
+	return {
+		user: newUser,
+		statusCode: 200,
+		statusText: ['update', 'Your profile information has been updated successfully'],
+	}
 }
 
-export const deleteUser = async (userId: string): Promise<IDefault | AppError> => {
-	const { error, status } = await supabase.from('users').delete().eq('id', userId).select('id').single()
+export const deleteUser = async (password: string, userId: string): Promise<IDefault | AppError> => {
+	const { data: user } = await supabase.from('users').select('*').eq('id', userId).single()
+
+	const arePasswordsEqual = await bcrypt.compare(password, user.password)
+	if (!arePasswordsEqual) return new AppError(401, `Hmm, your passwords don't match. Try again.`)
+
+	const { error, status, data } = await supabase
+		.from('users')
+		.delete()
+		.eq('id', userId)
+		.select('fullName')
+		.single()
 
 	if (error) return new AppError(status)
 
-	return { statusCode: 200, statusText: ['delete', 'user has been deleted'] }
+	return { statusCode: 200, statusText: ['delete', `${data.fullName} account has been deleted`] }
 }
 
 type UpdateUserType = z.infer<typeof updateUserSchema>

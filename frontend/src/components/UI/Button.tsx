@@ -13,6 +13,7 @@ interface ButtonProps {
 	isLoading?: boolean
 	formName?: string
 	buttonStyles?: TailwindClasses
+	iconStyles?: TailwindClasses
 }
 
 const Button: FC<ButtonProps> = ({
@@ -26,11 +27,12 @@ const Button: FC<ButtonProps> = ({
 	iconPos = 'left',
 	formName,
 	buttonStyles,
+	iconStyles,
 }) => {
 	const buttonClasses = `${styles.button} ${disabled ? styles.disabled : ''} ${
 		variant ? styles[variant] : ''
 	} ${buttonStyles ? buttonStyles : ''}`
-	const iconClasses = `inline-block ${iconPos ? styles[iconPos] : ''}`
+	const iconClasses = `inline-block ${iconPos ? styles[iconPos] : ''} ${iconStyles}`
 	let pressed = false
 	const handleClick = (event: MouseEvent) => {
 		if (!disabled && onClick) {

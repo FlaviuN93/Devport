@@ -11,7 +11,8 @@ import { TailwindClasses } from '../../utils/types'
 import Button from '../UI/Button'
 import { useModalContext } from '../../contexts/contextHooks'
 import { useChangePassword, useResetPassword } from '../../services/queries'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { CheckCircleIcon } from '@heroicons/react/24/solid'
 
 interface IResetPasswordForm {
 	buttonName: string
@@ -45,6 +46,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 	const passwordErrorTypes = errors.password?.types?.invalid_string
 	const { errors: passwordErrors, isValid } = useValidateResult(passwordErrorTypes, passwordInitialState)
 
+	const navigate = useNavigate()
 	const { close } = useModalContext()
 	const { resetToken } = useParams()
 
@@ -62,12 +64,17 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 
 	useEffect(() => {
 		if (resetToken) {
-			if (!isResetLoading && isResetSuccess) reset()
+			if (!isResetLoading && isResetSuccess) {
+				reset()
+				setTimeout(() => {
+					navigate('/auth/login')
+				}, 1000)
+			}
 		} else if (!isChangeLoading && isChangeSuccess) {
 			reset()
 			close()
 		}
-	}, [isResetLoading, isResetSuccess, reset, isChangeLoading, isChangeSuccess, close, resetToken])
+	}, [isResetLoading, isResetSuccess, reset, isChangeLoading, isChangeSuccess, close, resetToken, navigate])
 
 	const handleResetPassword: SubmitHandler<ResetPasswordType> = (data) => {
 		if (resetToken) return resetPassword(data)
@@ -108,6 +115,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 					type='submit'
 					buttonStyles={buttonStyles}
 					isLoading={isResetLoading || isChangeLoading}
+					icon={<CheckCircleIcon className='h-5 w-5' />}
 				/>
 			</div>
 		</form>

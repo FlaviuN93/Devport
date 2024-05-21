@@ -41,7 +41,7 @@ export const createZodErrorMessage = (error: IDefaultError): string | null => {
 	if (error.type === 'zodError' && typeof error.message === 'object') {
 		let toastMessage = `${error.statusTitle.toUpperCase()}:\n `
 		for (const [field, errorMessage] of Object.entries(error.message)) {
-			toastMessage += `• ${field.toUpperCase()}: ${
+			toastMessage += `${field.toUpperCase()}: ${
 				Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage
 			}\n`
 		}

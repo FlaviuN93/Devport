@@ -13,8 +13,6 @@ import {
 
 import { sendEmail } from '../utils/email'
 import { IDefault, IRegisterUser, IUser, TokenPayload, User } from './types'
-import { z } from 'zod'
-import { updatePasswordSchema } from '../services/routeSchema'
 
 export const registerUser = async (email: string, password: string): Promise<IRegisterUser | AppError> => {
 	const hashedPassword = await bcrypt.hash(password, 12)
@@ -42,25 +40,28 @@ export const loginUser = async (email: string, loginPassword: string): Promise<I
 	const token = signToken(user.id)
 	const loginUser = removeUserColumns<User>(user)
 
-	return { user: loginUser, token, statusCode: 200, statusText: [] }
+	return { user: loginUser, token, statusCode: 200, statusText: ['login', 'Welcome back'] }
 }
 
-export const updatePassword = async (
-	passwords: UpdatePasswordType,
-	userId: string
-): Promise<IUser | AppError> => {
+export const updatePassword = async (password: string, userId: string): Promise<IUser | AppError> => {
 	const { data: user } = await supabase.from('users').select('*').eq('id', userId).single()
 	if (!user) return new AppError(404, 'User token has probably expired. Try to log in again.')
 
-	const arePasswordsEqual = await bcrypt.compare(passwords.currentPassword, user.password)
-	if (!arePasswordsEqual) return new AppError(401, `Hmm, your user credentials don't match. Try again`)
-
-	const hashedPassword = bcrypt.hash(passwords.newPassword, 12)
-	await supabase.from('users').update({ password: hashedPassword }).eq('id', user.id).select('id').single()
+	const hashedPassword = bcrypt.hash(password, 12)
+	await supabase
+		.from('users')
+		.update({ password: hashedPassword, passwordUpdatedAt: new Date().toISOString() })
+		.eq('id', user.id)
 
 	const token = signToken(user.id)
 	const loginUser = removeUserColumns<User>(user)
-	return { user: loginUser, token, statusCode: 200, statusText: [] }
+
+	return {
+		user: loginUser,
+		token,
+		statusCode: 200,
+		statusText: ['update password', 'Your new password was updated successfully'],
+	}
 }
 
 export const forgotPassword = async (email: string): Promise<IDefault | AppError> => {
@@ -102,7 +103,7 @@ export const forgotPassword = async (email: string): Promise<IDefault | AppError
 		return new AppError(500, 'There was an error sending the email. Try again later!')
 	}
 
-	return { statusCode: 200, statusText: ['forgot password', 'reset link was send to your email'] }
+	return { statusCode: 200, statusText: ['forgot password', 'The reset link was send to your email'] }
 }
 
 export const resetPassword = async (newPassword: string, resetToken: string): Promise<IUser | AppError> => {
@@ -139,7 +140,7 @@ export const resetPassword = async (newPassword: string, resetToken: string): Pr
 		user: loginUser,
 		token,
 		statusCode: 200,
-		statusText: ['reset password', 'new password was saved successfully'],
+		statusText: ['reset password', 'Your new password was saved successfully'],
 	}
 }
 
@@ -152,9 +153,7 @@ export const protect = async (reqToken: string): Promise<{ userId: string } | Ap
 	const { data: user } = await supabase.from('users').select('*').eq('id', decodedToken.userId).single()
 
 	const isPasswordChanged = hasPasswordChanged(decodedToken.iat as number, user.passwordUpdatedAt)
-	if (isPasswordChanged) return new AppError(401, 'User recently changed password! Please log in again')
+	if (isPasswordChanged) return new AppError(401, 'You recently changed password! Please log in again')
 
 	return { userId: user.id.toString() }
 }
-
-type UpdatePasswordType = z.infer<typeof updatePasswordSchema>

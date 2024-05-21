@@ -32,7 +32,8 @@ export const useUpdateMe = () =>
 		},
 	})
 
-export const useDeleteMe = () => useMutation<IDefaultSuccess, IDefaultError>({ mutationFn: deleteMe })
+export const useDeleteMe = () =>
+	useMutation<IDefaultSuccess, IDefaultError, { password: string }>({ mutationFn: deleteMe })
 
 export const useGetUserAndProjects = (userId: string) =>
 	useQuery<User, IDefaultError>({

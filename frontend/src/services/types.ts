@@ -2,10 +2,10 @@ export interface Params {
 	[key: string]: string | string[] | number | number[]
 }
 
-// export interface HttpParamsType<T> {
-// 	query?: Params
-// 	body?: T
-// }
+export interface HttpParamsType<T> {
+	query?: Params
+	body?: T
+}
 
 export interface IDefaultSuccess {
 	message: string

@@ -1,4 +1,4 @@
-import { FC, ReactElement, ReactNode } from 'react'
+import { FC, ReactNode } from 'react'
 import { TailwindClasses, tPositions } from '../../utils/types'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import styles from './Dropdown.module.css'
@@ -21,7 +21,7 @@ interface MenuProps {
 
 interface ItemProps {
 	itemId: string
-	children: ReactElement
+	children: ReactNode
 	itemStyles?: TailwindClasses
 }
 

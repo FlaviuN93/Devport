@@ -8,7 +8,8 @@ export const getMe = () => get<User>('/users/currentUser')
 export const updateMe = (body: IProfileSettings) =>
 	patch<IUser, IProfileSettings>('/users/currentUser', { body })
 
-export const deleteMe = () => remove<IDefaultSuccess>('/users/currentUser')
+export const deleteMe = (body: { password: string }) =>
+	remove<IDefaultSuccess, { password: string }>('/users/currentUser', { body })
 
 // I will get access to userId from the url with react router
 export const getUserAndProjects = (userId: string) => get<User>(`/users/projects/${userId}`)

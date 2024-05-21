@@ -7,7 +7,7 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 
 export interface TextProps<T extends FieldValues> {
 	name: Path<T>
-	register: UseFormRegister<T>
+	register?: UseFormRegister<T>
 	placeholder: string
 	variant?: 'input' | 'textarea'
 	label?: string
@@ -49,7 +49,7 @@ const Text = <T extends FieldValues>({
 			>
 				{variant === 'input' ? (
 					<input
-						{...register(name)}
+						{...register?.(name)}
 						className={textClasses}
 						id={label}
 						placeholder={placeholder}
@@ -61,7 +61,7 @@ const Text = <T extends FieldValues>({
 					/>
 				) : (
 					<textarea
-						{...register(name)}
+						{...register?.(name)}
 						className={textClasses}
 						id={label}
 						disabled={disabled}

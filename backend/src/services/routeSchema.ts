@@ -32,11 +32,6 @@ export const resetPasswordSchema = z
 		path: ['confirmPassword'],
 	})
 
-export const updatePasswordSchema = z.object({
-	currentPassword: passwordSchema,
-	newPassword: passwordSchema,
-})
-
 // Project Schema
 export const createProjectSchema = z.object({
 	imageFile: z.union([urlSchema, z.null()]),

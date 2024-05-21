@@ -80,7 +80,7 @@ export const ModalWindow: FC<IModalWindow> = ({
 				initial='hidden'
 				animate={isModalOpen ? 'visible' : 'hidden'}
 				variants={motionVariants}
-				transition={{ duration: 0.3 }}
+				transition={{ duration: 0.2 }}
 				className={modalWindowClasses}
 			>
 				<div ref={modalWindowRef}>

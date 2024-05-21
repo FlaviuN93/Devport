@@ -12,7 +12,7 @@ export const errorMessage: { [key: number]: string } = {
 export const getSuccessMessage = (statusCode: number, statusText: string[]): string | undefined => {
 	if (statusCode === 200)
 		return statusText.length > 0
-			? `The ${statusText[0]} operation was processed.Your ${statusText[1]}!`
+			? `The ${statusText[0]} operation was processed.${statusText[1]}!`
 			: 'Your request was successful!'
 
 	if (statusCode === 201)

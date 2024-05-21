@@ -67,17 +67,22 @@ export const updateMyProject = async (
 		reqBody.imageFile = data?.imageFile
 	}
 
-	const { error, status } = await supabase.from('projects').update(reqBody).eq('id', projectId)
+	const { error, status, data } = await supabase
+		.from('projects')
+		.update(reqBody)
+		.eq('id', projectId)
+		.select('name')
+		.single()
 	if (error) return new AppError(status)
 
-	return { statusCode: 200, statusText: ['update', 'project has been updated successfully'] }
+	return { statusCode: 200, statusText: ['update', `Project ${data.name} has been updated successfully`] }
 }
 
 export const deleteMyProject = async (id: string): Promise<IDefault | AppError> => {
-	const { error } = await supabase.from('projects').delete().eq('id', id).select('id').single()
+	const { error, data } = await supabase.from('projects').delete().eq('id', id).select('name').single()
 	if (error) return new AppError(404, 'The project you tried to delete does not exist')
 
-	return { statusCode: 200, statusText: ['delete', 'project has been deleted'] }
+	return { statusCode: 200, statusText: ['delete', `Project ${data.name} has been deleted`] }
 }
 
 export type CreateProject = z.infer<typeof createProjectSchema>

@@ -9,12 +9,7 @@ import {
 } from '../models/authModel'
 
 import { catchAsync } from '../utils/errorFunctions'
-import {
-	authSchema,
-	forgotPasswordSchema,
-	resetPasswordSchema,
-	updatePasswordSchema,
-} from '../services/routeSchema'
+import { authSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { sendTokenByCookie } from '../utils/functions'
 
@@ -48,9 +43,9 @@ export const loginUserHandler = catchAsync(async (req: Request, res: Response, n
 })
 
 export const updatePasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	const passwords = updatePasswordSchema.parse(req.body)
+	const { password } = resetPasswordSchema.parse(req.body)
 
-	const response = await updatePassword(passwords, req.userId)
+	const response = await updatePassword(password, req.userId)
 	if (response instanceof AppError) return next(response)
 	const { user, token, statusCode, statusText = [] } = response
 

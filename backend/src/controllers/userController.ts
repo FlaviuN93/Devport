@@ -4,7 +4,7 @@ import { deleteUser, getUser, getUserAndProjects, updateUser } from '../models/u
 import { updateUserSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import AppError, { getSuccessMessage } from '../utils/appError'
-import { idSchema } from '../services/baseSchema'
+import { idSchema, passwordSchema } from '../services/baseSchema'
 import sharp from 'sharp'
 
 const upload = multer({
@@ -65,7 +65,9 @@ export const updateMeHandler = catchAsync(async (req: Request, res: Response, ne
 })
 
 export const deleteMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	const response = await deleteUser(req.userId)
+	const password = passwordSchema.parse(req.body.password)
+
+	const response = await deleteUser(password, req.userId)
 	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText = [] } = response
 
