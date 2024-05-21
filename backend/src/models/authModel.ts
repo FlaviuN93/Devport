@@ -6,13 +6,13 @@ import crypto from 'crypto'
 import {
 	hasPasswordChanged,
 	createPasswordResetToken,
-	removeUserPassword,
 	signToken,
 	verifyToken,
+	removeUserColumns,
 } from '../utils/functions'
 
 import { sendEmail } from '../utils/email'
-import { IDefault, ILoginUser, IRegisterUser, LoginUser, TokenPayload } from './types'
+import { IDefault, IRegisterUser, IUser, TokenPayload, User } from './types'
 import { z } from 'zod'
 import { updatePasswordSchema } from '../services/routeSchema'
 
@@ -32,19 +32,15 @@ export const registerUser = async (email: string, password: string): Promise<IRe
 	return { email: user.email, token, statusCode: 201, statusText: ['user', 'created'] }
 }
 
-export const loginUser = async (email: string, loginPassword: string): Promise<ILoginUser | AppError> => {
-	const { data: user } = await supabase
-		.from('users')
-		.select('id,email,fullName,avatarURL,password')
-		.eq('email', email)
-		.single()
+export const loginUser = async (email: string, loginPassword: string): Promise<IUser | AppError> => {
+	const { data: user } = await supabase.from('users').select('*').eq('email', email).single()
 	if (!user) return new AppError(400, `Your user credentials don't match. Try again.`)
 
 	const arePasswordsEqual = await bcrypt.compare(loginPassword, user.password)
 	if (!arePasswordsEqual) return new AppError(401, `Hmm, your user credentials don't match. Try again`)
 
 	const token = signToken(user.id)
-	const loginUser = removeUserPassword<LoginUser>(user)
+	const loginUser = removeUserColumns<User>(user)
 
 	return { user: loginUser, token, statusCode: 200, statusText: [] }
 }
@@ -52,38 +48,38 @@ export const loginUser = async (email: string, loginPassword: string): Promise<I
 export const updatePassword = async (
 	passwords: UpdatePasswordType,
 	userId: string
-): Promise<ILoginUser | AppError> => {
-	const { data: user } = await supabase
-		.from('users')
-		.select('id,email,fullName,avatarURL,password')
-		.eq('id', userId)
-		.single()
+): Promise<IUser | AppError> => {
+	const { data: user } = await supabase.from('users').select('*').eq('id', userId).single()
 	if (!user) return new AppError(404, 'User token has probably expired. Try to log in again.')
 
 	const arePasswordsEqual = await bcrypt.compare(passwords.currentPassword, user.password)
 	if (!arePasswordsEqual) return new AppError(401, `Hmm, your user credentials don't match. Try again`)
 
 	const hashedPassword = bcrypt.hash(passwords.newPassword, 12)
-	const { error } = await supabase
-		.from('users')
-		.update({ password: hashedPassword })
-		.eq('id', user.id)
-		.select('id')
-		.single()
-	if (error) return new AppError(500)
+	await supabase.from('users').update({ password: hashedPassword }).eq('id', user.id).select('id').single()
 
 	const token = signToken(user.id)
-	const loginUser = removeUserPassword<LoginUser>(user)
+	const loginUser = removeUserColumns<User>(user)
 	return { user: loginUser, token, statusCode: 200, statusText: [] }
 }
 
-export const forgotPassword = async (email: string, resetUrl: string): Promise<IDefault | AppError> => {
-	const { data: user } = await supabase.from('users').select('email').eq('email', email).single()
+export const forgotPassword = async (email: string): Promise<IDefault | AppError> => {
+	const { data: user } = await supabase
+		.from('users')
+		.select('email,resetTokenExpiresIn')
+		.eq('email', email)
+		.single()
 
 	if (!user) return new AppError(404, 'There is no user with the email you entered. Please try again.')
 
-	const { resetToken, encryptedResetToken, tokenExpiresIn } = createPasswordResetToken()
+	const timeleft = Math.trunc((user.resetTokenExpiresIn - Date.now()) / (1000 * 60))
+	if (Date.now() < user.resetTokenExpiresIn)
+		return new AppError(
+			429,
+			`You have already made a request to reset your password. Check your email or try again in ${timeleft} minutes.`
+		)
 
+	const { resetToken, encryptedResetToken, tokenExpiresIn } = createPasswordResetToken()
 	await supabase
 		.from('users')
 		.update({ resetToken: encryptedResetToken, resetTokenExpiresIn: tokenExpiresIn })
@@ -91,7 +87,8 @@ export const forgotPassword = async (email: string, resetUrl: string): Promise<I
 		.select('id')
 		.single()
 
-	const resetURL = `${resetUrl}/${resetToken}`
+	const url = `${process.env.VITE_APP_LOCAL_DOMAIN}/auth/reset-password`
+	const resetURL = `${url}/${resetToken}`
 	const message = `Forgot your password? Submit a patch request with your new password and password confirm to: ${resetURL}.\n
 						If you didin't forget your password, please ignore this email!`
 
@@ -108,22 +105,24 @@ export const forgotPassword = async (email: string, resetUrl: string): Promise<I
 	return { statusCode: 200, statusText: ['forgot password', 'reset link was send to your email'] }
 }
 
-export const resetPassword = async (
-	newPassword: string,
-	resetToken: string
-): Promise<ILoginUser | AppError> => {
+export const resetPassword = async (newPassword: string, resetToken: string): Promise<IUser | AppError> => {
 	const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex')
-
 	const { data: user } = await supabase
 		.from('users')
-		.select('id,email,fullName,avatarURL,password')
+		.select('*')
 		.eq('resetToken', hashedToken)
 		.gt('resetTokenExpiresIn', Date.now())
 		.single()
+
 	if (!user) return new AppError(400, 'Token is invalid or has expired!')
+	if (!user.resetToken)
+		return new AppError(
+			429,
+			'You have already made a succesful request to reset your password. If you want to change it again, go to the forgot password page and start again.'
+		)
 
 	const hashedPassword = await bcrypt.hash(newPassword, 12)
-	const { error: resetError } = await supabase
+	await supabase
 		.from('users')
 		.update({
 			password: hashedPassword,
@@ -133,11 +132,8 @@ export const resetPassword = async (
 		})
 		.eq('resetToken', hashedToken)
 
-	if (resetError)
-		return new AppError(500, 'Something went wrong with saving your new password. Please try again later')
-
 	const token = signToken(user.id)
-	const loginUser = removeUserPassword<LoginUser>(user)
+	const loginUser = removeUserColumns<User>(user)
 
 	return {
 		user: loginUser,
@@ -155,10 +151,7 @@ export const protect = async (reqToken: string): Promise<{ userId: string } | Ap
 
 	const { data: user } = await supabase.from('users').select('*').eq('id', decodedToken.userId).single()
 
-	if (!user) return new AppError(404)
-	if (!decodedToken.iat) return new AppError(500, 'Something went wrong. Please log in again')
-
-	const isPasswordChanged = hasPasswordChanged(decodedToken.iat, user.passwordUpdatedAt)
+	const isPasswordChanged = hasPasswordChanged(decodedToken.iat as number, user.passwordUpdatedAt)
 	if (isPasswordChanged) return new AppError(401, 'User recently changed password! Please log in again')
 
 	return { userId: user.id.toString() }

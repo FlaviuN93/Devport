@@ -23,6 +23,8 @@ export const queryClient = new QueryClient({
 	queryCache: new QueryCache({
 		onError: (error: unknown) => {
 			const defaultError = error as IDefaultError
+			if (defaultError.statusTitle.startsWith('500')) return
+
 			const toastMessage = createZodErrorMessage(defaultError)
 			if (toastMessage) return toast.error(toastMessage)
 
@@ -36,6 +38,8 @@ export const queryClient = new QueryClient({
 		},
 		onError: (error: unknown) => {
 			const defaultError = error as IDefaultError
+			if (defaultError.statusTitle.startsWith('500')) return
+
 			const toastMessage = createZodErrorMessage(defaultError)
 			if (toastMessage) return toast.error(toastMessage)
 			return toast.error(`${defaultError.statusTitle}: ${defaultError.message}`)

@@ -31,9 +31,8 @@ const ProfileSettings = () => {
 	})
 
 	const { data: getUser, error: getUserError, isSuccess, isLoading, refetch } = useGetMe()
-	const { error: updateUserError, isPending: pendingUpdate, mutate: updateUser } = useUpdateMe()
-	const { error: deleteUserError, isPending: pendingDelete, mutate: deleteUser } = useDeleteMe()
-	const { error: changePasswordError, isPending, mutate: changePassword } = useChangePassword()
+	const { isPending: pendingUpdate, mutate: updateUser } = useUpdateMe()
+	const { isPending: pendingDelete, mutate: deleteUser } = useDeleteMe()
 	console.log(getUserError, 'hello')
 	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
 
@@ -58,17 +57,13 @@ const ProfileSettings = () => {
 								<ModalWindow showCloseIcon={true} modalName='changePassword'>
 									<h2 className='mb-6'>Change Password</h2>
 									<ResetPasswordForm
-										formName='changePassword'
+										buttonName='Change'
 										passwordLabel='Password'
 										confirmLabel='Confirm Password'
 										formStyles='mb-4'
+										buttonStyles='bg-violet text-white'
+										showCancelBtn={true}
 									/>
-									<ModalClose>
-										<div className='flex gap-2 justify-end'>
-											<Button type='button' variant='transparent' buttonText='Cancel' />
-											<Button formName='changePassword' type='submit' variant='primary' buttonText='Change' />
-										</div>
-									</ModalClose>
 								</ModalWindow>
 							</Modal>
 						</DropdownItem>
@@ -83,6 +78,7 @@ const ProfileSettings = () => {
 										<p>Are you sure you want to remove user?</p>
 										<ModalClose>
 											<div className='flex gap-2 justify-end'>
+												<Button variant='transparent' buttonText='No' />
 												<Button
 													variant='primary'
 													buttonText='Yes'
@@ -90,7 +86,6 @@ const ProfileSettings = () => {
 													isLoading={isLoading}
 													// onClick={() => deleteUser()}
 												/>
-												<Button variant='transparent' buttonText='No' />
 											</div>
 										</ModalClose>
 									</div>

@@ -63,9 +63,7 @@ export const updatePasswordHandler = catchAsync(async (req: Request, res: Respon
 
 export const forgotPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { email } = forgotPasswordSchema.parse(req.body)
-
-	const resetUrl = `${req.protocol}://${req.get('host')}/api/auth/password`
-	const response = await forgotPassword(email, resetUrl)
+	const response = await forgotPassword(email)
 
 	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText = [] } = response
@@ -77,7 +75,7 @@ export const forgotPasswordHandler = catchAsync(async (req: Request, res: Respon
 
 export const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { password } = resetPasswordSchema.parse(req.body)
-	const response = await resetPassword(password, req.params.token)
+	const response = await resetPassword(password, req.params.resetToken)
 
 	if (response instanceof AppError) return next(response)
 	const { user, token, statusCode, statusText = [] } = response

@@ -17,6 +17,7 @@ const Login = () => {
 		formState: { errors },
 	} = useForm<LoginType>({
 		resolver: zodResolver(loginSchema),
+		mode: 'onChange',
 	})
 	const { mutate: loginUser, isPending, isSuccess, data } = useLogin()
 	const { handleSetUser } = useUserContext()

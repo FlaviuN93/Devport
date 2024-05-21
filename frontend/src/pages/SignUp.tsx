@@ -21,7 +21,7 @@ const SignUp = () => {
 	} = useForm<SignupType>({
 		resolver: zodResolver(signupSchema),
 		criteriaMode: 'all',
-		reValidateMode: 'onChange',
+		mode: 'onChange',
 	})
 	// Have to ask a friend what's the best approach, onSubmit first then onChange after or onChange from the start
 	const { data, isSuccess, mutate: registerUser, isPending } = useRegister()

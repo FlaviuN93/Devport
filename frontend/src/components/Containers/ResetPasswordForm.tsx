@@ -2,24 +2,38 @@ import styles from './ResetPasswordForm.module.css'
 import Password from '../Inputs/Password'
 import PasswordValidation from '../Inputs/PasswordValidation'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useValidateResult } from '../../hooks/useValidateResult'
 import { ResetPasswordType, resetPasswordSchema } from '../../utils/schemas'
 import { passwordInitialState } from '../../utils/variables'
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { TailwindClasses } from '../../utils/types'
+import Button from '../UI/Button'
+import { useModalContext } from '../../contexts/contextHooks'
+import { useChangePassword, useResetPassword } from '../../services/queries'
+import { useParams } from 'react-router-dom'
 
 interface IResetPasswordForm {
-	formName: string
+	buttonName: string
 	passwordLabel?: string
 	confirmLabel?: string
 	formStyles?: TailwindClasses
+	buttonStyles?: TailwindClasses
+	showCancelBtn?: boolean
 }
 
-const ResetPasswordForm: FC<IResetPasswordForm> = ({ formName, passwordLabel, confirmLabel, formStyles }) => {
+const ResetPasswordForm: FC<IResetPasswordForm> = ({
+	passwordLabel,
+	confirmLabel,
+	formStyles,
+	buttonName,
+	buttonStyles,
+	showCancelBtn = false,
+}) => {
 	const {
 		handleSubmit,
 		register,
+		reset,
 		formState: { errors },
 	} = useForm<ResetPasswordType>({
 		resolver: zodResolver(resetPasswordSchema),
@@ -30,11 +44,38 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({ formName, passwordLabel, co
 	const formClasses = `${styles.formContainer} ${formStyles}`
 	const passwordErrorTypes = errors.password?.types?.invalid_string
 	const { errors: passwordErrors, isValid } = useValidateResult(passwordErrorTypes, passwordInitialState)
-	const resetPasswordData: SubmitHandler<ResetPasswordType> = (data) => {
-		console.log('Submitted Data', data, errors, 'submitResetPassword')
+
+	const { close } = useModalContext()
+	const { resetToken } = useParams()
+
+	const {
+		isPending: isChangeLoading,
+		mutate: changePassword,
+		isSuccess: isChangeSuccess,
+	} = useChangePassword()
+
+	const {
+		isPending: isResetLoading,
+		mutate: resetPassword,
+		isSuccess: isResetSuccess,
+	} = useResetPassword(resetToken)
+
+	useEffect(() => {
+		if (resetToken) {
+			if (!isResetLoading && isResetSuccess) reset()
+		} else if (!isChangeLoading && isChangeSuccess) {
+			reset()
+			close()
+		}
+	}, [isResetLoading, isResetSuccess, reset, isChangeLoading, isChangeSuccess, close, resetToken])
+
+	const handleResetPassword: SubmitHandler<ResetPasswordType> = (data) => {
+		if (resetToken) return resetPassword(data)
+		else changePassword(data)
 	}
+
 	return (
-		<form id={formName} className={formClasses} onSubmit={handleSubmit(resetPasswordData)}>
+		<form className={formClasses} onSubmit={handleSubmit(handleResetPassword)}>
 			<Password
 				name='password'
 				register={register}
@@ -47,6 +88,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({ formName, passwordLabel, co
 			<Password
 				name='confirmPassword'
 				register={register}
+				showPasswordBtn={true}
 				label={confirmLabel}
 				placeholder='Re-enter a password'
 				error={errors.confirmPassword?.message}
@@ -56,6 +98,17 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({ formName, passwordLabel, co
 				{passwordErrors.map((error) => (
 					<PasswordValidation key={error.type} isActive={error.isActive} type={error.type} />
 				))}
+			</div>
+			<div className='flex gap-2 justify-end'>
+				{showCancelBtn && (
+					<Button type='button' variant='transparent' buttonText='Cancel' onClick={() => close()} />
+				)}
+				<Button
+					buttonText={buttonName}
+					type='submit'
+					buttonStyles={buttonStyles}
+					isLoading={isResetLoading || isChangeLoading}
+				/>
 			</div>
 		</form>
 	)

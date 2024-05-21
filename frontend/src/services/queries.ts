@@ -16,17 +16,7 @@ import {
 	updateMe,
 	updateMyProject,
 } from './api.requests'
-import {
-	HttpParamsType,
-	IDefaultError,
-	IDefaultSuccess,
-	ILogin,
-	IRegister,
-	Technology,
-	IUser,
-	Project,
-	User,
-} from './types'
+import { IDefaultError, IDefaultSuccess, ILogin, IRegister, Technology, IUser, Project, User } from './types'
 import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 
@@ -113,7 +103,7 @@ export const useLogin = () =>
 export const useForgotPassword = () =>
 	useMutation<IDefaultSuccess, IDefaultError, { email: string }>({ mutationFn: forgotPassword })
 
-export const useResetPassword = () =>
-	useMutation<ILogin, IDefaultError, HttpParamsType<ResetPasswordType>>({
-		mutationFn: resetPassword,
+export const useResetPassword = (resetToken: string | undefined) =>
+	useMutation<ILogin, IDefaultError, ResetPasswordType>({
+		mutationFn: (body) => resetPassword(resetToken, body),
 	})

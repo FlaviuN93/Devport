@@ -1,5 +1,5 @@
 import { remove, get, patch, post, put } from './baseHttp'
-import { HttpParamsType, IDefaultSuccess, ILogin, IRegister, IUser, Project, Technology, User } from './types'
+import { IDefaultSuccess, ILogin, IRegister, IUser, Project, Technology, User } from './types'
 import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 
 // User Routes
@@ -40,11 +40,8 @@ export const forgotPassword = (body: { email: string }) =>
 	post<IDefaultSuccess, { email: string }>('/auth/forgotPassword', { body })
 
 // I will get access to resetToken from the url with react router
-export const resetPassword = (httpParams: HttpParamsType<ResetPasswordType>) =>
-	patch<ILogin, ResetPasswordType>('/auth/resetPassword/:resetToken', {
-		query: httpParams.query,
-		body: httpParams.body,
-	})
+export const resetPassword = (resetToken: string | undefined, body: ResetPasswordType) =>
+	patch<ILogin, ResetPasswordType>(`/auth/resetPassword/${resetToken}`, { body })
 
 export const changePassword = (body: ResetPasswordType) =>
 	post<ILogin, ResetPasswordType>('/auth/changePassword', { body })

@@ -18,16 +18,17 @@
 	cursor: pointer;
 	transition: background-color 0.2s ease;
 	border: 1px solid white;
-	width: max-content;
+	min-width: max-content;
+	width: 100%;
 	transition: all 0.2s ease-out;
 }
 
 .item:hover,
 .item:active {
-	text-shadow: 0 5px 10px var(--gray);
-	/* border: 1px solid var(--light-gray); */
-	/* box-shadow: var(--shadow-sm); */
-	border-radius: 4px;
+	text-shadow: 1px 5px 10px var(--light-gray);
+	border: 1px solid #d4dfff;
+	background-color: #eaefff;
+	box-shadow: var(--shadow-xs);
 }
 
 .dropdownToggle {

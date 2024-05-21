@@ -1,11 +1,5 @@
 import { JwtPayload } from 'jsonwebtoken'
 
-export interface LoginUser {
-	avatarURL: string
-	email: string
-	fullName: string
-}
-
 export interface User {
 	coverURL: string
 	avatarURL: string
@@ -71,8 +65,4 @@ export interface IRegisterUser extends IDefault {
 
 export interface TokenPayload extends JwtPayload {
 	userId: number
-}
-
-export interface ILoginUser extends IDefault {
-	user: LoginUser
 }

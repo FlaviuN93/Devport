@@ -10,7 +10,6 @@ export const useValidateResult = (errorTypes: ValidateResult, initialState: Vali
 	const [errors, setErrors] = useState(initialState)
 	const [isValid, setIsValid] = useState(false)
 	const [hasUpdated, setHasUpdated] = useState(false)
-
 	useEffect(() => {
 		setErrors((state) => {
 			// This is for initial render

@@ -18,7 +18,7 @@ export const ErrorDisplay: FC<IErrorDisplay> = ({ error, resetErrorBoundary }) =
 				<Button
 					icon={<ArrowUturnLeftIcon className='h-5 w-5' />}
 					onClick={resetErrorBoundary}
-					buttonText='Go To Login'
+					buttonText='Try again'
 				/>
 			</div>
 		</main>
