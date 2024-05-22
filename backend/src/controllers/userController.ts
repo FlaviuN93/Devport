@@ -32,17 +32,15 @@ export const resizeUserImages = (req: Request, res: Response, next: NextFunction
 	next()
 }
 
-export const getUserAndProjectsHandler = catchAsync(
-	async (req: Request, res: Response, next: NextFunction) => {
-		const userId = idSchema.parse(req.params.userId).toString()
+export const getUserAndProjectsHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const userId = idSchema.parse(req.params.userId).toString()
 
-		const response = await getUserAndProjects(userId)
-		if (response instanceof AppError) return next(response)
-		const { userWithProjects, statusCode, statusText } = response
+	const response = await getUserAndProjects(userId)
+	if (response instanceof AppError) return next(response)
+	const { userWithProjects, statusCode, statusText } = response
 
-		res.status(statusCode).send(userWithProjects)
-	}
-)
+	res.status(statusCode).send(userWithProjects)
+})
 
 export const getMeHandler = async (req: Request, res: Response, next: NextFunction) => {
 	const response = await getUser(req.userId)
@@ -52,7 +50,8 @@ export const getMeHandler = async (req: Request, res: Response, next: NextFuncti
 }
 
 export const updateMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	const userData = updateUserSchema.parse(req.body)
+	const reqBody = JSON.parse(req.body)
+	const userData = updateUserSchema.parse(reqBody)
 	const response = await updateUser(userData, req.userId)
 
 	if (response instanceof AppError) return next(response)

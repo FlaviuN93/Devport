@@ -1,11 +1,7 @@
 import { z } from 'zod'
 
 // Base Schemas
-export const emailSchema = z
-	.string()
-	.trim()
-	.min(1, 'Email is required')
-	.email({ message: 'Invalid email address. Please try again.' })
+export const emailSchema = z.string().trim().email({ message: 'Invalid email address. Please try again.' })
 
 export const idSchema = z.coerce
 	.number({
@@ -43,7 +39,4 @@ export const urlSchema = z.string().trim().min(1, 'Please enter a repository URL
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 export const fileSchema = z
 	.any()
-	.refine(
-		(file: File | null) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
-		'File must be a valid image (PNG, JPEG, JPG, WEBP)'
-	)
+	.refine((file: File | null) => file && ACCEPTED_IMAGE_TYPES.includes(file.type), 'File must be a valid image (PNG, JPEG, JPG, WEBP)')

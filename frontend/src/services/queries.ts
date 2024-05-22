@@ -17,14 +17,14 @@ import {
 	updateMyProject,
 } from './api.requests'
 import { IDefaultError, IDefaultSuccess, ILogin, IRegister, Technology, IUser, Project, User } from './types'
-import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
+import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 
 // User Queries and Mutations
 export const useGetMe = () => useQuery<User, IDefaultError>({ queryKey: ['profileSettings', 'getUser'], queryFn: getMe, enabled: false })
 
 export const useUpdateMe = () =>
-	useMutation<IUser, IDefaultError, IProfileSettings>({
+	useMutation<IUser, IDefaultError, FormData>({
 		mutationFn: updateMe,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['profileSettings', 'getUser'] })

@@ -10,12 +10,13 @@ export interface FileProps<T extends FieldValues> {
 	register: UseFormRegister<T>
 	onFileUpload: (file: File) => void
 	name: Path<T>
-	buttonText: string
+	buttonText?: string
 	label?: string
 	icon?: ReactNode
 	fileStyles?: TailwindClasses
 	error?: string
 	tooltipStyles?: TailwindClasses
+	fileContainerStyles?: TailwindClasses
 }
 
 const File = <T extends FieldValues>({
@@ -28,6 +29,7 @@ const File = <T extends FieldValues>({
 	error,
 	register,
 	tooltipStyles,
+	fileContainerStyles,
 }: FileProps<T>) => {
 	const uniqueId = useId()
 	const divRef = useRef<HTMLDivElement>(null)
@@ -44,7 +46,7 @@ const File = <T extends FieldValues>({
 	}, [size.width, size.height])
 
 	const isMobile = useMediaQuery('(max-width:480px)')
-	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''}`
+	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''} ${fileContainerStyles ? fileContainerStyles : ''}`
 	const fileClasses = `${styles.fileButton} ${fileStyles} ${error ? styles.error : ''} relative`
 
 	const handleSetFile = (event: ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +69,7 @@ const File = <T extends FieldValues>({
 				onMouseOver={() => setShowTooltip(true)}
 				onMouseOut={() => setShowTooltip(false)}
 			>
-				{icon && <span className='mr-1.5'>{icon}</span>}
+				{icon && <span>{icon}</span>}
 				<span className='font-medium'>{buttonText}</span>
 
 				<motion.input
@@ -81,12 +83,7 @@ const File = <T extends FieldValues>({
 					type='file'
 				/>
 				{error && (
-					<Tooltip
-						content={error}
-						position={isMobile ? 'top' : 'right'}
-						tooltipStyles={tooltipStyles}
-						hoverTooltip={showTooltip}
-					/>
+					<Tooltip content={error} position={isMobile ? 'top' : 'right'} tooltipStyles={tooltipStyles} hoverTooltip={showTooltip} />
 				)}
 			</div>
 		</div>

@@ -1,11 +1,11 @@
 import { remove, get, patch, post, put } from './baseHttp'
 import { IDefaultSuccess, ILogin, IRegister, IUser, Project, Technology, User } from './types'
-import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
+import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 
 // User Routes
 export const getMe = () => get<User>('/users/currentUser')
 
-export const updateMe = (body: IProfileSettings) => patch<IUser, IProfileSettings>('/users/currentUser', { body })
+export const updateMe = (body: FormData) => patch<IUser, FormData>('/users/currentUser', { body })
 
 export const deleteMe = (body: { password: string }) => remove<IDefaultSuccess, { password: string }>('/users/currentUser', { body })
 

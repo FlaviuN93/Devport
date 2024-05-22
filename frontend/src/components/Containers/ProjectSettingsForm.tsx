@@ -17,6 +17,8 @@ import Button from '../UI/Button'
 import File from '../Inputs/File'
 import Text from '../Inputs/Text'
 
+const initialProjectValue = { imageFile: null, demoURL: '', description: '', name: '', repositoryURL: '', technologies: [] }
+
 const ProjectSettingsForm = () => {
 	const {
 		handleSubmit,
@@ -28,7 +30,7 @@ const ProjectSettingsForm = () => {
 		formState: { errors, isDirty },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
-		defaultValues: { imageFile: null },
+		defaultValues: initialProjectValue,
 	})
 	const url = getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile as File) : null
 
@@ -60,14 +62,7 @@ const ProjectSettingsForm = () => {
 	}, [isProjectSelected, selectedProject, reset])
 
 	const handleResetForm = () => {
-		reset({
-			imageFile: null,
-			demoURL: '',
-			description: '',
-			name: '',
-			repositoryURL: '',
-			technologies: [],
-		})
+		reset(initialProjectValue)
 
 		resetImageUrl()
 		resetMultiSelect.current()
@@ -119,6 +114,7 @@ const ProjectSettingsForm = () => {
 					buttonText='Upload Project Image'
 					icon={<UploadIcon />}
 					name='imageFile'
+					fileStyles='gap-2'
 					register={register}
 					onFileUpload={(selectedFile: File) => setValue('imageFile', selectedFile, { shouldValidate: true })}
 					error={errors.imageFile?.message}

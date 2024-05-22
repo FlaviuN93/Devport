@@ -22,6 +22,7 @@ const SignUp = () => {
 		resolver: zodResolver(signupSchema),
 		criteriaMode: 'all',
 		mode: 'onChange',
+		defaultValues: { email: '', password: '' },
 	})
 	const { data, isSuccess, mutate: registerUser, isPending } = useRegister()
 	const navigate = useNavigate()

@@ -2,7 +2,7 @@ import { FC, ReactNode, createContext, useState } from 'react'
 import { User } from '../services/types'
 import { getValueFromStorage } from '../utils/functions'
 
-const initialUser: User = {
+const initialUser = {
 	email: '',
 	avatarURL: '',
 	coverURL: '',

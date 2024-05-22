@@ -40,6 +40,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 		resolver: zodResolver(resetPasswordSchema),
 		criteriaMode: 'all',
 		mode: 'onChange',
+		defaultValues: { password: '', confirmPassword: '' },
 	})
 
 	const formClasses = `${styles.formContainer} ${formStyles}`

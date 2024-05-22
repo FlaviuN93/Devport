@@ -44,8 +44,8 @@ export interface Project {
 }
 
 export interface User {
-	coverURL?: string
-	avatarURL?: string
+	coverURL?: string | null
+	avatarURL?: string | null
 	email: string
 	fullName?: string
 	jobTitle?: string

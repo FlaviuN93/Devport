@@ -1,7 +1,9 @@
 import CheckCircleIcon from '../../assets/check circle-1.svg?react'
-import { UserCircleIcon, PhotoIcon, PencilSquareIcon } from '@heroicons/react/24/outline'
+import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import ProjectIcon from '../../assets/project.svg?react'
+import UploadIcon from '../../assets/upload.svg?react'
 import { useUserContext } from '../../contexts/contextHooks'
 import { useUpdateMe } from '../../services/queries'
 import { IProfileSettings, profileSettingsSchema } from '../../utils/schemas'
@@ -9,30 +11,44 @@ import Avatar from '../UI/Avatar'
 import Button from '../UI/Button'
 import File from '../Inputs/File'
 import Text from '../Inputs/Text'
-import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import { motionVariants } from '../../utils/variables'
+import { convertToFormData } from '../../utils/functions'
+
+const initialFormValue = {
+	avatarFile: null,
+	coverFile: null,
+	bio: '',
+	email: '',
+	jobTitle: '',
+	linkedin: '',
+	name: '',
+}
 
 const ProfileSettingsForm = () => {
 	const {
 		handleSubmit,
 		register,
-		formState: { errors },
+		formState: { errors, isValid },
 		setValue,
+		getValues,
 		reset,
 	} = useForm<IProfileSettings>({
 		resolver: zodResolver(profileSettingsSchema),
+		defaultValues: initialFormValue,
 	})
 
 	const { user: loggedUser } = useUserContext()
-	const { isPending: pendingUpdate, mutate: updateUser } = useUpdateMe()
+	const { isPending: pendingUpdate, mutate: updateUser, isSuccess } = useUpdateMe()
 
-	const [coverUrl, setCoverUrl] = useState<string | undefined>(undefined)
-	const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
-	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
+	const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
+	const [coverUrl, setCoverUrl] = useState<string | null>(null)
+	// const [editState, setEditState] = useState(false)
 
 	const editUserHandler = () => {
-		setCoverUrl(loggedUser.coverURL)
-		setAvatarUrl(loggedUser.avatarURL)
-		setValue('email', loggedUser.email)
+		if (loggedUser.coverURL) setCoverUrl(loggedUser.coverURL)
+
 		reset({
 			name: loggedUser.fullName,
 			bio: loggedUser.bio,
@@ -42,33 +58,59 @@ const ProfileSettingsForm = () => {
 		})
 	}
 
+	const handleResetForm = () => {
+		setCoverUrl(null)
+		reset(initialFormValue)
+	}
+
+	useEffect(() => {
+		setCoverUrl(coverFile)
+		console.log(errors, 'errors')
+	}, [getValues().coverFile])
+
+	const userDataHandler: SubmitHandler<IProfileSettings> = (data) => {
+		console.log(data, 'data')
+		const userFormData = convertToFormData(data)
+		if (isSuccess) setTimeout(() => handleResetForm(), 500)
+		updateUser(userFormData)
+	}
+
 	return (
-		<form onSubmit={handleSubmit((data) => updateUser(data))} className='formSettingsContainer'>
-			<div className='imageFileContainer'>
-				<img src='' alt='' />
-				<Avatar icon={<UserCircleIcon className='w-6 h-6' />} avatarStyles='h-[52px] w-[52px]' />
+		<form onSubmit={handleSubmit(userDataHandler)} className='formSettingsContainer'>
+			<motion.div
+				initial='hidden'
+				animate={!coverUrl ? 'visible' : 'hidden'}
+				variants={motionVariants}
+				transition={{ duration: 0.5 }}
+				className='flex flex-col items-center gap-4 bg-light2 py-6'
+			>
+				<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px] -mt-2' />
+				<p className='text-gray text-sm text-center font-medium px-4'>Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
 
-				<p className='text-gray text-sm text-center font-medium px-4'>Cover Image resolution 1584x396 pixels, max size 2MB</p>
-				<div className='flex items-center flex-col sm:flex-row gap-4 -mt-1'>
-					<File
-						buttonText='Upload Cover'
-						icon={<PhotoIcon className='h-6 w-6' />}
-						register={register}
-						name='coverFile'
-						onFileUpload={(coverFile: File) => setValue('coverFile', coverFile, { shouldValidate: true })}
-						error={errors.coverFile?.message}
-					/>
-
-					<File
-						buttonText='Upload Avatar'
-						icon={<UserCircleIcon className='w-6 h-6' />}
-						register={register}
-						name='avatarFile'
-						onFileUpload={(avatarFile: File) => setValue('avatarFile', avatarFile, { shouldValidate: true })}
-						error={errors.avatarFile?.message}
-					/>
-				</div>
-			</div>
+				<File
+					buttonText='Upload Cover Image'
+					icon={<UploadIcon />}
+					name='coverFile'
+					fileStyles='gap-2'
+					register={register}
+					onFileUpload={(selectedFile: File) => setValue('coverFile', selectedFile, { shouldValidate: true })}
+					error={errors.coverFile?.message}
+				/>
+			</motion.div>
+			<motion.div
+				initial='hidden'
+				animate={coverUrl ? 'visible' : 'hidden'}
+				variants={motionVariants}
+				transition={{ duration: 0.5 }}
+				className='relative justify-center bg-light3'
+			>
+				{coverUrl && (
+					<>
+						<XMarkIcon onClick={() => setCoverUrl(null)} className='h-6 w-6 absolute top-2 right-2 text-white cursor-pointer' />
+						<img src={coverUrl} className='object-cover max-h-[250px] w-full' />
+					</>
+				)}
+			</motion.div>
 
 			<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
 				<Text label='Name' register={register} name='name' placeholder='Enter your name' error={errors.name?.message} />
@@ -83,7 +125,6 @@ const ProfileSettingsForm = () => {
 			</div>
 			<div className='flex flex-col gap-3 md:flex-row md:gap-10'>
 				<Text label='Email' register={register} name='email' placeholder='example@mail.com' error={errors.email?.message} />
-
 				<Text label='Job Title' register={register} name='jobTitle' placeholder='Enter your job title' error={errors.jobTitle?.message} />
 			</div>
 			<Text
@@ -111,6 +152,7 @@ const ProfileSettingsForm = () => {
 					buttonStyles='mb-2 w-full sm:place-self-end sm:w-auto'
 					variant='primary'
 					isLoading={pendingUpdate}
+					// disabled={isValid}
 					type='submit'
 				/>
 			</div>
