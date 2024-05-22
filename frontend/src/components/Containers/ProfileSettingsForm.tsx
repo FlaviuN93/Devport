@@ -9,6 +9,7 @@ import Avatar from '../UI/Avatar'
 import Button from '../UI/Button'
 import File from '../Inputs/File'
 import Text from '../Inputs/Text'
+import { useState } from 'react'
 
 const ProfileSettingsForm = () => {
 	const {
@@ -21,27 +22,33 @@ const ProfileSettingsForm = () => {
 		resolver: zodResolver(profileSettingsSchema),
 	})
 
-	const { user } = useUserContext()
+	const { user: loggedUser } = useUserContext()
 	const { isPending: pendingUpdate, mutate: updateUser } = useUpdateMe()
+
+	const [coverUrl, setCoverUrl] = useState<string | undefined>(undefined)
+	const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined)
+	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
+
 	const editUserHandler = () => {
+		setCoverUrl(loggedUser.coverURL)
+		setAvatarUrl(loggedUser.avatarURL)
+		setValue('email', loggedUser.email)
 		reset({
-			name: user.fullName,
-			bio: user.bio,
-			email: user.email,
-			jobTitle: user.jobTitle,
-			linkedin: user.linkedin,
+			name: loggedUser.fullName,
+			bio: loggedUser.bio,
+			email: loggedUser.email,
+			jobTitle: loggedUser.jobTitle,
+			linkedin: loggedUser.linkedin,
 		})
 	}
-	// const previewUrl = selectedImage ? URL.createObjectURL(selectedImage) : null
+
 	return (
 		<form onSubmit={handleSubmit((data) => updateUser(data))} className='formSettingsContainer'>
 			<div className='imageFileContainer'>
 				<img src='' alt='' />
 				<Avatar icon={<UserCircleIcon className='w-6 h-6' />} avatarStyles='h-[52px] w-[52px]' />
 
-				<p className='text-gray text-sm text-center font-medium px-4'>
-					Cover Image resolution 1584x396 pixels, max size 2MB
-				</p>
+				<p className='text-gray text-sm text-center font-medium px-4'>Cover Image resolution 1584x396 pixels, max size 2MB</p>
 				<div className='flex items-center flex-col sm:flex-row gap-4 -mt-1'>
 					<File
 						buttonText='Upload Cover'
@@ -64,13 +71,7 @@ const ProfileSettingsForm = () => {
 			</div>
 
 			<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
-				<Text
-					label='Name'
-					register={register}
-					name='name'
-					placeholder='Enter your name'
-					error={errors.name?.message}
-				/>
+				<Text label='Name' register={register} name='name' placeholder='Enter your name' error={errors.name?.message} />
 
 				<Text
 					label='Linkedin Profile'
@@ -81,21 +82,9 @@ const ProfileSettingsForm = () => {
 				/>
 			</div>
 			<div className='flex flex-col gap-3 md:flex-row md:gap-10'>
-				<Text
-					label='Email'
-					register={register}
-					name='email'
-					placeholder='example@mail.com'
-					error={errors.email?.message}
-				/>
+				<Text label='Email' register={register} name='email' placeholder='example@mail.com' error={errors.email?.message} />
 
-				<Text
-					label='Job Title'
-					register={register}
-					name='jobTitle'
-					placeholder='Enter your job title'
-					error={errors.jobTitle?.message}
-				/>
+				<Text label='Job Title' register={register} name='jobTitle' placeholder='Enter your job title' error={errors.jobTitle?.message} />
 			</div>
 			<Text
 				label='Bio'

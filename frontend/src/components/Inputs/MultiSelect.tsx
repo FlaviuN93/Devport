@@ -66,12 +66,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
 			<label className={styles.label} htmlFor={label} aria-label={label}>
 				{label}
 			</label>
-			<div
-				className='relative mt-1'
-				ref={divRef}
-				onMouseOver={() => setShowTooltip(true)}
-				onMouseOut={() => setShowTooltip(false)}
-			>
+			<div className='relative mt-1' ref={divRef} onMouseOver={() => setShowTooltip(true)} onMouseOut={() => setShowTooltip(false)}>
 				<input
 					className={inputClasses}
 					value={placeholderValue}
@@ -81,12 +76,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
 					onClick={() => setIsOpen((prevIsOpen) => !prevIsOpen)}
 				/>
 				{error && (
-					<Tooltip
-						content={error}
-						position={isLaptop ? 'right' : 'bottom'}
-						hoverTooltip={showTooltip}
-						tooltipStyles={tooltipStyles}
-					/>
+					<Tooltip content={error} position={isLaptop ? 'right' : 'bottom'} hoverTooltip={showTooltip} tooltipStyles={tooltipStyles} />
 				)}
 				{placeholderValue.length > 0 && !error && (
 					<button className={styles.inputIcon} onClick={handleResetItems}>

@@ -5,6 +5,7 @@ import styles from './Dropdown.module.css'
 import { useDropdownContext } from '../../contexts/contextHooks'
 
 import { DropdownProvider } from '../../contexts/DropdownContext'
+import useKeyToClose from '../../hooks/useKeyToClose'
 
 interface ToggleProps {
 	imageUrl?: string
@@ -35,7 +36,7 @@ const Dropdown: FC<{ children: ReactNode }> = ({ children }) => {
 
 const DropdownMenu: FC<MenuProps> = ({ children, position = 'bottom', menuStyles = '' }) => {
 	const { isOpen, handleClose, menuRef, dropdownBtnRef, exclusionRef } = useDropdownContext()
-
+	useKeyToClose('Escape', handleClose)
 	useOutsideClick(menuRef, handleClose, dropdownBtnRef, exclusionRef)
 
 	const menuClasses = `${styles.menu} ${styles[position]} ${menuStyles}`

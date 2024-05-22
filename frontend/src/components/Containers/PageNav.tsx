@@ -1,13 +1,16 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from './PageNav.module.css'
 import LogoIcon from '../../assets/Logo.svg?react'
 import { Dropdown, DropdownDivider, DropdownItem, DropdownMenu, DropdownToggle } from '../UI/Dropdown'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import Avatar from '../UI/Avatar'
 import { useUserContext } from '../../contexts/contextHooks'
+import Button from '../UI/Button'
 
 const PageNav = () => {
-	const { user } = useUserContext()
+	const { user, handleLogoutUser } = useUserContext()
+	const navigate = useNavigate()
+
 	return (
 		<nav className={styles.navContainer}>
 			<Link to='/home'>
@@ -30,30 +33,33 @@ const PageNav = () => {
 						<Link to={'/home'}>
 							<DropdownItem itemId='2'>
 								<UserCircleIcon className='h-6 w-6' />
-								<span>Profile Settings</span>
+								<Button variant='text' buttonStyles='font-normal text-base' buttonText='Profile Settings' />
 							</DropdownItem>
 						</Link>
 						<Link to={'/home'}>
 							<DropdownItem itemId='3'>
 								<UserCircleIcon className='h-6 w-6' />
-								<span>Project Settings</span>
+								<Button variant='text' buttonStyles='font-normal text-base' buttonText='Project Settings' />
 							</DropdownItem>
 						</Link>
 						<Link to={'/home'}>
 							<DropdownItem itemId='4'>
 								<UserCircleIcon className='h-6 w-6' />
-								<span>My Portofolio</span>
+								<Button variant='text' buttonStyles='font-normal text-base' buttonText='My Portofolio' />
 							</DropdownItem>
 						</Link>
 					</div>
 					<DropdownDivider />
 
-					<Link to={'/home'}>
-						<DropdownItem itemId='5' itemStyles='mb-0'>
-							<UserCircleIcon className='h-6 w-6' />
-							<span>Logout</span>
-						</DropdownItem>
-					</Link>
+					<DropdownItem itemId='5' itemStyles='mb-0'>
+						<UserCircleIcon className='h-6 w-6' />
+						<Button
+							variant='text'
+							buttonStyles='font-normal text-base'
+							buttonText='Logout'
+							onClick={() => handleLogoutUser(() => navigate('/auth/login'))}
+						/>
+					</DropdownItem>
 				</DropdownMenu>
 			</Dropdown>
 		</nav>

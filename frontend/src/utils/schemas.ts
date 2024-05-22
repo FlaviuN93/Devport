@@ -2,11 +2,7 @@ import { z } from 'zod'
 import { getImageFormat } from './functions'
 
 // Base Schemas
-const emailSchema = z
-	.string()
-	.trim()
-	.min(1, 'Email is required')
-	.email('Invalid email address. Please try again.')
+const emailSchema = z.string().trim().min(3, 'Email is required').email('Invalid email address')
 
 const passwordSchema = z
 	.string()
@@ -38,10 +34,7 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 
 const fileSchema = z
 	.any()
-	.refine(
-		(file: File | null) => file && ACCEPTED_IMAGE_TYPES.includes(file.type),
-		'File must be a valid image (PNG, JPEG, JPG, WEBP)'
-	)
+	.refine((file: File | null) => file && ACCEPTED_IMAGE_TYPES.includes(file.type), 'File must be a valid image (PNG, JPEG, JPG, WEBP)')
 
 // Auth Schemas
 export const signupSchema = z.object({
@@ -51,10 +44,7 @@ export const signupSchema = z.object({
 
 export const loginSchema = z.object({
 	email: emailSchema,
-	password: z
-		.string()
-		.min(8, 'Password must have at least 8 characters')
-		.max(20, 'Password must have a maximum of 20 characters'),
+	password: z.string().trim().min(8, 'Password must have at least 8 characters').max(20, 'Password must have a maximum of 20 characters'),
 })
 
 export const forgotPasswordSchema = z.object({
@@ -79,39 +69,27 @@ export const projectSettingsSchema = z.object({
 	imageFile: z.union([
 		fileSchema
 			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
-			.refine(
-				async (file: File | null) => file && (await getImageFormat('landscape', file)),
-				'Image must have a landscape format.'
-			),
+			.refine(async (file: File | null) => file && (await getImageFormat('landscape', file)), 'Image must have a landscape format.'),
 		z.null(),
 	]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,
 	description: descriptionSchema,
-	technologies: z
-		.array(z.string())
-		.min(2, 'Select a minimum of 2 technologies')
-		.max(5, 'Select a maximum of 5 technologies'),
+	technologies: z.array(z.string()).min(2, 'Select a minimum of 2 technologies').max(5, 'Select a maximum of 5 technologies'),
 })
 
 export const profileSettingsSchema = z.object({
 	coverFile: z.union([
 		fileSchema
 			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
-			.refine(
-				async (file: File | null) => file && (await getImageFormat('landscape', file)),
-				'Image must have a landscape format.'
-			),
+			.refine(async (file: File | null) => file && (await getImageFormat('landscape', file)), 'Image must have a landscape format.'),
 		z.null(),
 	]),
 	avatarFile: z.union([
 		fileSchema
 			.refine((file: File | null) => file && file.size <= AVATAR_FILE_SIZE, 'Image must be under 3MB')
-			.refine(
-				async (file: File | null) => file && (await getImageFormat('portrait', file)),
-				'Image must have a portrait format.'
-			),
+			.refine(async (file: File | null) => file && (await getImageFormat('portrait', file)), 'Image must have a portrait format.'),
 		z.null(),
 	]),
 	email: z.union([emailSchema, z.literal('')]),

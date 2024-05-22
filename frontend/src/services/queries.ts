@@ -21,8 +21,7 @@ import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../u
 import { queryClient } from './queryClient'
 
 // User Queries and Mutations
-export const useGetMe = () =>
-	useQuery<User, IDefaultError>({ queryKey: ['profileSettings', 'getUser'], queryFn: getMe, enabled: false })
+export const useGetMe = () => useQuery<User, IDefaultError>({ queryKey: ['profileSettings', 'getUser'], queryFn: getMe, enabled: false })
 
 export const useUpdateMe = () =>
 	useMutation<IUser, IDefaultError, IProfileSettings>({
@@ -32,8 +31,7 @@ export const useUpdateMe = () =>
 		},
 	})
 
-export const useDeleteMe = () =>
-	useMutation<IDefaultSuccess, IDefaultError, { password: string }>({ mutationFn: deleteMe })
+export const useDeleteMe = () => useMutation<IDefaultSuccess, IDefaultError, { password: string }>({ mutationFn: deleteMe })
 
 export const useGetUserAndProjects = (userId: string) =>
 	useQuery<User, IDefaultError>({
@@ -41,8 +39,7 @@ export const useGetUserAndProjects = (userId: string) =>
 		queryFn: () => getUserAndProjects(userId),
 	})
 
-export const useChangePassword = () =>
-	useMutation<ILogin, IDefaultError, ResetPasswordType>({ mutationFn: changePassword })
+export const useChangePassword = () => useMutation<ILogin, IDefaultError, ResetPasswordType>({ mutationFn: changePassword })
 
 //Project Queries and Mutations
 
@@ -101,10 +98,9 @@ export const useLogin = () =>
 		mutationFn: login,
 	})
 
-export const useForgotPassword = () =>
-	useMutation<IDefaultSuccess, IDefaultError, { email: string }>({ mutationFn: forgotPassword })
+export const useForgotPassword = () => useMutation<IDefaultSuccess, IDefaultError, { email: string }>({ mutationFn: forgotPassword })
 
 export const useResetPassword = (resetToken: string | undefined) =>
-	useMutation<ILogin, IDefaultError, ResetPasswordType>({
+	useMutation<IDefaultSuccess, IDefaultError, ResetPasswordType>({
 		mutationFn: (body) => resetPassword(resetToken, body),
 	})

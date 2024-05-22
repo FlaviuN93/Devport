@@ -50,17 +50,8 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 	const { close } = useModalContext()
 	const { resetToken } = useParams()
 
-	const {
-		isPending: isChangeLoading,
-		mutate: changePassword,
-		isSuccess: isChangeSuccess,
-	} = useChangePassword()
-
-	const {
-		isPending: isResetLoading,
-		mutate: resetPassword,
-		isSuccess: isResetSuccess,
-	} = useResetPassword(resetToken)
+	const { isPending: isChangeLoading, mutate: changePassword, isSuccess: isChangeSuccess } = useChangePassword()
+	const { isPending: isResetLoading, mutate: resetPassword, isSuccess: isResetSuccess } = useResetPassword(resetToken)
 
 	useEffect(() => {
 		if (resetToken) {
@@ -107,9 +98,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 				))}
 			</div>
 			<div className='flex gap-2 justify-end'>
-				{showCancelBtn && (
-					<Button type='button' variant='transparent' buttonText='Cancel' onClick={() => close()} />
-				)}
+				{showCancelBtn && <Button type='button' variant='transparent' buttonText='Cancel' onClick={() => close()} />}
 				<Button
 					buttonText={buttonName}
 					type='submit'

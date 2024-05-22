@@ -1,5 +1,4 @@
 import { FC, ReactElement, ReactNode, cloneElement, useEffect } from 'react'
-import { motion } from 'framer-motion'
 import styles from './Modal.module.css'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { createPortal } from 'react-dom'
@@ -8,6 +7,7 @@ import { useDropdownContext, useModalContext } from '../../contexts/contextHooks
 import { useCalculateWindowHeight } from '../../hooks/useCalculateWindowHeight'
 import { TailwindClasses } from '../../utils/types'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
+import useKeyToClose from '../../hooks/useKeyToClose'
 
 interface IModalWindow {
 	modalName: string
@@ -46,8 +46,8 @@ export const ModalWindow: FC<IModalWindow> = ({
 	const { openModal, close, modalWindowRef, modalPosition } = useModalContext()
 	const { exclusionRef } = useDropdownContext()
 	const isModalOpen = openModal.length > 0
-
 	const overlayRef = useCalculateWindowHeight(isModalOpen)
+	useKeyToClose('Escape', close)
 	useOutsideClick(modalWindowRef, close)
 
 	useEffect(() => {
@@ -59,38 +59,19 @@ export const ModalWindow: FC<IModalWindow> = ({
 
 	const modalWindowClasses = `${styles.modalContainer} ${modalWindowStyles ? modalWindowStyles : ''}`
 
-	const motionVariants = {
-		hidden: { opacity: 0 },
-		visible: { opacity: 1 },
-	}
-
 	if (modalName !== openModal) return null
 
 	return createPortal(
-		<motion.div
-			initial='hidden'
-			animate={isModalOpen ? 'visible' : 'hidden'}
-			variants={motionVariants}
-			transition={{ duration: 0.2 }}
-			className={styles.modalOverlay}
-			ref={overlayRef}
-		>
-			<motion.div
-				ref={exclusionRef}
-				initial='hidden'
-				animate={isModalOpen ? 'visible' : 'hidden'}
-				variants={motionVariants}
-				transition={{ duration: 0.2 }}
-				className={modalWindowClasses}
-			>
+		<div className={styles.modalOverlay} ref={overlayRef}>
+			<div ref={exclusionRef} className={modalWindowClasses}>
 				<div ref={modalWindowRef}>
 					{showCloseIcon && (
 						<XMarkIcon onClick={close} className='h-6 w-6 cursor-pointer absolute top-1.5 right-1.5' />
 					)}
 					{children}
 				</div>
-			</motion.div>
-		</motion.div>,
+			</div>
+		</div>,
 		document.body
 	)
 }

@@ -30,26 +30,15 @@ const ProjectSettingsForm = () => {
 		resolver: zodResolver(projectSettingsSchema),
 		defaultValues: { imageFile: null },
 	})
+	const url = getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile as File) : null
 
 	const { isProjectSelected, selectedProject, resetImageUrl, disableProjectEdit } = useProjectContext()
 	const { data: technologies } = useGetTechnologies()
-	const url =
-		getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile as File) : null
-
-	const {
-		isPending: IsPendingUpdate,
-		mutate: updateMutation,
-		isSuccess: isUpdateSuccess,
-	} = useUpdateMyProject(selectedProject.id)
-
-	const {
-		isPending: IsPendingCreate,
-		mutate: createMutation,
-		isSuccess: isCreateSuccess,
-	} = useCreateMyProject()
-
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const resetMultiSelect = useRef<() => void>(() => {})
+
+	const { isPending: IsPendingUpdate, mutate: updateMutation, isSuccess: isUpdateSuccess } = useUpdateMyProject(selectedProject.id)
+	const { isPending: IsPendingCreate, mutate: createMutation, isSuccess: isCreateSuccess } = useCreateMyProject()
 
 	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
 	useEffect(() => {
@@ -124,9 +113,7 @@ const ProjectSettingsForm = () => {
 				className='imageFileContainer'
 			>
 				<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
-				<p className='text-gray text-sm text-center font-medium px-4'>
-					Image must be PNG, JPEG, JPG, WEBP - max 2MB
-				</p>
+				<p className='text-gray text-sm text-center font-medium px-4'>Image must be PNG, JPEG, JPG, WEBP - max 2MB</p>
 
 				<File
 					buttonText='Upload Project Image'
@@ -139,21 +126,9 @@ const ProjectSettingsForm = () => {
 			</motion.div>
 
 			<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
-				<Text
-					label='Project Name'
-					register={register}
-					name='name'
-					placeholder='Enter your project name'
-					error={errors.name?.message}
-				/>
+				<Text label='Project Name' register={register} name='name' placeholder='Enter your project name' error={errors.name?.message} />
 
-				<Text
-					label='Demo URL'
-					register={register}
-					name='demoURL'
-					placeholder='Enter the demo URL'
-					error={errors.demoURL?.message}
-				/>
+				<Text label='Demo URL' register={register} name='demoURL' placeholder='Enter the demo URL' error={errors.demoURL?.message} />
 			</div>
 			<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
 				<Text

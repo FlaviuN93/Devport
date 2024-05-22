@@ -14,10 +14,9 @@ const Login = () => {
 	const {
 		handleSubmit,
 		register,
-		formState: { errors },
+		formState: { errors, isValid },
 	} = useForm<LoginType>({
 		resolver: zodResolver(loginSchema),
-		mode: 'onChange',
 	})
 	const { mutate: loginUser, isPending, isSuccess, data } = useLogin()
 	const { handleSetUser } = useUserContext()
@@ -26,9 +25,9 @@ const Login = () => {
 	useEffect(() => {
 		if (isSuccess) {
 			handleSetUser(data.user)
-			navigate('/project-settings')
+			navigate('/profile-settings')
 		}
-	}, [navigate, isSuccess, data, handleSetUser])
+	}, [navigate, isSuccess, data, errors, handleSetUser, isValid])
 
 	const handleGithubSignup = () => {
 		console.log('Github')
@@ -40,12 +39,7 @@ const Login = () => {
 				<h1 className='mb-1'>Login to Account</h1>
 				<h6>Enter your credentials to access your account</h6>
 			</div>
-			<Button
-				onClick={handleGithubSignup}
-				buttonText='Sign In with Github'
-				buttonStyles='bg-darkBlue text-white'
-				icon={<GithubIcon />}
-			/>
+			<Button onClick={handleGithubSignup} buttonText='Sign In with Github' buttonStyles='bg-darkBlue text-white' icon={<GithubIcon />} />
 			<div className='borderWord'>or</div>
 
 			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => loginUser(data))}>
@@ -61,12 +55,7 @@ const Login = () => {
 				<Link to='/auth/forgot-password' className='place-self-end -mt-2'>
 					<Button buttonText='Forgot Password' variant='text' buttonStyles='text-violet' />
 				</Link>
-				<Button
-					buttonText='Sign In'
-					isLoading={isPending}
-					type='submit'
-					buttonStyles='bg-violet text-white w-full'
-				/>
+				<Button buttonText='Sign In' isLoading={isPending} type='submit' buttonStyles='bg-violet text-white w-full' />
 			</form>
 
 			<div className='-mt-3 text-start'>

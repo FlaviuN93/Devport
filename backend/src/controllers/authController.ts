@@ -1,12 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import {
-	forgotPassword,
-	loginUser,
-	protect,
-	registerUser,
-	resetPassword,
-	updatePassword,
-} from '../models/authModel'
+import { forgotPassword, loginUser, protect, registerUser, resetPassword, updatePassword } from '../models/authModel'
 
 import { catchAsync } from '../utils/errorFunctions'
 import { authSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
@@ -21,11 +14,11 @@ export const registerUserHandler = catchAsync(async (req: Request, res: Response
 	const response = await registerUser(email, password)
 	if (response instanceof AppError) return next(response)
 
-	const { email: userEmail, token, statusCode, statusText = [] } = response
+	const { user, token, statusCode, statusText = [] } = response
 	sendTokenByCookie(token, res, next)
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		user: userEmail,
+		user,
 	})
 })
 
@@ -73,12 +66,10 @@ export const resetPasswordHandler = catchAsync(async (req: Request, res: Respons
 	const response = await resetPassword(password, req.params.resetToken)
 
 	if (response instanceof AppError) return next(response)
-	const { user, token, statusCode, statusText = [] } = response
+	const { statusCode, statusText = [] } = response
 
-	sendTokenByCookie(token, res, next)
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		user,
 	})
 })
 

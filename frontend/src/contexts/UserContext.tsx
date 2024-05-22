@@ -16,7 +16,7 @@ const initialUser: User = {
 export interface UserContextProps {
 	user: User
 	handleSetUser: (user: User) => void
-	handleLogoutUser: () => void
+	handleLogoutUser: (navigate: () => void) => void
 }
 
 export const UserContext = createContext<UserContextProps>({} as UserContextProps)
@@ -29,9 +29,11 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		setUser(user)
 	}
 
-	const handleLogoutUser = () => window.localStorage.removeItem('user')
+	const handleLogoutUser = (navigate: () => void) => {
+		window.localStorage.removeItem('user')
+		setUser(initialUser)
+		navigate()
+	}
 
-	return (
-		<UserContext.Provider value={{ user, handleSetUser, handleLogoutUser }}>{children}</UserContext.Provider>
-	)
+	return <UserContext.Provider value={{ user, handleSetUser, handleLogoutUser }}>{children}</UserContext.Provider>
 }

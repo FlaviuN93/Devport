@@ -4,15 +4,13 @@ import Button from '../UI/Button'
 import { useDeleteMe } from '../../services/queries'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
+import { useModalContext } from '../../contexts/contextHooks'
 
 const DeleteAccountForm = () => {
 	const { error, isPending, mutate: deleteUser, isSuccess } = useDeleteMe()
+	const { close } = useModalContext()
 	const [deletePassword, setDeletePassword] = useState('')
 	const navigate = useNavigate()
-
-	const handleDeleteUser = () => {
-		deleteUser({ password: deletePassword })
-	}
 
 	// Still have to work on logout functionality here and other places
 	useEffect(() => {
@@ -24,8 +22,7 @@ const DeleteAccountForm = () => {
 			<div className='flex flex-col gap-3 mt-2'>
 				<h4 className='text-danger'>Delete Account</h4>
 				<h3 className='font-bold'>
-					Important! Deleting your account is permanent. You will lose access to all of your data and
-					information associated with it.
+					Important! Deleting your account is permanent. You will lose access to all of your data and information associated with it.
 				</h3>
 
 				<p>If you are sure that you want to delete your account, please enter your password to confirm:</p>
@@ -47,7 +44,7 @@ const DeleteAccountForm = () => {
 						buttonStyles='bg-danger text-white'
 						iconStyles='border-light2 border-t-danger'
 						isLoading={isPending}
-						onClick={handleDeleteUser}
+						onClick={() => deleteUser({ password: deletePassword })}
 					/>
 				</div>
 			</div>
