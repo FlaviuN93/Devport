@@ -37,6 +37,7 @@ const ProfileSettingsForm = () => {
 	} = useForm<IProfileSettings>({
 		resolver: zodResolver(profileSettingsSchema),
 		defaultValues: initialFormValue,
+		mode: 'onSubmit',
 	})
 
 	const { user: loggedUser } = useUserContext()
@@ -44,7 +45,6 @@ const ProfileSettingsForm = () => {
 
 	const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
 	const [coverUrl, setCoverUrl] = useState<string | null>(null)
-	// const [editState, setEditState] = useState(false)
 
 	const editUserHandler = () => {
 		if (loggedUser.coverURL) setCoverUrl(loggedUser.coverURL)
@@ -64,15 +64,15 @@ const ProfileSettingsForm = () => {
 	}
 
 	useEffect(() => {
-		setCoverUrl(coverFile)
 		console.log(errors, 'errors')
-	}, [getValues().coverFile])
+		setCoverUrl(coverFile)
+	}, [getValues().coverFile, errors])
 
 	const userDataHandler: SubmitHandler<IProfileSettings> = (data) => {
-		console.log(data, 'data')
-		const userFormData = convertToFormData(data)
-		if (isSuccess) setTimeout(() => handleResetForm(), 500)
+		const formData = Object.assign(data, { coverURL: null, avatarURL: null })
+		const userFormData = convertToFormData(formData)
 		updateUser(userFormData)
+		if (isSuccess) setTimeout(() => handleResetForm(), 500)
 	}
 
 	return (
@@ -85,10 +85,10 @@ const ProfileSettingsForm = () => {
 				className='flex flex-col items-center gap-4 bg-light2 py-6'
 			>
 				<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px] -mt-2' />
-				<p className='text-gray text-sm text-center font-medium px-4'>Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
+				<p className='text-gray text-sm text-center font-medium px-4'>Cover Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
 
 				<File
-					buttonText='Upload Cover Image'
+					buttonText='Upload Cover'
 					icon={<UploadIcon />}
 					name='coverFile'
 					fileStyles='gap-2'
@@ -152,7 +152,6 @@ const ProfileSettingsForm = () => {
 					buttonStyles='mb-2 w-full sm:place-self-end sm:w-auto'
 					variant='primary'
 					isLoading={pendingUpdate}
-					// disabled={isValid}
 					type='submit'
 				/>
 			</div>

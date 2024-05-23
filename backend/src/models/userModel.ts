@@ -31,20 +31,19 @@ export const getUser = async (userId: string): Promise<IUser | AppError> => {
 }
 
 export const updateUser = async (reqBody: UpdateUserType, userId: string): Promise<IUser | AppError> => {
-	// const response = await supabase.from('users').update(reqBody).eq('id', userId).select('*').single()
-	// const { data: user, error, status } = response
+	const response = await supabase.from('users').update(reqBody).eq('id', userId).select('*').single()
+	const { data: user, error, status } = response
 
-	// if (error) return new AppError(status)
-	// if (!user) return new AppError(400)
+	if (!user) return new AppError(400)
+	if (error) return new AppError(status)
 
-	// const newUser = removeUserColumns<User>(user)
+	const newUser = removeUserColumns<User>(user)
 
-	// return {
-	// 	user: newUser,
-	// 	statusCode: 200,
-	// 	statusText: ['update', 'Your profile information has been updated successfully'],
-	// }
-	return new AppError(429)
+	return {
+		user: newUser,
+		statusCode: 200,
+		statusText: ['update', 'Your profile information has been updated successfully'],
+	}
 }
 
 export const deleteUser = async (password: string, userId: string): Promise<IDefault | AppError> => {

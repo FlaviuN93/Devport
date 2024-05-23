@@ -1,8 +1,5 @@
-import { emailSchema, passwordSchema, descriptionSchema, fileSchema, nameSchema, urlSchema } from '../services/baseSchema'
+import { emailSchema, passwordSchema, descriptionSchema, nameSchema, urlSchema } from '../services/baseSchema'
 import { z } from 'zod'
-
-// Constants
-const MAX_FILE_SIZE = 1024 * 1024 * 5
 
 // Auth Schema
 export const authSchema = z.object({
@@ -26,7 +23,7 @@ export const resetPasswordSchema = z
 
 // Project Schema
 export const createProjectSchema = z.object({
-	imageFile: z.union([urlSchema, z.null()]),
+	imageURL: z.union([urlSchema, z.null()]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,
@@ -37,8 +34,8 @@ export const createProjectSchema = z.object({
 
 // User Schema
 export const updateUserSchema = z.object({
-	coverFile: z.union([urlSchema, z.null()]),
-	avatarFile: z.union([urlSchema, z.null()]),
+	coverURL: z.union([urlSchema, z.null()]),
+	avatarURL: z.union([urlSchema, z.null()]),
 	email: z.union([emailSchema, z.literal('')]),
 	name: z.union([nameSchema, z.literal('')]),
 	jobTitle: z.union([

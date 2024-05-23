@@ -21,11 +21,8 @@ export const getMyProjects = async (userId: string): Promise<IProjects | AppErro
 		data: projects,
 		error,
 		status,
-	} = await supabase
-		.from('projects')
-		.select('id,imageFile,name,demoURL,repositoryURL,technologies,description')
-		.eq('user_id', userId)
-
+	} = await supabase.from('projects').select('id,imageURL,name,demoURL,repositoryURL,technologies,description').eq('user_id', userId)
+	console.log(error, 'error')
 	if (error) return new AppError(status)
 	if (projects === null || projects.length === 0) return { projects: [], statusCode: 200 }
 
@@ -39,7 +36,7 @@ export const getMyProject = async (userId: string, projectId: string): Promise<I
 		status,
 	} = await supabase
 		.from('projects')
-		.select('id,imageFile,name,demoURL,repositoryURL,technologies,description')
+		.select('id,imageURL,name,demoURL,repositoryURL,technologies,description')
 		.eq('id', projectId)
 		.eq('user_id', userId)
 		.single()
@@ -58,21 +55,13 @@ export const createMyProject = async (reqBody: CreateProject): Promise<IDefault 
 	return { statusCode: 201, statusText: ['project', 'created'] }
 }
 
-export const updateMyProject = async (
-	reqBody: CreateProject,
-	projectId: string
-): Promise<IDefault | AppError> => {
-	if (reqBody.imageFile === null) {
-		const { data } = await supabase.from('projects').select('imageFile').eq('id', projectId).single()
-		reqBody.imageFile = data?.imageFile
+export const updateMyProject = async (reqBody: CreateProject, projectId: string): Promise<IDefault | AppError> => {
+	if (reqBody.imageURL === null) {
+		const { data } = await supabase.from('projects').select('imageURL').eq('id', projectId).single()
+		reqBody.imageURL = data?.imageURL
 	}
 
-	const { error, status, data } = await supabase
-		.from('projects')
-		.update(reqBody)
-		.eq('id', projectId)
-		.select('name')
-		.single()
+	const { error, status, data } = await supabase.from('projects').update(reqBody).eq('id', projectId).select('name').single()
 	if (error) return new AppError(status)
 
 	return { statusCode: 200, statusText: ['update', `Project ${data.name} has been updated successfully`] }

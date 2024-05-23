@@ -76,7 +76,6 @@ export const resetPasswordHandler = catchAsync(async (req: Request, res: Respons
 export const protectHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const response = await protect(req.cookies.jwt)
 	if (response instanceof AppError) return next(response)
-
 	// I could add userRoles here if needed
 	req.userId = response.userId
 	next()

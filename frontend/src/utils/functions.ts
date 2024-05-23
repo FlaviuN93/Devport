@@ -41,9 +41,7 @@ export const createZodErrorMessage = (error: IDefaultError): string | null => {
 	if (error.type === 'zodError' && typeof error.message === 'object') {
 		let toastMessage = `${error.statusTitle.toUpperCase()}:\n `
 		for (const [field, errorMessage] of Object.entries(error.message)) {
-			toastMessage += `${field.toUpperCase()}: ${
-				Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage
-			}\n`
+			toastMessage += `${field.toUpperCase()}: ${Array.isArray(errorMessage) ? errorMessage.join(', ') : errorMessage}\n`
 		}
 
 		return toastMessage
@@ -55,9 +53,9 @@ export const createZodErrorMessage = (error: IDefaultError): string | null => {
 export const convertToFormData = (data: ObjectType): FormData => {
 	const formData = new FormData()
 	const fileKeys = Object.keys(data).filter((key: string) => key.endsWith('File'))
-	const bodyData = { ...data }
-	fileKeys.forEach((key) => formData.append(key, data[key]))
-
+	const bodyData = structuredClone(data)
+	fileKeys.forEach((key) => formData.append(key, bodyData[key]))
+	fileKeys.forEach((key) => delete bodyData[key])
 	formData.append('body', JSON.stringify(bodyData))
 	return formData
 }

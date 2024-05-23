@@ -129,7 +129,6 @@ export const protect = async (reqToken: string): Promise<{ userId: string } | Ap
 	if (decodedToken instanceof AppError) return decodedToken
 
 	const { data: user } = await supabase.from('users').select('*').eq('id', decodedToken.userId).single()
-
 	const isPasswordChanged = hasPasswordChanged(decodedToken.iat as number, user.passwordUpdatedAt)
 	if (isPasswordChanged) return new AppError(401, 'You recently changed password! Please log in again')
 

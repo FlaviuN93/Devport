@@ -70,7 +70,8 @@ const ProjectSettingsForm = () => {
 	}
 
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
-		const projectFormData = convertToFormData(data)
+		const formData = Object.assign(data, { imageURL: null })
+		const projectFormData = convertToFormData(formData)
 		if (isProjectSelected) updateMutation(projectFormData)
 		else createMutation(projectFormData)
 

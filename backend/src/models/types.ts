@@ -12,7 +12,7 @@ export interface User {
 
 interface Project {
 	id?: number
-	imageFile: string
+	imageURL: string
 	name: string
 	demoURL: string
 	repositoryURL: string
