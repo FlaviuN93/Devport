@@ -22,7 +22,6 @@ export const getMyProjects = async (userId: string): Promise<IProjects | AppErro
 		error,
 		status,
 	} = await supabase.from('projects').select('id,imageURL,name,demoURL,repositoryURL,technologies,description').eq('user_id', userId)
-	console.log(error, 'error')
 	if (error) return new AppError(status)
 	if (projects === null || projects.length === 0) return { projects: [], statusCode: 200 }
 

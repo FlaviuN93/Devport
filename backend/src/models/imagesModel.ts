@@ -8,7 +8,6 @@ export const addProjectImage = async (file: Express.Multer.File): Promise<string
 		.upload(file.filename, file.buffer, { contentType: file.mimetype })
 
 	if (error) return new AppError(400)
-
 	const { data } = supabase.storage.from('project-images').getPublicUrl(url.path)
 
 	return data.publicUrl
@@ -29,7 +28,6 @@ export const updateProjectImage = async (file: Express.Multer.File, projectId?: 
 	if (error) return new AppError(400)
 
 	const { data } = supabase.storage.from('project-images').getPublicUrl(url.path)
-
 	return data.publicUrl
 }
 

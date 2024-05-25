@@ -24,7 +24,7 @@ export const nameSchema = z
 	.string()
 	.trim()
 	.min(4, 'Name must be at least 4 characters')
-	.max(50, 'Name must be maximum 50 characters')
+	.max(40, 'Name must be maximum 40 characters')
 	.regex(/^[a-zA-Z0-9-\s]+$/, 'Name can only contain letters and numbers')
 
 export const descriptionSchema = z

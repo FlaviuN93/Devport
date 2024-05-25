@@ -25,7 +25,7 @@ const ProjectSettings = () => {
 								technologies={project.technologies}
 								title={project.name}
 								cardState='edit'
-								imageFile={project.imageFile}
+								imageURL={project.imageURL}
 							/>
 						)
 					})}

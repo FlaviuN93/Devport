@@ -1,5 +1,5 @@
 import CheckCircleIcon from '../../assets/check circle-1.svg?react'
-import { PencilSquareIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import ProjectIcon from '../../assets/project.svg?react'
@@ -16,67 +16,74 @@ import { useEffect, useState } from 'react'
 import { motionVariants } from '../../utils/variables'
 import { convertToFormData } from '../../utils/functions'
 
-const initialFormValue = {
-	avatarFile: null,
-	coverFile: null,
-	bio: '',
-	email: '',
-	jobTitle: '',
-	linkedin: '',
-	name: '',
-}
-
 const ProfileSettingsForm = () => {
+	const { user: loggedUser, handleSetUser } = useUserContext()
 	const {
 		handleSubmit,
 		register,
-		formState: { errors, isValid },
+		formState: { errors },
 		setValue,
 		getValues,
-		reset,
 	} = useForm<IProfileSettings>({
 		resolver: zodResolver(profileSettingsSchema),
-		defaultValues: initialFormValue,
-		mode: 'onSubmit',
-	})
-
-	const { user: loggedUser } = useUserContext()
-	const { isPending: pendingUpdate, mutate: updateUser, isSuccess } = useUpdateMe()
-
-	const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
-	const [coverUrl, setCoverUrl] = useState<string | null>(null)
-
-	const editUserHandler = () => {
-		if (loggedUser.coverURL) setCoverUrl(loggedUser.coverURL)
-
-		reset({
-			name: loggedUser.fullName,
+		defaultValues: {
+			avatarFile: null,
+			coverFile: null,
+			fullName: loggedUser.fullName,
 			bio: loggedUser.bio,
 			email: loggedUser.email,
 			jobTitle: loggedUser.jobTitle,
 			linkedin: loggedUser.linkedin,
-		})
-	}
+		},
+	})
 
-	const handleResetForm = () => {
-		setCoverUrl(null)
-		reset(initialFormValue)
-	}
+	const { isPending: pendingUpdate, mutate: updateUser, isSuccess, data: newUser } = useUpdateMe()
+	const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
+	const [coverUrl, setCoverUrl] = useState<string | null>(null)
+	const [isCoverSelected, setIsCoverSelected] = useState(true)
 
+	// Updating the previewUrl for cover.
 	useEffect(() => {
-		console.log(errors, 'errors')
-		setCoverUrl(coverFile)
-	}, [getValues().coverFile, errors])
+		if (isCoverSelected) setCoverUrl(loggedUser.coverURL)
+		else setCoverUrl(coverFile)
+	}, [getValues().coverFile, loggedUser.coverURL, isCoverSelected])
+
+	// Updating user
+	useEffect(() => {
+		if (isSuccess && !pendingUpdate) {
+			handleSetUser(newUser.user)
+			setIsCoverSelected(true)
+		}
+	}, [isSuccess, pendingUpdate, handleSetUser, newUser?.user])
 
 	const userDataHandler: SubmitHandler<IProfileSettings> = (data) => {
 		const formData = Object.assign(data, { coverURL: null, avatarURL: null })
 		const userFormData = convertToFormData(formData)
 		updateUser(userFormData)
-		if (isSuccess) setTimeout(() => handleResetForm(), 500)
 	}
 
 	return (
 		<form onSubmit={handleSubmit(userDataHandler)} className='formSettingsContainer'>
+			<motion.div
+				initial='hidden'
+				animate={coverUrl ? 'visible' : 'hidden'}
+				variants={motionVariants}
+				transition={{ duration: 0.5 }}
+				className='relative justify-center bg-light3'
+			>
+				{coverUrl && (
+					<>
+						<XMarkIcon
+							onClick={() => {
+								setIsCoverSelected(false)
+								setCoverUrl(null)
+							}}
+							className='h-6 w-6 absolute top-2 right-2 text-[#666] cursor-pointer'
+						/>
+						<img src={coverUrl} className='object-cover max-h-[250px] w-full' />
+					</>
+				)}
+			</motion.div>
 			<motion.div
 				initial='hidden'
 				animate={!coverUrl ? 'visible' : 'hidden'}
@@ -88,7 +95,7 @@ const ProfileSettingsForm = () => {
 				<p className='text-gray text-sm text-center font-medium px-4'>Cover Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
 
 				<File
-					buttonText='Upload Cover'
+					buttonText='Upload New Cover'
 					icon={<UploadIcon />}
 					name='coverFile'
 					fileStyles='gap-2'
@@ -97,23 +104,8 @@ const ProfileSettingsForm = () => {
 					error={errors.coverFile?.message}
 				/>
 			</motion.div>
-			<motion.div
-				initial='hidden'
-				animate={coverUrl ? 'visible' : 'hidden'}
-				variants={motionVariants}
-				transition={{ duration: 0.5 }}
-				className='relative justify-center bg-light3'
-			>
-				{coverUrl && (
-					<>
-						<XMarkIcon onClick={() => setCoverUrl(null)} className='h-6 w-6 absolute top-2 right-2 text-white cursor-pointer' />
-						<img src={coverUrl} className='object-cover max-h-[250px] w-full' />
-					</>
-				)}
-			</motion.div>
-
 			<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
-				<Text label='Name' register={register} name='name' placeholder='Enter your name' error={errors.name?.message} />
+				<Text label='Name' register={register} name='fullName' placeholder='Enter your name' error={errors.fullName?.message} />
 
 				<Text
 					label='Linkedin Profile'
@@ -136,15 +128,7 @@ const ProfileSettingsForm = () => {
 				placeholder='Enter a short introduction..'
 				error={errors.bio?.message}
 			/>
-			<div className='place-self-end flex flex-col w-full gap-4 sm:flex-row sm:w-auto'>
-				<Button
-					icon={<PencilSquareIcon className='h-5 w-5' />}
-					iconPos='left'
-					buttonText='Edit'
-					buttonStyles='mb-2 w-full sm:place-self-end sm:w-auto bg-lightViolet text-darkViolet'
-					type='button'
-					onClick={editUserHandler}
-				/>
+			<div className='place-self-end flex w-full sm:w-auto'>
 				<Button
 					icon={<CheckCircleIcon className='h-5 w-5' />}
 					iconPos='left'

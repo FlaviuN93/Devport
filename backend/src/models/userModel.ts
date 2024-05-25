@@ -31,9 +31,15 @@ export const getUser = async (userId: string): Promise<IUser | AppError> => {
 }
 
 export const updateUser = async (reqBody: UpdateUserType, userId: string): Promise<IUser | AppError> => {
+	const { data } = await supabase.from('projects').select('coverURL,avatarURL').eq('id', userId).single()
+	if (reqBody.coverURL === null) reqBody.coverURL = data?.coverURL
+
+	if (reqBody.avatarURL === null) {
+		reqBody.avatarURL = data?.avatarURL
+	}
+
 	const response = await supabase.from('users').update(reqBody).eq('id', userId).select('*').single()
 	const { data: user, error, status } = response
-
 	if (!user) return new AppError(400)
 	if (error) return new AppError(status)
 

@@ -25,6 +25,8 @@
 
 .articleDescription {
 	color: var(--gray);
+	width: 100%;
+	word-wrap: break-word;
 }
 
 .articleTechnologies {
@@ -57,6 +59,6 @@
 	}
 
 	.contentContainer {
-		width: 65%;
+		width: 60%;
 	}
 }

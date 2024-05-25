@@ -1,12 +1,7 @@
 import { FC } from 'react'
 import styles from './ProjectCard.module.css'
 import Button from '../UI/Button'
-import {
-	ArrowTopRightOnSquareIcon,
-	PencilSquareIcon,
-	PhotoIcon,
-	TrashIcon,
-} from '@heroicons/react/24/outline'
+import { ArrowTopRightOnSquareIcon, PencilSquareIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 import { tCardState } from '../../utils/types'
 import { Modal, ModalClose, ModalOpen, ModalWindow } from '../UI/Modal'
@@ -20,13 +15,13 @@ interface ProjectCardProps {
 	technologies: string[]
 	title: string
 	description: string
-	imageFile: string
+	imageURL: string
 	cardState?: tCardState
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
 	projectId,
-	imageFile,
+	imageURL,
 	demoURL,
 	repositoryURL,
 	technologies,
@@ -40,11 +35,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
 	return (
 		<div className={styles.cardContainer}>
-			{imageFile ? (
-				<img src={imageFile} alt='Image' className={styles.cardImage} />
-			) : (
-				<PhotoIcon className={styles.cardImage} />
-			)}
+			{imageURL ? <img src={imageURL} alt='Image' className={styles.cardImage} /> : <PhotoIcon className={styles.cardImage} />}
 			<div className={styles.contentContainer}>
 				<article className={styles.articleContainer}>
 					<h4 className={styles.articleTitle}>{title}</h4>
@@ -85,7 +76,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 										demoURL,
 										repositoryURL,
 										description,
-										imageFile,
+										imageURL,
 										technologies,
 									})
 								}
@@ -94,11 +85,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
 							<Modal>
 								<ModalOpen openedModalName='removeProject'>
-									<Button
-										buttonText='Remove'
-										buttonStyles='text-darkBlue bg-light3 border-0'
-										icon={<TrashIcon className='h-5 w-5' />}
-									/>
+									<Button buttonText='Remove' buttonStyles='text-darkBlue bg-light3 border-0' icon={<TrashIcon className='h-5 w-5' />} />
 								</ModalOpen>
 								<ModalWindow modalName='removeProject'>
 									<div className='flex flex-col gap-3 mt-2'>
@@ -106,12 +93,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 										<p>Are you sure you want to remove {title}?</p>
 										<ModalClose>
 											<div className='flex gap-2 justify-end'>
-												<Button
-													variant='primary'
-													buttonText='Yes'
-													isLoading={isPending}
-													onClick={() => deleteAction()}
-												/>
+												<Button variant='primary' buttonText='Yes' isLoading={isPending} onClick={() => deleteAction()} />
 												<Button variant='transparent' buttonText='No' />
 											</div>
 										</ModalClose>

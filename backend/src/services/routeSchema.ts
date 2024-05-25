@@ -37,15 +37,8 @@ export const updateUserSchema = z.object({
 	coverURL: z.union([urlSchema, z.null()]),
 	avatarURL: z.union([urlSchema, z.null()]),
 	email: z.union([emailSchema, z.literal('')]),
-	name: z.union([nameSchema, z.literal('')]),
-	jobTitle: z.union([
-		z
-			.string()
-			.trim()
-			.max(30, 'Job title is maximum 30 characters long')
-			.regex(/^[a-zA-Z]+$/, 'Position can only contain letters'),
-		z.literal(''),
-	]),
+	fullName: z.union([nameSchema, z.literal('')]),
+	jobTitle: z.union([nameSchema, z.literal('')]),
 	linkedin: z.union([urlSchema, z.literal('')]),
 	bio: z.union([descriptionSchema, z.literal('')]),
 })

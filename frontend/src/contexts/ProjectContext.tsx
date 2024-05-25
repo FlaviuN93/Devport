@@ -6,7 +6,7 @@ const initialProjectState: Project = {
 	name: '',
 	demoURL: '',
 	description: '',
-	imageFile: '',
+	imageURL: '',
 	repositoryURL: '',
 	technologies: [],
 }
@@ -30,7 +30,7 @@ export const ProjectProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		setIsProjectSelected(true)
 	}
 
-	const resetImageUrl = () => setSelectedProject((prevState) => ({ ...prevState, imageFile: '' }))
+	const resetImageUrl = () => setSelectedProject((prevState) => ({ ...prevState, imageURL: '' }))
 	const disableProjectEdit = () => setIsProjectSelected(false)
 
 	return (

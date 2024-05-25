@@ -11,10 +11,7 @@ const ProfileSettings = () => {
 			<div className='flex justify-between items-center'>
 				<h4 className='mt-2 mb-4'>Profile Settings</h4>
 				<Dropdown>
-					<DropdownToggle
-						btnStyles='p-1 shadow-xs border-light2'
-						icon={<EllipsisVerticalIcon className='h-6 w-6' />}
-					/>
+					<DropdownToggle btnStyles='p-1 shadow-xs border-light2' icon={<EllipsisVerticalIcon className='h-6 w-6' />} />
 					<DropdownMenu position='bottom'>
 						<DropdownItem itemId='changePassword'>
 							<Modal>

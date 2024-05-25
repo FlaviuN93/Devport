@@ -21,10 +21,6 @@ export interface IRegister extends IDefaultSuccess {
 	user: { email: string }
 }
 
-export interface ILogin extends IDefaultSuccess {
-	user: { email: string; avatarURL: string; fullName: string }
-}
-
 export interface IUser extends IDefaultSuccess {
 	user: User
 }
@@ -35,7 +31,7 @@ export interface IProject extends IDefaultSuccess {
 
 export interface Project {
 	id: number
-	imageFile: string
+	imageURL: string
 	name: string
 	demoURL: string
 	repositoryURL: string
@@ -44,7 +40,7 @@ export interface Project {
 }
 
 export interface User {
-	coverURL?: string | null
+	coverURL: string | null
 	avatarURL?: string | null
 	email: string
 	fullName?: string

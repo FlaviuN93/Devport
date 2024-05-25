@@ -18,7 +18,7 @@ const nameSchema = z
 	.string()
 	.trim()
 	.min(4, 'Name must be at least 4 characters')
-	.max(50, 'Name must be maximum 50 characters')
+	.max(40, 'Name must be maximum 40 characters')
 	.regex(/^[a-zA-Z_-\s]+$/, 'Name can only contain letters')
 
 const descriptionSchema = z
@@ -83,7 +83,10 @@ export const profileSettingsSchema = z.object({
 	coverFile: z.union([
 		fileSchema
 			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
-			.refine(async (file: File | null) => file && (await getImageFormat('landscape', file)), 'Image must have a landscape format.'),
+			.refine(
+				async (file: File | null) => file && (await getImageFormat('cover', file)),
+				'The uploaded file dimensions are incorrect. Ensure the image is 1350 pixels wide by 350 pixels tall.'
+			),
 		z.null(),
 	]),
 	avatarFile: z.union([
@@ -93,15 +96,8 @@ export const profileSettingsSchema = z.object({
 		z.null(),
 	]),
 	email: z.union([emailSchema, z.literal('')]),
-	name: z.union([nameSchema, z.literal('')]),
-	jobTitle: z.union([
-		z
-			.string()
-			.trim()
-			.max(30, 'Job title is maximum 30 characters long')
-			.regex(/^[a-zA-Z]+$/, 'Position can only contain letters'),
-		z.literal(''),
-	]),
+	fullName: z.union([nameSchema, z.literal('')]),
+	jobTitle: z.union([nameSchema, z.literal('')]),
 	linkedin: z.union([urlSchema, z.literal('')]),
 	bio: z.union([descriptionSchema, z.literal('')]),
 })
@@ -116,7 +112,7 @@ export interface IProfileSettings {
 	coverFile: File | null
 	avatarFile: File | null
 	email?: string
-	name?: string
+	fullName?: string
 	jobTitle?: string
 	linkedin?: string
 	bio?: string

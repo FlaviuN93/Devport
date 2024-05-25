@@ -16,7 +16,7 @@ import {
 	updateMe,
 	updateMyProject,
 } from './api.requests'
-import { IDefaultError, IDefaultSuccess, ILogin, IRegister, Technology, IUser, Project, User } from './types'
+import { IDefaultError, IDefaultSuccess, IRegister, Technology, IUser, Project, User } from './types'
 import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 
@@ -26,9 +26,6 @@ export const useGetMe = () => useQuery<User, IDefaultError>({ queryKey: ['profil
 export const useUpdateMe = () =>
 	useMutation<IUser, IDefaultError, FormData>({
 		mutationFn: updateMe,
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['profileSettings', 'getUser'] })
-		},
 	})
 
 export const useDeleteMe = () => useMutation<IDefaultSuccess, IDefaultError, { password: string }>({ mutationFn: deleteMe })
@@ -39,7 +36,7 @@ export const useGetUserAndProjects = (userId: string) =>
 		queryFn: () => getUserAndProjects(userId),
 	})
 
-export const useChangePassword = () => useMutation<ILogin, IDefaultError, ResetPasswordType>({ mutationFn: changePassword })
+export const useChangePassword = () => useMutation<IUser, IDefaultError, ResetPasswordType>({ mutationFn: changePassword })
 
 //Project Queries and Mutations
 
@@ -94,7 +91,7 @@ export const useRegister = () =>
 	})
 
 export const useLogin = () =>
-	useMutation<ILogin, IDefaultError, LoginType>({
+	useMutation<IUser, IDefaultError, LoginType>({
 		mutationFn: login,
 	})
 

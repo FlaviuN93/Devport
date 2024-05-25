@@ -44,7 +44,6 @@ export const getMyProjectsData = async (req: Request, res: Response, next: NextF
 	if (response instanceof AppError) return next(response)
 
 	const { projects, statusCode } = response
-
 	res.status(statusCode).send(projects)
 }
 
@@ -86,7 +85,7 @@ export const updateMyProjectData = catchAsync(async (req: Request, res: Response
 	if (req.file) {
 		const url = await updateProjectImage(req.file, projectId)
 		if (url instanceof AppError) return next(url)
-		reqBody.imageFile = url
+		reqBody.imageURL = url
 	}
 
 	const projectData = createProjectSchema.parse(reqBody)
