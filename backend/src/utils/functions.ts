@@ -14,16 +14,9 @@ export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T =
 	if (obj.hasOwnProperty('resetToken')) delete obj.resetToken
 	if (obj.hasOwnProperty('resetTokenExpiresIn')) delete obj.resetTokenExpiresIn
 	if (obj.hasOwnProperty('active')) delete obj.active
+	if (obj.hasOwnProperty('role')) delete obj.role
 
 	return obj
-}
-
-export const removeUserPassword = <T extends { [key: string]: any }>(user: T): T => {
-	if (user.hasOwnProperty('password')) delete user.password
-	if (user.hasOwnProperty('id')) delete user.id
-	if (user.hasOwnProperty('active')) delete user.active
-
-	return user
 }
 
 // Verify Token
@@ -37,8 +30,7 @@ export const verifyToken = <T extends jwt.JwtPayload>(reqToken: string): T | App
 
 		if (err instanceof NotBeforeError) return new AppError(403, 'Your token is not active. Nice try!')
 
-		if (err instanceof TokenExpiredError)
-			return new AppError(403, 'Your token has expired! Please log in again.')
+		if (err instanceof TokenExpiredError) return new AppError(403, 'Your token has expired! Please log in again.')
 
 		if (err instanceof JsonWebTokenError) return new AppError(403, 'Invalid token. Please login in again.')
 	}
@@ -46,8 +38,7 @@ export const verifyToken = <T extends jwt.JwtPayload>(reqToken: string): T | App
 	return new AppError(500, 'JsonWebToken')
 }
 
-export const hasPasswordChanged = (JWTTimestamp: number, passwordTimestamp: string) =>
-	JWTTimestamp < Date.parse(passwordTimestamp) / 1000
+export const hasPasswordChanged = (JWTTimestamp: number, passwordTimestamp: string) => JWTTimestamp < Date.parse(passwordTimestamp) / 1000
 
 export const isEmptyObject = (obj: Object<unknown>) => Object.keys(obj).length === 0
 

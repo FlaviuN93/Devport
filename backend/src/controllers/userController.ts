@@ -1,7 +1,7 @@
 import multer from 'multer'
 import { NextFunction, Request, Response } from 'express'
-import { deleteUser, getUser, getUserAndProjects, updateUser } from '../models/userModel'
-import { updateUserSchema } from '../services/routeSchema'
+import { deleteUser, getMyPortfolio, getUser, getUserAndProjects, updateMyPortfolio, updateUser } from '../models/userModel'
+import { patchUserImageSchema, updateUserSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { idSchema, passwordSchema } from '../services/baseSchema'
@@ -49,9 +49,43 @@ export const getUserAndProjectsHandler = catchAsync(async (req: Request, res: Re
 
 	const response = await getUserAndProjects(userId)
 	if (response instanceof AppError) return next(response)
-	const { userWithProjects, statusCode, statusText } = response
+	const { userWithProjects, statusCode } = response
 
 	res.status(statusCode).send(userWithProjects)
+})
+
+export const getMyPortfolioHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const response = await getMyPortfolio(req.userId)
+	if (response instanceof AppError) return next(response)
+	const { userWithProjects, statusCode } = response
+
+	res.status(statusCode).send(userWithProjects)
+})
+
+export const updateMyPortolioHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const { coverFile, avatarFile } = req.files as { [fieldname: string]: Express.Multer.File[] }
+
+	if (coverFile) {
+		const coverUrl = await updateCoverImage(coverFile[0], req.userId)
+		if (coverUrl instanceof AppError) return next(coverUrl)
+		req.body.coverURL = coverUrl
+	}
+
+	if (avatarFile) {
+		const avatarUrl = await updateAvatarImage(avatarFile[0], req.userId)
+		if (avatarUrl instanceof AppError) return next(avatarUrl)
+		req.body.avatarURL = avatarUrl
+	}
+
+	const userImagesData = patchUserImageSchema.parse(req.body)
+	const response = await updateMyPortfolio(userImagesData, req.userId)
+	if (response instanceof AppError) return next(response)
+	const { user, statusCode, statusText = [] } = response
+
+	res.status(statusCode).json({
+		message: getSuccessMessage(statusCode, statusText),
+		user,
+	})
 })
 
 export const getMeHandler = async (req: Request, res: Response, next: NextFunction) => {

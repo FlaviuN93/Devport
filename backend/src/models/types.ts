@@ -10,6 +10,8 @@ export interface User {
 	bio: string
 }
 
+export type UserRoles = 'user' | 'tester'
+
 interface Project {
 	id?: number
 	imageURL: string
@@ -18,6 +20,18 @@ interface Project {
 	repositoryURL: string
 	technologies: string[]
 	description: string
+}
+
+export interface UserAndProjects {
+	userId?: string
+	coverURL: string
+	avatarURL: string
+	email: string
+	fullName: string
+	jobTitle: string
+	linkedin: string
+	bio: string
+	projects: Project[]
 }
 
 interface Item {
@@ -32,12 +46,9 @@ export interface IDefault {
 }
 
 // User Types
-export interface IUserAndProjects extends IUser {
-	projects: Project[]
-}
 
-export interface IGetUserAndProjects extends IDefault {
-	userWithProjects: IUserAndProjects
+export interface IUserAndProjects extends IDefault {
+	userWithProjects: UserAndProjects
 }
 
 export interface IUser extends IDefault {

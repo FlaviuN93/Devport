@@ -8,6 +8,7 @@ export const idSchema = z.coerce
 		invalid_type_error: 'The id you added to the request is not a number',
 	})
 	.int({ message: 'Id must be an integer' })
+	.lte(100000, { message: 'Your value is too large for an id' })
 	.positive({ message: `Id should not have a negative value` })
 
 export const passwordSchema = z

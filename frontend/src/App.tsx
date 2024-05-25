@@ -5,9 +5,9 @@ import { UserProvider } from './contexts/UserContext'
 import { Toaster } from 'react-hot-toast'
 import ForgotPassword from './pages/ForgotPassword'
 import HomePage from './pages/HomePage'
-import Portfolio from './pages/Portfolio'
 import ProjectSettings from './pages/ProjectSettings'
 import ProfileSettings from './pages/ProfileSettings'
+import MyPortfolio from './pages/MyPortfolio'
 import ResetPassword from './pages/ResetPassword'
 
 import SignUp from './pages/SignUp'
@@ -27,7 +27,7 @@ function App() {
 					<BrowserRouter>
 						<Routes>
 							<Route path='/home' element={<HomePage />} />
-							<Route path='/' element={<Portfolio />} />
+							<Route path='/my-portfolio' element={<MyPortfolio />} />
 							<Route path='/' element={<AppLayout />}>
 								<Route path='project-settings' element={<ProjectSettings />} />
 								<Route path='profile-settings' element={<ProfileSettings />} />

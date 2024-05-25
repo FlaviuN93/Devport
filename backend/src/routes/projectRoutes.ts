@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { protectHandler } from '../controllers/authController'
+import { protectHandler, userRolesHandler } from '../controllers/authController'
 import {
 	createMyProjectData,
 	getMyProjectsData,
@@ -18,13 +18,13 @@ projectRouter.route('/currentUser/technologies').get(protectHandler, getTechnolo
 
 projectRouter
 	.route('/currentUser')
-	.get(protectHandler, getMyProjectsData)
-	.post(protectHandler, uploadProjectImage, resizeProjectImage, createMyProjectData)
+	.get(protectHandler, userRolesHandler('user', 'tester'), getMyProjectsData)
+	.post(protectHandler, userRolesHandler('user', 'tester'), uploadProjectImage, resizeProjectImage, createMyProjectData)
 
 projectRouter
 	.route('/currentUser/:projectId')
-	.get(protectHandler, getMyProjectData)
-	.put(protectHandler, uploadProjectImage, resizeProjectImage, updateMyProjectData)
-	.delete(protectHandler, deleteMyProjectData)
+	.get(protectHandler, userRolesHandler('user', 'tester'), getMyProjectData)
+	.put(protectHandler, userRolesHandler('user'), uploadProjectImage, resizeProjectImage, updateMyProjectData)
+	.delete(protectHandler, userRolesHandler('user'), deleteMyProjectData)
 
 export default projectRouter

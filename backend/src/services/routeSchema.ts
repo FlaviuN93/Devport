@@ -42,3 +42,8 @@ export const updateUserSchema = z.object({
 	linkedin: z.union([urlSchema, z.literal('')]),
 	bio: z.union([descriptionSchema, z.literal('')]),
 })
+
+export const patchUserImageSchema = z.object({
+	coverURL: z.union([urlSchema, z.null()]),
+	avatarURL: z.union([urlSchema, z.null()]),
+})

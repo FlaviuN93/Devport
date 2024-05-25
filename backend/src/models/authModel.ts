@@ -6,7 +6,7 @@ import crypto from 'crypto'
 import { hasPasswordChanged, createPasswordResetToken, signToken, verifyToken, removeUserColumns } from '../utils/functions'
 
 import { sendEmail } from '../utils/email'
-import { IDefault, IRegisterUser, IUser, TokenPayload, User } from './types'
+import { IDefault, IRegisterUser, IUser, TokenPayload, User, UserRoles } from './types'
 
 export const registerUser = async (email: string, password: string): Promise<IRegisterUser | AppError> => {
 	const hashedPassword = await bcrypt.hash(password, 12)
@@ -122,16 +122,16 @@ export const resetPassword = async (newPassword: string, resetToken: string): Pr
 	}
 }
 
-export const protect = async (reqToken: string): Promise<{ userId: string } | AppError> => {
+export const protect = async (reqToken: string): Promise<{ user: { id: string; role: UserRoles } } | AppError> => {
 	if (!reqToken) return new AppError(401, 'You are not logged in. Please log in to gain access')
 
 	const decodedToken = verifyToken<TokenPayload>(reqToken)
 	if (decodedToken instanceof AppError) return decodedToken
 
-	const { data: user } = await supabase.from('users').select('*').eq('id', decodedToken.userId).single()
+	const { data: user } = await supabase.from('users').select('id,passwordUpdatedAt,role').eq('id', decodedToken.userId).single()
 	if (!user) return new AppError(401, 'You are not logged in. Please log in to gain access')
 	const isPasswordChanged = hasPasswordChanged(decodedToken.iat as number, user.passwordUpdatedAt)
 	if (isPasswordChanged) return new AppError(401, 'You recently changed password! Please log in again')
 
-	return { userId: user.id.toString() }
+	return { user: { id: user.id.toString(), role: user.role } }
 }

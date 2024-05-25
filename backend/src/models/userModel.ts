@@ -1,18 +1,30 @@
 import { z } from 'zod'
 import bcrypt from 'bcrypt'
 import supabase from '../services/supabase'
-import { updateUserSchema } from '../services/routeSchema'
+import { patchUserImageSchema, updateUserSchema } from '../services/routeSchema'
 import AppError from '../utils/appError'
 import { removeUserColumns } from '../utils/functions'
-import { User, IDefault, IGetUserAndProjects, IUser, IUserAndProjects } from './types'
+import { User, IDefault, IUser, IUserAndProjects, UserAndProjects } from './types'
 
-export const getUserAndProjects = async (userId: string): Promise<IGetUserAndProjects | AppError> => {
-	const { data: userWithProjects, error, status } = await supabase.from('users').select(`*, projects(*)`).eq('id', userId).single()
+export const getUserAndProjects = async (userId: string): Promise<IUserAndProjects | AppError> => {
+	const { data: userWithProjects, error } = await supabase.from('users').select(`*, projects(*)`).eq('id', userId).single()
 
-	if (!userWithProjects) return new AppError(404)
-	if (error) return new AppError(status)
+	if (error) return new AppError(500, 'Something went wrong while trying to get your user and project data. Give us some time to fix this.')
 
-	const newUser = removeUserColumns<IUserAndProjects>(userWithProjects)
+	const newUser = removeUserColumns<UserAndProjects>(userWithProjects)
+	return {
+		userWithProjects: newUser,
+		statusCode: 200,
+	}
+}
+
+export const getMyPortfolio = async (userId: string): Promise<IUserAndProjects | AppError> => {
+	const { data: userWithProjects, error } = await supabase.from('users').select(`*, projects(*)`).eq('id', userId).single()
+	if (error) return new AppError(500, 'Something went wrong while trying to get your user and project data. Give us some time to fix this.')
+	const id = userWithProjects.id
+	const newUser = removeUserColumns<UserAndProjects>(userWithProjects)
+	newUser.userId = id
+
 	return {
 		userWithProjects: newUser,
 		statusCode: 200,
@@ -20,8 +32,7 @@ export const getUserAndProjects = async (userId: string): Promise<IGetUserAndPro
 }
 
 export const getUser = async (userId: string): Promise<IUser | AppError> => {
-	const response = await supabase.from('users').select('*').eq('id', userId).single()
-	const { data: user, error, status } = response
+	const { data: user, error, status } = await supabase.from('users').select('*').eq('id', userId).single()
 
 	if (error) return new AppError(status)
 	if (!user) return new AppError(404)
@@ -33,14 +44,10 @@ export const getUser = async (userId: string): Promise<IUser | AppError> => {
 export const updateUser = async (reqBody: UpdateUserType, userId: string): Promise<IUser | AppError> => {
 	const { data } = await supabase.from('projects').select('coverURL,avatarURL').eq('id', userId).single()
 	if (reqBody.coverURL === null) reqBody.coverURL = data?.coverURL
+	if (reqBody.avatarURL === null) reqBody.avatarURL = data?.avatarURL
 
-	if (reqBody.avatarURL === null) {
-		reqBody.avatarURL = data?.avatarURL
-	}
+	const { data: user, error, status } = await supabase.from('users').update(reqBody).eq('id', userId).select('*').single()
 
-	const response = await supabase.from('users').update(reqBody).eq('id', userId).select('*').single()
-	const { data: user, error, status } = response
-	if (!user) return new AppError(400)
 	if (error) return new AppError(status)
 
 	const newUser = removeUserColumns<User>(user)
@@ -48,7 +55,24 @@ export const updateUser = async (reqBody: UpdateUserType, userId: string): Promi
 	return {
 		user: newUser,
 		statusCode: 200,
-		statusText: ['update', 'Your profile information has been updated successfully'],
+		statusText: ['update', 'Your profile information has been updated successfully.'],
+	}
+}
+
+export const updateMyPortfolio = async (reqBody: UpdateMyUserImages, userId: string): Promise<IUser | AppError> => {
+	const { data } = await supabase.from('projects').select('coverURL,avatarURL').eq('id', userId).single()
+	if (reqBody.coverURL === null) reqBody.coverURL = data?.coverURL
+	if (reqBody.avatarURL === null) reqBody.avatarURL = data?.avatarURL
+
+	const { data: user, error, status } = await supabase.from('users').update(reqBody).eq('id', userId).select('*').single()
+	if (error) return new AppError(status)
+
+	const newUser = removeUserColumns<User>(user)
+
+	return {
+		user: newUser,
+		statusCode: 200,
+		statusText: ['update', 'Your profile information has been updated succesfully.'],
 	}
 }
 
@@ -66,3 +90,4 @@ export const deleteUser = async (password: string, userId: string): Promise<IDef
 }
 
 type UpdateUserType = z.infer<typeof updateUserSchema>
+type UpdateMyUserImages = z.infer<typeof patchUserImageSchema>
