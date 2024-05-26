@@ -26,9 +26,9 @@ function App() {
 				<ProjectProvider>
 					<BrowserRouter>
 						<Routes>
-							<Route path='/home' element={<HomePage />} />
-							<Route path='/my-portfolio' element={<MyPortfolio />} />
-							<Route path='/' element={<AppLayout />}>
+							<Route path='/' element={<HomePage />} />
+							<Route path='/app' element={<AppLayout />}>
+								<Route index element={<MyPortfolio />} />
 								<Route path='project-settings' element={<ProjectSettings />} />
 								<Route path='profile-settings' element={<ProfileSettings />} />
 							</Route>

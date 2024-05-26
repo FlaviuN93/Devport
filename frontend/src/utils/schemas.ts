@@ -63,7 +63,6 @@ export const resetPasswordSchema = z
 
 // Settings Schemas
 const MAX_FILE_SIZE = 1024 * 1024 * 5
-const AVATAR_FILE_SIZE = 1024 * 1024 * 3
 
 export const projectSettingsSchema = z.object({
 	imageFile: z.union([
@@ -85,13 +84,13 @@ export const profileSettingsSchema = z.object({
 			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
 			.refine(
 				async (file: File | null) => file && (await getImageFormat('cover', file)),
-				'The uploaded file dimensions are incorrect. Ensure the image is 1350 pixels wide by 350 pixels tall.'
+				`Ensure the image dimensions are of 800 pixels wide by 200 pixels tall or the same ratio of wide and tall.`
 			),
 		z.null(),
 	]),
 	avatarFile: z.union([
 		fileSchema
-			.refine((file: File | null) => file && file.size <= AVATAR_FILE_SIZE, 'Image must be under 3MB')
+			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 3MB')
 			.refine(async (file: File | null) => file && (await getImageFormat('portrait', file)), 'Image must have a portrait format.'),
 		z.null(),
 	]),
@@ -100,6 +99,24 @@ export const profileSettingsSchema = z.object({
 	jobTitle: z.union([nameSchema, z.literal('')]),
 	linkedin: z.union([urlSchema, z.literal('')]),
 	bio: z.union([descriptionSchema, z.literal('')]),
+})
+
+export const portfolioSchema = z.object({
+	coverFile: z.union([
+		fileSchema
+			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
+			.refine(
+				async (file: File | null) => file && (await getImageFormat('cover', file)),
+				`Ensure the image dimensions are of 800 pixels wide by 200 pixels tall or the same ratio of wide and tall.`
+			),
+		z.null(),
+	]),
+	avatarFile: z.union([
+		fileSchema
+			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
+			.refine(async (file: File | null) => file && (await getImageFormat('portrait', file)), 'Image must have a portrait format.'),
+		z.null(),
+	]),
 })
 
 export type ResetPasswordType = z.infer<typeof resetPasswordSchema>
@@ -116,6 +133,11 @@ export interface IProfileSettings {
 	jobTitle?: string
 	linkedin?: string
 	bio?: string
+}
+
+export interface IPortfolio {
+	coverFile: File | null
+	avatarFile: File | null
 }
 
 export interface IProjectSettings {

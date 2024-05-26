@@ -47,7 +47,7 @@ const File = <T extends FieldValues>({
 
 	const isMobile = useMediaQuery('(max-width:480px)')
 	const fileContainerClasses = `${styles.fileContainer} ${!label ? 'flex-row' : ''} ${fileContainerStyles ? fileContainerStyles : ''}`
-	const fileClasses = `${styles.fileButton} ${fileStyles} ${error ? styles.error : ''} relative`
+	const fileClasses = `${styles.fileButton} ${fileStyles ? fileStyles : ''} ${error ? styles.error : ''} relative`
 
 	const handleSetFile = (event: ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files) {
@@ -75,7 +75,7 @@ const File = <T extends FieldValues>({
 				<motion.input
 					animate={size}
 					name={name}
-					className='absolute opacity-0'
+					className={`absolute opacity-0 `}
 					id={uniqueId}
 					onChange={handleSetFile}
 					ref={() => register(name)}

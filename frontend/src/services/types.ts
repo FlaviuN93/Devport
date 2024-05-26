@@ -17,10 +17,6 @@ export interface IDefaultError {
 	message: string | string[]
 }
 
-export interface IRegister extends IDefaultSuccess {
-	user: { email: string }
-}
-
 export interface IUser extends IDefaultSuccess {
 	user: User
 }

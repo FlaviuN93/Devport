@@ -16,7 +16,7 @@ import {
 	updateMe,
 	updateMyProject,
 } from './api.requests'
-import { IDefaultError, IDefaultSuccess, IRegister, Technology, IUser, Project, User } from './types'
+import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User } from './types'
 import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 
@@ -86,7 +86,7 @@ export const useGetTechnologies = () =>
 // Authentication Mutations
 
 export const useRegister = () =>
-	useMutation<IRegister, IDefaultError, SignupType>({
+	useMutation<IUser, IDefaultError, SignupType>({
 		mutationFn: register,
 	})
 

@@ -31,7 +31,6 @@ const SignUp = () => {
 	const { handleSetUser } = useUserContext()
 
 	useEffect(() => {
-		console.log(errors.password, 'checkRegister')
 		if (isSuccess) {
 			handleSetUser(data.user)
 			navigate('/profile-settings')

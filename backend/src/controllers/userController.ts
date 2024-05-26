@@ -28,7 +28,7 @@ export const resizeUserImages = catchAsync(async (req: Request, res: Response, n
 	const { coverFile, avatarFile } = req.files as { [fieldname: string]: Express.Multer.File[] }
 
 	if (coverFile) {
-		const resizedBuffer = await sharp(coverFile[0].buffer).resize(1400, 350).toFormat('jpeg').toBuffer()
+		const resizedBuffer = await sharp(coverFile[0].buffer).resize(800, 200).toFormat('jpeg').toBuffer()
 		coverFile[0].buffer = resizedBuffer
 		coverFile[0].mimetype = 'image/jpeg'
 		coverFile[0].filename = `cover-${req.userId}-${Date.now()}.jpeg`
