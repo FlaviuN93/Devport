@@ -103,12 +103,11 @@ export const profileSettingsSchema = z.object({
 
 export const portfolioSchema = z.object({
 	coverFile: z.union([
-		fileSchema
-			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
-			.refine(
-				async (file: File | null) => file && (await getImageFormat('cover', file)),
-				`Ensure the image dimensions are of 800 pixels wide by 200 pixels tall or the same ratio of wide and tall.`
-			),
+		fileSchema.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB'),
+		// .refine(
+		// 	async (file: File | null) => file && (await getImageFormat('cover', file)),
+		// 	`Ensure the image dimensions are of 800 pixels wide by 200 pixels tall or the same ratio of wide and tall.`
+		// )
 		z.null(),
 	]),
 	avatarFile: z.union([

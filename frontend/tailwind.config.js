@@ -16,6 +16,9 @@ export default {
 				darkViolet: '#4138c2',
 			},
 		},
+		screens: {
+			mobile: '420px',
+		},
 	},
 	plugins: [],
 }

@@ -75,7 +75,7 @@ const File = <T extends FieldValues>({
 				<motion.input
 					animate={size}
 					name={name}
-					className={`absolute opacity-0 `}
+					className={`absolute opacity-0 w-full mobile:w-auto `}
 					id={uniqueId}
 					onChange={handleSetFile}
 					ref={() => register(name)}

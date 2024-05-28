@@ -24,6 +24,7 @@ interface ItemProps {
 	itemId: string
 	children: ReactNode
 	itemStyles?: TailwindClasses
+	closeOnClick?: boolean
 }
 
 const Dropdown: FC<{ children: ReactNode }> = ({ children }) => {
@@ -71,11 +72,14 @@ const DropdownToggle: FC<ToggleProps> = ({ btnStyles = '', buttonText, icon, ima
 	)
 }
 
-const DropdownItem: FC<ItemProps> = ({ children, itemStyles = '', itemId }) => {
-	const { selectedItemId, handleSelect } = useDropdownContext()
+const DropdownItem: FC<ItemProps> = ({ children, itemStyles = '', itemId, closeOnClick = true }) => {
+	const { selectedItemId, handleSelect, handleClose } = useDropdownContext()
 	const itemClasses = `${styles.item} ${itemStyles} ${selectedItemId === itemId ? styles.active : ''}`
 
-	const handleClick = () => itemId && handleSelect(itemId)
+	const handleClick = () => {
+		if (itemId) handleSelect(itemId)
+		if (closeOnClick) handleClose()
+	}
 
 	return (
 		<div className={itemClasses} onClick={handleClick}>
@@ -84,9 +88,9 @@ const DropdownItem: FC<ItemProps> = ({ children, itemStyles = '', itemId }) => {
 	)
 }
 
-const DropdownDivider: FC<{ dividerStyles?: TailwindClasses }> = ({ dividerStyles = '' }) => {
+const Divider: FC<{ dividerStyles?: TailwindClasses }> = ({ dividerStyles = '' }) => {
 	const dividerClasses = `${styles.divider} ${dividerStyles}`
 	return <hr className={dividerClasses} />
 }
 
-export { Dropdown, DropdownMenu, DropdownToggle, DropdownItem, DropdownDivider }
+export { Dropdown, DropdownMenu, DropdownToggle, DropdownItem, Divider }

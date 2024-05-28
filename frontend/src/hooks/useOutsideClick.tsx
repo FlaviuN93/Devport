@@ -9,7 +9,7 @@ export const useOutsideClick = (
 	useEffect(() => {
 		const listener = (event: MouseEvent) => {
 			if (!ref.current || ref.current.contains(event.target as Node)) return
-			if (!optionalRef?.current || optionalRef.current.contains(event.target as Node)) return
+			if (optionalRef?.current && optionalRef.current.contains(event.target as Node)) return
 			if (exclusionRef?.current && exclusionRef.current.contains(event.target as Node)) return
 			handler()
 		}

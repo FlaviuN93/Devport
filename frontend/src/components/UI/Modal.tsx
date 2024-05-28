@@ -1,5 +1,6 @@
 import { FC, ReactElement, ReactNode, cloneElement, useEffect } from 'react'
 import styles from './Modal.module.css'
+import { motion } from 'framer-motion'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { createPortal } from 'react-dom'
 import { ModalProvider } from '../../contexts/ModalContext'
@@ -8,6 +9,7 @@ import { useCalculateWindowHeight } from '../../hooks/useCalculateWindowHeight'
 import { TailwindClasses } from '../../utils/types'
 import { useOutsideClick } from '../../hooks/useOutsideClick'
 import useKeyToClose from '../../hooks/useKeyToClose'
+import { motionVariants } from '../../utils/variables'
 
 interface IModalWindow {
 	modalName: string
@@ -16,33 +18,34 @@ interface IModalWindow {
 	showCloseIcon?: boolean
 }
 
+interface IModalOpen {
+	openedModalName: string
+	children: ReactElement | ReactElement[]
+	isInputValid?: boolean
+}
+
 export const Modal: FC<{ children: ReactNode }> = ({ children }) => {
 	return <ModalProvider>{children}</ModalProvider>
 }
 
-export const ModalOpen: FC<{ openedModalName: string; children: ReactElement | ReactElement[] }> = ({
-	children,
-	openedModalName,
-}) => {
+export const ModalOpen: FC<IModalOpen> = ({ children, openedModalName, isInputValid }) => {
 	const { setOpenModal, setModalPosition } = useModalContext()
 
 	const handleOpenModal = () => {
-		const xPosition = (window.scrollX + window.innerWidth / 2).toString()
-		const yPosition = (window.scrollY + window.innerHeight / 2).toString()
-		setModalPosition({ xPosition, yPosition })
+		const heightPosition = (window.scrollY + window.innerHeight / 2).toString()
+		setModalPosition(heightPosition)
 		setOpenModal(openedModalName)
 	}
 
-	if (Array.isArray(children)) return children.map((child) => cloneElement(child, { onClick: close }))
+	useEffect(() => {
+		if (isInputValid) handleOpenModal()
+	}, [isInputValid])
+
+	if (Array.isArray(children)) return children.map((child) => cloneElement(child, { onClick: handleOpenModal }))
 	return cloneElement(children, { onClick: handleOpenModal })
 }
 
-export const ModalWindow: FC<IModalWindow> = ({
-	modalName,
-	children,
-	showCloseIcon = true,
-	modalWindowStyles,
-}) => {
+export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIcon = true, modalWindowStyles }) => {
 	const { openModal, close, modalWindowRef, modalPosition } = useModalContext()
 	const { exclusionRef } = useDropdownContext()
 	const isModalOpen = openModal.length > 0
@@ -51,10 +54,7 @@ export const ModalWindow: FC<IModalWindow> = ({
 	useOutsideClick(modalWindowRef, close)
 
 	useEffect(() => {
-		if (modalWindowRef.current) {
-			modalWindowRef.current.style.top = `${modalPosition?.yPosition}px`
-			modalWindowRef.current.style.left = `${modalPosition?.xPosition}px`
-		}
+		if (modalWindowRef.current) modalWindowRef.current.style.top = `${modalPosition}px`
 	}, [modalPosition, modalWindowRef])
 
 	const modalWindowClasses = `${styles.modalContainer} ${modalWindowStyles ? modalWindowStyles : ''}`
@@ -63,14 +63,19 @@ export const ModalWindow: FC<IModalWindow> = ({
 
 	return createPortal(
 		<div className={styles.modalOverlay} ref={overlayRef}>
-			<div ref={exclusionRef} className={modalWindowClasses}>
-				<div ref={modalWindowRef}>
-					{showCloseIcon && (
-						<XMarkIcon onClick={close} className='h-6 w-6 cursor-pointer absolute top-1.5 right-1.5' />
-					)}
+			<motion.div
+				initial='hidden'
+				animate={openModal ? 'visible' : 'hidden'}
+				variants={motionVariants}
+				transition={{ duration: 0.2 }}
+				ref={modalWindowRef}
+				className={modalWindowClasses}
+			>
+				<div ref={exclusionRef}>
+					{showCloseIcon && <XMarkIcon onClick={close} className='h-6 w-6 cursor-pointer absolute top-3 right-4' />}
 					{children}
 				</div>
-			</div>
+			</motion.div>
 		</div>,
 		document.body
 	)

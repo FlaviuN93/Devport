@@ -69,6 +69,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 							<Button
 								buttonText='Edit'
 								variant='primary'
+								buttonStyles='order-2 mobile:order-1'
 								onClick={() =>
 									handleProjectSelect({
 										id: projectId,
@@ -85,7 +86,11 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
 							<Modal>
 								<ModalOpen openedModalName='removeProject'>
-									<Button buttonText='Remove' buttonStyles='text-darkBlue bg-light3 border-0' icon={<TrashIcon className='h-5 w-5' />} />
+									<Button
+										buttonText='Remove'
+										buttonStyles='text-darkBlue bg-light3 border-0 order-1 mobile:order-2'
+										icon={<TrashIcon className='h-5 w-5' />}
+									/>
 								</ModalOpen>
 								<ModalWindow modalName='removeProject'>
 									<div className='flex flex-col gap-3 mt-2'>

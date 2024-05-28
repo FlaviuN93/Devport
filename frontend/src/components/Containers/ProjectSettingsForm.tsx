@@ -125,12 +125,12 @@ const ProjectSettingsForm = () => {
 				/>
 			</motion.div>
 
-			<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
+			<div className='flex flex-col gap-4 sm:flex-row md:gap-10'>
 				<Text label='Project Name' register={register} name='name' placeholder='Enter your project name' error={errors.name?.message} />
 
 				<Text label='Demo URL' register={register} name='demoURL' placeholder='Enter the demo URL' error={errors.demoURL?.message} />
 			</div>
-			<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
+			<div className='flex flex-col gap-4 sm:flex-row md:gap-10'>
 				<Text
 					label='Repository URL'
 					register={register}
@@ -164,7 +164,7 @@ const ProjectSettingsForm = () => {
 				placeholder='Enter a short description..'
 				error={errors.description?.message}
 			/>
-			<div className='place-self-end mb-2 flex flex-col w-full gap-4 sm:flex-row sm:w-auto'>
+			<div className='mb-2 flex flex-col w-full gap-4 mobile:flex-row mobile:justify-end'>
 				<Button
 					buttonText='Clear'
 					buttonStyles='text-darkBlue bg-light3 border-0'

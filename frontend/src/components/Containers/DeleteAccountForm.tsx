@@ -35,7 +35,7 @@ const DeleteAccountForm = () => {
 					error={error?.message as string}
 				/>
 
-				<div className='flex gap-2 justify-end'>
+				<div className='flex gap-2 flex-col mobile:flex-row mobile:justify-end'>
 					<Button variant='transparent' buttonText='Cancel' onClick={() => close()} />
 
 					<Button

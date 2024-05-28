@@ -13,7 +13,7 @@ const ProfileSettings = () => {
 				<Dropdown>
 					<DropdownToggle btnStyles='p-1 shadow-xs border-light2' icon={<EllipsisVerticalIcon className='h-6 w-6' />} />
 					<DropdownMenu position='bottom'>
-						<DropdownItem itemId='changePassword'>
+						<DropdownItem itemId='changePassword' closeOnClick={false}>
 							<Modal>
 								<ModalOpen openedModalName='changePassword'>
 									<span>Change Password</span>
@@ -31,12 +31,12 @@ const ProfileSettings = () => {
 								</ModalWindow>
 							</Modal>
 						</DropdownItem>
-						<DropdownItem itemId='deleteAccount'>
+						<DropdownItem itemId='deleteAccount' closeOnClick={false}>
 							<Modal>
 								<ModalOpen openedModalName='deleteAccount'>
 									<span>Delete Account</span>
 								</ModalOpen>
-								<ModalWindow modalName='deleteAccount'>
+								<ModalWindow modalName='deleteAccount' modalWindowStyles='max-w-[600px]'>
 									<DeleteAccountForm />
 								</ModalWindow>
 							</Modal>

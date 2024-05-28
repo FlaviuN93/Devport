@@ -28,7 +28,7 @@ function App() {
 						<Routes>
 							<Route path='/' element={<HomePage />} />
 							<Route path='/app' element={<AppLayout />}>
-								<Route index element={<MyPortfolio />} />
+								<Route path='my-portfolio' element={<MyPortfolio />} />
 								<Route path='project-settings' element={<ProjectSettings />} />
 								<Route path='profile-settings' element={<ProfileSettings />} />
 							</Route>
