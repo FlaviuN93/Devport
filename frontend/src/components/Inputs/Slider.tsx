@@ -1,42 +1,43 @@
-import { ChangeEvent, FC, useState } from 'react'
-import { tPositions } from '../../utils/types'
+import { ChangeEvent, FC } from 'react'
 import styles from './Slider.module.css'
+import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid'
+import { TailwindClasses } from '../../utils/types'
 
 interface ISlider {
 	min: number
 	max: number
 	step: number
-	startValue: number
-	onChange: (value: number) => void
-	labelPos?: tPositions
+	value: number
+	onSliderChange: (value: number) => void
 	label?: string
+	sliderStyles?: TailwindClasses
+	sliderContainerStyles?: TailwindClasses
 }
 
-const Slider: FC<ISlider> = ({ min, max, label, labelPos = 'top', onChange, step, startValue = 1 }) => {
-	const [value, setValue] = useState(startValue)
+const Slider: FC<ISlider> = ({ min, max, label, onSliderChange, step, value, sliderStyles, sliderContainerStyles }) => {
+	const sliderClasses = `${styles.slider} ${sliderStyles ? sliderStyles : ''}`
+	const sliderContainerClasses = `${styles.sliderContainer} ${sliderContainerStyles ? sliderContainerStyles : ''} flex items-center`
 
-	const labelClasses = `${styles.label} ${labelPos ? styles[labelPos] : ''}`
-
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		setValue(+e.target.value)
-		onChange(+e.target.value)
-	}
 	return (
-		<div>
-			<label className={labelClasses} htmlFor='slider'>
+		<div className='w-full'>
+			<label className='font-medium' htmlFor='slider'>
 				{label}
 			</label>
-			<input
-				id='slider'
-				type='range'
-				className={styles.slider}
-				value={value}
-				min={min}
-				max={max}
-				step={step}
-				aria-labelledby={label}
-				onChange={handleChange}
-			/>
+			<div className={sliderContainerClasses}>
+				<MinusIcon className='h-7 w-7' />
+				<input
+					id='slider'
+					type='range'
+					className={sliderClasses}
+					value={value}
+					min={min}
+					max={max}
+					step={step}
+					aria-labelledby={label}
+					onChange={(e: ChangeEvent<HTMLInputElement>) => onSliderChange(+e.target.value)}
+				/>
+				<PlusIcon className='h-7 w-7' />
+			</div>
 		</div>
 	)
 }

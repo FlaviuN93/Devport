@@ -1,4 +1,4 @@
-import { emailSchema, passwordSchema, descriptionSchema, nameSchema, urlSchema } from '../services/baseSchema'
+import { emailSchema, passwordSchema, descriptionSchema, nameSchema, urlSchema, bioSchema } from '../services/baseSchema'
 import { z } from 'zod'
 
 // Auth Schema
@@ -40,7 +40,7 @@ export const updateUserSchema = z.object({
 	fullName: z.union([nameSchema, z.literal('')]),
 	jobTitle: z.union([nameSchema, z.literal('')]),
 	linkedin: z.union([urlSchema, z.literal('')]),
-	bio: z.union([descriptionSchema, z.literal('')]),
+	bio: z.union([bioSchema, z.literal('')]),
 })
 
 export const patchUserImageSchema = z.object({

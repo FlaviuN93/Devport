@@ -31,8 +31,15 @@ export const nameSchema = z
 export const descriptionSchema = z
 	.string()
 	.trim()
-	.min(100, 'Must be at least 100 characters long.')
-	.max(175, 'Cannot exceed 175 characters.')
+	.min(125, 'Must be at least 125 characters long.')
+	.max(200, 'Cannot exceed 200 characters.')
+	.regex(/^[a-zA-Z0-9\s\.\!\?\'\,\-]+$/, 'Cannot contain special characters. Keep it simple and clean.')
+
+export const bioSchema = z
+	.string()
+	.trim()
+	.min(200, 'Must be at least 200 characters long.')
+	.max(300, 'Cannot exceed 300 characters.')
 	.regex(/^[a-zA-Z0-9\s\.\!\?\'\,\-]+$/, 'Cannot contain special characters. Keep it simple and clean.')
 
 export const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')

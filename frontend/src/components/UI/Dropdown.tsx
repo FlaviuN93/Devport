@@ -38,7 +38,7 @@ const Dropdown: FC<{ children: ReactNode }> = ({ children }) => {
 const DropdownMenu: FC<MenuProps> = ({ children, position = 'bottom', menuStyles = '' }) => {
 	const { isOpen, handleClose, menuRef, dropdownBtnRef, exclusionRef } = useDropdownContext()
 	useKeyToClose('Escape', handleClose)
-	useOutsideClick(menuRef, handleClose, dropdownBtnRef, exclusionRef)
+	useOutsideClick(menuRef, handleClose, { secondaryRef: dropdownBtnRef, exclusionRef })
 
 	const menuClasses = `${styles.menu} ${styles[position]} ${menuStyles}`
 

@@ -24,9 +24,16 @@ const nameSchema = z
 const descriptionSchema = z
 	.string()
 	.trim()
-	.min(100, 'Description must be at least 100 characters long.')
-	.max(175, 'Description cannot exceed 175 characters.')
+	.min(125, 'Description must be at least 125 characters long.')
+	.max(200, 'Description cannot exceed 200 characters.')
 	.regex(/^[a-zA-Z0-9,.-\s]+$/, 'Description can only contain letters and numbers.')
+
+const bioSchema = z
+	.string()
+	.trim()
+	.min(200, 'Must be at least 200 characters long.')
+	.max(300, 'Cannot exceed 300 characters.')
+	.regex(/^[a-zA-Z0-9\s.!?',-]+$/, 'Cannot contain special characters. Keep it simple and clean.')
 
 const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
 
@@ -62,7 +69,7 @@ export const resetPasswordSchema = z
 	})
 
 // Settings Schemas
-const MAX_FILE_SIZE = 1024 * 1024 * 5
+const MAX_FILE_SIZE = 1024 * 1024 * 7
 
 export const projectSettingsSchema = z.object({
 	imageFile: z.union([
@@ -98,7 +105,7 @@ export const profileSettingsSchema = z.object({
 	fullName: z.union([nameSchema, z.literal('')]),
 	jobTitle: z.union([nameSchema, z.literal('')]),
 	linkedin: z.union([urlSchema, z.literal('')]),
-	bio: z.union([descriptionSchema, z.literal('')]),
+	bio: z.union([bioSchema, z.literal('')]),
 })
 
 export const portfolioSchema = z.object({

@@ -31,16 +31,6 @@ export const getMyPortfolio = async (userId: string): Promise<IUserAndProjects |
 	}
 }
 
-export const getUser = async (userId: string): Promise<IUser | AppError> => {
-	const { data: user, error, status } = await supabase.from('users').select('*').eq('id', userId).single()
-
-	if (error) return new AppError(status)
-	if (!user) return new AppError(404)
-
-	const newUser = removeUserColumns<User>(user)
-	return { user: newUser, statusCode: 200 }
-}
-
 export const updateUser = async (reqBody: UpdateUserType, userId: string): Promise<IUser | AppError> => {
 	const { data } = await supabase.from('projects').select('coverURL,avatarURL').eq('id', userId).single()
 	if (reqBody.coverURL === null) reqBody.coverURL = data?.coverURL

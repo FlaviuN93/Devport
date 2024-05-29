@@ -1,6 +1,6 @@
 import multer from 'multer'
 import { NextFunction, Request, Response } from 'express'
-import { deleteUser, getMyPortfolio, getUser, getUserAndProjects, updateMyPortfolio, updateUser } from '../models/userModel'
+import { deleteUser, getMyPortfolio, getUserAndProjects, updateMyPortfolio, updateUser } from '../models/userModel'
 import { patchUserImageSchema, updateUserSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import AppError, { getSuccessMessage } from '../utils/appError'
@@ -87,13 +87,6 @@ export const updateMyPortolioHandler = catchAsync(async (req: Request, res: Resp
 		user,
 	})
 })
-
-export const getMeHandler = async (req: Request, res: Response, next: NextFunction) => {
-	const response = await getUser(req.userId)
-	if (response instanceof AppError) return next(response)
-	const { user, statusCode } = response
-	res.status(statusCode).send(user)
-}
 
 export const updateMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const reqBody = JSON.parse(req.body.body)

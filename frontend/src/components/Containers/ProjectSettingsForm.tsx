@@ -125,12 +125,12 @@ const ProjectSettingsForm = () => {
 				/>
 			</motion.div>
 
-			<div className='flex flex-col gap-4 sm:flex-row md:gap-10'>
+			<div className='flex flex-col gap-4 lgMobile:flex-row md:gap-10'>
 				<Text label='Project Name' register={register} name='name' placeholder='Enter your project name' error={errors.name?.message} />
 
 				<Text label='Demo URL' register={register} name='demoURL' placeholder='Enter the demo URL' error={errors.demoURL?.message} />
 			</div>
-			<div className='flex flex-col gap-4 sm:flex-row md:gap-10'>
+			<div className='flex flex-col gap-4 lgMobile:flex-row md:gap-10'>
 				<Text
 					label='Repository URL'
 					register={register}

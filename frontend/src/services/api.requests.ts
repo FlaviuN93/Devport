@@ -3,9 +3,11 @@ import { IDefaultSuccess, IUser, Project, Technology, User } from './types'
 import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 
 // User Routes
-export const getMe = () => get<User>('/users/currentUser')
+export const getMyPortfolio = () => get<User>('/users/projects/currentUser')
 
 export const updateMe = (body: FormData) => patch<IUser, FormData>('/users/currentUser', { body })
+
+export const updateMyPortfolio = (body: FormData) => patch<IUser, FormData>('/users/projects/currentUser', { body })
 
 export const deleteMe = (body: { password: string }) => remove<IDefaultSuccess, { password: string }>('/users/currentUser', { body })
 

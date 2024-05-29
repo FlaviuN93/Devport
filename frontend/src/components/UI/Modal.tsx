@@ -29,12 +29,10 @@ export const Modal: FC<{ children: ReactNode }> = ({ children }) => {
 }
 
 export const ModalOpen: FC<IModalOpen> = ({ children, openedModalName, isInputValid }) => {
-	const { setOpenModal, setModalPosition } = useModalContext()
+	const { open } = useModalContext()
 
 	const handleOpenModal = () => {
-		const heightPosition = (window.scrollY + window.innerHeight / 2).toString()
-		setModalPosition(heightPosition)
-		setOpenModal(openedModalName)
+		open(openedModalName)
 	}
 
 	useEffect(() => {
@@ -46,16 +44,21 @@ export const ModalOpen: FC<IModalOpen> = ({ children, openedModalName, isInputVa
 }
 
 export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIcon = true, modalWindowStyles }) => {
-	const { openModal, close, modalWindowRef, modalPosition } = useModalContext()
+	const { close, modalWindowRef, modalPosition, openModal, isOpenModal } = useModalContext()
 	const { exclusionRef } = useDropdownContext()
-	const isModalOpen = openModal.length > 0
-	const overlayRef = useCalculateWindowHeight(isModalOpen)
+	const overlayRef = useCalculateWindowHeight(isOpenModal)
+
 	useKeyToClose('Escape', close)
 	useOutsideClick(modalWindowRef, close)
 
 	useEffect(() => {
-		if (modalWindowRef.current) modalWindowRef.current.style.top = `${modalPosition}px`
-	}, [modalPosition, modalWindowRef])
+		setTimeout(() => {
+			if (modalWindowRef.current) {
+				const topPosition = (window.innerHeight + window.scrollY * 2 - modalWindowRef.current.offsetHeight) / 2
+				modalWindowRef.current.style.top = `${topPosition}px`
+			}
+		})
+	}, [modalPosition, modalWindowRef, isOpenModal])
 
 	const modalWindowClasses = `${styles.modalContainer} ${modalWindowStyles ? modalWindowStyles : ''}`
 
@@ -65,9 +68,9 @@ export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIc
 		<div className={styles.modalOverlay} ref={overlayRef}>
 			<motion.div
 				initial='hidden'
-				animate={openModal ? 'visible' : 'hidden'}
+				animate={isOpenModal ? 'visible' : 'hidden'}
 				variants={motionVariants}
-				transition={{ duration: 0.2 }}
+				transition={{ duration: 0.3 }}
 				ref={modalWindowRef}
 				className={modalWindowClasses}
 			>

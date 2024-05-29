@@ -132,6 +132,6 @@ export const protect = async (reqToken: string): Promise<{ user: { id: string; r
 	if (!user) return new AppError(401, 'You are not logged in. Please log in to gain access')
 	const isPasswordChanged = hasPasswordChanged(decodedToken.iat as number, user.passwordUpdatedAt)
 	if (isPasswordChanged) return new AppError(401, 'You recently changed password! Please log in again')
-
+	console.log(user.id, 'hello')
 	return { user: { id: user.id.toString(), role: user.role } }
 }

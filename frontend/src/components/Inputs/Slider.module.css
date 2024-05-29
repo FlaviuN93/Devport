@@ -1,5 +1,37 @@
 .slider {
-	width: 20px;
-	height: 20px;
-	color: black;
+	height: 12px;
+	width: 100%;
+	background-color: var(--violet);
+	border: 1px solid var(--light-3);
+	accent-color: var(--violet);
+	border-radius: 50%;
+	transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.label {
+	font-weight: 500;
+}
+
+.slider:focus {
+	outline: none;
+}
+
+.slider::-webkit-slider-thumb {
+	border-radius: 50%;
+	transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slider::-moz-slider-thumb {
+	border-radius: 50%;
+	transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.slider:hover::-webkit-slider-thumb {
+	box-shadow: 0px 0px 0px 8px rgba(100, 102, 233, 0.2);
+	border-radius: 50%;
+}
+
+.slider:hover::-moz-slider-thumb {
+	box-shadow: 0px 0px 0px 8px rgba(100, 102, 233, 0.2);
+	border-radius: 50%;
 }

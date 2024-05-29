@@ -5,7 +5,7 @@ import {
 	deleteMe,
 	deleteMyProject,
 	forgotPassword,
-	getMe,
+	getMyPortfolio,
 	getMyProject,
 	getMyProjects,
 	getTechnologies,
@@ -14,6 +14,7 @@ import {
 	register,
 	resetPassword,
 	updateMe,
+	updateMyPortfolio,
 	updateMyProject,
 } from './api.requests'
 import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User } from './types'
@@ -21,18 +22,20 @@ import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 
 // User Queries and Mutations
-export const useGetMe = () => useQuery<User, IDefaultError>({ queryKey: ['profileSettings', 'getUser'], queryFn: getMe, enabled: false })
+export const useGetMyPortfolio = () => useQuery<User, IDefaultError>({ queryKey: ['getMyPortfolio'], queryFn: getMyPortfolio })
 
 export const useUpdateMe = () =>
 	useMutation<IUser, IDefaultError, FormData>({
 		mutationFn: updateMe,
 	})
 
+export const useUpdateMyPortfolio = () => useMutation<IUser, IDefaultError, FormData>({ mutationFn: updateMyPortfolio })
+
 export const useDeleteMe = () => useMutation<IDefaultSuccess, IDefaultError, { password: string }>({ mutationFn: deleteMe })
 
 export const useGetUserAndProjects = (userId: string) =>
 	useQuery<User, IDefaultError>({
-		queryKey: ['myPortfolio', userId],
+		queryKey: ['getPortfolio', userId],
 		queryFn: () => getUserAndProjects(userId),
 	})
 

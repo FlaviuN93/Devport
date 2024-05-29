@@ -161,7 +161,7 @@ h6 {
 	display: flex;
 	flex-direction: column;
 	gap: 1.5rem;
-
+	width: 100%;
 	margin: 0 auto;
 }
 
@@ -185,6 +185,17 @@ h6 {
 @media (min-width: 640px) {
 	h4 {
 		font-size: 1.1rem;
+	}
+
+	.portfolioContainer {
+		padding: 0 1rem;
+		width: calc(300px + (100vw - 320px) * 0.8);
+	}
+}
+
+@media (min-width: 768px) {
+	.portfolioContainer {
+		width: 100%;
 	}
 }
 
