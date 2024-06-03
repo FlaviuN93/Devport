@@ -14,10 +14,11 @@ import {
 	register,
 	resetPassword,
 	updateMe,
-	updateMyPortfolio,
+	updateMyAvatar,
+	updateMyCover,
 	updateMyProject,
 } from './api.requests'
-import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User } from './types'
+import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar } from './types'
 import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 
@@ -29,7 +30,9 @@ export const useUpdateMe = () =>
 		mutationFn: updateMe,
 	})
 
-export const useUpdateMyPortfolio = () => useMutation<IUser, IDefaultError, FormData>({ mutationFn: updateMyPortfolio })
+// export const useUpdateMyPortfolio = () => useMutation<IUser, IDefaultError, FormData>({ mutationFn: updateMyPortfolio })
+export const useUpdateMyCover = () => useMutation<ICover, IDefaultError, FormData>({ mutationFn: updateMyCover })
+export const useUpdateMyAvatar = () => useMutation<IAvatar, IDefaultError, FormData>({ mutationFn: updateMyAvatar })
 
 export const useDeleteMe = () => useMutation<IDefaultSuccess, IDefaultError, { password: string }>({ mutationFn: deleteMe })
 

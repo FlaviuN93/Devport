@@ -1,21 +1,21 @@
 import { XMarkIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
-import TrashIcon2 from '../../assets/Trash-1.svg?react'
-import UploadIcon from '../../assets/upload.svg?react'
-import ProjectIcon from '../../assets/project.svg?react'
+import TrashIcon2 from '../../../assets/Trash-1.svg?react'
+import UploadIcon from '../../../assets/upload.svg?react'
+import ProjectIcon from '../../../assets/project.svg?react'
 import { useEffect, useRef, useState } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
-import { useProjectContext } from '../../contexts/contextHooks'
-import { useGetTechnologies, useUpdateMyProject, useCreateMyProject } from '../../services/queries'
-import { convertToFormData } from '../../utils/functions'
-import { IProjectSettings, projectSettingsSchema } from '../../utils/schemas'
-import { motionVariants } from '../../utils/variables'
-import MultiSelect from '../Inputs/MultiSelect'
-import Avatar from '../UI/Avatar'
-import Button from '../UI/Button'
-import File from '../Inputs/File'
-import Text from '../Inputs/Text'
+import { useProjectContext } from '../../../contexts/contextHooks'
+import { useGetTechnologies, useUpdateMyProject, useCreateMyProject } from '../../../services/queries'
+import { convertToFormData } from '../../../utils/functions'
+import { IProjectSettings, projectSettingsSchema } from '../../../utils/schemas'
+import { motionVariants } from '../../../utils/variables'
+import MultiSelect from '../../Inputs/MultiSelect'
+import Avatar from '../../UI/Avatar'
+import Button from '../../UI/Button'
+import Text from '../../Inputs/Text'
+import FileInput from '../../Inputs/FileInput'
 
 const initialProjectValue = { imageFile: null, demoURL: '', description: '', name: '', repositoryURL: '', technologies: [] }
 
@@ -33,7 +33,7 @@ const ProjectSettingsForm = () => {
 		defaultValues: initialProjectValue,
 	})
 
-	const { isProjectSelected, selectedProject, resetImageUrl, disableProjectEdit } = useProjectContext()
+	const { isProjectSelected, selectedProject, resetImageUrl, closeProject } = useProjectContext()
 	const { data: technologies } = useGetTechnologies()
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const resetMultiSelect = useRef<() => void>(() => {})
@@ -46,7 +46,7 @@ const ProjectSettingsForm = () => {
 		reset(initialProjectValue)
 		resetImageUrl()
 		resetMultiSelect.current()
-		disableProjectEdit()
+		closeProject()
 	}
 
 	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
@@ -114,7 +114,7 @@ const ProjectSettingsForm = () => {
 				<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
 				<p className='text-gray text-sm text-center font-medium px-4'>Image must be PNG, JPEG, JPG, WEBP - max 2MB</p>
 
-				<File
+				<FileInput
 					buttonText='Upload Project Image'
 					icon={<UploadIcon />}
 					name='imageFile'

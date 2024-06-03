@@ -16,6 +16,8 @@ const initialUser = {
 export interface UserContextProps {
 	user: User
 	handleSetUser: (user: User) => void
+	setCover: (url: string) => void
+	setAvatar: (url: string) => void
 	handleLogoutUser: (navigate: () => void) => void
 }
 
@@ -23,6 +25,9 @@ export const UserContext = createContext<UserContextProps>({} as UserContextProp
 
 export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [user, setUser] = useState(getValueFromStorage<User>('user', initialUser))
+
+	const setCover = (url: string) => setUser((user) => ({ ...user, coverURL: url }))
+	const setAvatar = (url: string) => setUser((user) => ({ ...user, avatarURL: url }))
 
 	const handleSetUser = (user: User) => {
 		window.localStorage.setItem('user', JSON.stringify(user))
@@ -35,5 +40,5 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		navigate()
 	}
 
-	return <UserContext.Provider value={{ user, handleSetUser, handleLogoutUser }}>{children}</UserContext.Provider>
+	return <UserContext.Provider value={{ user, setCover, setAvatar, handleSetUser, handleLogoutUser }}>{children}</UserContext.Provider>
 }

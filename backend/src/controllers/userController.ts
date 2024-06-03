@@ -1,14 +1,14 @@
 import multer from 'multer'
 import { NextFunction, Request, Response } from 'express'
-import { deleteUser, getMyPortfolio, getUserAndProjects, updateMyPortfolio, updateUser } from '../models/userModel'
-import { patchUserImageSchema, updateUserSchema } from '../services/routeSchema'
+import { deleteUser, getMyPortfolio, getUserAndProjects, updateMyAvatar, updateMyCover, updateUser } from '../models/userModel'
+import { patchAvatarSchema, patchCoverSchema, updateUserSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { idSchema, passwordSchema } from '../services/baseSchema'
 import sharp from 'sharp'
 import { removeAvatarImage, removeCoverImage, updateAvatarImage, updateCoverImage } from '../models/imagesModel'
 
-const upload = multer({
+export const upload = multer({
 	storage: multer.memoryStorage(),
 	fileFilter: (req, file, cb) => {
 		const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
@@ -18,29 +18,24 @@ const upload = multer({
 	limits: { fileSize: 1024 * 1024 * 5 },
 })
 
-export const uploadUserImages = upload.fields([
-	{ name: 'avatarFile', maxCount: 1 },
-	{ name: 'coverFile', maxCount: 1 },
-])
+export const resizeAvatarImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	if (!req.file) return next()
 
-export const resizeUserImages = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	if (!req.files) return next()
-	const { coverFile, avatarFile } = req.files as { [fieldname: string]: Express.Multer.File[] }
+	const resizedBuffer = await sharp(req.file.buffer).resize(160, 160).toFormat('jpeg').toBuffer()
+	req.file.buffer = resizedBuffer
+	req.file.mimetype = 'image/jpeg'
+	req.file.filename = `avatar-${req.userId}-${Date.now()}.jpeg`
 
-	if (coverFile) {
-		const resizedBuffer = await sharp(coverFile[0].buffer).resize(800, 200).toFormat('jpeg').toBuffer()
-		coverFile[0].buffer = resizedBuffer
-		coverFile[0].mimetype = 'image/jpeg'
-		coverFile[0].filename = `cover-${req.userId}-${Date.now()}.jpeg`
-	}
+	next()
+})
 
-	if (avatarFile) {
-		const resizedBuffer = await sharp(avatarFile[0].buffer).resize(160, 160).toFormat('jpeg').toBuffer()
-		avatarFile[0].buffer = resizedBuffer
-		avatarFile[0].mimetype = 'image/jpeg'
-		avatarFile[0].filename = `avatar-${req.userId}-${Date.now()}.jpeg`
-	}
+export const resizeCoverImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	if (!req.file) return next()
 
+	const resizedBuffer = await sharp(req.file.buffer).resize(800, 200).toFormat('jpeg').toBuffer()
+	req.file.buffer = resizedBuffer
+	req.file.mimetype = 'image/jpeg'
+	req.file.filename = `cover-${req.userId}-${Date.now()}.jpeg`
 	next()
 })
 
@@ -62,29 +57,37 @@ export const getMyPortfolioHandler = catchAsync(async (req: Request, res: Respon
 	res.status(statusCode).send(userWithProjects)
 })
 
-export const updateMyPortolioHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	const { coverFile, avatarFile } = req.files as { [fieldname: string]: Express.Multer.File[] }
-
-	if (coverFile) {
-		const coverUrl = await updateCoverImage(coverFile[0], req.userId)
-		if (coverUrl instanceof AppError) return next(coverUrl)
-		req.body.coverURL = coverUrl
-	}
-
-	if (avatarFile) {
-		const avatarUrl = await updateAvatarImage(avatarFile[0], req.userId)
+export const updateMyAvatarHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	if (req.file) {
+		const avatarUrl = await updateAvatarImage(req.file, req.userId)
 		if (avatarUrl instanceof AppError) return next(avatarUrl)
 		req.body.avatarURL = avatarUrl
 	}
-
-	const userImagesData = patchUserImageSchema.parse(req.body)
-	const response = await updateMyPortfolio(userImagesData, req.userId)
+	const url = patchAvatarSchema.parse(req.body)
+	const response = await updateMyAvatar(url.avatarURL, req.userId)
 	if (response instanceof AppError) return next(response)
-	const { user, statusCode, statusText = [] } = response
+	const { avatarURL, statusCode, statusText = [] } = response
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		user,
+		avatarURL,
+	})
+})
+
+export const updateMyCoverHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	if (req.file) {
+		const coverURL = await updateCoverImage(req.file, req.userId)
+		if (coverURL instanceof AppError) return next(coverURL)
+		req.body.coverURL = coverURL
+	}
+	const url = patchCoverSchema.parse(req.body)
+	const response = await updateMyCover(url.coverURL, req.userId)
+	if (response instanceof AppError) return next(response)
+	const { coverURL, statusCode, statusText = [] } = response
+
+	res.status(statusCode).json({
+		message: getSuccessMessage(statusCode, statusText),
+		coverURL,
 	})
 })
 
@@ -133,3 +136,66 @@ export const deleteMeHandler = catchAsync(async (req: Request, res: Response, ne
 		message: getSuccessMessage(statusCode, statusText),
 	})
 })
+
+// export const resizeCoverImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+// 	if (!req.file) return next()
+// 	const { coverFile, avatarFile } = req.files as { [fieldname: string]: Express.Multer.File[] }
+
+// 	if (coverFile) {
+// 		const resizedBuffer = await sharp(coverFile[0].buffer).resize(800, 200).toFormat('jpeg').toBuffer()
+// 		coverFile[0].buffer = resizedBuffer
+// 		coverFile[0].mimetype = 'image/jpeg'
+// 		coverFile[0].filename = `cover-${req.userId}-${Date.now()}.jpeg`
+// 	}
+
+// 	if (avatarFile) {
+// 		const resizedBuffer = await sharp(avatarFile[0].buffer).resize(160, 160).toFormat('jpeg').toBuffer()
+// 		avatarFile[0].buffer = resizedBuffer
+// 		avatarFile[0].mimetype = 'image/jpeg'
+// 		avatarFile[0].filename = `avatar-${req.userId}-${Date.now()}.jpeg`
+// 	}
+
+// 	next()
+// })
+
+// export const updateMyPortolioHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+// 	const { coverFile, avatarFile } = req.files as { [fieldname: string]: Express.Multer.File[] }
+
+// 	if (coverFile) {
+// 		const coverUrl = await updateCoverImage(coverFile[0], req.userId)
+// 		if (coverUrl instanceof AppError) return next(coverUrl)
+// 		req.body.coverURL = coverUrl
+// 	}
+
+// 	if (avatarFile) {
+// 		const avatarUrl = await updateAvatarImage(avatarFile[0], req.userId)
+// 		if (avatarUrl instanceof AppError) return next(avatarUrl)
+// 		req.body.avatarURL = avatarUrl
+// 	}
+
+// 	const userImagesData = patchUserImageSchema.parse(req.body)
+// 	const response = await updateMyPortfolio(userImagesData, req.userId)
+// 	if (response instanceof AppError) return next(response)
+// 	const { user, statusCode, statusText = [] } = response
+
+// 	res.status(statusCode).json({
+// 		message: getSuccessMessage(statusCode, statusText),
+// 		user,
+// 	})
+// })
+// export const updateMyPortfolio = async (reqBody: UpdateMyUserImages, userId: string): Promise<IUser | AppError> => {
+// 	const { data } = await supabase.from('projects').select('coverURL,avatarURL').eq('id', userId).single()
+// 	if (reqBody.coverURL === null) reqBody.coverURL = data?.coverURL
+// 	if (reqBody.avatarURL === null) reqBody.avatarURL = data?.avatarURL
+
+// 	const { data: user, error, status } = await supabase.from('users').update(reqBody).eq('id', userId).select('*').single()
+// 	if (error) return new AppError(status)
+
+// 	const newUser = removeUserColumns<User>(user)
+
+// 	return {
+// 		user: newUser,
+// 		statusCode: 200,
+// 		statusText: ['update', 'Your profile information has been updated succesfully.'],
+// 	}
+// }

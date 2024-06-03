@@ -19,6 +19,7 @@ export default {
 		screens: {
 			mobile: '420px',
 			lgMobile: '480px',
+			md: '640px',
 		},
 	},
 	plugins: [],

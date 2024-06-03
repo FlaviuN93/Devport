@@ -1,7 +1,7 @@
 import { useGetMyProjects } from '../services/queries'
 import ProjectCard from '../components/Containers/ProjectCard'
 import Loading from '../components/UI/Loading'
-import ProjectSettingsForm from '../components/Containers/ProjectSettingsForm'
+import ProjectSettingsForm from '../components/Containers/Forms/ProjectSettingsForm'
 
 const ProjectSettings = () => {
 	const { data: projects, isLoading } = useGetMyProjects()

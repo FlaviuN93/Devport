@@ -1,25 +1,26 @@
 import { ReactNode, useId, useRef, useEffect, useState, ChangeEvent } from 'react'
-import { TailwindClasses } from '../../utils/types'
+import { TailwindClasses, tPositions } from '../../utils/types'
 import { motion } from 'framer-motion'
-import styles from './File.module.css'
+import styles from './FileInput.module.css'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 import Tooltip from '../UI/Tooltip'
 import useMediaQuery from '../../hooks/useMediaQuery'
 
-export interface FileProps<T extends FieldValues> {
-	register: UseFormRegister<T>
+export interface IFileProps<T extends FieldValues> {
 	onFileUpload: (file: File) => void
 	name: Path<T>
+	register?: UseFormRegister<T>
 	buttonText?: string
 	label?: string
 	icon?: ReactNode
 	fileStyles?: TailwindClasses
 	error?: string
 	tooltipStyles?: TailwindClasses
+	tooltipPosition?: tPositions
 	fileContainerStyles?: TailwindClasses
 }
 
-const File = <T extends FieldValues>({
+const FileInput = <T extends FieldValues>({
 	fileStyles = '',
 	name,
 	label,
@@ -29,8 +30,10 @@ const File = <T extends FieldValues>({
 	error,
 	register,
 	tooltipStyles,
+	tooltipPosition = 'right',
+
 	fileContainerStyles,
-}: FileProps<T>) => {
+}: IFileProps<T>) => {
 	const uniqueId = useId()
 	const divRef = useRef<HTMLDivElement>(null)
 	const [size, setSize] = useState({ width: '0', height: '0' })
@@ -78,16 +81,16 @@ const File = <T extends FieldValues>({
 					className={`absolute opacity-0 w-full mobile:w-auto `}
 					id={uniqueId}
 					onChange={handleSetFile}
-					ref={() => register(name)}
+					ref={() => register?.(name)}
 					aria-describedby={`${uniqueId}-${name}`}
 					type='file'
 				/>
 				{error && (
-					<Tooltip content={error} position={isMobile ? 'top' : 'right'} tooltipStyles={tooltipStyles} hoverTooltip={showTooltip} />
+					<Tooltip content={error} position={isMobile ? 'top' : tooltipPosition} tooltipStyles={tooltipStyles} hoverTooltip={showTooltip} />
 				)}
 			</div>
 		</div>
 	)
 }
 
-export default File
+export default FileInput

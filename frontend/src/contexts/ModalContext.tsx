@@ -18,6 +18,7 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const modalWindowRef = useRef<HTMLDivElement>(null)
 	const isOpenModal = openModal.length > 0
 	const close = () => setOpenModal('')
+
 	const open = (name: string) => setOpenModal(name)
 
 	return (

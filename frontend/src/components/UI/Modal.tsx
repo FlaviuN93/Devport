@@ -1,4 +1,4 @@
-import { FC, ReactElement, ReactNode, cloneElement, useEffect } from 'react'
+import { FC, ReactElement, ReactNode, cloneElement, useEffect, useLayoutEffect } from 'react'
 import styles from './Modal.module.css'
 import { motion } from 'framer-motion'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -15,6 +15,7 @@ interface IModalWindow {
 	modalName: string
 	children: ReactNode
 	modalWindowStyles?: TailwindClasses
+	onClose?: () => void
 	showCloseIcon?: boolean
 }
 
@@ -43,22 +44,27 @@ export const ModalOpen: FC<IModalOpen> = ({ children, openedModalName, isInputVa
 	return cloneElement(children, { onClick: handleOpenModal })
 }
 
-export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIcon = true, modalWindowStyles }) => {
+export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIcon = true, modalWindowStyles, onClose }) => {
 	const { close, modalWindowRef, modalPosition, openModal, isOpenModal } = useModalContext()
 	const { exclusionRef } = useDropdownContext()
 	const overlayRef = useCalculateWindowHeight(isOpenModal)
 
-	useKeyToClose('Escape', close)
-	useOutsideClick(modalWindowRef, close)
+	const handleClose = () => {
+		if (onClose) onClose()
+		close()
+	}
+	useKeyToClose('Escape', handleClose)
+	useOutsideClick(modalWindowRef, handleClose)
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setTimeout(() => {
-			if (modalWindowRef.current) {
-				const topPosition = (window.innerHeight + window.scrollY * 2 - modalWindowRef.current.offsetHeight) / 2
+			if (modalWindowRef.current && modalWindowRef.current.offsetHeight > 0) {
+				console.log(modalWindowRef.current.offsetHeight, 'checkOffsetHeight')
+				const topPosition = (window.innerHeight + window.scrollY * 2 - modalWindowRef.current?.offsetHeight) / 2
 				modalWindowRef.current.style.top = `${topPosition}px`
 			}
-		})
-	}, [modalPosition, modalWindowRef, isOpenModal])
+		}, 250)
+	}, [modalPosition, modalWindowRef, isOpenModal, openModal])
 
 	const modalWindowClasses = `${styles.modalContainer} ${modalWindowStyles ? modalWindowStyles : ''}`
 
@@ -75,7 +81,7 @@ export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIc
 				className={modalWindowClasses}
 			>
 				<div ref={exclusionRef}>
-					{showCloseIcon && <XMarkIcon onClick={close} className='h-6 w-6 cursor-pointer absolute top-3 right-4' />}
+					{showCloseIcon && <XMarkIcon onClick={handleClose} className='h-6 w-6 cursor-pointer absolute top-3 right-4' />}
 					{children}
 				</div>
 			</motion.div>
@@ -84,9 +90,14 @@ export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIc
 	)
 }
 
-export const ModalClose: FC<{ children: ReactElement | ReactElement[] }> = ({ children }) => {
+export const ModalClose: FC<{ children: ReactElement | ReactElement[]; onClose?: () => void }> = ({ children, onClose }) => {
 	const { close } = useModalContext()
-	if (Array.isArray(children)) return children.map((child) => cloneElement(child, { onClick: close }))
 
-	return cloneElement(children, { onClick: close })
+	const handleClose = () => {
+		if (onClose) onClose()
+		close()
+	}
+	if (Array.isArray(children)) return children.map((child) => cloneElement(child, { onClick: handleClose }))
+
+	return cloneElement(children, { onClick: handleClose })
 }

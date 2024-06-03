@@ -1,9 +1,9 @@
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from '../components/UI/Dropdown'
 import { Modal, ModalOpen, ModalWindow } from '../components/UI/Modal'
-import ResetPasswordForm from '../components/Containers/ResetPasswordForm'
-import DeleteAccountForm from '../components/Containers/DeleteAccountForm'
-import ProfileSettingsForm from '../components/Containers/ProfileSettingsForm'
+import ResetPasswordForm from '../components/Containers/Forms/ResetPasswordForm'
+import DeleteAccountForm from '../components/Containers/Forms/DeleteAccountForm'
+import ProfileSettingsForm from '../components/Containers/Forms/ProfileSettingsForm'
 
 const ProfileSettings = () => {
 	return (

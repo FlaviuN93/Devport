@@ -1,20 +1,22 @@
 import PortfolioCard from '../components/Containers/PortfolioCard'
-import MyPortfolioForm from '../components/Containers/MyPortfolioForm'
-import { useGetMyPortfolio } from '../services/queries'
+import MyPortfolioForm from '../components/Containers/Forms/MyPortfolioForm'
+import { useGetMyProjects } from '../services/queries'
 import ProjectCard from '../components/Containers/ProjectCard'
 import Loading from '../components/UI/Loading'
+import { useUserContext } from '../contexts/contextHooks'
 
 const MyPortfolio = () => {
-	const { data: user, isLoading } = useGetMyPortfolio()
+	const { data: projects, isLoading } = useGetMyProjects()
+	const { user: loggedUser } = useUserContext()
 	if (isLoading) return <Loading />
 
 	return (
 		<section className='portfolioContainer'>
 			<div className='relative mb-20'>
-				<MyPortfolioForm user={user} />
+				<MyPortfolioForm />
 			</div>
-			<PortfolioCard user={user} />
-			{user?.projects?.map((project) => (
+			<PortfolioCard user={loggedUser} />
+			{projects?.map((project) => (
 				<ProjectCard
 					key={project.id}
 					projectId={project.id}

@@ -36,10 +36,9 @@
 }
 
 .right {
-	bottom: 50%;
-	left: 100%;
-	transform: translateY(50%);
-	margin-left: 10px;
+	top: 25%;
+	left: 50%;
+	transform: translateX(0);
 }
 
 .bottom {
@@ -50,10 +49,9 @@
 }
 
 .left {
-	top: 50%;
+	top: 25%;
 	right: 50%;
-	transform: translateY(-50%);
-	margin-right: 2px;
+	transform: translateX(-50%);
 }
 
 @media (min-width: 768px) {

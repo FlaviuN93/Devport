@@ -1,5 +1,5 @@
 import { remove, get, patch, post, put } from './baseHttp'
-import { IDefaultSuccess, IUser, Project, Technology, User } from './types'
+import { IAvatar, ICover, IDefaultSuccess, IUser, Project, Technology, User } from './types'
 import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 
 // User Routes
@@ -7,7 +7,10 @@ export const getMyPortfolio = () => get<User>('/users/projects/currentUser')
 
 export const updateMe = (body: FormData) => patch<IUser, FormData>('/users/currentUser', { body })
 
-export const updateMyPortfolio = (body: FormData) => patch<IUser, FormData>('/users/projects/currentUser', { body })
+// export const updateMyPortfolio = (body: FormData) => patch<IUser, FormData>('/users/projects/currentUser', { body })
+
+export const updateMyCover = (body: FormData) => patch<ICover, FormData>('/users/currentUser/coverImg', { body })
+export const updateMyAvatar = (body: FormData) => patch<IAvatar, FormData>('/users/currentUser/avatarImg', { body })
 
 export const deleteMe = (body: { password: string }) => remove<IDefaultSuccess, { password: string }>('/users/currentUser', { body })
 

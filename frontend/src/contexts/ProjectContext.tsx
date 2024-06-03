@@ -15,7 +15,7 @@ export interface IProjectContextProps {
 	isProjectSelected: boolean
 	handleProjectSelect: (project: Project) => void
 	selectedProject: Project
-	disableProjectEdit: () => void
+	closeProject: () => void
 	resetImageUrl: () => void
 }
 
@@ -31,7 +31,7 @@ export const ProjectProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	}
 
 	const resetImageUrl = () => setSelectedProject((prevState) => ({ ...prevState, imageURL: '' }))
-	const disableProjectEdit = () => setIsProjectSelected(false)
+	const closeProject = () => setIsProjectSelected(false)
 
 	return (
 		<ProjectContext.Provider
@@ -40,7 +40,7 @@ export const ProjectProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				handleProjectSelect,
 				isProjectSelected,
 				resetImageUrl,
-				disableProjectEdit,
+				closeProject,
 			}}
 		>
 			{children}

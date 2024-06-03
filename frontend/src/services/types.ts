@@ -21,6 +21,14 @@ export interface IUser extends IDefaultSuccess {
 	user: User
 }
 
+export interface IAvatar extends IDefaultSuccess {
+	avatarURL: string
+}
+
+export interface ICover extends IDefaultSuccess {
+	coverURL: string
+}
+
 export interface IProject extends IDefaultSuccess {
 	project: Project
 }

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import LogoIcon from '../assets/Logo.svg?react'
-import ResetPasswordForm from '../components/Containers/ResetPasswordForm'
+import ResetPasswordForm from '../components/Containers/Forms/ResetPasswordForm'
 import Button from '../components/UI/Button'
 
 const ResetPassword = () => {

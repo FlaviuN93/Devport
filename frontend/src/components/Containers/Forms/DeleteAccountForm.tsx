@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import Password from '../Inputs/Password'
-import Button from '../UI/Button'
-import { useDeleteMe } from '../../services/queries'
+import Password from '../../Inputs/Password'
+import Button from '../../UI/Button'
+import { useDeleteMe } from '../../../services/queries'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
-import { useModalContext } from '../../contexts/contextHooks'
+import { useModalContext } from '../../../contexts/contextHooks'
 
 const DeleteAccountForm = () => {
 	const { error, isPending, mutate: deleteUser, isSuccess } = useDeleteMe()

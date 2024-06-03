@@ -1,20 +1,20 @@
-import CheckCircleIcon from '../../assets/check circle-1.svg?react'
+import CheckCircleIcon from '../../../assets/check circle-1.svg?react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import ProjectIcon from '../../assets/project.svg?react'
-import UploadIcon from '../../assets/upload.svg?react'
-import { useUserContext } from '../../contexts/contextHooks'
-import { useUpdateMe } from '../../services/queries'
-import { IProfileSettings, profileSettingsSchema } from '../../utils/schemas'
-import Avatar from '../UI/Avatar'
-import Button from '../UI/Button'
-import File from '../Inputs/File'
-import Text from '../Inputs/Text'
+import ProjectIcon from '../../../assets/project.svg?react'
+import UploadIcon from '../../../assets/upload.svg?react'
+import { useUserContext } from '../../../contexts/contextHooks'
+import { useUpdateMe } from '../../../services/queries'
+import { IProfileSettings, profileSettingsSchema } from '../../../utils/schemas'
+import Avatar from '../../UI/Avatar'
+import Button from '../../UI/Button'
+import Text from '../../Inputs/Text'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { motionVariants } from '../../utils/variables'
-import { convertToFormData } from '../../utils/functions'
+import { motionVariants } from '../../../utils/variables'
+import { convertToFormData } from '../../../utils/functions'
+import FileInput from '../../Inputs/FileInput'
 
 const ProfileSettingsForm = () => {
 	const { user: loggedUser, handleSetUser } = useUserContext()
@@ -40,12 +40,16 @@ const ProfileSettingsForm = () => {
 	const { isPending: pendingUpdate, mutate: updateUser, isSuccess, data: newUser } = useUpdateMe()
 	const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
 	const [coverUrl, setCoverUrl] = useState<string | null>(null)
-	const [isCoverSelected, setIsCoverSelected] = useState(true)
+	const [isCoverSelected, setIsCoverSelected] = useState(false)
 
 	// Updating the previewUrl for cover.
+	// Not working properly yet
 	useEffect(() => {
-		if (isCoverSelected) setCoverUrl(loggedUser.coverURL)
-		else setCoverUrl(coverFile)
+		if (isCoverSelected) {
+			setCoverUrl(loggedUser.coverURL)
+		} else {
+			setCoverUrl(coverFile)
+		}
 	}, [getValues().coverFile, loggedUser.coverURL, isCoverSelected])
 
 	// Updating user
@@ -94,7 +98,7 @@ const ProfileSettingsForm = () => {
 				<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px] -mt-2' />
 				<p className='text-gray text-sm text-center font-medium px-4'>Cover Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
 
-				<File
+				<FileInput
 					buttonText='Upload New Cover'
 					icon={<UploadIcon />}
 					name='coverFile'
@@ -128,7 +132,7 @@ const ProfileSettingsForm = () => {
 				placeholder='Enter a short introduction..'
 				error={errors.bio?.message}
 			/>
-			<div className='place-self-end flex w-full sm:w-auto'>
+			<div className='place-self-end flex w-full lgMobile:w-auto'>
 				<Button
 					icon={<CheckCircleIcon className='h-5 w-5' />}
 					iconPos='left'

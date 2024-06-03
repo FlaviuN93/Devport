@@ -89,10 +89,7 @@ export const profileSettingsSchema = z.object({
 	coverFile: z.union([
 		fileSchema
 			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
-			.refine(
-				async (file: File | null) => file && (await getImageFormat('cover', file)),
-				`Ensure the image dimensions are of 800 pixels wide by 200 pixels tall or the same ratio of wide and tall.`
-			),
+			.refine(async (file: File | null) => file && (await getImageFormat('landscape', file)), `Image must have a landscape format.`),
 		z.null(),
 	]),
 	avatarFile: z.union([
@@ -108,22 +105,23 @@ export const profileSettingsSchema = z.object({
 	bio: z.union([bioSchema, z.literal('')]),
 })
 
-export const portfolioSchema = z.object({
+export const coverSchema = z.object({
 	coverFile: z.union([
 		fileSchema.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB'),
 		// .refine(
 		// 	async (file: File | null) => file && (await getImageFormat('cover', file)),
-		// 	`Ensure the image dimensions are of 800 pixels wide by 200 pixels tall or the same ratio of wide and tall.`
-		// )
-		z.null(),
-	]),
-	avatarFile: z.union([
-		fileSchema
-			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
-			.refine(async (file: File | null) => file && (await getImageFormat('portrait', file)), 'Image must have a portrait format.'),
+		// 	`Ensure the image dimensions respect the ratio of a cover image.`
+		// ),
 		z.null(),
 	]),
 })
+
+export const avatarSchema = z.union([
+	fileSchema
+		.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
+		.refine(async (file: File | null) => file && (await getImageFormat('portrait', file)), 'Image must have a portrait format.'),
+	z.null(),
+])
 
 export type ResetPasswordType = z.infer<typeof resetPasswordSchema>
 

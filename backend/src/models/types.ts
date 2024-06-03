@@ -45,6 +45,14 @@ export interface IDefault {
 	token?: string
 }
 
+export interface IAvatar extends IDefault {
+	avatarURL: string
+}
+
+export interface ICover extends IDefault {
+	coverURL: string
+}
+
 // User Types
 
 export interface IUserAndProjects extends IDefault {
