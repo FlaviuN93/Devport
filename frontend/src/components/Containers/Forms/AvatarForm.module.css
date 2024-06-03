@@ -1,0 +1,40 @@
+.avatarContainer {
+	position: relative;
+	width: 160px;
+	height: 160px;
+}
+
+@media (min-width: 420px) {
+	.avatarContainer {
+		width: 375px;
+		height: 150px;
+	}
+}
+
+@media (min-width: 480px) {
+	.avatarContainer {
+		width: 425px;
+		height: 175px;
+	}
+}
+
+@media (min-width: 640px) {
+	.avatarContainer {
+		width: 550px;
+		height: 175px;
+	}
+}
+
+@media (min-width: 768px) {
+	.avatarContainer {
+		width: 700px;
+		height: 250px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.avatarContainer {
+		width: 450px;
+		height: 300px;
+	}
+}

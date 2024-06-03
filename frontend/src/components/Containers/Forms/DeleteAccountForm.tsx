@@ -14,8 +14,9 @@ const DeleteAccountForm = () => {
 
 	// Still have to work on logout functionality here and other places
 	useEffect(() => {
+		console.log(close, 'close')
 		if (!isPending && isSuccess) setTimeout(() => navigate('/auth'), 1000)
-	}, [isPending, isSuccess, navigate])
+	}, [isPending, isSuccess, navigate, close])
 
 	return (
 		<div>

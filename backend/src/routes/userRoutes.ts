@@ -2,6 +2,8 @@ import { protectHandler, userRolesHandler } from '../controllers/authController'
 import express from 'express'
 import {
 	deleteMeHandler,
+	deleteMyAvatarHandler,
+	deleteMyCoverHandler,
 	getMyPortfolioHandler,
 	getUserAndProjectsHandler,
 	resizeAvatarImage,
@@ -24,10 +26,12 @@ userRouter
 userRouter
 	.route('/currentUser/avatarImg')
 	.patch(protectHandler, userRolesHandler('user', 'tester'), upload.single('avatarFile'), resizeAvatarImage, updateMyAvatarHandler)
+	.delete(protectHandler, userRolesHandler('user', 'tester'), deleteMyAvatarHandler)
 
 userRouter
 	.route('/currentUser/coverImg')
 	.patch(protectHandler, userRolesHandler('user', 'tester'), upload.single('coverFile'), resizeCoverImage, updateMyCoverHandler)
+	.delete(protectHandler, userRolesHandler('user', 'tester'), deleteMyCoverHandler)
 // .patch(protectHandler, userRolesHandler('user', 'tester'), uploadUserImages, resizeUserImages, updateMyPortolioHandler)
 
 userRouter.route('/projects/:userId').get(getUserAndProjectsHandler)

@@ -1,4 +1,3 @@
-import styles from './ResetPasswordForm.module.css'
 import Password from '../../Inputs/Password'
 import PasswordValidation from '../../Inputs/PasswordValidation'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -43,7 +42,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 		defaultValues: { password: '', confirmPassword: '' },
 	})
 
-	const formClasses = `${styles.formContainer} ${formStyles}`
+	const formClasses = `flex flex-col -mt-1 gap-4 ${formStyles}`
 	const passwordErrorTypes = errors.password?.types?.invalid_string
 	const { errors: passwordErrors, isValid } = useValidateResult(passwordErrorTypes, passwordInitialState)
 
@@ -93,7 +92,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 				error={errors.confirmPassword?.message}
 			/>
 
-			<div className={styles.passwordValidation}>
+			<div className='grid grid-cols-2 gap-3'>
 				{passwordErrors.map((error) => (
 					<PasswordValidation key={error.type} isActive={error.isActive} type={error.type} />
 				))}

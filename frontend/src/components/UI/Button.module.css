@@ -11,15 +11,11 @@
 	min-width: 3rem;
 	font-weight: 500;
 	overflow: hidden;
-	transition: all 0.25s ease;
+	transition: all 0.25 ease;
 }
 
 .button:focus {
 	outline: none;
-}
-
-.button:active {
-	box-shadow: var(--shadow-xs);
 }
 
 .disabled {

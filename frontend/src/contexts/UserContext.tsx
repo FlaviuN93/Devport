@@ -1,6 +1,6 @@
 import { FC, ReactNode, createContext, useState } from 'react'
 import { User } from '../services/types'
-import { getValueFromStorage } from '../utils/functions'
+import { getValueFromStorage, updateValueFromStorage } from '../utils/functions'
 
 const initialUser = {
 	email: '',
@@ -26,8 +26,14 @@ export const UserContext = createContext<UserContextProps>({} as UserContextProp
 export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [user, setUser] = useState(getValueFromStorage<User>('user', initialUser))
 
-	const setCover = (url: string) => setUser((user) => ({ ...user, coverURL: url }))
-	const setAvatar = (url: string) => setUser((user) => ({ ...user, avatarURL: url }))
+	const setCover = (url: string) => {
+		updateValueFromStorage({ key: 'user', keyToUpdate: 'coverURL', valueToUpdate: url })
+		setUser((user) => ({ ...user, coverURL: url }))
+	}
+	const setAvatar = (url: string) => {
+		updateValueFromStorage({ key: 'user', keyToUpdate: 'avatarURL', valueToUpdate: url })
+		setUser((user) => ({ ...user, avatarURL: url }))
+	}
 
 	const handleSetUser = (user: User) => {
 		window.localStorage.setItem('user', JSON.stringify(user))

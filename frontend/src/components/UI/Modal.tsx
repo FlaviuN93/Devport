@@ -15,7 +15,6 @@ interface IModalWindow {
 	modalName: string
 	children: ReactNode
 	modalWindowStyles?: TailwindClasses
-	onClose?: () => void
 	showCloseIcon?: boolean
 }
 
@@ -44,27 +43,22 @@ export const ModalOpen: FC<IModalOpen> = ({ children, openedModalName, isInputVa
 	return cloneElement(children, { onClick: handleOpenModal })
 }
 
-export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIcon = true, modalWindowStyles, onClose }) => {
-	const { close, modalWindowRef, modalPosition, openModal, isOpenModal } = useModalContext()
+export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIcon = true, modalWindowStyles }) => {
+	const { close, modalWindowRef, modalPosition, openModal, isModalOpen } = useModalContext()
 	const { exclusionRef } = useDropdownContext()
-	const overlayRef = useCalculateWindowHeight(isOpenModal)
+	const overlayRef = useCalculateWindowHeight(isModalOpen)
 
-	const handleClose = () => {
-		if (onClose) onClose()
-		close()
-	}
-	useKeyToClose('Escape', handleClose)
-	useOutsideClick(modalWindowRef, handleClose)
+	useKeyToClose('Escape', close)
+	useOutsideClick(modalWindowRef, close)
 
 	useLayoutEffect(() => {
 		setTimeout(() => {
 			if (modalWindowRef.current && modalWindowRef.current.offsetHeight > 0) {
-				console.log(modalWindowRef.current.offsetHeight, 'checkOffsetHeight')
 				const topPosition = (window.innerHeight + window.scrollY * 2 - modalWindowRef.current?.offsetHeight) / 2
 				modalWindowRef.current.style.top = `${topPosition}px`
 			}
 		}, 250)
-	}, [modalPosition, modalWindowRef, isOpenModal, openModal])
+	}, [modalPosition, modalWindowRef, isModalOpen, openModal])
 
 	const modalWindowClasses = `${styles.modalContainer} ${modalWindowStyles ? modalWindowStyles : ''}`
 
@@ -74,14 +68,14 @@ export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIc
 		<div className={styles.modalOverlay} ref={overlayRef}>
 			<motion.div
 				initial='hidden'
-				animate={isOpenModal ? 'visible' : 'hidden'}
+				animate={isModalOpen ? 'visible' : 'hidden'}
 				variants={motionVariants}
 				transition={{ duration: 0.3 }}
 				ref={modalWindowRef}
 				className={modalWindowClasses}
 			>
 				<div ref={exclusionRef}>
-					{showCloseIcon && <XMarkIcon onClick={handleClose} className='h-6 w-6 cursor-pointer absolute top-3 right-4' />}
+					{showCloseIcon && <XMarkIcon onClick={() => close()} className={styles.closeIcon} />}
 					{children}
 				</div>
 			</motion.div>

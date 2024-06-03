@@ -1,7 +1,7 @@
 import { Dispatch, FC, ReactNode, RefObject, SetStateAction, createContext, useRef, useState } from 'react'
 
 interface IModalContextProps {
-	isOpenModal: boolean
+	isModalOpen: boolean
 	openModal: string
 	setModalPosition: Dispatch<SetStateAction<string>>
 	modalPosition: string
@@ -16,16 +16,16 @@ export const ModalProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [openModal, setOpenModal] = useState('')
 	const [modalPosition, setModalPosition] = useState('')
 	const modalWindowRef = useRef<HTMLDivElement>(null)
-	const isOpenModal = openModal.length > 0
-	const close = () => setOpenModal('')
+	const isModalOpen = openModal.length > 0
 
+	const close = () => setOpenModal('')
 	const open = (name: string) => setOpenModal(name)
 
 	return (
 		<ModalContext.Provider
 			value={{
 				openModal,
-				isOpenModal,
+				isModalOpen,
 				open,
 				close,
 				modalWindowRef,

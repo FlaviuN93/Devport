@@ -11,7 +11,7 @@ interface DropdownContextProps {
 	handleSelect: (itemId: string) => void
 }
 
-export const DropdownContext = createContext<DropdownContextProps>({} as DropdownContextProps)
+export const DropdownContext = createContext({} as DropdownContextProps)
 
 export const DropdownProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [isOpen, setIsOpen] = useState(false)

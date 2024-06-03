@@ -90,4 +90,18 @@ export const deleteUser = async (password: string, userId: string): Promise<IDef
 	return { statusCode: 200, statusText: ['delete', `${data.fullName} account has been deleted`] }
 }
 
+export const deleteMyCover = async (userId: string): Promise<IDefault | AppError> => {
+	const { error, status } = await supabase.from('users').update({ coverURL: '' }).eq('id', userId)
+	if (error) return new AppError(status)
+
+	return { statusCode: 200, statusText: ['delete', `Your cover image has been deleted`] }
+}
+
+export const deleteMyAvatar = async (userId: string): Promise<IDefault | AppError> => {
+	const { error, status } = await supabase.from('users').update({ avatarURL: '' }).eq('id', userId)
+
+	if (error) return new AppError(status)
+	return { statusCode: 200, statusText: ['delete', `Your avatar image has been deleted`] }
+}
+
 type UpdateUserType = z.infer<typeof updateUserSchema>

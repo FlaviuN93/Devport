@@ -1,6 +1,15 @@
 import multer from 'multer'
 import { NextFunction, Request, Response } from 'express'
-import { deleteUser, getMyPortfolio, getUserAndProjects, updateMyAvatar, updateMyCover, updateUser } from '../models/userModel'
+import {
+	deleteMyAvatar,
+	deleteMyCover,
+	deleteUser,
+	getMyPortfolio,
+	getUserAndProjects,
+	updateMyAvatar,
+	updateMyCover,
+	updateUser,
+} from '../models/userModel'
 import { patchAvatarSchema, patchCoverSchema, updateUserSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
 import AppError, { getSuccessMessage } from '../utils/appError'
@@ -137,65 +146,28 @@ export const deleteMeHandler = catchAsync(async (req: Request, res: Response, ne
 	})
 })
 
-// export const resizeCoverImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-// 	if (!req.file) return next()
-// 	const { coverFile, avatarFile } = req.files as { [fieldname: string]: Express.Multer.File[] }
+export const deleteMyCoverHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const coverImageResponse = await removeCoverImage(req.userId)
+	if (coverImageResponse instanceof AppError) return next(coverImageResponse)
 
-// 	if (coverFile) {
-// 		const resizedBuffer = await sharp(coverFile[0].buffer).resize(800, 200).toFormat('jpeg').toBuffer()
-// 		coverFile[0].buffer = resizedBuffer
-// 		coverFile[0].mimetype = 'image/jpeg'
-// 		coverFile[0].filename = `cover-${req.userId}-${Date.now()}.jpeg`
-// 	}
+	const response = await deleteMyCover(req.userId)
+	if (response instanceof AppError) return next(response)
+	const { statusCode, statusText = [] } = response
 
-// 	if (avatarFile) {
-// 		const resizedBuffer = await sharp(avatarFile[0].buffer).resize(160, 160).toFormat('jpeg').toBuffer()
-// 		avatarFile[0].buffer = resizedBuffer
-// 		avatarFile[0].mimetype = 'image/jpeg'
-// 		avatarFile[0].filename = `avatar-${req.userId}-${Date.now()}.jpeg`
-// 	}
+	res.status(statusCode).json({
+		message: getSuccessMessage(statusCode, statusText),
+	})
+})
 
-// 	next()
-// })
+export const deleteMyAvatarHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const avatarImageResponse = await removeAvatarImage(req.userId)
+	if (avatarImageResponse instanceof AppError) return next(avatarImageResponse)
 
-// export const updateMyPortolioHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-// 	const { coverFile, avatarFile } = req.files as { [fieldname: string]: Express.Multer.File[] }
+	const response = await deleteMyAvatar(req.userId)
+	if (response instanceof AppError) return next(response)
+	const { statusCode, statusText = [] } = response
 
-// 	if (coverFile) {
-// 		const coverUrl = await updateCoverImage(coverFile[0], req.userId)
-// 		if (coverUrl instanceof AppError) return next(coverUrl)
-// 		req.body.coverURL = coverUrl
-// 	}
-
-// 	if (avatarFile) {
-// 		const avatarUrl = await updateAvatarImage(avatarFile[0], req.userId)
-// 		if (avatarUrl instanceof AppError) return next(avatarUrl)
-// 		req.body.avatarURL = avatarUrl
-// 	}
-
-// 	const userImagesData = patchUserImageSchema.parse(req.body)
-// 	const response = await updateMyPortfolio(userImagesData, req.userId)
-// 	if (response instanceof AppError) return next(response)
-// 	const { user, statusCode, statusText = [] } = response
-
-// 	res.status(statusCode).json({
-// 		message: getSuccessMessage(statusCode, statusText),
-// 		user,
-// 	})
-// })
-// export const updateMyPortfolio = async (reqBody: UpdateMyUserImages, userId: string): Promise<IUser | AppError> => {
-// 	const { data } = await supabase.from('projects').select('coverURL,avatarURL').eq('id', userId).single()
-// 	if (reqBody.coverURL === null) reqBody.coverURL = data?.coverURL
-// 	if (reqBody.avatarURL === null) reqBody.avatarURL = data?.avatarURL
-
-// 	const { data: user, error, status } = await supabase.from('users').update(reqBody).eq('id', userId).select('*').single()
-// 	if (error) return new AppError(status)
-
-// 	const newUser = removeUserColumns<User>(user)
-
-// 	return {
-// 		user: newUser,
-// 		statusCode: 200,
-// 		statusText: ['update', 'Your profile information has been updated succesfully.'],
-// 	}
-// }
+	res.status(statusCode).json({
+		message: getSuccessMessage(statusCode, statusText),
+	})
+})

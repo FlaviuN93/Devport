@@ -12,6 +12,9 @@ export const updateMe = (body: FormData) => patch<IUser, FormData>('/users/curre
 export const updateMyCover = (body: FormData) => patch<ICover, FormData>('/users/currentUser/coverImg', { body })
 export const updateMyAvatar = (body: FormData) => patch<IAvatar, FormData>('/users/currentUser/avatarImg', { body })
 
+export const deleteMyCover = () => remove<IDefaultSuccess>('/users/currentUser/coverImg')
+export const deleteMyAvatar = () => remove<IDefaultSuccess>('/users/currentUser/avatarImg')
+
 export const deleteMe = (body: { password: string }) => remove<IDefaultSuccess, { password: string }>('/users/currentUser', { body })
 
 // I will get access to userId from the url with react router

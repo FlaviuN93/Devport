@@ -1,32 +1,42 @@
-import { ChangeEvent, FC, useState } from 'react'
+import { ChangeEvent, FC, ReactNode } from 'react'
 import styles from './Slider.module.css'
-import { MinusIcon, PlusIcon } from '@heroicons/react/24/solid'
 import { TailwindClasses } from '../../utils/types'
 
 interface ISlider {
 	min: number
 	max: number
 	step: number
-	initialValue: number
+	value: number
 	onSliderChange: (value: number) => void
+	leftIcon?: ReactNode
+	rightIcon?: ReactNode
 	label?: string
 	sliderStyles?: TailwindClasses
 	sliderContainerStyles?: TailwindClasses
 }
 
-const Slider: FC<ISlider> = ({ min, max, label, onSliderChange, step, initialValue, sliderStyles, sliderContainerStyles }) => {
-	const [value, setValue] = useState(initialValue)
+const Slider: FC<ISlider> = ({
+	min,
+	max,
+	label,
+	onSliderChange,
+	step,
+	value,
+	leftIcon,
+	rightIcon,
+	sliderStyles,
+	sliderContainerStyles,
+}) => {
 	const sliderClasses = `${styles.slider} ${sliderStyles ? sliderStyles : ''}`
-	const sliderContainerClasses = `${styles.sliderContainer} ${sliderContainerStyles ? sliderContainerStyles : ''} flex items-center`
+	const sliderContainerClasses = `${sliderContainerStyles ? sliderContainerStyles : ''} ${styles.sliderContainer}`
 
-	// Have to fix the Slider first. Add local state and update props
 	return (
 		<div className='w-full'>
-			<label className='font-medium' htmlFor='slider'>
+			<label className='font-medium mb-2' htmlFor='slider'>
 				{label}
 			</label>
 			<div className={sliderContainerClasses}>
-				<MinusIcon className='h-7 w-7' />
+				{leftIcon && <span>{leftIcon}</span>}
 				<input
 					id='slider'
 					type='range'
@@ -38,7 +48,7 @@ const Slider: FC<ISlider> = ({ min, max, label, onSliderChange, step, initialVal
 					aria-labelledby={label}
 					onChange={(e: ChangeEvent<HTMLInputElement>) => onSliderChange(+e.target.value)}
 				/>
-				<PlusIcon className='h-7 w-7' />
+				{rightIcon && <span>{rightIcon}</span>}
 			</div>
 		</div>
 	)

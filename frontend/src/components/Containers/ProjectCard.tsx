@@ -4,9 +4,10 @@ import Button from '../UI/Button'
 import { ArrowTopRightOnSquareIcon, PencilSquareIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
 import { tCardState } from '../../utils/types'
-import { Modal, ModalClose, ModalOpen, ModalWindow } from '../UI/Modal'
+import { Modal, ModalOpen, ModalWindow } from '../UI/Modal'
 import { useDeleteMyProject } from '../../services/queries'
 import { useProjectContext } from '../../contexts/contextHooks'
+import DeleteModal from '../Modals/DeleteModal'
 
 interface ProjectCardProps {
 	projectId: number
@@ -93,16 +94,12 @@ const ProjectCard: FC<ProjectCardProps> = ({
 									/>
 								</ModalOpen>
 								<ModalWindow modalName='removeProject'>
-									<div className='flex flex-col gap-3 mt-2'>
-										<h4 className=''>Delete Project</h4>
-										<p>Are you sure you want to remove {title}?</p>
-										<ModalClose>
-											<div className='flex gap-2 justify-end'>
-												<Button variant='primary' buttonText='Yes' isLoading={isPending} onClick={() => deleteAction()} />
-												<Button variant='transparent' buttonText='No' />
-											</div>
-										</ModalClose>
-									</div>
+									<DeleteModal
+										content={`Are you sure you want to remove ${title}?`}
+										title='Delete Project'
+										isLoading={isPending}
+										onDelete={() => deleteAction()}
+									/>
 								</ModalWindow>
 							</Modal>
 						</div>

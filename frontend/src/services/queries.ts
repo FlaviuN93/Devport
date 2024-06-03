@@ -3,6 +3,8 @@ import {
 	changePassword,
 	createMyProject,
 	deleteMe,
+	deleteMyAvatar,
+	deleteMyCover,
 	deleteMyProject,
 	forgotPassword,
 	getMyPortfolio,
@@ -33,6 +35,9 @@ export const useUpdateMe = () =>
 // export const useUpdateMyPortfolio = () => useMutation<IUser, IDefaultError, FormData>({ mutationFn: updateMyPortfolio })
 export const useUpdateMyCover = () => useMutation<ICover, IDefaultError, FormData>({ mutationFn: updateMyCover })
 export const useUpdateMyAvatar = () => useMutation<IAvatar, IDefaultError, FormData>({ mutationFn: updateMyAvatar })
+
+export const useDeleteMyCover = () => useMutation<IDefaultSuccess, IDefaultError>({ mutationFn: deleteMyCover })
+export const useDeleteMyAvatar = () => useMutation<IDefaultSuccess, IDefaultError>({ mutationFn: deleteMyAvatar })
 
 export const useDeleteMe = () => useMutation<IDefaultSuccess, IDefaultError, { password: string }>({ mutationFn: deleteMe })
 

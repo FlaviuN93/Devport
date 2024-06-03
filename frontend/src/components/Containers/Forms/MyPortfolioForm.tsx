@@ -1,42 +1,46 @@
 import styles from './MyPortfolioForm.module.css'
-import { CameraIcon } from '@heroicons/react/24/outline'
+import { CameraIcon, PencilIcon } from '@heroicons/react/24/outline'
 import Avatar from '../../UI/Avatar'
 
 import { defaultCover } from '../../../utils/variables'
 import CoverModal from '../Modals/CoverModal'
 import FileInput from '../../Inputs/FileInput'
+import Button from '../../UI/Button'
+import { Divider } from '../../UI/Dropdown'
+import { Modal, ModalOpen, ModalWindow } from '../../UI/Modal'
+import CoverForm from './CoverForm'
 
 const MyPortfolioForm = () => {
-	// const { isPending, isSuccess, mutate: updateMyPortfolio, data } = useUpdateMyPortfolio()
-	// const [isCoverSelected, setIsCoverSelected] = useState(true)
-
-	// const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
-	// const [coverUrl2, setCoverUrl2] = useState<string | null>(loggedUser.coverURL)
-	// const isFileValid = !!coverFile
-	// const isDone = isSuccess && !isPending
-	// const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
-	// const [zoom, setZoom] = useState(1)
-
-	// const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => {
-	// 	console.log(croppedArea, croppedAreaPixels)
-	// }
-
-	// Updating the previewUrl for cover.
-
-	// Updating user
-
-	// const portfolioImagesHandler: SubmitHandler<IPortfolio> = (data) => {
-	// 	console.log(data, 'updateUrl')
-	// 	const formData = Object.assign(data, { coverURL: null, avatarURL: null })
-	// 	const portfolioData = convertToFormData(formData)
-	// 	updateMyPortfolio(portfolioData)
-	// }
-
 	return (
 		<>
 			<div className={styles.coverContainer}>
 				<img className={styles.coverImage} src={defaultCover} alt='' />
-				<CoverModal />
+				<Modal>
+					<ModalOpen openedModalName='addCoverModal'>
+						<Avatar
+							role='button'
+							avatarStyles='h-10 w-10 border-none bg-white absolute top-2 right-4'
+							icon={coverUrl ? <PencilIcon className='h-6 w-6 text-gray' /> : <CameraIconSolid className='h-6 w-6 text-gray' />}
+						/>
+					</ModalOpen>
+					<ModalWindow modalName='addCoverModal' modalWindowStyles='max-w-[850px]' onClose={handleCloseModal}>
+						<CoverForm />
+					</ModalWindow>
+
+					<ModalWindow modalName='deletePhoto'>
+						<div className='flex flex-col mt-2'>
+							<h4 className=''>Delete Photo</h4>
+							<Divider />
+							<p>Delete photo? A cover image is a great way to help your profile stand out?</p>
+							<div className='flex gap-2 mt-4 justify-end'>
+								<Button buttonText='Yes' buttonStyles='bg-danger text-white' onClick={(e) => console.log(e, 'e')} />
+								<ModalOpen openedModalName='addCoverModal'>
+									<Button variant='transparent' buttonText='No' />
+								</ModalOpen>
+							</div>
+						</div>
+					</ModalWindow>
+				</Modal>
 			</div>
 			<FileInput
 				name='avatarFile'
