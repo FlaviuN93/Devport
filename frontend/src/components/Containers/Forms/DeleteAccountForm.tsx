@@ -4,19 +4,21 @@ import Button from '../../UI/Button'
 import { useDeleteMe } from '../../../services/queries'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import { useNavigate } from 'react-router-dom'
-import { useModalContext } from '../../../contexts/contextHooks'
+import { useModalContext, useUserContext } from '../../../contexts/contextHooks'
 
 const DeleteAccountForm = () => {
 	const { error, isPending, mutate: deleteUser, isSuccess } = useDeleteMe()
 	const { close } = useModalContext()
+	const { handleLogoutUser } = useUserContext()
 	const [deletePassword, setDeletePassword] = useState('')
 	const navigate = useNavigate()
 
-	// Still have to work on logout functionality here and other places
 	useEffect(() => {
-		console.log(close, 'close')
-		if (!isPending && isSuccess) setTimeout(() => navigate('/auth'), 1000)
-	}, [isPending, isSuccess, navigate, close])
+		if (!isPending && isSuccess) {
+			handleLogoutUser()
+			navigate('/', { replace: true })
+		}
+	}, [isPending, isSuccess, navigate, close, handleLogoutUser])
 
 	return (
 		<div>

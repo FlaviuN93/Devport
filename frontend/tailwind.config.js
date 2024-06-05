@@ -20,6 +20,8 @@ export default {
 			mobile: '420px',
 			lgMobile: '480px',
 			md: '640px',
+			tablet: '768px',
+			laptop: '1024px',
 		},
 	},
 	plugins: [],

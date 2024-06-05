@@ -54,18 +54,12 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 	const { isPending: isResetLoading, mutate: resetPassword, isSuccess: isResetSuccess } = useResetPassword(resetToken)
 
 	useEffect(() => {
-		if (resetToken) {
-			if (!isResetLoading && isResetSuccess) {
-				reset()
-				setTimeout(() => {
-					navigate('/auth/login')
-				}, 1000)
-			}
-		} else if (!isChangeLoading && isChangeSuccess) {
+		if (!isResetLoading && isResetSuccess) setTimeout(() => navigate('/auth/login', { replace: true }), 500)
+		else if (!isChangeLoading && isChangeSuccess) {
 			reset()
-			close()
+			setTimeout(() => close(), 500)
 		}
-	}, [isResetLoading, isResetSuccess, reset, isChangeLoading, isChangeSuccess, close, resetToken, navigate])
+	}, [isResetLoading, isResetSuccess, reset, isChangeLoading, isChangeSuccess, close, navigate])
 
 	const handleResetPassword: SubmitHandler<ResetPasswordType> = (data) => {
 		if (resetToken) return resetPassword(data)

@@ -141,6 +141,7 @@ export const deleteMeHandler = catchAsync(async (req: Request, res: Response, ne
 	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText = [] } = response
 
+	res.cookie('jwt', '')
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
 	})

@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
 	changePassword,
+	checkResetToken,
 	createMyProject,
 	deleteMe,
 	deleteMyAvatar,
@@ -13,6 +14,7 @@ import {
 	getTechnologies,
 	getUserAndProjects,
 	login,
+	logout,
 	register,
 	resetPassword,
 	updateMe,
@@ -125,9 +127,12 @@ export const useLogin = () =>
 		mutationFn: login,
 	})
 
+export const useLogout = () => useMutation({ mutationFn: logout })
 export const useForgotPassword = () => useMutation<IDefaultSuccess, IDefaultError, { email: string }>({ mutationFn: forgotPassword })
 
 export const useResetPassword = (resetToken: string | undefined) =>
 	useMutation<IDefaultSuccess, IDefaultError, ResetPasswordType>({
 		mutationFn: (body) => resetPassword(resetToken, body),
 	})
+export const useCheckResetToken = (resetToken: string | undefined) =>
+	useQuery<undefined, IDefaultError>({ queryKey: ['resetToken'], queryFn: () => checkResetToken(resetToken), enabled: true })

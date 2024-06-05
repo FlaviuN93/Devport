@@ -30,7 +30,7 @@ export const loginUser = async (email: string, loginPassword: string): Promise<I
 	const token = signToken(user.id)
 	const loginUser = removeUserColumns<User>(user)
 
-	return { user: loginUser, token, statusCode: 200, statusText: ['login', 'Welcome back'] }
+	return { user: loginUser, token, statusCode: 200, statusText: ['sign in', 'Welcome back'] }
 }
 
 export const updatePassword = async (password: string, userId: string): Promise<IUser | AppError> => {
@@ -122,6 +122,18 @@ export const resetPassword = async (newPassword: string, resetToken: string): Pr
 	}
 }
 
+export const checkResetToken = async (resetToken: string): Promise<string | AppError> => {
+	const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+	const { data: user } = await supabase
+		.from('users')
+		.select('id,resetToken')
+		.eq('resetToken', hashedToken)
+		.gt('resetTokenExpiresIn', Date.now())
+		.single()
+	if (!user) return new AppError(500, 'Reset token is invalid or has expired. Go to the forgot password page and start again.')
+	return 'Success'
+}
+
 export const protect = async (reqToken: string): Promise<{ user: { id: string; role: UserRoles } } | AppError> => {
 	if (!reqToken) return new AppError(401, 'You are not logged in. Please log in to gain access')
 
@@ -132,6 +144,6 @@ export const protect = async (reqToken: string): Promise<{ user: { id: string; r
 	if (!user) return new AppError(401, 'You are not logged in. Please log in to gain access')
 	const isPasswordChanged = hasPasswordChanged(decodedToken.iat as number, user.passwordUpdatedAt)
 	if (isPasswordChanged) return new AppError(401, 'You recently changed password! Please log in again')
-	console.log(user.id, 'hello')
+
 	return { user: { id: user.id.toString(), role: user.role } }
 }

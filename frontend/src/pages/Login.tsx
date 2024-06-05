@@ -14,21 +14,22 @@ const Login = () => {
 	const {
 		handleSubmit,
 		register,
-		formState: { errors, isValid },
+		formState: { errors },
 	} = useForm<LoginType>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: { email: '', password: '' },
 	})
 	const { mutate: loginUser, isPending, isSuccess, data } = useLogin()
-	const { handleSetUser } = useUserContext()
+	const { handleSetUser, handleIsLoggedIn } = useUserContext()
 	const navigate = useNavigate()
 
 	useEffect(() => {
-		if (isSuccess) {
+		if (isSuccess && !isPending) {
 			handleSetUser(data.user)
-			navigate('/profile-settings')
+			handleIsLoggedIn()
+			navigate('/app/profile-settings', { replace: true })
 		}
-	}, [navigate, isSuccess, data, errors, handleSetUser, isValid])
+	}, [navigate, isSuccess, data?.user, handleSetUser, handleIsLoggedIn, isPending])
 
 	const handleGithubSignup = () => {
 		console.log('Github')
@@ -43,7 +44,7 @@ const Login = () => {
 			<Button onClick={handleGithubSignup} buttonText='Sign In with Github' buttonStyles='bg-darkBlue text-white' icon={<GithubIcon />} />
 			<div className='borderWord'>or</div>
 
-			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => loginUser(data))}>
+			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => loginUser(data))} autoComplete='on'>
 				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />
 
 				<Password

@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
-import { forgotPassword, loginUser, protect, registerUser, resetPassword, updatePassword } from '../models/authModel'
+import { checkResetToken, forgotPassword, loginUser, protect, registerUser, resetPassword, updatePassword } from '../models/authModel'
 
 import { catchAsync } from '../utils/errorFunctions'
 import { authSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { sendTokenByCookie } from '../utils/functions'
 import { UserRoles } from '../models/types'
+import { stringSchema } from '../services/baseSchema'
 
 // Have to come up with a default image avatar for when the user first registers and assign it to the user on the
 // supabase database.
@@ -36,6 +37,11 @@ export const loginUserHandler = catchAsync(async (req: Request, res: Response, n
 	})
 })
 
+export const logoutMeHandler = (req: Request, res: Response, next: NextFunction) => {
+	if (req.cookies.jwt) res.cookie('jwt', '')
+	else return next(new AppError(403, 'You are unauthorized to perform this action'))
+}
+
 export const updatePasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { password } = resetPasswordSchema.parse(req.body)
 
@@ -60,6 +66,12 @@ export const forgotPasswordHandler = catchAsync(async (req: Request, res: Respon
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
 	})
+})
+
+export const checkResetTokenHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const resetToken = stringSchema.parse(req.params.resetToken)
+	const response = await checkResetToken(resetToken)
+	if (response instanceof AppError) return next(response)
 })
 
 export const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

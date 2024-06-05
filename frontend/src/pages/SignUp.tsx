@@ -28,14 +28,15 @@ const SignUp = () => {
 	const navigate = useNavigate()
 	const passwordErrorTypes = errors.password?.types?.invalid_string
 	const { errors: passwordErrors, isValid } = useValidateResult(passwordErrorTypes, passwordInitialState)
-	const { handleSetUser } = useUserContext()
+	const { handleSetUser, handleIsLoggedIn } = useUserContext()
 
 	useEffect(() => {
-		if (isSuccess) {
+		if (isSuccess && !isPending) {
 			handleSetUser(data.user)
-			navigate('/profile-settings')
+			handleIsLoggedIn()
+			navigate('/profile-settings', { replace: true })
 		}
-	}, [navigate, isSuccess, data, handleSetUser, errors.password])
+	}, [navigate, isSuccess, data?.user, handleSetUser, handleIsLoggedIn, isPending])
 
 	const handleGithubSignup = () => {
 		console.log('Github')

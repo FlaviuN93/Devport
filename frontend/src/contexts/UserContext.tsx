@@ -15,16 +15,19 @@ const initialUser = {
 
 export interface UserContextProps {
 	user: User
+	isLoggedIn: boolean
 	handleSetUser: (user: User) => void
 	setCover: (url: string) => void
 	setAvatar: (url: string) => void
-	handleLogoutUser: (navigate: () => void) => void
+	handleLogoutUser: () => void
+	handleIsLoggedIn: () => void
 }
 
 export const UserContext = createContext<UserContextProps>({} as UserContextProps)
 
 export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [user, setUser] = useState(getValueFromStorage<User>('user', initialUser))
+	const [isLoggedIn, setIsLoggedIn] = useState(getValueFromStorage<boolean>('isLoggedIn', false))
 
 	const setCover = (url: string) => {
 		updateValueFromStorage({ key: 'user', keyToUpdate: 'coverURL', valueToUpdate: url })
@@ -40,11 +43,21 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		setUser(user)
 	}
 
-	const handleLogoutUser = (navigate: () => void) => {
-		window.localStorage.removeItem('user')
-		setUser(initialUser)
-		navigate()
+	const handleIsLoggedIn = () => {
+		window.localStorage.setItem('isLoggedIn', 'true')
+		setIsLoggedIn(true)
 	}
 
-	return <UserContext.Provider value={{ user, setCover, setAvatar, handleSetUser, handleLogoutUser }}>{children}</UserContext.Provider>
+	const handleLogoutUser = () => {
+		window.localStorage.removeItem('user')
+		window.localStorage.removeItem('isLoggedIn')
+		setUser(initialUser)
+		setIsLoggedIn(false)
+	}
+
+	return (
+		<UserContext.Provider value={{ user, setCover, setAvatar, handleSetUser, handleLogoutUser, isLoggedIn, handleIsLoggedIn }}>
+			{children}
+		</UserContext.Provider>
+	)
 }

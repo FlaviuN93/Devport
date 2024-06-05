@@ -4,7 +4,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { UserProvider } from './contexts/UserContext'
 import { Toaster } from 'react-hot-toast'
 import ForgotPassword from './pages/ForgotPassword'
-import HomePage from './pages/HomePage'
 import ProjectSettings from './pages/ProjectSettings'
 import ProfileSettings from './pages/ProfileSettings'
 import MyPortfolio from './pages/MyPortfolio'
@@ -17,6 +16,10 @@ import AppLayout from './components/Layouts/AppLayout'
 import PageNotFound from './pages/PageNotFound'
 import { ProjectProvider } from './contexts/ProjectContext'
 import { queryClient } from './services/queryClient'
+import PrivateRoute from './components/Utilities/PrivateRoute'
+import HomePage from './pages/HomePage'
+import { ErrorBoundary } from 'react-error-boundary'
+import ErrorDisplay from './components/UI/ErrorDisplay'
 
 function App() {
 	return (
@@ -27,7 +30,14 @@ function App() {
 					<BrowserRouter>
 						<Routes>
 							<Route path='/' element={<HomePage />} />
-							<Route path='/app' element={<AppLayout />}>
+							<Route
+								path='/app'
+								element={
+									<PrivateRoute>
+										<AppLayout />
+									</PrivateRoute>
+								}
+							>
 								<Route path='my-portfolio' element={<MyPortfolio />} />
 								<Route path='project-settings' element={<ProjectSettings />} />
 								<Route path='profile-settings' element={<ProfileSettings />} />
@@ -37,8 +47,15 @@ function App() {
 								<Route index element={<SignUp />} />
 								<Route path='login' element={<Login />} />
 								<Route path='forgot-password' element={<ForgotPassword />} />
-								<Route path='reset-password/:resetToken' element={<ResetPassword />} />
 							</Route>
+							<Route
+								path='/auth/reset-password/:resetToken'
+								element={
+									<ErrorBoundary FallbackComponent={ErrorDisplay} onReset={() => window.location.replace('/auth/forgot-password')}>
+										<ResetPassword />
+									</ErrorBoundary>
+								}
+							/>
 
 							<Route path='*' element={<PageNotFound />} />
 						</Routes>

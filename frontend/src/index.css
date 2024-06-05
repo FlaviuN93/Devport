@@ -118,7 +118,7 @@ h6 {
 	content: '';
 	position: absolute;
 	top: 55%;
-	height: 1px;
+	height: 0;
 	background-color: var(--gray);
 	width: 180px;
 }
@@ -200,6 +200,10 @@ h6 {
 	.portfolioContainer {
 		padding: 0 1rem;
 	}
+	.borderWord::before,
+	.borderWord::after {
+		height: 1px;
+	}
 }
 
 @media (min-width: 640px) {
@@ -220,10 +224,20 @@ h6 {
 	.portfolioContainer {
 		width: 100%;
 	}
+
+	.borderWord::before,
+	.borderWord::after {
+		height: 0;
+	}
 }
 
 @media (min-width: 1024px) {
 	.settingsContainer {
 		width: calc(300px + (100vw - 320px) * 0.75);
+	}
+
+	.borderWord::before,
+	.borderWord::after {
+		height: 1px;
 	}
 }

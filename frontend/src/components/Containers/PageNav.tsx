@@ -6,11 +6,22 @@ import { UserCircleIcon } from '@heroicons/react/24/outline'
 import Avatar from '../UI/Avatar'
 import { useUserContext } from '../../contexts/contextHooks'
 import Button from '../UI/Button'
+import { useLogout } from '../../services/queries'
+import { useCallback, useEffect } from 'react'
 
 const PageNav = () => {
 	const { user, handleLogoutUser } = useUserContext()
+	const { isPending, isSuccess, mutate: logout } = useLogout()
 	const navigate = useNavigate()
 
+	const handleLogout = useCallback(() => {
+		handleLogoutUser()
+		navigate('/', { replace: true })
+	}, [handleLogoutUser, navigate])
+
+	useEffect(() => {
+		if (isSuccess && !isPending) handleLogout()
+	}, [handleLogout, isSuccess, isPending])
 	return (
 		<nav className={styles.navContainer}>
 			<Link to='/home'>
@@ -53,12 +64,7 @@ const PageNav = () => {
 
 					<DropdownItem itemId='5' itemStyles='mb-0'>
 						<UserCircleIcon className='h-6 w-6' />
-						<Button
-							variant='text'
-							buttonStyles='font-normal text-base'
-							buttonText='Logout'
-							onClick={() => handleLogoutUser(() => navigate('/auth/login'))}
-						/>
+						<Button variant='text' buttonStyles='font-normal text-base' buttonText='Logout' onClick={() => logout()} />
 					</DropdownItem>
 				</DropdownMenu>
 			</Dropdown>

@@ -40,11 +40,13 @@ export const getTechnologies = () => get<Technology[]>('/projects/currentUser/te
 export const register = (body: SignupType) => post<IUser, SignupType>('/auth/register', { body })
 
 export const login = (body: LoginType) => post<IUser, LoginType>('/auth/login', { body })
-
+export const logout = () => post('/auth/logout')
 export const forgotPassword = (body: { email: string }) => post<IDefaultSuccess, { email: string }>('/auth/forgotPassword', { body })
 
 // I will get access to resetToken from the url with react router
 export const resetPassword = (resetToken: string | undefined, body: ResetPasswordType) =>
 	patch<IDefaultSuccess, ResetPasswordType>(`/auth/resetPassword/${resetToken}`, { body })
+
+export const checkResetToken = (resetToken: string | undefined) => get<undefined>(`/auth/resetPassword/${resetToken}`)
 
 export const changePassword = (body: ResetPasswordType) => post<IUser, ResetPasswordType>('/auth/changePassword', { body })
