@@ -79,12 +79,18 @@ h2 {
 	line-height: 2.25rem;
 }
 
+h3 {
+	font-size: 1.3rem;
+	line-height: 2rem;
+}
+
 h4 {
 	font-size: 1.25rem;
 }
 
 h5 {
-	font-size: 0.875rem;
+	font-size: 1rem;
+	line-height: 1.75rem;
 	font-weight: 500;
 }
 
@@ -165,6 +171,20 @@ h6 {
 	margin: 0 auto;
 }
 
+.iconAnimation {
+	height: 24px;
+	width: 24px;
+	cursor: pointer;
+	border-radius: 50%;
+	transition: all 250ms ease-out;
+}
+
+.iconAnimation:hover,
+.iconAnimation:active {
+	background-color: rgba(0, 0, 0, 0.15);
+	box-shadow: 0px 0px 0px 8px rgba(0, 0, 0, 0.15);
+}
+
 @media (min-width: 320px) {
 	.settingsContainer {
 		width: calc(300px + (100vw - 320px) * 0.95);
@@ -183,6 +203,9 @@ h6 {
 }
 
 @media (min-width: 640px) {
+	h3 {
+		font-size: 1.2rem;
+	}
 	h4 {
 		font-size: 1.1rem;
 	}

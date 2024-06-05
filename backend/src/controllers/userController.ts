@@ -30,7 +30,7 @@ export const upload = multer({
 export const resizeAvatarImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
 
-	const resizedBuffer = await sharp(req.file.buffer).resize(160, 160).toFormat('jpeg').toBuffer()
+	const resizedBuffer = await sharp(req.file.buffer).resize(720, 720).toFormat('jpeg').toBuffer()
 	req.file.buffer = resizedBuffer
 	req.file.mimetype = 'image/jpeg'
 	req.file.filename = `avatar-${req.userId}-${Date.now()}.jpeg`
@@ -41,7 +41,7 @@ export const resizeAvatarImage = catchAsync(async (req: Request, res: Response, 
 export const resizeCoverImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
 
-	const resizedBuffer = await sharp(req.file.buffer).resize(800, 200).toFormat('jpeg').toBuffer()
+	const resizedBuffer = await sharp(req.file.buffer).resize(1600, 400).toFormat('jpeg').toBuffer()
 	req.file.buffer = resizedBuffer
 	req.file.mimetype = 'image/jpeg'
 	req.file.filename = `cover-${req.userId}-${Date.now()}.jpeg`

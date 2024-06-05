@@ -1,7 +1,7 @@
 import { CheckIcon } from '@heroicons/react/24/solid'
 import UploadIcon from '../../../assets/upload.svg?react'
 import styles from './CoverForm.module.css'
-import { addCoverImage } from '../../../utils/variables'
+import { CONSTANTS, addCoverImage } from '../../../utils/variables'
 import Button from '../../UI/Button'
 import { Divider } from '../../UI/Dropdown'
 import { ModalOpen } from '../../UI/Modal'
@@ -32,8 +32,8 @@ const CoverForm = () => {
 
 	const { user: loggedUser, setCover } = useUserContext()
 	const [coverUrl, setCoverUrl] = useState<string | null>(null)
-	const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
-	const [zoom, setZoom] = useState(1)
+	const [crop, setCrop] = useState<Point>(CONSTANTS.cropPoints)
+	const [zoom, setZoom] = useState(CONSTANTS.zoom)
 	const [isEmpty, setIsEmpty] = useState(false)
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 	const [isImageSelected, setIsImageSelected] = useState(false)
@@ -116,6 +116,7 @@ const CoverForm = () => {
 							crop={crop}
 							zoom={zoom}
 							onCropChange={setCrop}
+							showGrid={false}
 							onZoomChange={setZoom}
 							zoomSpeed={0.375}
 							onCropComplete={onCropComplete}

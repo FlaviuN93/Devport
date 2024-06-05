@@ -6,7 +6,7 @@ import { Divider } from '../../UI/Dropdown'
 import { ModalOpen } from '../../UI/Modal'
 import { useEffect, useState } from 'react'
 import { useModalContext, useUserContext } from '../../../contexts/contextHooks'
-import { coverSchema } from '../../../utils/schemas'
+import { avatarSchema, coverSchema } from '../../../utils/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { useUpdateMyAvatar } from '../../../services/queries'
@@ -16,6 +16,7 @@ import FileInput from '../../Inputs/FileInput'
 import { getCroppedImg } from '../../../utils/functions'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
 import Avatar from '../../UI/Avatar'
+import { CONSTANTS } from '../../../utils/variables'
 
 const AvatarForm = () => {
 	const {
@@ -26,14 +27,14 @@ const AvatarForm = () => {
 		setError,
 		getValues,
 	} = useForm<{ avatarFile: File | null }>({
-		resolver: zodResolver(coverSchema),
+		resolver: zodResolver(avatarSchema),
 		defaultValues: { avatarFile: null },
 	})
 
 	const { user: loggedUser, setAvatar } = useUserContext()
 	const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
-	const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
-	const [zoom, setZoom] = useState(1)
+	const [crop, setCrop] = useState<Point>(CONSTANTS.cropPoints)
+	const [zoom, setZoom] = useState(CONSTANTS.zoom)
 	const [isEmpty, setIsEmpty] = useState(false)
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 	const [isImageSelected, setIsImageSelected] = useState(false)
@@ -130,7 +131,7 @@ const AvatarForm = () => {
 							showGrid={false}
 							zoomSpeed={0.375}
 							onCropComplete={onCropComplete}
-							objectFit='cover'
+							objectFit='vertical-cover'
 							aspect={1 / 1}
 						/>
 					</div>
@@ -148,18 +149,23 @@ const AvatarForm = () => {
 					/>
 
 					<Divider />
-					<div className='flex flex-col gap-4 lgMobile:flex-row'>
-						<div className='md:w-1/2 w-full'>
-							<ModalOpen openedModalName='deleteCover'>
-								<Button buttonStyles='border-1 hover:bg-lightGray w-full md:w-auto' buttonText='Delete Photo' type='button' />
+					<div className='flex flex-col gap-2 lgMobile:flex-row justify-between'>
+						<div>
+							<ModalOpen openedModalName='deleteAvatarModal'>
+								<Button
+									buttonStyles='border-1 hover:bg-lightGray transition-all duration-300 w-full md:w-auto'
+									buttonText='Delete Photo'
+									type='button'
+								/>
 							</ModalOpen>
 						</div>
-						<div className='w-full flex flex-col gap-2 justify-end md:flex-row md:w-1/2'>
+
+						<div className='flex flex-col gap-2 lgMobile:flex-row'>
 							<FileInput
 								buttonText='Change Photo'
 								name='avatarFile'
 								register={register}
-								fileStyles='shadow-none border-[1px] w-full md:w-auto'
+								fileStyles=' border-[1px] md:w-auto'
 								tooltipPosition='bottom'
 								error={errors.avatarFile?.message}
 								onFileUpload={(selectedFile) => {

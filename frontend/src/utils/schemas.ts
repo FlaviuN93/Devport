@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { getImageFormat } from './functions'
+
+const MAX_FILE_SIZE = 1024 * 1024 * 5
 
 // Base Schemas
 const emailSchema = z.string().trim().min(3, 'Email is required').email('Invalid email address')
@@ -42,6 +43,7 @@ const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/web
 const fileSchema = z
 	.any()
 	.refine((file: File | null) => file && ACCEPTED_IMAGE_TYPES.includes(file.type), 'File must be a valid image (PNG, JPEG, JPG, WEBP)')
+	.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
 
 // Auth Schemas
 export const signupSchema = z.object({
@@ -69,15 +71,9 @@ export const resetPasswordSchema = z
 	})
 
 // Settings Schemas
-const MAX_FILE_SIZE = 1024 * 1024 * 7
 
 export const projectSettingsSchema = z.object({
-	imageFile: z.union([
-		fileSchema
-			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
-			.refine(async (file: File | null) => file && (await getImageFormat('landscape', file)), 'Image must have a landscape format.'),
-		z.null(),
-	]),
+	imageFile: z.union([fileSchema, z.null()]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,
@@ -86,18 +82,8 @@ export const projectSettingsSchema = z.object({
 })
 
 export const profileSettingsSchema = z.object({
-	coverFile: z.union([
-		fileSchema
-			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
-			.refine(async (file: File | null) => file && (await getImageFormat('landscape', file)), `Image must have a landscape format.`),
-		z.null(),
-	]),
-	avatarFile: z.union([
-		fileSchema
-			.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 3MB')
-			.refine(async (file: File | null) => file && (await getImageFormat('portrait', file)), 'Image must have a portrait format.'),
-		z.null(),
-	]),
+	coverFile: z.union([fileSchema, z.null()]),
+	avatarFile: z.union([fileSchema, z.null()]),
 	email: z.union([emailSchema, z.literal('')]),
 	fullName: z.union([nameSchema, z.literal('')]),
 	jobTitle: z.union([nameSchema, z.literal('')]),
@@ -106,22 +92,12 @@ export const profileSettingsSchema = z.object({
 })
 
 export const coverSchema = z.object({
-	coverFile: z.union([
-		fileSchema.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB'),
-		// .refine(
-		// 	async (file: File | null) => file && (await getImageFormat('cover', file)),
-		// 	`Ensure the image dimensions respect the ratio of a cover image.`
-		// ),
-		z.null(),
-	]),
+	coverFile: z.union([fileSchema, z.null()]),
 })
 
-export const avatarSchema = z.union([
-	fileSchema
-		.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
-		.refine(async (file: File | null) => file && (await getImageFormat('portrait', file)), 'Image must have a portrait format.'),
-	z.null(),
-])
+export const avatarSchema = z.object({
+	avatarFile: z.union([fileSchema, z.null()]),
+})
 
 export type ResetPasswordType = z.infer<typeof resetPasswordSchema>
 

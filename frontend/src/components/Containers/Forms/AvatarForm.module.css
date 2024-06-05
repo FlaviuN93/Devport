@@ -1,40 +1,33 @@
 .avatarContainer {
 	position: relative;
-	width: 160px;
-	height: 160px;
+	width: 300px;
+	height: 200px;
 }
 
 @media (min-width: 420px) {
 	.avatarContainer {
 		width: 375px;
-		height: 150px;
+		height: 250px;
 	}
 }
 
 @media (min-width: 480px) {
 	.avatarContainer {
 		width: 425px;
-		height: 175px;
+		height: 275px;
 	}
 }
 
 @media (min-width: 640px) {
 	.avatarContainer {
-		width: 550px;
-		height: 175px;
-	}
-}
-
-@media (min-width: 768px) {
-	.avatarContainer {
-		width: 700px;
-		height: 250px;
+		width: 500px;
+		height: 325px;
 	}
 }
 
 @media (min-width: 1024px) {
 	.avatarContainer {
-		width: 450px;
-		height: 300px;
+		width: 550px;
+		height: 350px;
 	}
 }

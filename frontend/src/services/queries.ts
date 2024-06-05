@@ -23,6 +23,7 @@ import {
 import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar } from './types'
 import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
+import { updateValueFromStorage } from '../utils/functions'
 
 // User Queries and Mutations
 export const useGetMyPortfolio = () => useQuery<User, IDefaultError>({ queryKey: ['getMyPortfolio'], queryFn: getMyPortfolio })
@@ -36,10 +37,28 @@ export const useUpdateMe = () =>
 export const useUpdateMyCover = () => useMutation<ICover, IDefaultError, FormData>({ mutationFn: updateMyCover })
 export const useUpdateMyAvatar = () => useMutation<IAvatar, IDefaultError, FormData>({ mutationFn: updateMyAvatar })
 
-export const useDeleteMyCover = () => useMutation<IDefaultSuccess, IDefaultError>({ mutationFn: deleteMyCover })
-export const useDeleteMyAvatar = () => useMutation<IDefaultSuccess, IDefaultError>({ mutationFn: deleteMyAvatar })
+export const useDeleteMyCover = () =>
+	useMutation<IDefaultSuccess, IDefaultError>({
+		mutationFn: deleteMyCover,
+		onSuccess: () => {
+			updateValueFromStorage({ key: 'user', keyToUpdate: 'coverURL', valueToUpdate: '' })
+		},
+	})
+export const useDeleteMyAvatar = () =>
+	useMutation<IDefaultSuccess, IDefaultError>({
+		mutationFn: deleteMyAvatar,
+		onSuccess: () => {
+			updateValueFromStorage({ key: 'user', keyToUpdate: 'avatarURL', valueToUpdate: '' })
+		},
+	})
 
-export const useDeleteMe = () => useMutation<IDefaultSuccess, IDefaultError, { password: string }>({ mutationFn: deleteMe })
+export const useDeleteMe = () =>
+	useMutation<IDefaultSuccess, IDefaultError, { password: string }>({
+		mutationFn: deleteMe,
+		onSuccess: () => {
+			window.localStorage.removeItem('user')
+		},
+	})
 
 export const useGetUserAndProjects = (userId: string) =>
 	useQuery<User, IDefaultError>({

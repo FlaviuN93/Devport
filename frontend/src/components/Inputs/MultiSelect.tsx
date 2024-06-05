@@ -37,7 +37,7 @@ const MultiSelect: FC<MultiSelectProps> = ({
 	const [showTooltip, setShowTooltip] = useState(false)
 
 	const handleClose = () => setIsOpen(false)
-	useOutsideClick(selectRef, handleClose, divRef)
+	useOutsideClick(selectRef, handleClose, { secondaryRef: divRef })
 
 	const handleResetItems = (event: MouseEvent) => {
 		if (event) event.preventDefault()
