@@ -1,8 +1,17 @@
 import { NextFunction, Request, Response } from 'express'
-import { checkResetToken, forgotPassword, loginUser, protect, registerUser, resetPassword, updatePassword } from '../models/authModel'
+import {
+	checkResetToken,
+	contactUs,
+	forgotPassword,
+	loginUser,
+	protect,
+	registerUser,
+	resetPassword,
+	updatePassword,
+} from '../models/authModel'
 
 import { catchAsync } from '../utils/errorFunctions'
-import { authSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
+import { authSchema, contactUsSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { sendTokenByCookie } from '../utils/functions'
 import { UserRoles } from '../models/types'
@@ -84,6 +93,15 @@ export const resetPasswordHandler = catchAsync(async (req: Request, res: Respons
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
 	})
+})
+
+// Have to work on this when I work on mails.
+export const contactUsHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const reqBody = contactUsSchema.parse(req.body)
+	const response = await contactUs(reqBody)
+	if (response instanceof AppError) return next(response)
+	// const { statusCode, statusText = [] } = response
+	// res.status(statusCode).json({ message: getSuccessMessage(statusCode, statusText) })
 })
 
 export const protectHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

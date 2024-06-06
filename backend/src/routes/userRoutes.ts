@@ -32,7 +32,7 @@ userRouter
 	.route('/currentUser/coverImg')
 	.patch(protectHandler, userRolesHandler('user', 'tester'), upload.single('coverFile'), resizeCoverImage, updateMyCoverHandler)
 	.delete(protectHandler, userRolesHandler('user', 'tester'), deleteMyCoverHandler)
-// .patch(protectHandler, userRolesHandler('user', 'tester'), uploadUserImages, resizeUserImages, updateMyPortolioHandler)
 
 userRouter.route('/projects/:userId').get(getUserAndProjectsHandler)
+
 export default userRouter

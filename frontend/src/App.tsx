@@ -20,6 +20,9 @@ import PrivateRoute from './components/Utilities/PrivateRoute'
 import HomePage from './pages/HomePage'
 import { ErrorBoundary } from 'react-error-boundary'
 import ErrorDisplay from './components/UI/ErrorDisplay'
+import TermsOfService from './pages/InfoPages/TermsOfService'
+import PrivacyPolicy from './pages/InfoPages/PrivacyPolicy'
+import ContactUs from './pages/InfoPages/ContactUs'
 
 function App() {
 	return (
@@ -56,6 +59,9 @@ function App() {
 									</ErrorBoundary>
 								}
 							/>
+							<Route path='/terms-of-service' element={<TermsOfService />} />
+							<Route path='/privacy-policy' element={<PrivacyPolicy />} />
+							<Route path='/contact-us' element={<ContactUs />} />
 
 							<Route path='*' element={<PageNotFound />} />
 						</Routes>

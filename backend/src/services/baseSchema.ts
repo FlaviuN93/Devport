@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 // Base Schemas
-export const emailSchema = z.string().trim().email({ message: 'Invalid email address. Please try again.' })
+export const emailSchema = z.string().trim().email({ message: 'Your email address is not valid. Try again.' })
 
 export const idSchema = z.coerce
 	.number({
@@ -24,22 +24,29 @@ export const passwordSchema = z
 export const nameSchema = z
 	.string()
 	.trim()
-	.min(4, 'Name must be at least 4 characters')
-	.max(40, 'Name must be maximum 40 characters')
-	.regex(/^[a-zA-Z0-9-\s]+$/, 'Name can only contain letters and numbers')
+	.min(4, 'Your name is too short. Please enter at least 4 characters.')
+	.max(50, 'Your name is too long.')
+	.regex(/^[a-zA-Z_-\s]+$/, 'You can only add letters to your name')
+
+export const jobSchema = z
+	.string()
+	.trim()
+	.min(4, 'Please enter your current job title. It helps showcase your experience.')
+	.max(50, 'Your job title is too long.')
+	.regex(/^[a-zA-Z_-\s]+$/, 'Your job title can only contain letters')
 
 export const descriptionSchema = z
 	.string()
 	.trim()
 	.min(125, 'Must be at least 125 characters long.')
-	.max(200, 'Cannot exceed 200 characters.')
+	.max(250, 'Cannot exceed 250 characters.')
 	.regex(/^[a-zA-Z0-9\s\.\!\?\'\,\-]+$/, 'Cannot contain special characters. Keep it simple and clean.')
 
 export const bioSchema = z
 	.string()
 	.trim()
-	.min(200, 'Must be at least 200 characters long.')
-	.max(300, 'Cannot exceed 300 characters.')
+	.min(175, 'Must be at least 175 characters long.')
+	.max(350, 'Cannot exceed 350 characters.')
 	.regex(/^[a-zA-Z0-9\s\.\!\?\'\,\-]+$/, 'Cannot contain special characters. Keep it simple and clean.')
 
 export const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')

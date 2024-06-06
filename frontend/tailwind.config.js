@@ -14,6 +14,7 @@ export default {
 				black2: '#364153',
 				lightViolet: '#e1e7fd',
 				darkViolet: '#4138c2',
+				darkGray: '#495057',
 			},
 		},
 		screens: {
@@ -22,6 +23,7 @@ export default {
 			md: '640px',
 			tablet: '768px',
 			laptop: '1024px',
+			desktop: '1280px',
 		},
 	},
 	plugins: [],

@@ -3,7 +3,7 @@ import { z } from 'zod'
 const MAX_FILE_SIZE = 1024 * 1024 * 5
 
 // Base Schemas
-const emailSchema = z.string().trim().min(3, 'Email is required').email('Invalid email address')
+const emailSchema = z.string().trim().min(3, 'Email is required').email('Your email address is not valid. Try again.')
 
 const passwordSchema = z
 	.string()
@@ -18,25 +18,32 @@ const passwordSchema = z
 const nameSchema = z
 	.string()
 	.trim()
-	.min(4, 'Name must be at least 4 characters')
-	.max(40, 'Name must be maximum 40 characters')
-	.regex(/^[a-zA-Z_-\s]+$/, 'Name can only contain letters')
+	.min(4, 'Your name is too short. Please enter at least 4 characters.')
+	.max(50, 'It seems like a very long name. While we appreciate the details, most names fit within 50 characters')
+	.regex(/^[a-zA-Z_-\s]+$/, 'You can only add letters to your name')
+
+const jobSchema = z
+	.string()
+	.trim()
+	.min(4, 'Please enter your current job title. It helps showcase your experience.')
+	.max(50, 'Whoa, that`s a long job title! Aim for under 50 characters to ensure clear display.')
+	.regex(/^[a-zA-Z_-\s]+$/, 'Your job title can only contain letters')
 
 const descriptionSchema = z
 	.string()
 	.trim()
-	.min(125, 'Description must be at least 125 characters long.')
-	.max(200, 'Description cannot exceed 200 characters.')
-	.regex(/^[a-zA-Z0-9,.-\s]+$/, 'Description can only contain letters and numbers.')
+	.min(125, 'To showcase your skills effectively, include a detailed description (at least 125 characters) for each project.')
+	.max(250, 'Your description is quite detailed! To ensure readability, please keep it under 250 characters.')
+	.regex(/^[a-zA-Z0-9,.-\s]+$/, 'Your description should be clean and readable. No special characters allowed.')
 
 const bioSchema = z
 	.string()
 	.trim()
-	.min(200, 'Must be at least 200 characters long.')
-	.max(300, 'Cannot exceed 300 characters.')
-	.regex(/^[a-zA-Z0-9\s.!?',-]+$/, 'Cannot contain special characters. Keep it simple and clean.')
+	.min(175, 'Tell us more about yourself! A more detailed bio helps potential clients understand your background.')
+	.max(300, 'Length of the bio exceeded! To ensure readability, please keep it under 300 characters.')
+	.regex(/^[a-zA-Z0-9\s.!?',-]+$/, 'Your bio should be clean and readable. No special characters allowed.')
 
-const urlSchema = z.string().trim().min(1, 'Please enter a repository URL.').url('Invalid URL')
+const urlSchema = z.string().trim().min(3, 'Please enter a repository URL.').url('Invalid URL')
 
 const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 
@@ -45,6 +52,16 @@ const fileSchema = z
 	.refine((file: File | null) => file && ACCEPTED_IMAGE_TYPES.includes(file.type), 'File must be a valid image (PNG, JPEG, JPG, WEBP)')
 	.refine((file: File | null) => file && file.size <= MAX_FILE_SIZE, 'Image must be under 5MB')
 
+export const contactUsSchema = z.object({
+	name: nameSchema,
+	email: emailSchema,
+	message: z
+		.string()
+		.trim()
+		.min(50, `You should write at least 50 characters. Tell us what's on your mind.`)
+		.max(500, `Your message is too long. Try to be more concise with your message.`)
+		.regex(/^[a-zA-Z0-9,.-\s]+$/, 'Your message can only contain letters and numbers.'),
+})
 // Auth Schemas
 export const signupSchema = z.object({
 	email: emailSchema,
@@ -86,7 +103,7 @@ export const profileSettingsSchema = z.object({
 	avatarFile: z.union([fileSchema, z.null()]),
 	email: z.union([emailSchema, z.literal('')]),
 	fullName: z.union([nameSchema, z.literal('')]),
-	jobTitle: z.union([nameSchema, z.literal('')]),
+	jobTitle: z.union([jobSchema, z.literal('')]),
 	linkedin: z.union([urlSchema, z.literal('')]),
 	bio: z.union([bioSchema, z.literal('')]),
 })

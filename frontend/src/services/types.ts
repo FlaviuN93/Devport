@@ -33,6 +33,12 @@ export interface IProject extends IDefaultSuccess {
 	project: Project
 }
 
+export interface MessageUs {
+	name: string
+	email: string
+	message: string
+}
+
 export interface Project {
 	id: number
 	imageURL: string

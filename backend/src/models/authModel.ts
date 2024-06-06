@@ -134,6 +134,10 @@ export const checkResetToken = async (resetToken: string): Promise<string | AppE
 	return 'Success'
 }
 
+export const contactUs = async (reqBody: { name: string; email: string; message: string }): Promise<string | AppError> => {
+	return new AppError(400, 'Haven`t finished this route yet')
+}
+
 export const protect = async (reqToken: string): Promise<{ user: { id: string; role: UserRoles } } | AppError> => {
 	if (!reqToken) return new AppError(401, 'You are not logged in. Please log in to gain access')
 

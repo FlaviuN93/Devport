@@ -1,4 +1,4 @@
-import { emailSchema, passwordSchema, descriptionSchema, nameSchema, urlSchema, bioSchema } from '../services/baseSchema'
+import { emailSchema, passwordSchema, descriptionSchema, nameSchema, urlSchema, bioSchema, jobSchema } from '../services/baseSchema'
 import { z } from 'zod'
 
 // Auth Schema
@@ -38,7 +38,7 @@ export const updateUserSchema = z.object({
 	avatarURL: z.union([urlSchema, z.null()]),
 	email: z.union([emailSchema, z.literal('')]),
 	fullName: z.union([nameSchema, z.literal('')]),
-	jobTitle: z.union([nameSchema, z.literal('')]),
+	jobTitle: z.union([jobSchema, z.literal('')]),
 	linkedin: z.union([urlSchema, z.literal('')]),
 	bio: z.union([bioSchema, z.literal('')]),
 })
@@ -49,4 +49,15 @@ export const patchCoverSchema = z.object({
 
 export const patchAvatarSchema = z.object({
 	avatarURL: z.union([urlSchema, z.null()]),
+})
+
+export const contactUsSchema = z.object({
+	email: emailSchema,
+	name: nameSchema,
+	message: z
+		.string()
+		.trim()
+		.min(50, `You should write at least 50 characters. Tell us what's on your mind.`)
+		.max(500, `Your message is too long. Try to be more concise with your message.`)
+		.regex(/^[a-zA-Z0-9,.-\s]+$/, 'Your message can only contain letters and numbers.'),
 })

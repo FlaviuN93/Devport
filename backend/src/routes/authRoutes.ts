@@ -1,6 +1,7 @@
 import express from 'express'
 import {
 	checkResetTokenHandler,
+	contactUsHandler,
 	forgotPasswordHandler,
 	loginUserHandler,
 	logoutMeHandler,
@@ -13,6 +14,7 @@ import {
 
 const authRouter = express.Router()
 
+authRouter.route('/contactUs').post(contactUsHandler)
 authRouter.route('/register').post(registerUserHandler)
 authRouter.route('/login').post(loginUserHandler)
 authRouter.route('/logout').get(protectHandler, logoutMeHandler)

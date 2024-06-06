@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import {
 	changePassword,
 	checkResetToken,
+	contactUs,
 	createMyProject,
 	deleteMe,
 	deleteMyAvatar,
@@ -22,7 +23,7 @@ import {
 	updateMyCover,
 	updateMyProject,
 } from './api.requests'
-import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar } from './types'
+import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar, MessageUs } from './types'
 import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 import { updateValueFromStorage } from '../utils/functions'
@@ -136,3 +137,8 @@ export const useResetPassword = (resetToken: string | undefined) =>
 	})
 export const useCheckResetToken = (resetToken: string | undefined) =>
 	useQuery<undefined, IDefaultError>({ queryKey: ['resetToken'], queryFn: () => checkResetToken(resetToken), enabled: true })
+
+export const useContactUs = () =>
+	useMutation<IDefaultSuccess, IDefaultError, MessageUs>({
+		mutationFn: contactUs,
+	})

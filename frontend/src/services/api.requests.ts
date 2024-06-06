@@ -1,8 +1,9 @@
 import { remove, get, patch, post, put } from './baseHttp'
-import { IAvatar, ICover, IDefaultSuccess, IUser, Project, Technology, User } from './types'
+import { IAvatar, ICover, IDefaultSuccess, IUser, MessageUs, Project, Technology, User } from './types'
 import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 
 // User Routes
+
 export const getMyPortfolio = () => get<User>('/users/projects/currentUser')
 
 export const updateMe = (body: FormData) => patch<IUser, FormData>('/users/currentUser', { body })
@@ -43,10 +44,10 @@ export const login = (body: LoginType) => post<IUser, LoginType>('/auth/login', 
 export const logout = () => post('/auth/logout')
 export const forgotPassword = (body: { email: string }) => post<IDefaultSuccess, { email: string }>('/auth/forgotPassword', { body })
 
-// I will get access to resetToken from the url with react router
 export const resetPassword = (resetToken: string | undefined, body: ResetPasswordType) =>
 	patch<IDefaultSuccess, ResetPasswordType>(`/auth/resetPassword/${resetToken}`, { body })
 
 export const checkResetToken = (resetToken: string | undefined) => get<undefined>(`/auth/resetPassword/${resetToken}`)
 
 export const changePassword = (body: ResetPasswordType) => post<IUser, ResetPasswordType>('/auth/changePassword', { body })
+export const contactUs = (body: MessageUs) => post<IDefaultSuccess, MessageUs>('/auth/contactUs', { body })
