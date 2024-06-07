@@ -50,6 +50,7 @@ export interface Project {
 }
 
 export interface User {
+	userId?: number
 	coverURL: string | null
 	avatarURL?: string | null
 	email: string

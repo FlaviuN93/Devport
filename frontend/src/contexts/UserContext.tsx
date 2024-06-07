@@ -19,6 +19,8 @@ export interface UserContextProps {
 	handleSetUser: (user: User) => void
 	setCover: (url: string) => void
 	setAvatar: (url: string) => void
+	removeCover: () => void
+	removeAvatar: () => void
 	handleLogoutUser: () => void
 	handleIsLoggedIn: () => void
 }
@@ -36,6 +38,15 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const setAvatar = (url: string) => {
 		updateValueFromStorage({ key: 'user', keyToUpdate: 'avatarURL', valueToUpdate: url })
 		setUser((user) => ({ ...user, avatarURL: url }))
+	}
+
+	const removeCover = () => {
+		updateValueFromStorage({ key: 'user', keyToUpdate: 'coverURL', valueToUpdate: '' })
+		setUser((user) => ({ ...user, coverURL: '' }))
+	}
+	const removeAvatar = () => {
+		updateValueFromStorage({ key: 'user', keyToUpdate: 'avatarURL', valueToUpdate: '' })
+		setUser((user) => ({ ...user, avatarURL: '' }))
 	}
 
 	const handleSetUser = (user: User) => {
@@ -56,7 +67,9 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	}
 
 	return (
-		<UserContext.Provider value={{ user, setCover, setAvatar, handleSetUser, handleLogoutUser, isLoggedIn, handleIsLoggedIn }}>
+		<UserContext.Provider
+			value={{ user, setCover, setAvatar, removeAvatar, removeCover, handleSetUser, handleLogoutUser, isLoggedIn, handleIsLoggedIn }}
+		>
 			{children}
 		</UserContext.Provider>
 	)

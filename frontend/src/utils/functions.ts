@@ -78,6 +78,16 @@ export const convertToFormData = (data: ObjectType): FormData => {
 	return formData
 }
 
+export const allValuesValid = (data: ObjectType): boolean => {
+	for (const value of Object.values(data)) {
+		if (typeof value === 'string' && value.trim().length === 0) return false
+		if (typeof value === 'undefined' || value === null) return false
+		if (Array.isArray(value) && value.length === 0) return false
+		if (typeof value === 'number' && value < 0) return false
+	}
+	return true
+}
+
 export const createImage = (url: string): Promise<HTMLImageElement> =>
 	new Promise((resolve, reject) => {
 		const image = new Image()

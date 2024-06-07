@@ -2,7 +2,7 @@ import HomeImage from '../../components/UI/HomeImage'
 
 const TermsOfService = () => {
 	return (
-		<section className='px-4 mx-auto my-8 flex flex-col gap-8 max-w-[800px] min-w-[320px] leading-relaxed'>
+		<section className='px-4 mx-auto my-8 flex flex-col text-darkGray gap-8 max-w-[800px] min-w-[320px] leading-relaxed'>
 			<HomeImage />
 			<div className='text-center'>
 				<h1>Terms of Service</h1>

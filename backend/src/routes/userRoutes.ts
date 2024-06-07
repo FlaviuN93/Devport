@@ -4,7 +4,7 @@ import {
 	deleteMeHandler,
 	deleteMyAvatarHandler,
 	deleteMyCoverHandler,
-	getMyPortfolioHandler,
+	getMyUserIdHandler,
 	getUserAndProjectsHandler,
 	resizeAvatarImage,
 	resizeCoverImage,
@@ -16,7 +16,7 @@ import {
 
 const userRouter = express.Router()
 
-userRouter.route('/projects/currentUser').get(protectHandler, userRolesHandler('user', 'tester'), getMyPortfolioHandler)
+userRouter.route('/currentUser/userId').get(protectHandler, userRolesHandler('user', 'tester'), getMyUserIdHandler)
 // Have to remove tester from a few routes
 userRouter
 	.route('/currentUser')

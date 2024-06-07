@@ -9,9 +9,9 @@ import {
 	deleteMyCover,
 	deleteMyProject,
 	forgotPassword,
-	getMyPortfolio,
 	getMyProject,
 	getMyProjects,
+	getMyUserId,
 	getTechnologies,
 	getUserAndProjects,
 	login,
@@ -29,7 +29,7 @@ import { queryClient } from './queryClient'
 import { updateValueFromStorage } from '../utils/functions'
 
 // User Queries and Mutations
-export const useGetMyPortfolio = () => useQuery<User, IDefaultError>({ queryKey: ['getMyPortfolio'], queryFn: getMyPortfolio })
+export const useGetMyUserId = () => useQuery<string, IDefaultError>({ queryKey: ['getMyUserId'], queryFn: getMyUserId })
 
 export const useUpdateMe = () =>
 	useMutation<IUser, IDefaultError, FormData>({

@@ -29,11 +29,12 @@ const Button: FC<ButtonProps> = ({
 	buttonStyles,
 	iconStyles,
 }) => {
-	const buttonClasses = `${styles.button} ${disabled ? styles.disabled : ''} ${
-		variant ? styles[variant] : ''
-	} ${buttonStyles ? buttonStyles : ''}`
+	const buttonClasses = `${styles.button} ${disabled ? styles.disabled : ''} ${variant ? styles[variant] : ''} ${
+		buttonStyles ? buttonStyles : ''
+	}`
 	const iconClasses = `inline-block ${iconPos ? styles[iconPos] : ''} ${iconStyles}`
 	let pressed = false
+
 	const handleClick = (event: MouseEvent) => {
 		if (!disabled && onClick) {
 			pressed = true

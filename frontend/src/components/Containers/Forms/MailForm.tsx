@@ -43,7 +43,7 @@ const MailForm = () => {
 				label='Your Message'
 				placeholder='Have a question or feedback? Share it here!'
 			/>
-			<div className='flex w-full mobile:justify-end'>
+			<div className='flex w-full mobile:justify-end -mt-2'>
 				<Button
 					icon={<PaperAirplaneIcon className='h-5 w-5' />}
 					buttonText='Send'

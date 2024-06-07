@@ -18,15 +18,12 @@ export const getUserAndProjects = async (userId: string): Promise<IUserAndProjec
 	}
 }
 
-export const getMyPortfolio = async (userId: string): Promise<IUserAndProjects | AppError> => {
-	const { data: userWithProjects, error } = await supabase.from('users').select(`*, projects(*)`).eq('id', userId).single()
-	if (error) return new AppError(500, 'Something went wrong while trying to get your user and project data. Give us some time to fix this.')
-	const id = userWithProjects.id
-	const newUser = removeUserColumns<UserAndProjects>(userWithProjects)
-	newUser.userId = id
+export const getMyUserId = async (userId: string): Promise<{ userId: number; statusCode: number } | AppError> => {
+	const { data, error } = await supabase.from('users').select(`id`).eq('id', userId).single()
+	if (error) return new AppError(500, 'Something went wrong while trying to get your user id. Give us some time to fix this.')
 
 	return {
-		userWithProjects: newUser,
+		userId: data.id,
 		statusCode: 200,
 	}
 }
@@ -45,7 +42,7 @@ export const updateUser = async (reqBody: UpdateUserType, userId: string): Promi
 	return {
 		user: newUser,
 		statusCode: 200,
-		statusText: ['update', 'Your profile information has been updated successfully.'],
+		statusText: ['update', 'Your profile information has been updated successfully'],
 	}
 }
 
@@ -59,7 +56,7 @@ export const updateMyAvatar = async (avatarURL: string | null, userId: string): 
 	return {
 		avatarURL: data?.avatarURL,
 		statusCode: 200,
-		statusText: ['update', 'Your profile information has been updated succesfully.'],
+		statusText: ['update', 'Your profile information has been updated succesfully'],
 	}
 }
 

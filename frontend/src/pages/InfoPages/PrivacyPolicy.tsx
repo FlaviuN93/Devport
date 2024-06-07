@@ -2,7 +2,7 @@ import HomeImage from '../../components/UI/HomeImage'
 
 const PrivacyPolicy = () => {
 	return (
-		<div className='px-4 mx-auto my-8 flex flex-col gap-6 max-w-[800px] min-w-[320px] leading-relaxed'>
+		<div className='px-4 mx-auto my-8 flex flex-col gap-6 max-w-[800px] text-darkGray min-w-[320px] leading-relaxed'>
 			<HomeImage />
 			<div className='text-center'>
 				<h1>Privacy Policy</h1>

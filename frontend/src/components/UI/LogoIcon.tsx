@@ -1,8 +1,9 @@
 import { FC } from 'react'
+import { TailwindClasses } from '../../utils/types'
 
-const LogoIcon: FC<{ width: number; height: number }> = ({ width, height }) => {
+const LogoIcon: FC<{ width?: number; height?: number; iconStyles?: TailwindClasses }> = ({ width, height, iconStyles }) => {
 	return (
-		<svg width={width} height={height} viewBox='0 0 78 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+		<svg width={width} height={height} className={iconStyles} viewBox='0 0 78 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
 			<path
 				d='M12 18C15.3137 18 18 15.3137 18 12C18 8.68629 15.3137 6 12 6C8.68629 6 6 8.68629 6 12C6 15.3137 8.68629 18 12 18Z'
 				fill='#A8B4F6'
@@ -17,8 +18,8 @@ const LogoIcon: FC<{ width: number; height: number }> = ({ width, height }) => {
 			/>
 			<defs>
 				<linearGradient id='paint0_linear_1999_245' x1='18' y1='19' x2='6.5' y2='4' gradientUnits='userSpaceOnUse'>
-					<stop stop-color='#838CF1' />
-					<stop offset='1' stop-color='#443BC4' />
+					<stop stopColor='#838CF1' />
+					<stop offset='1' stopColor='#443BC4' />
 				</linearGradient>
 			</defs>
 		</svg>

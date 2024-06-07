@@ -37,7 +37,7 @@ Functionality:
 For more flexibility, we will have a children props for the form component
 In that way, we can change the form based on how many inputs we require
 
-Menu Component:
+Dropdown Component:
 Functionality:
 Creating a menu component with different button links and icons
 Will also have children props for more flexibility.
@@ -47,3 +47,6 @@ Navlink for having links active when selecting them
 Cover image component:
 Check the resolution required and implement a validation with regards to image resolution upload
 or inform user of best resolution for cover image
+
+Modal Component:
+Would need a reusable modal that can be used in all situations on this projects and other projects.

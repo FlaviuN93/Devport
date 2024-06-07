@@ -37,7 +37,7 @@ export const ModalOpen: FC<IModalOpen> = ({ children, openedModalName, isInputVa
 
 	useEffect(() => {
 		if (isInputValid) handleOpenModal()
-	}, [isInputValid])
+	}, [isInputValid, openedModalName])
 
 	if (Array.isArray(children)) return children.map((child) => cloneElement(child, { onClick: handleOpenModal }))
 	return cloneElement(children, { onClick: handleOpenModal })

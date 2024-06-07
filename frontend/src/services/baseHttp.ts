@@ -2,16 +2,12 @@ import axios, { AxiosError, Method } from 'axios'
 import { HttpParamsType } from './types'
 
 const instance = axios.create({
-	baseURL: import.meta.env.VITE_LOCAL_DOMAIN,
+	baseURL: import.meta.env.VITE_API_DOMAIN,
 	withCredentials: true,
 	timeout: 5000,
 })
 
-const request = async <D, B = undefined>(
-	method: Method,
-	url: string,
-	paramsData?: HttpParamsType<B>
-): Promise<D> => {
+const request = async <D, B = undefined>(method: Method, url: string, paramsData?: HttpParamsType<B>): Promise<D> => {
 	try {
 		const { data } = await instance.request<D>({
 			method,
@@ -48,17 +44,13 @@ const request = async <D, B = undefined>(
 	}
 }
 
-export const get = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
-	request<D, B>('get', url, paramsData)
+export const get = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> => request<D, B>('get', url, paramsData)
 
-export const post = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
-	request<D, B>('post', url, paramsData)
+export const post = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> => request<D, B>('post', url, paramsData)
 
-export const patch = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
-	request<D, B>('patch', url, paramsData)
+export const patch = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> => request<D, B>('patch', url, paramsData)
 
-export const put = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
-	request<D, B>('put', url, paramsData)
+export const put = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> => request<D, B>('put', url, paramsData)
 
 export const remove = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
 	request<D, B>('delete', url, paramsData)

@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom'
+import LogoIcon from '../UI/LogoIcon'
 import styles from './PageNav.module.css'
-import LogoIcon from '../../assets/Logo.svg?react'
 import { Dropdown, Divider, DropdownItem, DropdownMenu, DropdownToggle } from '../UI/Dropdown'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import Avatar from '../UI/Avatar'
@@ -25,7 +25,7 @@ const PageNav = () => {
 	return (
 		<nav className={styles.navContainer}>
 			<Link to='/home'>
-				<LogoIcon />
+				<LogoIcon width={78} height={24} />
 			</Link>
 
 			<Dropdown>

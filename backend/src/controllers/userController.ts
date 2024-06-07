@@ -4,7 +4,7 @@ import {
 	deleteMyAvatar,
 	deleteMyCover,
 	deleteUser,
-	getMyPortfolio,
+	getMyUserId,
 	getUserAndProjects,
 	updateMyAvatar,
 	updateMyCover,
@@ -58,12 +58,12 @@ export const getUserAndProjectsHandler = catchAsync(async (req: Request, res: Re
 	res.status(statusCode).send(userWithProjects)
 })
 
-export const getMyPortfolioHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	const response = await getMyPortfolio(req.userId)
+export const getMyUserIdHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	const response = await getMyUserId(req.userId)
 	if (response instanceof AppError) return next(response)
-	const { userWithProjects, statusCode } = response
+	const { userId, statusCode } = response
 
-	res.status(statusCode).send(userWithProjects)
+	res.status(statusCode).send(userId.toString())
 })
 
 export const updateMyAvatarHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

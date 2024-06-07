@@ -1,11 +1,11 @@
 import { Link, useParams } from 'react-router-dom'
-import LogoIcon from '../assets/Logo.svg?react'
 import ResetPasswordForm from '../components/Containers/Forms/ResetPasswordForm'
 import Button from '../components/UI/Button'
 import { useCheckResetToken } from '../services/queries'
 import Loading from '../components/UI/Loading'
 import LoginImage from '../components/UI/LoginImage'
 import useMediaQuery from '../hooks/useMediaQuery'
+import LogoIcon from '../components/UI/LogoIcon'
 
 const ResetPassword = () => {
 	const { resetToken } = useParams()
@@ -25,7 +25,7 @@ const ResetPassword = () => {
 				/>
 			)}
 			<div className='formContainer'>
-				<LogoIcon className='place-self-center -mb-3' />
+				<LogoIcon width={78} height={24} iconStyles='place-self-center -mb-3' />
 				<div>
 					<h1 className='mb-1'>Choose a new password</h1>
 					<h6>Enter your new password and you're all set.</h6>

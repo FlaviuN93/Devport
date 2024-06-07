@@ -40,7 +40,7 @@ export const removeProjectImage = async (projectId: string): Promise<string | Ap
 	const { error: deleteError } = await supabase.storage.from('project-images').remove([filePath])
 	if (deleteError) return new AppError(400, 'The image could not be deleted. Something went wrong with your request.')
 
-	return 'Image deleted succesfully.'
+	return 'Image deleted succesfully'
 }
 
 export const updateAvatarImage = async (file: Express.Multer.File, userId: string): Promise<string | AppError> => {
@@ -70,7 +70,7 @@ export const removeAvatarImage = async (userId: string): Promise<string | AppErr
 	const { error: deleteError } = await supabase.storage.from('avatars').remove([filePath])
 	if (deleteError) return new AppError(400, 'The image could not be deleted. Something went wrong with your request.')
 
-	return 'Image deleted succesfully.'
+	return 'Image deleted succesfully'
 }
 
 export const updateCoverImage = async (file: Express.Multer.File, userId: string): Promise<string | AppError> => {
@@ -99,5 +99,5 @@ export const removeCoverImage = async (userId: string): Promise<string | AppErro
 	const { error: deleteError } = await supabase.storage.from('user-covers').remove([filePath])
 	if (deleteError) return new AppError(400, 'The image could not be deleted. Something went wrong with your request.')
 
-	return 'Image deleted succesfully.'
+	return 'Image deleted succesfully'
 }

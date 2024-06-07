@@ -4,7 +4,7 @@ import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 
 // User Routes
 
-export const getMyPortfolio = () => get<User>('/users/projects/currentUser')
+export const getMyUserId = () => get<string>('/users/currentUser/userId')
 
 export const updateMe = (body: FormData) => patch<IUser, FormData>('/users/currentUser', { body })
 

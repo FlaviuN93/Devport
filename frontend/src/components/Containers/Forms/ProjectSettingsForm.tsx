@@ -16,6 +16,7 @@ import Avatar from '../../UI/Avatar'
 import Button from '../../UI/Button'
 import Text from '../../Inputs/Text'
 import FileInput from '../../Inputs/FileInput'
+import useSuccess from '../../../hooks/useSuccess'
 
 const initialProjectValue = { imageFile: null, demoURL: '', description: '', name: '', repositoryURL: '', technologies: [] }
 
@@ -49,6 +50,10 @@ const ProjectSettingsForm = () => {
 		closeProject()
 	}
 
+	// Reseting the form
+	useSuccess(IsPendingCreate, isCreateSuccess, handleResetForm)
+	useSuccess(IsPendingUpdate, isUpdateSuccess, handleResetForm)
+
 	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
 	useEffect(() => {
 		setPreviewUrl(url)
@@ -67,12 +72,6 @@ const ProjectSettingsForm = () => {
 			})
 		}
 	}, [isProjectSelected, selectedProject, reset])
-
-	// Reseting the form
-	useEffect(() => {
-		if (isUpdateSuccess && !IsPendingUpdate) handleResetForm()
-		if (isCreateSuccess && !IsPendingCreate) handleResetForm()
-	}, [isUpdateSuccess, IsPendingUpdate, isCreateSuccess, IsPendingCreate])
 
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		const formData = Object.assign(data, { imageURL: null })

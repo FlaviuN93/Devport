@@ -3,7 +3,7 @@ import HomeImage from '../../components/UI/HomeImage'
 
 const ContactUs = () => {
 	return (
-		<div className='px-4 mx-auto flex flex-col gap-6 max-w-[600px] min-w-[320px] justify-center h-screen leading-relaxed '>
+		<div className='px-4 mx-auto flex flex-col gap-6 max-w-[600px] text-darkGray min-w-[320px] justify-center h-screen leading-relaxed '>
 			<HomeImage />
 			<h1 className='text-center'>Contact Us</h1>
 
