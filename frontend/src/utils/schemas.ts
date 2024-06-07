@@ -99,8 +99,6 @@ export const projectSettingsSchema = z.object({
 })
 
 export const profileSettingsSchema = z.object({
-	coverFile: z.union([fileSchema, z.null()]),
-	avatarFile: z.union([fileSchema, z.null()]),
 	email: z.union([emailSchema, z.literal('')]),
 	fullName: z.union([nameSchema, z.literal('')]),
 	jobTitle: z.union([jobSchema, z.literal('')]),
@@ -123,18 +121,11 @@ export type SignupType = z.infer<typeof signupSchema>
 export type LoginType = z.infer<typeof loginSchema>
 
 export interface IProfileSettings {
-	coverFile: File | null
-	avatarFile: File | null
 	email?: string
 	fullName?: string
 	jobTitle?: string
 	linkedin?: string
 	bio?: string
-}
-
-export interface IPortfolio {
-	coverFile: File | null
-	avatarFile: File | null
 }
 
 export interface IProjectSettings {

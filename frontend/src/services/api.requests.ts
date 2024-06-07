@@ -1,14 +1,12 @@
 import { remove, get, patch, post, put } from './baseHttp'
 import { IAvatar, ICover, IDefaultSuccess, IUser, MessageUs, Project, Technology, User } from './types'
-import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
+import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 
 // User Routes
 
 export const getMyUserId = () => get<string>('/users/currentUser/userId')
 
-export const updateMe = (body: FormData) => patch<IUser, FormData>('/users/currentUser', { body })
-
-// export const updateMyPortfolio = (body: FormData) => patch<IUser, FormData>('/users/projects/currentUser', { body })
+export const updateMe = (body: IProfileSettings) => patch<IUser, IProfileSettings>('/users/currentUser', { body })
 
 export const updateMyCover = (body: FormData) => patch<ICover, FormData>('/users/currentUser/coverImg', { body })
 export const updateMyAvatar = (body: FormData) => patch<IAvatar, FormData>('/users/currentUser/avatarImg', { body })
@@ -18,7 +16,6 @@ export const deleteMyAvatar = () => remove<IDefaultSuccess>('/users/currentUser/
 
 export const deleteMe = (body: { password: string }) => remove<IDefaultSuccess, { password: string }>('/users/currentUser', { body })
 
-// I will get access to userId from the url with react router
 export const getUserAndProjects = (userId: string) => get<User>(`/users/projects/${userId}`)
 
 // Project Routes

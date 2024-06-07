@@ -29,12 +29,7 @@ export const getMyUserId = async (userId: string): Promise<{ userId: number; sta
 }
 
 export const updateUser = async (reqBody: UpdateUserType, userId: string): Promise<IUser | AppError> => {
-	const { data } = await supabase.from('projects').select('coverURL,avatarURL').eq('id', userId).single()
-	if (reqBody.coverURL === null) reqBody.coverURL = data?.coverURL
-	if (reqBody.avatarURL === null) reqBody.avatarURL = data?.avatarURL
-
 	const { data: user, error, status } = await supabase.from('users').update(reqBody).eq('id', userId).select('*').single()
-
 	if (error) return new AppError(status)
 
 	const newUser = removeUserColumns<User>(user)

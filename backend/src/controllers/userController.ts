@@ -101,23 +101,7 @@ export const updateMyCoverHandler = catchAsync(async (req: Request, res: Respons
 })
 
 export const updateMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	const reqBody = JSON.parse(req.body.body)
-
-	const { coverFile, avatarFile } = req.files as { [fieldname: string]: Express.Multer.File[] }
-
-	if (coverFile) {
-		const coverUrl = await updateCoverImage(coverFile[0], req.userId)
-		if (coverUrl instanceof AppError) return next(coverUrl)
-		reqBody.coverURL = coverUrl
-	}
-
-	if (avatarFile) {
-		const avatarUrl = await updateAvatarImage(avatarFile[0], req.userId)
-		if (avatarUrl instanceof AppError) return next(avatarUrl)
-		reqBody.avatarURL = avatarUrl
-	}
-
-	const userData = updateUserSchema.parse(reqBody)
+	const userData = updateUserSchema.parse(req.body)
 	const response = await updateUser(userData, req.userId)
 
 	if (response instanceof AppError) return next(response)

@@ -21,8 +21,8 @@ interface MenuProps {
 }
 
 interface ItemProps {
-	itemId: string
 	children: ReactNode
+	itemId?: string
 	itemStyles?: TailwindClasses
 	closeOnClick?: boolean
 }
@@ -30,7 +30,7 @@ interface ItemProps {
 const Dropdown: FC<{ children: ReactNode }> = ({ children }) => {
 	return (
 		<DropdownProvider>
-			<div className='relative w-min min-w-10'>{children}</div>
+			<div className='relative w-fit min-w-10'>{children}</div>
 		</DropdownProvider>
 	)
 }
@@ -56,7 +56,7 @@ const DropdownMenu: FC<MenuProps> = ({ children, position = 'bottom', menuStyles
 const DropdownToggle: FC<ToggleProps> = ({ btnStyles = '', buttonText, icon, imageUrl }) => {
 	const { handleToggle, dropdownBtnRef } = useDropdownContext()
 	const buttonClasses = `${styles.dropdownToggle} ${btnStyles}`
-	const iconClasses = `${icon && buttonText && 'ml-2'}`
+	const iconClasses = `${icon && buttonText ? 'ml-2' : ''}`
 
 	return (
 		<button ref={dropdownBtnRef} className={buttonClasses} onClick={handleToggle}>

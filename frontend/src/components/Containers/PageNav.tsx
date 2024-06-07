@@ -3,25 +3,24 @@ import LogoIcon from '../UI/LogoIcon'
 import styles from './PageNav.module.css'
 import { Dropdown, Divider, DropdownItem, DropdownMenu, DropdownToggle } from '../UI/Dropdown'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
-import Avatar from '../UI/Avatar'
 import { useUserContext } from '../../contexts/contextHooks'
 import Button from '../UI/Button'
 import { useLogout } from '../../services/queries'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
+import useSuccess from '../../hooks/useSuccess'
+import Avatar from '../UI/Avatar'
 
 const PageNav = () => {
-	const { user, handleLogoutUser } = useUserContext()
+	const { user: loggedUser, handleLogoutUser } = useUserContext()
 	const { isPending, isSuccess, mutate: logout } = useLogout()
 	const navigate = useNavigate()
-
 	const handleLogout = useCallback(() => {
 		handleLogoutUser()
 		navigate('/', { replace: true })
 	}, [handleLogoutUser, navigate])
 
-	useEffect(() => {
-		if (isSuccess && !isPending) handleLogout()
-	}, [handleLogout, isSuccess, isPending])
+	useSuccess(isPending, isSuccess, handleLogout)
+
 	return (
 		<nav className={styles.navContainer}>
 			<Link to='/home'>
@@ -29,13 +28,17 @@ const PageNav = () => {
 			</Link>
 
 			<Dropdown>
-				<DropdownToggle icon={<UserCircleIcon className='h-6 w-6' />} />
+				<DropdownToggle
+					btnStyles={styles.dropdownToggleStyles}
+					imageUrl={loggedUser.avatarURL ? loggedUser.avatarURL : ''}
+					icon={!loggedUser.avatarURL && <UserCircleIcon className='h-7 w-7' />}
+				/>
 				<DropdownMenu position='bottom' menuStyles='min-w-64'>
-					<DropdownItem itemId='1'>
+					<DropdownItem>
 						<Avatar icon={<UserCircleIcon className='h-6 w-6' />} avatarStyles='w-10 h-10' />
 						<div className='text-start -mt-1'>
 							<h5>Tyler Johnson</h5>
-							<p className='text-xs text-gray'>{user.email}</p>
+							<p className='text-xs text-darkGray font-medium'>{loggedUser.email}</p>
 						</div>
 					</DropdownItem>
 					<Divider />

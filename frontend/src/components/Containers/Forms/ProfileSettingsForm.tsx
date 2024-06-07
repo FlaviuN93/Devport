@@ -1,20 +1,12 @@
 import CheckCircleIcon from '../../../assets/check circle-1.svg?react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import ProjectIcon from '../../../assets/project.svg?react'
-import UploadIcon from '../../../assets/upload.svg?react'
+import { useForm } from 'react-hook-form'
 import { useUserContext } from '../../../contexts/contextHooks'
 import { useUpdateMe } from '../../../services/queries'
 import { IProfileSettings, profileSettingsSchema } from '../../../utils/schemas'
-import Avatar from '../../UI/Avatar'
 import Button from '../../UI/Button'
 import Text from '../../Inputs/Text'
-import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { motionVariants } from '../../../utils/variables'
-import { convertToFormData } from '../../../utils/functions'
-import FileInput from '../../Inputs/FileInput'
+import { useEffect } from 'react'
 
 const ProfileSettingsForm = () => {
 	const { user: loggedUser, handleSetUser } = useUserContext()
@@ -22,13 +14,9 @@ const ProfileSettingsForm = () => {
 		handleSubmit,
 		register,
 		formState: { errors },
-		setValue,
-		getValues,
 	} = useForm<IProfileSettings>({
 		resolver: zodResolver(profileSettingsSchema),
 		defaultValues: {
-			avatarFile: null,
-			coverFile: null,
 			fullName: loggedUser.fullName,
 			bio: loggedUser.bio,
 			email: loggedUser.email,
@@ -38,76 +26,14 @@ const ProfileSettingsForm = () => {
 	})
 
 	const { isPending: pendingUpdate, mutate: updateUser, isSuccess, data: newUser } = useUpdateMe()
-	const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
-	const [coverUrl, setCoverUrl] = useState<string | null>(null)
-	const [isCoverSelected, setIsCoverSelected] = useState(false)
-
-	// Updating the previewUrl for cover.
-	// Not working properly yet
-	useEffect(() => {
-		if (isCoverSelected) {
-			setCoverUrl(loggedUser.coverURL)
-		} else {
-			setCoverUrl(coverFile)
-		}
-	}, [getValues().coverFile, loggedUser.coverURL, isCoverSelected])
 
 	// Updating user
 	useEffect(() => {
-		if (isSuccess && !pendingUpdate) {
-			handleSetUser(newUser.user)
-			setIsCoverSelected(true)
-		}
+		if (isSuccess && !pendingUpdate) handleSetUser(newUser.user)
 	}, [isSuccess, pendingUpdate, handleSetUser, newUser?.user])
 
-	const userDataHandler: SubmitHandler<IProfileSettings> = (data) => {
-		const formData = Object.assign(data, { coverURL: null, avatarURL: null })
-		const userFormData = convertToFormData(formData)
-		updateUser(userFormData)
-	}
-
 	return (
-		<form onSubmit={handleSubmit(userDataHandler)} className='formSettingsContainer'>
-			<motion.div
-				initial='hidden'
-				animate={coverUrl ? 'visible' : 'hidden'}
-				variants={motionVariants}
-				transition={{ duration: 0.5 }}
-				className='relative justify-center bg-light3'
-			>
-				{coverUrl && (
-					<>
-						<XMarkIcon
-							onClick={() => {
-								setIsCoverSelected(false)
-								setCoverUrl(null)
-							}}
-							className='h-6 w-6 absolute top-2 right-2 text-[#666] cursor-pointer'
-						/>
-						<img src={coverUrl} className='object-cover max-h-[250px] w-full' />
-					</>
-				)}
-			</motion.div>
-			<motion.div
-				initial='hidden'
-				animate={!coverUrl ? 'visible' : 'hidden'}
-				variants={motionVariants}
-				transition={{ duration: 0.5 }}
-				className='flex flex-col items-center gap-4 bg-light2 py-6'
-			>
-				<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px] -mt-2' />
-				<p className='text-gray text-sm text-center font-medium px-4'>Cover Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
-
-				<FileInput
-					buttonText='Upload New Cover'
-					icon={<UploadIcon />}
-					name='coverFile'
-					fileStyles='gap-2'
-					register={register}
-					onFileUpload={(selectedFile: File) => setValue('coverFile', selectedFile, { shouldValidate: true })}
-					error={errors.coverFile?.message}
-				/>
-			</motion.div>
+		<form onSubmit={handleSubmit((data) => updateUser(data))} className='formSettingsContainer'>
 			<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
 				<Text label='Name' register={register} name='fullName' placeholder='Enter your name' error={errors.fullName?.message} />
 

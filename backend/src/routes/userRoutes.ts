@@ -20,7 +20,7 @@ userRouter.route('/currentUser/userId').get(protectHandler, userRolesHandler('us
 // Have to remove tester from a few routes
 userRouter
 	.route('/currentUser')
-	.patch(protectHandler, userRolesHandler('user', 'tester'), upload.single('coverFile'), resizeCoverImage, updateMeHandler)
+	.patch(protectHandler, userRolesHandler('user', 'tester'), updateMeHandler)
 	.delete(protectHandler, userRolesHandler('user'), deleteMeHandler)
 
 userRouter

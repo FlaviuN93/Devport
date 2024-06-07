@@ -24,7 +24,7 @@ import {
 	updateMyProject,
 } from './api.requests'
 import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar, MessageUs } from './types'
-import { LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
+import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 import { updateValueFromStorage } from '../utils/functions'
 
@@ -32,7 +32,7 @@ import { updateValueFromStorage } from '../utils/functions'
 export const useGetMyUserId = () => useQuery<string, IDefaultError>({ queryKey: ['getMyUserId'], queryFn: getMyUserId })
 
 export const useUpdateMe = () =>
-	useMutation<IUser, IDefaultError, FormData>({
+	useMutation<IUser, IDefaultError, IProfileSettings>({
 		mutationFn: updateMe,
 	})
 

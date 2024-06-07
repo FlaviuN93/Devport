@@ -34,8 +34,6 @@ export const createProjectSchema = z.object({
 
 // User Schema
 export const updateUserSchema = z.object({
-	coverURL: z.union([urlSchema, z.null()]),
-	avatarURL: z.union([urlSchema, z.null()]),
 	email: z.union([emailSchema, z.literal('')]),
 	fullName: z.union([nameSchema, z.literal('')]),
 	jobTitle: z.union([jobSchema, z.literal('')]),
