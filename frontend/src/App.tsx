@@ -23,6 +23,7 @@ import ErrorDisplay from './components/UI/ErrorDisplay'
 import TermsOfService from './pages/InfoPages/TermsOfService'
 import PrivacyPolicy from './pages/InfoPages/PrivacyPolicy'
 import ContactUs from './pages/InfoPages/ContactUs'
+import PublicPortfolio from './pages/PublicPortfolio'
 
 function App() {
 	return (
@@ -33,6 +34,7 @@ function App() {
 					<BrowserRouter>
 						<Routes>
 							<Route path='/' element={<HomePage />} />
+							<Route path='/my-portfolio/:userId' element={<PublicPortfolio />} />
 							<Route
 								path='/app'
 								element={
