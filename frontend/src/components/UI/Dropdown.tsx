@@ -76,13 +76,8 @@ const DropdownItem: FC<ItemProps> = ({ children, itemStyles = '', itemId, closeO
 	const { selectedItemId, handleSelect, handleClose } = useDropdownContext()
 	const itemClasses = `${styles.item} ${itemStyles} ${selectedItemId === itemId ? styles.active : ''}`
 
-	const handleClick = () => {
-		if (itemId) handleSelect(itemId)
-		if (closeOnClick) handleClose()
-	}
-
 	return (
-		<div className={itemClasses} onClick={handleClick}>
+		<div className={itemClasses} onClick={() => closeOnClick && handleClose()} onMouseOver={() => itemId && handleSelect(itemId)}>
 			{children}
 		</div>
 	)

@@ -32,8 +32,8 @@ const jobSchema = z
 const descriptionSchema = z
 	.string()
 	.trim()
-	.min(125, 'To showcase your skills effectively, include a detailed description (at least 125 characters) for each project.')
-	.max(250, 'Your description is quite detailed! To ensure readability, please keep it under 250 characters.')
+	.min(125, 'To present your skills in more detail, include a description (at least 125 characters) for each project.')
+	.max(250, 'Your description has too many characters! Please keep it under 250 characters.')
 	.regex(/^[a-zA-Z0-9,.-\s]+$/, 'Your description should be clean and readable. No special characters allowed.')
 
 const bioSchema = z

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import TrashIcon2 from '../../../assets/Trash-1.svg?react'
 import UploadIcon from '../../../assets/upload.svg?react'
 import ProjectIcon from '../../../assets/project.svg?react'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { useProjectContext } from '../../../contexts/contextHooks'
 import { useGetTechnologies, useUpdateMyProject, useCreateMyProject } from '../../../services/queries'
@@ -43,12 +43,12 @@ const ProjectSettingsForm = () => {
 	const { isPending: IsPendingUpdate, mutate: updateMutation, isSuccess: isUpdateSuccess } = useUpdateMyProject(selectedProject.id)
 	const { isPending: IsPendingCreate, mutate: createMutation, isSuccess: isCreateSuccess } = useCreateMyProject()
 
-	const handleResetForm = () => {
+	const handleResetForm = useCallback(() => {
 		reset(initialProjectValue)
 		resetImageUrl()
 		resetMultiSelect.current()
 		closeProject()
-	}
+	}, [reset, resetImageUrl, resetMultiSelect, closeProject])
 
 	// Reseting the form
 	useSuccess(IsPendingCreate, isCreateSuccess, handleResetForm)
@@ -98,7 +98,7 @@ const ProjectSettingsForm = () => {
 							}}
 							className='h-6 w-6 absolute top-2 right-2 text-black cursor-pointer'
 						/>
-						<img src={previewUrl} className='object-cover h-[195px] aspect-video' />
+						<img src={previewUrl} className='object-cover h-[200px] aspect-video' />
 					</>
 				)}
 			</motion.div>
@@ -111,13 +111,13 @@ const ProjectSettingsForm = () => {
 				className='imageFileContainer'
 			>
 				<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
-				<p className='text-gray text-sm text-center font-medium px-4'>Image must be PNG, JPEG, JPG, WEBP - max 2MB</p>
+				<p className='text-gray text-sm text-center font-medium px-4'>Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
 
 				<FileInput
 					buttonText='Upload Project Image'
 					icon={<UploadIcon />}
 					name='imageFile'
-					fileStyles='gap-2'
+					fileStyles='gap-2 text-darkGray'
 					register={register}
 					onFileUpload={(selectedFile: File) => setValue('imageFile', selectedFile, { shouldValidate: true })}
 					error={errors.imageFile?.message}

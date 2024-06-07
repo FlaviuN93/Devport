@@ -2,72 +2,76 @@ import { Link, useNavigate } from 'react-router-dom'
 import LogoIcon from '../UI/LogoIcon'
 import styles from './PageNav.module.css'
 import { Dropdown, Divider, DropdownItem, DropdownMenu, DropdownToggle } from '../UI/Dropdown'
-import { UserCircleIcon } from '@heroicons/react/24/outline'
+import { BookOpenIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import ProjectIcon from '../../assets/project-1.svg?react'
 import { useUserContext } from '../../contexts/contextHooks'
 import Button from '../UI/Button'
 import { useLogout } from '../../services/queries'
 import { useCallback } from 'react'
 import useSuccess from '../../hooks/useSuccess'
-import Avatar from '../UI/Avatar'
+import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/solid'
 
 const PageNav = () => {
 	const { user: loggedUser, handleLogoutUser } = useUserContext()
 	const { isPending, isSuccess, mutate: logout } = useLogout()
+	const avatarUrl = loggedUser.avatarURL ? loggedUser.avatarURL : ''
 	const navigate = useNavigate()
+
 	const handleLogout = useCallback(() => {
 		handleLogoutUser()
+		logout()
 		navigate('/', { replace: true })
-	}, [handleLogoutUser, navigate])
+	}, [handleLogoutUser, navigate, logout])
 
 	useSuccess(isPending, isSuccess, handleLogout)
 
 	return (
 		<nav className={styles.navContainer}>
-			<Link to='/home'>
+			<Link to='/'>
 				<LogoIcon width={78} height={24} />
 			</Link>
 
 			<Dropdown>
 				<DropdownToggle
 					btnStyles={styles.dropdownToggleStyles}
-					imageUrl={loggedUser.avatarURL ? loggedUser.avatarURL : ''}
+					imageUrl={avatarUrl}
 					icon={!loggedUser.avatarURL && <UserCircleIcon className='h-7 w-7' />}
 				/>
 				<DropdownMenu position='bottom' menuStyles='min-w-64'>
 					<DropdownItem>
-						<Avatar icon={<UserCircleIcon className='h-6 w-6' />} avatarStyles='w-10 h-10' />
-						<div className='text-start -mt-1'>
-							<h5>Tyler Johnson</h5>
-							<p className='text-xs text-darkGray font-medium'>{loggedUser.email}</p>
+						<div className='flex w-full items-center gap-4'>
+							<img src={avatarUrl} className='w-12 h-12 rounded-full' alt='' />
+							<div>
+								<h5>{loggedUser.fullName}</h5>
+								<p className='text-xs text-darkGray font-medium'>{loggedUser.jobTitle}</p>
+							</div>
 						</div>
 					</DropdownItem>
 					<Divider />
-					<div>
-						<h6 className='text-start mb-3'>Account</h6>
-						<Link to={'profile-settings'}>
-							<DropdownItem itemId='2'>
-								<UserCircleIcon className='h-6 w-6' />
-								<Button variant='text' buttonStyles='font-normal text-base' buttonText='Profile Settings' />
-							</DropdownItem>
-						</Link>
-						<Link to={'project-settings'}>
-							<DropdownItem itemId='3'>
-								<UserCircleIcon className='h-6 w-6' />
-								<Button variant='text' buttonStyles='font-normal text-base' buttonText='Project Settings' />
-							</DropdownItem>
-						</Link>
-						<Link to={'my-portfolio'}>
-							<DropdownItem itemId='4'>
-								<UserCircleIcon className='h-6 w-6' />
-								<Button variant='text' buttonStyles='font-normal text-base' buttonText='My Portofolio' />
-							</DropdownItem>
-						</Link>
-					</div>
+					<h6 className='text-start text-darkGray mb-3'>Account</h6>
+					<Link to={'profile-settings'}>
+						<DropdownItem itemId='2'>
+							<UserCircleIcon className='h-6 w-6 text-gray' />
+							<span className='text-base text-darkGray'>Profile Settings</span>
+						</DropdownItem>
+					</Link>
+					<Link to={'project-settings'}>
+						<DropdownItem itemId='3'>
+							<ProjectIcon className='h-6 w-6' />
+							<span className='text-base text-darkGray'>Project Settings</span>
+						</DropdownItem>
+					</Link>
+					<Link to={'my-portfolio'}>
+						<DropdownItem itemId='4'>
+							<BookOpenIcon className='h-6 w-6 text-gray' />
+							<span className='text-base text-darkGray'>My Portfolio</span>
+						</DropdownItem>
+					</Link>
 					<Divider />
 
 					<DropdownItem itemId='5' itemStyles='mb-0'>
-						<UserCircleIcon className='h-6 w-6' />
-						<Button variant='text' buttonStyles='font-normal text-base' buttonText='Logout' onClick={() => logout()} />
+						<ArrowLeftStartOnRectangleIcon className='h-6 w-6 text-gray' />
+						<Button variant='text' buttonStyles='font-normal text-darkGray text-base' buttonText='Sign out' onClick={handleLogout} />
 					</DropdownItem>
 				</DropdownMenu>
 			</Dropdown>

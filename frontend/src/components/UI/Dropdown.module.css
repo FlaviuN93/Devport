@@ -13,22 +13,24 @@
 	align-items: center;
 	font-size: 0.875rem;
 	gap: 1rem;
-	margin-bottom: 0.75rem;
+	padding: 0.25rem;
+	border-radius: 4px;
+	margin-bottom: 0.3rem;
 	color: var(--black-1);
 	cursor: pointer;
 	transition: background-color 0.2s ease;
 	border: 1px solid white;
 	min-width: max-content;
 	width: 100%;
-	transition: all 0.2s ease-out;
+	transition: all 0.25s ease-out;
 }
 
 .active:hover,
 .active:active {
-	text-shadow: 1px 5px 10px var(--light-gray);
-	border: 1px solid #d4dfff;
-	background-color: #eaefff;
-	box-shadow: var(--shadow-xs);
+	text-shadow: 1px 2px 4px var(--light-gray);
+	border: 1px solid var(--light-gray);
+	background-color: var(--light-2);
+	box-shadow: var(--shadow-sm);
 }
 
 .dropdownToggle {

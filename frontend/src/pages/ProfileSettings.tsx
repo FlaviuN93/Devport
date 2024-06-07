@@ -55,6 +55,7 @@ const ProfileSettings = () => {
 					src={loggedUser.coverURL ? loggedUser.coverURL : defaultCover}
 					alt='Cover Image'
 				/>
+
 				<CoverModal />
 				<ProfileSettingsForm />
 			</div>
