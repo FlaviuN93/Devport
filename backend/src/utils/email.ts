@@ -1,39 +1,60 @@
 import nodemailer from 'nodemailer'
+import { User } from '../models/types'
+import pug from 'pug'
+import { convert } from 'html-to-text'
 
-// For production, check on this later
-// const sendEmail = () => {
-// 	const transporter = nodemailer.createTransport({
-// 		service: 'SendGrid',
-// 		auth: {
-// 			user: process.env.SENDGRID_USERNAME,
-// 			pass: process.env.SENDGRID_PASSWORD,
-// 		},
-// 	})
-// }
+class Email {
+	private to: string
+	private fullName: string
+	private url: string | undefined
+	private from: string
 
-interface MailOptions {
-	email: string
-	subject: string
-	message: string
-	// htmlMessage: HTMLElement
-}
-
-export const sendEmail = async (options: MailOptions) => {
-	const transporter = nodemailer.createTransport({
-		host: process.env.EMAIL_HOST,
-		port: Number(process.env.EMAIL_PORT),
-
-		auth: {
-			user: process.env.EMAIL_USERNAME,
-			pass: process.env.EMAIL_PASSWORD,
-		},
-	})
-	const mailOptions = {
-		from: `Portofolio App <${process.env.EMAIL_FROM}>`,
-		to: options.email,
-		subject: options.subject,
-		text: options.message,
+	constructor(user: { email: string; fullName: string }, url: string) {
+		this.to = user.email
+		this.fullName = user.fullName
+		this.url = url
+		this.from = `Flaviu Nemes <${process.env.EMAIL_FROM}>`
 	}
 
-	await transporter.sendMail(mailOptions)
+	newTransport() {
+		if (process.env.NODE_ENV === 'production') {
+			// Sendgrid
+			return 1
+		}
+		return nodemailer.createTransport({
+			host: process.env.EMAIL_HOST,
+			port: Number(process.env.EMAIL_PORT),
+
+			auth: {
+				user: process.env.EMAIL_USERNAME,
+				pass: process.env.EMAIL_PASSWORD,
+			},
+		})
+	}
+
+	// Still some small fixes for email.
+	async send(template: string, subject: string) {
+		const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, { subject })
+		const mailOptions = {
+			from: this.from,
+			to: this.to,
+			subject,
+			html,
+			text: convert(html),
+		}
+
+		const transporter = this.newTransport()
+		if (typeof transporter !== 'number') {
+			await transporter.sendMail(mailOptions)
+		}
+	}
+
+	async sendWelcome() {
+		await this.send('welcome', 'Welcome to Devport!')
+	}
+	async sendResetPassword() {
+		await this.send('resetPassword', 'Your password reset token (valid for only 10 min)')
+	}
 }
+
+export default Email

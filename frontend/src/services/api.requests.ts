@@ -38,7 +38,7 @@ export const getTechnologies = () => get<Technology[]>('/projects/currentUser/te
 export const register = (body: SignupType) => post<IUser, SignupType>('/auth/register', { body })
 
 export const login = (body: LoginType) => post<IUser, LoginType>('/auth/login', { body })
-export const logout = () => post('/auth/logout')
+export const logout = () => post<IDefaultSuccess>('/auth/logout')
 export const forgotPassword = (body: { email: string }) => post<IDefaultSuccess, { email: string }>('/auth/forgotPassword', { body })
 
 export const resetPassword = (resetToken: string | undefined, body: ResetPasswordType) =>

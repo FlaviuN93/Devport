@@ -27,7 +27,9 @@ const ClipBoardButton: FC<{ isPortfolioValid: boolean }> = ({ isPortfolioValid }
 				iconPos='left'
 				buttonText='Share'
 				disabled={!isPortfolioValid}
-				buttonStyles={`text-gray ${isPortfolioValid ? 'transition-shadow duration-250 hover:shadow-md active:shadow-sm' : 'shadow-none'}`}
+				buttonStyles={`text-gray font-medium  ${
+					isPortfolioValid ? 'transition-shadow duration-250 hover:shadow-md active:shadow-sm' : 'shadow-none'
+				}`}
 				onClick={() => copyToClipBoard(publicUrl)}
 			/>
 			{!isPortfolioValid ? (

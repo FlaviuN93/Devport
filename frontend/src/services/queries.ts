@@ -128,7 +128,7 @@ export const useLogin = () =>
 		mutationFn: login,
 	})
 
-export const useLogout = () => useMutation({ mutationFn: logout })
+export const useLogout = () => useMutation<IDefaultSuccess, IDefaultError>({ mutationFn: logout })
 export const useForgotPassword = () => useMutation<IDefaultSuccess, IDefaultError, { email: string }>({ mutationFn: forgotPassword })
 
 export const useResetPassword = (resetToken: string | undefined) =>

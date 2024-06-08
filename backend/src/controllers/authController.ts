@@ -10,6 +10,7 @@ import {
 	updatePassword,
 } from '../models/authModel'
 
+import Email from '../utils/email'
 import { catchAsync } from '../utils/errorFunctions'
 import { authSchema, contactUsSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
 import AppError, { getSuccessMessage } from '../utils/appError'
@@ -27,6 +28,9 @@ export const registerUserHandler = catchAsync(async (req: Request, res: Response
 
 	const { user, token, statusCode, statusText = [] } = response
 	sendTokenByCookie(token, res, next)
+	const url = `${req.protocol}://${req.get('host')}/auth/login`
+	await new Email({ email: user.email, fullName: '' }, url).sendWelcome()
+
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
 		user,
@@ -47,8 +51,10 @@ export const loginUserHandler = catchAsync(async (req: Request, res: Response, n
 })
 
 export const logoutMeHandler = (req: Request, res: Response, next: NextFunction) => {
-	if (req.cookies.jwt) res.cookie('jwt', '')
-	else return next(new AppError(403, 'You are unauthorized to perform this action'))
+	if (req.cookies.jwt) {
+		res.clearCookie('jwt')
+		res.status(200).json({ message: 'Log out Successful!' })
+	} else return next(new AppError(403, 'You are unauthorized to perform this action'))
 }
 
 export const updatePasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

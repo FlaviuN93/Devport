@@ -4,9 +4,8 @@ import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 
 import { hasPasswordChanged, createPasswordResetToken, signToken, verifyToken, removeUserColumns } from '../utils/functions'
-
-import { sendEmail } from '../utils/email'
 import { IDefault, IRegisterUser, IUser, TokenPayload, User, UserRoles } from './types'
+import Email from '../utils/email'
 
 export const registerUser = async (email: string, password: string): Promise<IRegisterUser | AppError> => {
 	const hashedPassword = await bcrypt.hash(password, 12)
@@ -52,7 +51,7 @@ export const updatePassword = async (password: string, userId: string): Promise<
 }
 
 export const forgotPassword = async (email: string): Promise<IDefault | AppError> => {
-	const { data: user } = await supabase.from('users').select('email,resetTokenExpiresIn').eq('email', email).single()
+	const { data: user } = await supabase.from('users').select('email,fullName,resetTokenExpiresIn').eq('email', email).single()
 
 	if (!user) return new AppError(404, 'There is no user with the email you entered. Please try again.')
 
@@ -71,17 +70,10 @@ export const forgotPassword = async (email: string): Promise<IDefault | AppError
 		.select('id')
 		.single()
 
-	const url = `${process.env.VITE_APP_LOCAL_DOMAIN}/auth/reset-password`
-	const resetURL = `${url}/${resetToken}`
-	const message = `Forgot your password? Submit a patch request with your new password and password confirm to: ${resetURL}.\n
-						If you didin't forget your password, please ignore this email!`
-
 	try {
-		await sendEmail({
-			email: user.email,
-			subject: 'Your password reset token is only valid for 10 minutes',
-			message,
-		})
+		const url = `${process.env.VITE_APP_LOCAL_DOMAIN}/auth/reset-password`
+		const resetURL = `${url}/${resetToken}`
+		await new Email({ email: user.email, fullName: user.fullName }, resetURL).sendResetPassword()
 	} catch (err) {
 		return new AppError(500, 'There was an error sending the email. Try again later!')
 	}

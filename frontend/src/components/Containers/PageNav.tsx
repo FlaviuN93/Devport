@@ -5,11 +5,9 @@ import { Dropdown, Divider, DropdownItem, DropdownMenu, DropdownToggle } from '.
 import { BookOpenIcon, UserCircleIcon } from '@heroicons/react/24/outline'
 import ProjectIcon from '../../assets/project-1.svg?react'
 import { useUserContext } from '../../contexts/contextHooks'
-import Button from '../UI/Button'
 import { useLogout } from '../../services/queries'
-import { useCallback } from 'react'
-import useSuccess from '../../hooks/useSuccess'
 import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/solid'
+import useSuccess from '../../hooks/useSuccess'
 
 const PageNav = () => {
 	const { user: loggedUser, handleLogoutUser } = useUserContext()
@@ -17,17 +15,16 @@ const PageNav = () => {
 	const avatarUrl = loggedUser.avatarURL ? loggedUser.avatarURL : ''
 	const navigate = useNavigate()
 
-	const handleLogout = useCallback(() => {
+	const handleLogout = () => {
 		handleLogoutUser()
-		logout()
-		navigate('/', { replace: true })
-	}, [handleLogoutUser, navigate, logout])
+		navigate('/auth/login', { replace: true })
+	}
 
 	useSuccess(isPending, isSuccess, handleLogout)
 
 	return (
 		<nav className={styles.navContainer}>
-			<Link to='/'>
+			<Link to='/app/my-portfolio' className='focus:outline-none'>
 				<LogoIcon width={78} height={24} />
 			</Link>
 
@@ -38,7 +35,7 @@ const PageNav = () => {
 					icon={!loggedUser.avatarURL && <UserCircleIcon className='h-7 w-7' />}
 				/>
 				<DropdownMenu position='bottom' menuStyles='min-w-64'>
-					<DropdownItem>
+					<DropdownItem itemStyles='cursor-default' closeOnClick={false}>
 						<div className='flex w-full items-center gap-4'>
 							<img src={avatarUrl} className='w-12 h-12 rounded-full' alt='' />
 							<div>
@@ -70,8 +67,10 @@ const PageNav = () => {
 					<Divider />
 
 					<DropdownItem itemId='5' itemStyles='mb-0'>
-						<ArrowLeftStartOnRectangleIcon className='h-6 w-6 text-gray' />
-						<Button variant='text' buttonStyles='font-normal text-darkGray text-base' buttonText='Sign out' onClick={handleLogout} />
+						<div onClick={() => logout()} className='w-full flex gap-2'>
+							<ArrowLeftStartOnRectangleIcon className='h-6 w-6 text-gray' />
+							<span className='text-darkGray text-base'>Sign Out</span>
+						</div>
 					</DropdownItem>
 				</DropdownMenu>
 			</Dropdown>
