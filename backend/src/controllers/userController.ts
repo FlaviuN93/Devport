@@ -116,13 +116,14 @@ export const updateMeHandler = catchAsync(async (req: Request, res: Response, ne
 export const deleteMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const password = passwordSchema.parse(req.body.password)
 
+	const response = await deleteUser(password, req.userId)
+	if (response instanceof AppError) return next(response)
+
 	const coverImageResponse = await removeCoverImage(req.userId)
 	const avatarImageResponse = await removeAvatarImage(req.userId)
 	if (coverImageResponse instanceof AppError) return next(coverImageResponse)
 	if (avatarImageResponse instanceof AppError) return next(avatarImageResponse)
 
-	const response = await deleteUser(password, req.userId)
-	if (response instanceof AppError) return next(response)
 	const { statusCode, statusText = [] } = response
 
 	res.cookie('jwt', '')

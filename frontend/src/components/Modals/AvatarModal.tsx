@@ -1,4 +1,4 @@
-import { CameraIcon } from '@heroicons/react/24/solid'
+import { CameraIcon } from '@heroicons/react/24/outline'
 import AvatarForm from '../Containers/Forms/AvatarForm'
 import Avatar from '../UI/Avatar'
 import { Modal, ModalOpen, ModalWindow } from '../UI/Modal'
@@ -12,6 +12,7 @@ const AvatarModal = () => {
 	const { isPending: isAvatarPending, isSuccess: isAvatarSuccess, mutate: deleteAvatar, reset: resetAvatar } = useDeleteMyAvatar()
 	const avatarUrl = loggedUser.avatarURL ? loggedUser.avatarURL : ''
 	useSuccess(isAvatarPending, isAvatarSuccess, resetAvatar)
+
 	return (
 		<Modal>
 			<ModalOpen openedModalName='addAvatarModal'>

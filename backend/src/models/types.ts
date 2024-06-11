@@ -79,7 +79,7 @@ export interface ITechnologies extends IDefault {
 // Auth Types
 
 export interface IRegisterUser extends IDefault {
-	user: { email: string }
+	email: string
 }
 
 export interface TokenPayload extends JwtPayload {

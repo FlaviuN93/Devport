@@ -1,14 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import {
-	checkResetToken,
-	contactUs,
-	forgotPassword,
-	loginUser,
-	protect,
-	registerUser,
-	resetPassword,
-	updatePassword,
-} from '../models/authModel'
+import { checkResetToken, forgotPassword, loginUser, protect, registerUser, resetPassword, updatePassword } from '../models/authModel'
 
 import Email from '../utils/email'
 import { catchAsync } from '../utils/errorFunctions'
@@ -26,14 +17,15 @@ export const registerUserHandler = catchAsync(async (req: Request, res: Response
 	const response = await registerUser(email, password)
 	if (response instanceof AppError) return next(response)
 
-	const { user, token, statusCode, statusText = [] } = response
+	const { email: savedEmail, token, statusCode, statusText = [] } = response
 	sendTokenByCookie(token, res, next)
-	const url = `${req.protocol}://${req.get('host')}/auth/login`
-	await new Email({ email: user.email, fullName: '' }, url).sendWelcome()
+
+	const url = `${process.env.VITE_APP_LOCAL_DOMAIN}/auth/login`
+	await new Email({ email: savedEmail, fullName: '' }, { url }).sendWelcome()
 
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		user,
+		email: savedEmail,
 	})
 })
 
@@ -101,13 +93,13 @@ export const resetPasswordHandler = catchAsync(async (req: Request, res: Respons
 	})
 })
 
-// Have to work on this when I work on mails.
 export const contactUsHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const reqBody = contactUsSchema.parse(req.body)
-	const response = await contactUs(reqBody)
-	if (response instanceof AppError) return next(response)
-	// const { statusCode, statusText = [] } = response
-	// res.status(statusCode).json({ message: getSuccessMessage(statusCode, statusText) })
+
+	await new Email({ email: reqBody.email, fullName: reqBody.name }).contactUs()
+	await new Email({ email: process.env.EMAIL_FROM || '', fullName: reqBody.name }, { feedbackMessage: reqBody.message }).feedbackEmail()
+
+	res.status(200).json({ message: 'Your message has been received' })
 })
 
 export const protectHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -122,13 +114,6 @@ export const protectHandler = catchAsync(async (req: Request, res: Response, nex
 export const userRolesHandler =
 	(...roles: UserRoles[]) =>
 	(req: Request, res: Response, next: NextFunction) => {
-		if (!roles.includes('tester'))
-			return next(
-				new AppError(
-					403,
-					'You do not have permission to make these changes with a tester account. Go to login page and create a new account'
-				)
-			)
 		if (!roles.includes(req.userRole as UserRoles)) return next(new AppError(403, 'You do not have permission to perform this action'))
 		next()
 	}

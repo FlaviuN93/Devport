@@ -1,19 +1,20 @@
 import nodemailer from 'nodemailer'
-import { User } from '../models/types'
 import pug from 'pug'
 import { convert } from 'html-to-text'
 
 class Email {
 	private to: string
-	private fullName: string
+	private fullName: string = ''
 	private url: string | undefined
-	private from: string
+	private from: string = ''
+	private feedbackMessage: string | undefined
 
-	constructor(user: { email: string; fullName: string }, url: string) {
+	constructor(user: { email: string; fullName: string }, optionalArg?: { url?: string; feedbackMessage?: string }) {
 		this.to = user.email
 		this.fullName = user.fullName
-		this.url = url
+		this.url = optionalArg?.url
 		this.from = `Flaviu Nemes <${process.env.EMAIL_FROM}>`
+		this.feedbackMessage = optionalArg?.feedbackMessage
 	}
 
 	newTransport() {
@@ -24,7 +25,6 @@ class Email {
 		return nodemailer.createTransport({
 			host: process.env.EMAIL_HOST,
 			port: Number(process.env.EMAIL_PORT),
-
 			auth: {
 				user: process.env.EMAIL_USERNAME,
 				pass: process.env.EMAIL_PASSWORD,
@@ -34,7 +34,14 @@ class Email {
 
 	// Still some small fixes for email.
 	async send(template: string, subject: string) {
-		const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, { subject })
+		const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
+			fullName: this.fullName,
+			url: this.url,
+			subject,
+			message: this.feedbackMessage,
+			email: this.to,
+		})
+
 		const mailOptions = {
 			from: this.from,
 			to: this.to,
@@ -54,6 +61,14 @@ class Email {
 	}
 	async sendResetPassword() {
 		await this.send('resetPassword', 'Your password reset token (valid for only 10 min)')
+	}
+
+	async contactUs() {
+		await this.send('contactUs', 'Your message has been received')
+	}
+
+	async feedbackEmail() {
+		await this.send('feedbackEmail', 'Inquiry message')
 	}
 }
 

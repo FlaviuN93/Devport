@@ -1,5 +1,5 @@
 import { remove, get, patch, post, put } from './baseHttp'
-import { IAvatar, ICover, IDefaultSuccess, IUser, MessageUs, Project, Technology, User } from './types'
+import { IAvatar, ICover, IDefaultSuccess, IRegisteredUser, IUser, MessageUs, Project, Technology, User } from './types'
 import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 
 // User Routes
@@ -35,7 +35,7 @@ export const deleteMyProject = (projectId: number) => remove<IDefaultSuccess>(`p
 export const getTechnologies = () => get<Technology[]>('/projects/currentUser/technologies')
 
 // Authentication Routes
-export const register = (body: SignupType) => post<IUser, SignupType>('/auth/register', { body })
+export const register = (body: SignupType) => post<IRegisteredUser, SignupType>('/auth/register', { body })
 
 export const login = (body: LoginType) => post<IUser, LoginType>('/auth/login', { body })
 export const logout = () => post<IDefaultSuccess>('/auth/logout')

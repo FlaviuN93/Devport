@@ -16,7 +16,7 @@ export const registerUser = async (email: string, password: string): Promise<IRe
 
 	const token = signToken(user.id)
 
-	return { user: { email: user.email }, token, statusCode: 201, statusText: ['user', 'created'] }
+	return { email: user.email, token, statusCode: 201, statusText: ['user', 'created'] }
 }
 
 export const loginUser = async (email: string, loginPassword: string): Promise<IUser | AppError> => {
@@ -73,7 +73,7 @@ export const forgotPassword = async (email: string): Promise<IDefault | AppError
 	try {
 		const url = `${process.env.VITE_APP_LOCAL_DOMAIN}/auth/reset-password`
 		const resetURL = `${url}/${resetToken}`
-		await new Email({ email: user.email, fullName: user.fullName }, resetURL).sendResetPassword()
+		await new Email({ email: user.email, fullName: user.fullName }, { url: resetURL }).sendResetPassword()
 	} catch (err) {
 		return new AppError(500, 'There was an error sending the email. Try again later!')
 	}
@@ -124,10 +124,6 @@ export const checkResetToken = async (resetToken: string): Promise<string | AppE
 		.single()
 	if (!user) return new AppError(500, 'Reset token is invalid or has expired. Go to the forgot password page and start again.')
 	return 'Success'
-}
-
-export const contactUs = async (reqBody: { name: string; email: string; message: string }): Promise<string | AppError> => {
-	return new AppError(400, 'Haven`t finished this route yet')
 }
 
 export const protect = async (reqToken: string): Promise<{ user: { id: string; role: UserRoles } } | AppError> => {

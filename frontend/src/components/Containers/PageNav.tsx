@@ -12,7 +12,9 @@ import useSuccess from '../../hooks/useSuccess'
 const PageNav = () => {
 	const { user: loggedUser, handleLogoutUser } = useUserContext()
 	const { isPending, isSuccess, mutate: logout } = useLogout()
-	const avatarUrl = loggedUser.avatarURL ? loggedUser.avatarURL : ''
+
+	const showAccount = loggedUser.avatarURL && loggedUser.fullName && loggedUser.jobTitle
+	const avatarUrl = loggedUser.avatarURL ? loggedUser.avatarURL : undefined
 	const navigate = useNavigate()
 
 	const handleLogout = () => {
@@ -29,21 +31,20 @@ const PageNav = () => {
 			</Link>
 
 			<Dropdown>
-				<DropdownToggle
-					btnStyles={styles.dropdownToggleStyles}
-					imageUrl={avatarUrl}
-					icon={!loggedUser.avatarURL && <UserCircleIcon className='h-7 w-7' />}
-				/>
+				<DropdownToggle btnStyles={styles.dropdownToggleStyles} imageUrl={avatarUrl} icon={<UserCircleIcon className='h-7 w-7' />} />
 				<DropdownMenu position='bottom' menuStyles='min-w-64'>
-					<DropdownItem itemStyles='cursor-default' closeOnClick={false}>
-						<div className='flex w-full items-center gap-4'>
-							<img src={avatarUrl} className='w-12 h-12 rounded-full' alt='' />
-							<div>
-								<h5>{loggedUser.fullName}</h5>
-								<p className='text-xs text-darkGray font-medium'>{loggedUser.jobTitle}</p>
+					{showAccount && (
+						<DropdownItem itemStyles='cursor-default' closeOnClick={false}>
+							<div className='flex w-full items-center gap-4'>
+								<img src={avatarUrl} className='w-12 h-12 rounded-full' alt='' />
+
+								<div>
+									<h5>{loggedUser.fullName}</h5>
+									<p className='text-xs text-darkGray font-medium'>{loggedUser.jobTitle}</p>
+								</div>
 							</div>
-						</div>
-					</DropdownItem>
+						</DropdownItem>
+					)}
 					<Divider />
 					<h6 className='text-start text-darkGray mb-3'>Account</h6>
 					<Link to={'profile-settings'}>

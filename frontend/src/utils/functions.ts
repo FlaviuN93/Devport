@@ -1,6 +1,8 @@
 import { Area } from 'react-easy-crop'
 import { IDefaultError } from '../services/types'
 import { ObjectType, PasswordValidationType } from './types'
+import { passwordSchema } from './schemas'
+import { ZodError } from 'zod'
 
 interface IUpdateStorage {
 	key: string
@@ -86,6 +88,36 @@ export const allValuesValid = (data: ObjectType): boolean => {
 		if (typeof value === 'number' && value < 0) return false
 	}
 	return true
+}
+
+export const catchPasswordErrors = (password: string): string | string[] => {
+	try {
+		const result = passwordSchema.parse(password)
+		return result
+	} catch (err) {
+		const error = err as ZodError
+		return error.format()._errors
+	}
+}
+
+export const useValidateResult = (errorTypes: string | string[]) => {
+	const passwordErrors = [
+		{ type: 'lowerCase', isActive: false },
+		{ type: 'upperCase', isActive: false },
+		{ type: 'specialChar', isActive: false },
+		{ type: 'number', isActive: false },
+		{ type: 'minLength', isActive: false },
+		{ type: 'maxLength', isActive: false },
+	]
+	if (typeof errorTypes === 'string') {
+		passwordErrors.forEach((error) => (error.isActive = true))
+	}
+
+	if (Array.isArray(errorTypes)) {
+		passwordErrors.forEach((error) => (errorTypes.includes(error.type) ? (error.isActive = false) : (error.isActive = true)))
+	}
+
+	return passwordErrors
 }
 
 export const createImage = (url: string): Promise<HTMLImageElement> =>

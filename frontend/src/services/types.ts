@@ -17,6 +17,10 @@ export interface IDefaultError {
 	message: string | string[]
 }
 
+export interface IRegisteredUser extends IDefaultSuccess {
+	email: string
+}
+
 export interface IUser extends IDefaultSuccess {
 	user: User
 }

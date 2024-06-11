@@ -2,9 +2,7 @@ import Password from '../../Inputs/Password'
 import PasswordValidation from '../../Inputs/PasswordValidation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { useValidateResult } from '../../../hooks/useValidateResult'
 import { ResetPasswordType, resetPasswordSchema } from '../../../utils/schemas'
-import { passwordInitialState } from '../../../utils/variables'
 import { FC, useEffect } from 'react'
 import { TailwindClasses } from '../../../utils/types'
 import Button from '../../UI/Button'
@@ -12,6 +10,7 @@ import { useModalContext } from '../../../contexts/contextHooks'
 import { useChangePassword, useResetPassword } from '../../../services/queries'
 import { useNavigate, useParams } from 'react-router-dom'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
+import { catchPasswordErrors, useValidateResult } from '../../../utils/functions'
 
 interface IResetPasswordForm {
 	buttonName: string
@@ -33,6 +32,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 	const {
 		handleSubmit,
 		register,
+		watch,
 		reset,
 		formState: { errors },
 	} = useForm<ResetPasswordType>({
@@ -43,8 +43,9 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 	})
 
 	const formClasses = `flex flex-col -mt-1 gap-4 ${formStyles}`
-	const passwordErrorTypes = errors.password?.types?.invalid_string
-	const { errors: passwordErrors, isValid } = useValidateResult(passwordErrorTypes, passwordInitialState)
+	const watchPassword = watch('password')
+	const watchedErrors = catchPasswordErrors(watchPassword)
+	const passwordErrors = useValidateResult(watchedErrors)
 
 	const navigate = useNavigate()
 	const { close } = useModalContext()
@@ -74,7 +75,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 				label={passwordLabel}
 				placeholder='Enter a password'
 				showPasswordBtn={true}
-				error={isValid}
+				error={!!errors.password?.message}
 			/>
 
 			<Password

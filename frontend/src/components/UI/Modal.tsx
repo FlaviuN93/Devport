@@ -53,7 +53,7 @@ export const ModalWindow: FC<IModalWindow> = ({ modalName, children, showCloseIc
 
 	useLayoutEffect(() => {
 		setTimeout(() => {
-			if (modalWindowRef.current && modalWindowRef.current.offsetHeight > 0) {
+			if (modalWindowRef.current) {
 				const topPosition = (window.innerHeight + window.scrollY * 2 - modalWindowRef.current?.offsetHeight) / 2
 				modalWindowRef.current.style.top = `${topPosition}px`
 			}

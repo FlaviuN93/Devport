@@ -15,11 +15,7 @@ export const ErrorDisplay: FC<IErrorDisplay> = ({ error, resetErrorBoundary }) =
 			<div className={styles.errorBox}>
 				<h2 className='mb-2'>{error.statusTitle} 🫠</h2>
 				<p className='mb-4'>{error.message}</p>
-				<Button
-					icon={<ArrowUturnLeftIcon className='h-5 w-5' />}
-					onClick={resetErrorBoundary}
-					buttonText='Try again'
-				/>
+				<Button icon={<ArrowUturnLeftIcon className='h-5 w-5' />} onClick={resetErrorBoundary} buttonText='Try again' />
 			</div>
 		</main>
 	)

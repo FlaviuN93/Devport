@@ -83,7 +83,7 @@ const CoverForm = () => {
 					<h2>Add cover photo</h2>
 					<Divider />
 					<div className='flex justify-center'>
-						<img src={addCoverImage} className='w-full mobile:w-3/4 sm:w-2/3' alt='Cover' />
+						<img src={addCoverImage} className='w-full mobile:w-3/4 md:w-2/3' alt='Cover' />
 					</div>
 					<p className='text-center mb-4 text-lg font-medium'>Showcase your personality, interests, values or notable milestones </p>
 					<p className='text-center text-sm font-light'>

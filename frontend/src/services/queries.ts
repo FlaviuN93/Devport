@@ -23,7 +23,7 @@ import {
 	updateMyCover,
 	updateMyProject,
 } from './api.requests'
-import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar, MessageUs } from './types'
+import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar, MessageUs, IRegisteredUser } from './types'
 import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 import { updateValueFromStorage } from '../utils/functions'
@@ -119,7 +119,7 @@ export const useGetTechnologies = () =>
 // Authentication Mutations
 
 export const useRegister = () =>
-	useMutation<IUser, IDefaultError, SignupType>({
+	useMutation<IRegisteredUser, IDefaultError, SignupType>({
 		mutationFn: register,
 	})
 

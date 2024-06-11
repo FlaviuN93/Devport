@@ -3,9 +3,9 @@ import { z } from 'zod'
 const MAX_FILE_SIZE = 1024 * 1024 * 5
 
 // Base Schemas
-const emailSchema = z.string().trim().min(3, 'Email is required').email('Your email address is not valid. Try again.')
+const emailSchema = z.string().trim().min(3, { message: 'Email is required' }).email('Your email address is not valid. Try again.')
 
-const passwordSchema = z
+export const passwordSchema = z
 	.string()
 	.trim()
 	.regex(/^.{8,}/, 'minLength')

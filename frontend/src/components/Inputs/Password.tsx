@@ -25,8 +25,8 @@ const Password = <T extends FieldValues>({
 	tooltipStyles = '',
 	passwordStyles = '',
 	label,
-	name,
 	onChange,
+	name,
 	register,
 	showPasswordBtn = false,
 	error,
@@ -45,17 +45,32 @@ const Password = <T extends FieldValues>({
 			</label>
 
 			<div className='relative mt-1.5' onMouseOver={() => setShowTooltip(true)} onMouseOut={() => setShowTooltip(false)}>
-				<input
-					{...register?.(name, { onChange: (event) => onChange?.(event.target.value) })}
-					className={passwordClasses}
-					name={name}
-					id={label}
-					placeholder={placeholder}
-					aria-placeholder={placeholder}
-					type={showPassword ? 'text' : 'password'}
-					disabled={disabled}
-					aria-disabled={disabled ? 'true' : 'false'}
-				/>
+				{register && (
+					<input
+						{...register?.(name)}
+						className={passwordClasses}
+						name={name}
+						id={label}
+						placeholder={placeholder}
+						aria-placeholder={placeholder}
+						type={showPassword ? 'text' : 'password'}
+						disabled={disabled}
+						aria-disabled={disabled ? 'true' : 'false'}
+					/>
+				)}
+				{!register && onChange && (
+					<input
+						className={passwordClasses}
+						name={name}
+						id={label}
+						onChange={(event) => onChange(event.target.value)}
+						placeholder={placeholder}
+						aria-placeholder={placeholder}
+						type={showPassword ? 'text' : 'password'}
+						disabled={disabled}
+						aria-disabled={disabled ? 'true' : 'false'}
+					/>
+				)}
 
 				{showPasswordBtn && (
 					<button className={styles.passwordIcon} type='button' onClick={handleTogglePassword}>

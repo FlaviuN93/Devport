@@ -19,6 +19,7 @@ export interface UserContextProps {
 	handleSetUser: (user: User) => void
 	setCover: (url: string) => void
 	setAvatar: (url: string) => void
+	setEmail: (email: string) => void
 	removeCover: () => void
 	removeAvatar: () => void
 	handleLogoutUser: () => void
@@ -54,6 +55,12 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		setUser(user)
 	}
 
+	const setEmail = (email: string) => {
+		console.log(email, 'registerEmail')
+		setUser((user) => ({ ...user, email }))
+		window.localStorage.setItem('user', JSON.stringify({ ...user, email }))
+	}
+
 	const handleIsLoggedIn = () => {
 		window.localStorage.setItem('isLoggedIn', 'true')
 		setIsLoggedIn(true)
@@ -68,7 +75,18 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 	return (
 		<UserContext.Provider
-			value={{ user, setCover, setAvatar, removeAvatar, removeCover, handleSetUser, handleLogoutUser, isLoggedIn, handleIsLoggedIn }}
+			value={{
+				user,
+				setCover,
+				setAvatar,
+				removeAvatar,
+				removeCover,
+				handleSetUser,
+				handleLogoutUser,
+				isLoggedIn,
+				handleIsLoggedIn,
+				setEmail,
+			}}
 		>
 			{children}
 		</UserContext.Provider>
