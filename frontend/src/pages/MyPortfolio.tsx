@@ -1,6 +1,5 @@
 import { useGetMyProjects } from '../services/queries'
 import { useUserContext } from '../contexts/contextHooks'
-import { defaultCover } from '../utils/variables'
 import { useState, useEffect } from 'react'
 import Loading from '../components/UI/Loading'
 import { allValuesValid } from '../utils/functions'
@@ -8,6 +7,9 @@ import PortfolioCard from '../components/Containers/PortfolioCard'
 import ClipBoardButton from '../components/UI/ClipBoardButton'
 import CoverModal from '../components/Modals/CoverModal'
 import AvatarModal from '../components/Modals/AvatarModal'
+import LogoIcon from '../components/UI/LogoIcon'
+import Avatar from '../components/UI/Avatar'
+import { PhotoIcon } from '@heroicons/react/24/solid'
 
 const MyPortfolio = () => {
 	const { user: loggedUser } = useUserContext()
@@ -25,16 +27,25 @@ const MyPortfolio = () => {
 		<section className='portfolioContainer'>
 			<div className='relative mb-20'>
 				<div className='flex items-center justify-center relative'>
-					<img
-						className='bg-cover max-w-[800px] w-full h-[200px]'
-						src={loggedUser.coverURL ? loggedUser.coverURL : defaultCover}
-						alt='Cover Image'
-					/>
+					{loggedUser?.coverURL ? (
+						<img src={loggedUser?.coverURL} alt='CoverImage' className='bg-cover max-w-[800px] w-full h-[200px] rounded-lg' />
+					) : (
+						<div className='bg-cover bg-light3 dark:bg-darkGray max-w-[800px] w-full h-[200px] rounded-lg'>
+							<Avatar
+								icon={<PhotoIcon className='h-full w-full text-gray2 dark:text-black3' />}
+								avatarStyles='absolute h-16 w-16 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 border-none rounded-lg'
+							/>
+						</div>
+					)}
 					<CoverModal />
 				</div>
 				<AvatarModal />
 			</div>
 			<PortfolioCard projects={projects} clipBoardBtn={<ClipBoardButton isPortfolioValid={isPortfolioValid} />} />
+			<p className='self-center flex items-center mb-8 mt-2 gap-2'>
+				<span className='font-light text-sm'>power by </span>
+				<LogoIcon width={75} />
+			</p>
 		</section>
 	)
 }

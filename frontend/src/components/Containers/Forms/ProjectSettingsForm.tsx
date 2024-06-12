@@ -166,7 +166,7 @@ const ProjectSettingsForm = () => {
 			<div className='mb-2 flex flex-col w-full gap-4 mobile:flex-row mobile:justify-end'>
 				<Button
 					buttonText='Clear'
-					buttonStyles='text-darkBlue bg-light3 border-0'
+					buttonStyles='text-darkBlue bg-light2 border-0'
 					icon={<TrashIcon2 className='h-5 w-5' />}
 					onClick={handleResetForm}
 					iconPos='left'

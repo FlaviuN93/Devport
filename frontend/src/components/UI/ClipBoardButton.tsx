@@ -27,8 +27,8 @@ const ClipBoardButton: FC<{ isPortfolioValid: boolean }> = ({ isPortfolioValid }
 				iconPos='left'
 				buttonText='Share'
 				disabled={!isPortfolioValid}
-				buttonStyles={`text-gray font-medium  ${
-					isPortfolioValid ? 'transition-shadow duration-250 hover:shadow-md active:shadow-sm' : 'shadow-none'
+				buttonStyles={`text-darkGray dark:text-black3 bg-light dark:bg-light3 font-semibold  ${
+					isPortfolioValid ? 'bg-light dark:bg-light3 transition-shadow duration-250 hover:shadow-md active:shadow-sm' : 'shadow-none'
 				}`}
 				onClick={() => copyToClipBoard(publicUrl)}
 			/>
@@ -43,7 +43,7 @@ const ClipBoardButton: FC<{ isPortfolioValid: boolean }> = ({ isPortfolioValid }
 						content='To share your portfolio link, please complete all profile details and add at least one project.'
 						position='right'
 						hoverTooltip={showTooltip}
-						tooltipStyles='bg-gray'
+						tooltipStyles='bg-gray2 dark:bg-darkGray'
 					/>
 				</div>
 			) : (

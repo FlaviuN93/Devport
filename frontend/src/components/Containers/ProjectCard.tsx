@@ -1,5 +1,4 @@
 import { FC } from 'react'
-import styles from './ProjectCard.module.css'
 import Button from '../UI/Button'
 import { ArrowTopRightOnSquareIcon, PencilSquareIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom'
@@ -35,22 +34,26 @@ const ProjectCard: FC<ProjectCardProps> = ({
 	const { handleProjectSelect } = useProjectContext()
 
 	return (
-		<div className={styles.cardContainer}>
-			{imageURL ? <img src={imageURL} alt='Image' className={styles.cardImage} /> : <PhotoIcon className={styles.cardImage} />}
-			<div className={styles.contentContainer}>
-				<article className={styles.articleContainer}>
-					<h4 className={styles.articleTitle}>{title}</h4>
-					<p className={styles.articleTechnologies}>{techJoin}</p>
-					<p className={styles.articleDescription}>{description}</p>
+		<div className='flex flex-col border-[1px] border-light3 rounded-lg p-3 mx-2 mobile:mx-0 gap-6 bg-light dark:bg-darkBlue2 tablet:flex-row'>
+			{imageURL ? (
+				<img src={imageURL} alt='Image' className='aspect-video stroke-1 rounded-lg tablet:w-1/3 min-w-[250px]' />
+			) : (
+				<PhotoIcon className='aspect-video stroke-1 rounded-lg tablet:w-1/3 min-w-[250px]' />
+			)}
+			<div className='tablet:w-3/5'>
+				<article className='text-start text-sm mb-4'>
+					<h4 className='text-xl dark:text-light'>{title}</h4>
+					<p className='font-semibold text-darkGray dark:text-light3 mb-2'>{techJoin}</p>
+					<p className='text-darkGray font-medium dark:text-light w-full break-words'>{description}</p>
 				</article>
 
-				<div className={styles.buttonContainer}>
+				<div className='flex flex-col gap-4 mb-1 lgMobile:flex-row'>
 					{cardState === 'presentation' ? (
 						<>
 							<Link to={demoURL} target='_blank'>
 								<Button
 									buttonText='Demo URL'
-									buttonStyles='w-full'
+									buttonStyles='w-full px-2.5 py-2 text-light bg-darkViolet'
 									icon={<ArrowTopRightOnSquareIcon className='h-5 w-5' />}
 									iconPos='right'
 								/>
@@ -59,14 +62,14 @@ const ProjectCard: FC<ProjectCardProps> = ({
 							<Link to={repositoryURL} target='_blank'>
 								<Button
 									buttonText='Repository URL'
-									buttonStyles='w-full'
+									buttonStyles='w-full px-2.5 py-2 text-darkGray dark:bg-light3'
 									icon={<ArrowTopRightOnSquareIcon className='h-5 w-5' />}
 									iconPos='right'
 								/>
 							</Link>
 						</>
 					) : (
-						<div className={styles.buttonContainer}>
+						<div className='flex flex-col gap-4 mb-1 lgMobile:flex-row'>
 							<Button
 								buttonText='Edit'
 								variant='primary'
@@ -89,7 +92,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 								<ModalOpen openedModalName='removeProject'>
 									<Button
 										buttonText='Remove'
-										buttonStyles='text-darkBlue bg-light3 border-0 order-1 mobile:order-2'
+										buttonStyles='text-darkBlue bg-light2 border-0 order-1 mobile:order-2'
 										icon={<TrashIcon className='h-5 w-5' />}
 									/>
 								</ModalOpen>

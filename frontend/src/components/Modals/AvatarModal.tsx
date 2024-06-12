@@ -1,4 +1,3 @@
-import { CameraIcon } from '@heroicons/react/24/outline'
 import AvatarForm from '../Containers/Forms/AvatarForm'
 import Avatar from '../UI/Avatar'
 import { Modal, ModalOpen, ModalWindow } from '../UI/Modal'
@@ -6,6 +5,7 @@ import DeleteModal from './DeleteModal'
 import { useUserContext } from '../../contexts/contextHooks'
 import useSuccess from '../../hooks/useSuccess'
 import { useDeleteMyAvatar } from '../../services/queries'
+import { UserIcon } from '@heroicons/react/24/solid'
 
 const AvatarModal = () => {
 	const { user: loggedUser, removeAvatar } = useUserContext()
@@ -17,10 +17,10 @@ const AvatarModal = () => {
 		<Modal>
 			<ModalOpen openedModalName='addAvatarModal'>
 				<Avatar
-					avatarStyles='h-40 w-40 absolute -mt-20 z-50 shadow-md'
+					avatarStyles='h-40 w-40 absolute -mt-20 z-50 bg-light3 dark:bg-darkGray shadow-md'
 					role='button'
 					imageUrl={avatarUrl}
-					icon={!loggedUser.avatarURL && <CameraIcon className='h-20 w-20' />}
+					icon={!loggedUser.avatarURL && <UserIcon className='h-20 w-20 text-gray2 dark:text-black3' />}
 				/>
 			</ModalOpen>
 			<ModalWindow modalName='addAvatarModal' modalWindowStyles='max-w-[650px] -mt-20'>

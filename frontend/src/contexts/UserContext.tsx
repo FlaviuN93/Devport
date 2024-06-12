@@ -56,7 +56,6 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	}
 
 	const setEmail = (email: string) => {
-		console.log(email, 'registerEmail')
 		setUser((user) => ({ ...user, email }))
 		window.localStorage.setItem('user', JSON.stringify({ ...user, email }))
 	}

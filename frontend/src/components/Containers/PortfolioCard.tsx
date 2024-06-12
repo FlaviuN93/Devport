@@ -1,33 +1,31 @@
 import { FC, ReactNode } from 'react'
-import { EnvelopeIcon, PencilIcon } from '@heroicons/react/24/solid'
-import LinkedinIcon from '../../assets/linkedin.svg?react'
+import { BiLogoLinkedinSquare } from 'react-icons/bi'
 import { Link } from 'react-router-dom'
 import { aboutMeDefault } from '../../utils/variables'
 import Button from '../UI/Button'
 import ProjectCard from './ProjectCard'
 import { useUserContext } from '../../contexts/contextHooks'
 import { Project } from '../../services/types'
+import { PencilSquareIcon, PlusIcon, EnvelopeIcon } from '@heroicons/react/24/outline'
 
 const PortfolioCard: FC<{ projects: Project[] | undefined; clipBoardBtn?: ReactNode }> = ({ projects, clipBoardBtn }) => {
 	const { user: loggedUser } = useUserContext()
 
 	return (
 		<>
-			{clipBoardBtn && (
-				<div className='flex justify-between items-center'>
-					<h2 className='text-gray font-medium'>Profile</h2>
-					<div className='iconAnimation'>
-						<Link to={'/app/profile-settings'}>
-							<PencilIcon className='text-gray' />
-						</Link>
-					</div>
-				</div>
-			)}
-			<div className='flex w-full justify-between'>
+			<div className='flex justify-between items-center'>
 				<div>
-					<h3 className='font-semibold'>{loggedUser?.fullName || 'Full Name'}</h3>
-					<h6 className='font-medium'>{loggedUser?.jobTitle || 'Job Title'}</h6>
+					<h3 className='font-semibold text-[2rem] text-black dark:text-light'>{loggedUser?.fullName || 'Full Name'}</h3>
+					<h6 className='font-medium text-violet text-xl mt-2'>{loggedUser?.jobTitle || 'Your job description'}</h6>
 				</div>
+				<Link to={'/app/profile-settings'}>
+					<Button
+						buttonText='Edit Profile'
+						buttonStyles='bg-darkViolet text-light px-2.5 py-2 w-full text-sm'
+						icon={<PencilSquareIcon className='h-5 w-5' />}
+						iconPos='right'
+					/>
+				</Link>
 			</div>
 
 			<div className='flex gap-4'>
@@ -36,49 +34,56 @@ const PortfolioCard: FC<{ projects: Project[] | undefined; clipBoardBtn?: ReactN
 						icon={<EnvelopeIcon className='h-5 w-5' />}
 						iconPos='left'
 						buttonText='Contact'
-						buttonStyles='text-gray transition-shadow duration-250 hover:shadow-md active:shadow-sm'
+						buttonStyles='text-violet bg-light dark:bg-light3 font-semibold transition-shadow duration-250 hover:shadow-md active:shadow-sm'
 					/>
 				</Link>
 
 				<Link to={loggedUser?.linkedin || 'https://linkedin.com'} target='_blank'>
 					<Button
-						icon={<LinkedinIcon className='h-5 w-5' />}
+						icon={<BiLogoLinkedinSquare className='h-5 w-5' />}
 						iconPos='left'
 						buttonText='Linkedin'
-						buttonStyles='text-gray transition-shadow duration-250 hover:shadow-md active:shadow-sm'
+						buttonStyles='text-violet bg-light dark:bg-light3 font-semibold transition-shadow duration-250 hover:shadow-md active:shadow-sm'
 					/>
 				</Link>
 				{clipBoardBtn}
 			</div>
 			<div>
-				<h4 className='text-gray mb-2'>About Me</h4>
-				<p className='text-black2 font-medium text-md w-[95%]'>{loggedUser?.bio || aboutMeDefault}</p>
+				<h4 className='text-gray dark:text-gray2 mb-2 font-bold tracking-wider'>BIO</h4>
+				<p className='text-lg font-medium text-darkGray dark:text-light'>{loggedUser?.bio || aboutMeDefault}</p>
 			</div>
 
-			<hr className='border-lightGray my-3' />
+			<hr className='text-gray dark:text-light3 my-3' />
 			<div className='flex justify-between items-center'>
-				<h2 className='text-gray font-medium'>Projects</h2>
+				<h4 className='text-gray dark:text-gray2 font-bold self-start'>PROJECTS</h4>
 				{clipBoardBtn && (
-					<div className='iconAnimation'>
-						<Link to={'/app/project-settings'}>
-							<PencilIcon className='text-gray' />
-						</Link>
-					</div>
+					<Link to={'/app/project-settings'}>
+						<Button
+							buttonText='Add Project'
+							buttonStyles='bg-darkViolet text-light px-2.5 py-2 w-full text-sm'
+							icon={<PlusIcon className='h-5 w-5' />}
+							iconPos='right'
+						/>
+					</Link>
 				)}
 			</div>
-			{projects?.map((project) => (
-				<ProjectCard
-					key={project.id}
-					projectId={project.id}
-					demoURL={project.demoURL}
-					description={project.description}
-					imageURL={project.imageURL}
-					repositoryURL={project.repositoryURL}
-					technologies={project.technologies}
-					title={project.name}
-					cardState='presentation'
-				/>
-			))}
+			{projects ? (
+				projects.map((project) => (
+					<ProjectCard
+						key={project.id}
+						projectId={project.id}
+						demoURL={project.demoURL}
+						description={project.description}
+						imageURL={project.imageURL}
+						repositoryURL={project.repositoryURL}
+						technologies={project.technologies}
+						title={project.name}
+						cardState='presentation'
+					/>
+				))
+			) : (
+				<p className='text-lg font-medium text-darkGray dark:text-light'>You have no project added.</p>
+			)}
 		</>
 	)
 }

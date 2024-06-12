@@ -9,7 +9,7 @@
 	height: 12px;
 	width: 100%;
 	background-color: var(--violet);
-	border: 1px solid var(--light-3);
+	border: 1px solid var(--light-2);
 	accent-color: var(--violet);
 	border-radius: 50%;
 	transition: box-shadow 200ms cubic-bezier(0.4, 0, 0.2, 1);

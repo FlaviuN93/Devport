@@ -153,7 +153,7 @@ const AvatarForm = () => {
 						<div>
 							<ModalOpen openedModalName='deleteAvatarModal'>
 								<Button
-									buttonStyles='border-1 hover:bg-lightGray transition-all duration-300 w-full md:w-auto'
+									buttonStyles='border-1 hover:bg-lightGray dark:hover:bg-black transition-all duration-300 w-full md:w-auto'
 									buttonText='Delete Photo'
 									type='button'
 								/>

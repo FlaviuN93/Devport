@@ -46,7 +46,7 @@
 	background-color: var(--light);
 	color: var(--gray);
 	border-radius: 4px;
-	border: 1px solid var(--light-3);
+	border: 1px solid var(--light-2);
 	box-shadow: var(--shadow-sm);
 	height: 180px;
 	width: calc(100% - 5px);

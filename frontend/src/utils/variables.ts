@@ -14,6 +14,4 @@ export const CONSTANTS = {
 	cropPoints: { x: 0, y: 0 },
 }
 
-export const aboutMeDefault = `I'm a [Your Field] professional with [Number] years of experience, passionate about [mention relevant area]. 
-I'm skilled in [list 2 key skills] and I'm always eager to learn and tackle new challenges. 
-This portfolio showcases the work I'm most proud of.`
+export const aboutMeDefault = `Add a brief bio to showcase your background, skills, and achievements. Let others know what makes you unique and what you bring to the table..`
