@@ -1,9 +1,7 @@
-import { XMarkIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, PlusIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { BiCloudUpload } from 'react-icons/bi'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
-import TrashIcon2 from '../../../assets/Trash-1.svg?react'
-import UploadIcon from '../../../assets/upload.svg?react'
-import ProjectIcon from '../../../assets/project.svg?react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { useProjectContext } from '../../../contexts/contextHooks'
@@ -87,7 +85,7 @@ const ProjectSettingsForm = () => {
 				animate={previewUrl ? 'visible' : 'hidden'}
 				variants={motionVariants}
 				transition={{ duration: 0.5 }}
-				className='relative justify-center bg-light2 py-4 rounded-lg'
+				className='relative justify-center bg-light2 dark:bg-darkGray py-4 rounded-lg'
 			>
 				{previewUrl && (
 					<>
@@ -110,14 +108,14 @@ const ProjectSettingsForm = () => {
 				transition={{ duration: 0.5 }}
 				className='imageFileContainer'
 			>
-				<Avatar icon={<ProjectIcon />} avatarStyles='h-[52px] w-[52px]' />
-				<p className='text-gray text-sm text-center font-medium px-4'>Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
+				<Avatar icon={<PhotoIcon className='h-7 w-7' />} avatarStyles='h-[52px] w-[52px]' />
+				<p className='text-gray dark:text-light3 text-sm text-center font-medium px-4'>Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
 
 				<FileInput
 					buttonText='Upload Project Image'
-					icon={<UploadIcon />}
+					icon={<BiCloudUpload className='h-6 w-6' />}
 					name='imageFile'
-					fileStyles='gap-2 text-darkGray'
+					fileStyles='gap-2'
 					register={register}
 					onFileUpload={(selectedFile: File) => setValue('imageFile', selectedFile, { shouldValidate: true })}
 					error={errors.imageFile?.message}
@@ -166,8 +164,8 @@ const ProjectSettingsForm = () => {
 			<div className='mb-2 flex flex-col w-full gap-4 mobile:flex-row mobile:justify-end'>
 				<Button
 					buttonText='Clear'
-					buttonStyles='text-darkBlue bg-light2 border-0'
-					icon={<TrashIcon2 className='h-5 w-5' />}
+					buttonStyles='text-black3 bg-light dark:bg-light3'
+					icon={<TrashIcon className='h-5 w-5' />}
 					onClick={handleResetForm}
 					iconPos='left'
 				/>

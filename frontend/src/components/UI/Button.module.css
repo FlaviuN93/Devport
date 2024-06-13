@@ -1,6 +1,6 @@
 .button {
 	padding: 0.5rem 1.2rem;
-	border: 1px solid var(--light-gray);
+	border: 1px solid var(--hoverColor2);
 	border-radius: 8px;
 	box-shadow: var(--shadow-sm);
 	font-size: 14px;
@@ -21,7 +21,7 @@
 .disabled {
 	opacity: 0.7;
 	cursor: default;
-	background-color: var(--gray);
+	background-color: var(--hoverColor2);
 }
 
 .text {
@@ -44,14 +44,14 @@
 }
 
 .button.primary {
-	background-color: var(--violet);
+	background-color: var(--hoverColor);
 	color: var(--light);
 }
 
 .button.secondary {
-	background-color: var(--light-violet);
+	background-color: var(--lightViolet);
 	padding: 0.8rem 1rem;
-	color: var(--dark-violet);
+	color: var(--darkViolet);
 	justify-content: start;
 	width: 100%;
 }
@@ -70,7 +70,7 @@
 	width: 18px;
 	height: 18px;
 	display: inline-block;
-	border: 4px solid var(--dark-violet);
+	border: 4px solid var(--darkViolet);
 	border-radius: 50%;
 	border-top-color: var(--light-2);
 	animation: spin 1s linear infinite;

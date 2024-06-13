@@ -4,7 +4,7 @@
 	left: 50%;
 	width: 40px;
 	height: 40px;
-	border: 6px solid var(--dark-violet);
+	border: 6px solid var(--darkViolet);
 	transform: translate(-50%, -50%);
 	border-radius: 50%;
 	border-top-color: var(--light-2);

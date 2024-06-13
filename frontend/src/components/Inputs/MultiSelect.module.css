@@ -3,38 +3,34 @@
 	padding: 0.5rem 1rem;
 	font-family: inherit;
 	padding-right: 3rem;
-	/* border: 1px solid var(--light-2); */
 	border-radius: 8px;
-	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid var(--bgColor2);
+	background-color: var(--inputBg);
 	transition: border 0.2s, box-shadow 0.2s;
 	box-shadow: var(--shadow-xs);
 	position: relative;
 }
 
 .input:disabled {
-	background-color: var(--light-gray);
+	background-color: var(--hoverColor2);
 	cursor: not-allowed;
 }
 
-.input:read-only {
-	background-color: var(--light-2);
-}
-
 .input::placeholder {
-	color: var(--gray);
+	color: var(--gray-2);
 	font-size: 14px;
 }
 
 .input:focus {
 	outline: none;
 	box-shadow: var(--shadow-sm);
-	background-color: var(--light-2);
+	background-color: var(--inputBgFocus);
 }
 
 .label {
 	text-align: start;
 	font-size: 1rem;
-	color: var(--black-1);
+	color: var(--themeColor);
 	font-weight: 500;
 }
 
@@ -43,10 +39,10 @@
 	z-index: 100;
 	display: flex;
 	flex-direction: column;
-	background-color: var(--light);
-	color: var(--gray);
 	border-radius: 4px;
-	border: 1px solid var(--light-2);
+	color: var(--themeColor2);
+	background-color: var(--bgColor);
+	border: 1px solid var(--bgColor2);
 	box-shadow: var(--shadow-sm);
 	height: 180px;
 	width: calc(100% - 5px);
@@ -65,7 +61,7 @@
 }
 
 .item:hover {
-	background-color: var(--light-2);
+	background-color: var(--bgColor3);
 }
 
 .item .checkboxItem {
@@ -78,7 +74,6 @@
 	top: 50%;
 	transform: translateY(-50%);
 	right: 10px;
-	color: var(--gray);
 }
 
 .inputIcon:focus {

@@ -1,4 +1,3 @@
-import CheckCircleIcon from '../../../assets/check circle-1.svg?react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useUserContext } from '../../../contexts/contextHooks'
@@ -7,6 +6,7 @@ import { IProfileSettings, profileSettingsSchema } from '../../../utils/schemas'
 import Button from '../../UI/Button'
 import Text from '../../Inputs/Text'
 import { useEffect } from 'react'
+import { CheckCircleIcon } from '@heroicons/react/24/outline'
 
 const ProfileSettingsForm = () => {
 	const { user: loggedUser, handleSetUser } = useUserContext()

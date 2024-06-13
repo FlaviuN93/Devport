@@ -7,7 +7,7 @@ export const motionVariants = {
 }
 
 export const defaultCover = 'https://liakrqgjvgqicvzrakra.supabase.co/storage/v1/object/public/user-covers/defaultBackground.jpg'
-export const addCoverImage = 'https://liakrqgjvgqicvzrakra.supabase.co/storage/v1/object/public/user-covers/35634.jpg'
+export const addCoverImage = 'https://liakrqgjvgqicvzrakra.supabase.co/storage/v1/object/public/user-covers/image.png'
 
 export const CONSTANTS = {
 	zoom: 1,

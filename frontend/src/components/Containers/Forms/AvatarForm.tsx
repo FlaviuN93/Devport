@@ -1,5 +1,4 @@
 import { CheckIcon } from '@heroicons/react/24/solid'
-import UploadIcon from '../../../assets/upload.svg?react'
 import styles from './AvatarForm.module.css'
 import Button from '../../UI/Button'
 import { Divider } from '../../UI/Dropdown'
@@ -17,6 +16,7 @@ import { getCroppedImg } from '../../../utils/functions'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
 import Avatar from '../../UI/Avatar'
 import { CONSTANTS } from '../../../utils/variables'
+import { BiCloudUpload } from 'react-icons/bi'
 
 const AvatarForm = () => {
 	const {
@@ -88,11 +88,11 @@ const AvatarForm = () => {
 						<div className='flex justify-center gap-3'>
 							<Avatar
 								avatarStyles='h-32 w-32 shadow-lg'
-								imageUrl='https://liakrqgjvgqicvzrakra.supabase.co/storage/v1/object/public/avatars/137665.jpg'
+								imageUrl='https://liakrqgjvgqicvzrakra.supabase.co/storage/v1/object/public/avatars/defaultAvatar.png'
 							/>
 							<Avatar
 								avatarStyles='h-32 w-32 shadow-lg'
-								imageUrl='https://liakrqgjvgqicvzrakra.supabase.co/storage/v1/object/public/avatars/13176.jpg'
+								imageUrl='https://liakrqgjvgqicvzrakra.supabase.co/storage/v1/object/public/avatars/defaultAvatar2.png'
 							/>
 						</div>
 						<p className='text-center text-sm font-light'>
@@ -104,7 +104,7 @@ const AvatarForm = () => {
 					<div className='flex flex-col w-full mobile:flex-row mobile:justify-end'>
 						<FileInput
 							buttonText='Upload'
-							icon={<UploadIcon className='mr-1.5' />}
+							icon={<BiCloudUpload className='mr-1.5 h-6 w-6' />}
 							name='avatarFile'
 							register={register}
 							fileStyles='shadow-none border-[1px]'

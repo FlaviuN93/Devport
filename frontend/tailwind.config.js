@@ -16,6 +16,7 @@ export default {
 				light3: '#ced4da',
 				lightGray: '#cbcdd1',
 				danger: '#ab1b1b',
+				danger2: '#DD524C',
 				black: '#212529',
 				black2: '#364153',
 				black3: '#343A40',

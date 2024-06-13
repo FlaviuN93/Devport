@@ -1,5 +1,4 @@
 import { CheckIcon } from '@heroicons/react/24/solid'
-import UploadIcon from '../../../assets/upload.svg?react'
 import styles from './CoverForm.module.css'
 import { CONSTANTS, addCoverImage } from '../../../utils/variables'
 import Button from '../../UI/Button'
@@ -16,6 +15,7 @@ import Slider from '../../Inputs/Slider'
 import FileInput from '../../Inputs/FileInput'
 import { getCroppedImg } from '../../../utils/functions'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
+import { BiCloudUpload } from 'react-icons/bi'
 
 const CoverForm = () => {
 	const {
@@ -82,8 +82,8 @@ const CoverForm = () => {
 				<>
 					<h2>Add cover photo</h2>
 					<Divider />
-					<div className='flex justify-center'>
-						<img src={addCoverImage} className='w-full mobile:w-3/4 md:w-2/3' alt='Cover' />
+					<div className='flex justify-center bg-darkGray text-darkGray fill-darkGray'>
+						<img src={addCoverImage} className=' w-full mobile:w-3/4 md:w-2/3' alt='Cover' />
 					</div>
 					<p className='text-center mb-4 text-lg font-medium'>Showcase your personality, interests, values or notable milestones </p>
 					<p className='text-center text-sm font-light'>
@@ -94,7 +94,7 @@ const CoverForm = () => {
 					<div className='flex flex-col w-full mobile:flex-row mobile:justify-end'>
 						<FileInput
 							buttonText='Upload'
-							icon={<UploadIcon className='mr-1.5' />}
+							icon={<BiCloudUpload className='mr-1.5 h-6 w-6' />}
 							name='coverFile'
 							register={register}
 							fileStyles='shadow-none border-[1px]'

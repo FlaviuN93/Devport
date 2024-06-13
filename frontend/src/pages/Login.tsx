@@ -1,5 +1,4 @@
 import { Link, useNavigate } from 'react-router-dom'
-import GithubIcon from '../assets/github.svg?react'
 import Button from '../components/UI/Button'
 import { useForm } from 'react-hook-form'
 import { LoginType, loginSchema } from '../utils/schemas'
@@ -9,6 +8,7 @@ import Password from '../components/Inputs/Password'
 import { useLogin } from '../services/queries'
 import { useEffect } from 'react'
 import { useUserContext } from '../contexts/contextHooks'
+import { BiLogoGithub } from 'react-icons/bi'
 
 const Login = () => {
 	const {
@@ -41,7 +41,12 @@ const Login = () => {
 				<h1 className='mb-1'>Login to Account</h1>
 				<h6>Enter your credentials to access your account</h6>
 			</div>
-			<Button onClick={handleGithubSignup} buttonText='Sign In with Github' buttonStyles='bg-darkBlue text-white' icon={<GithubIcon />} />
+			<Button
+				onClick={handleGithubSignup}
+				buttonText='Sign In with Github'
+				buttonStyles='bg-darkBlue text-white'
+				icon={<BiLogoGithub className='h-6 w-6' />}
+			/>
 			<div className='borderWord'>or</div>
 
 			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => loginUser(data))} autoComplete='on'>

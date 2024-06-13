@@ -8,7 +8,7 @@ const ProjectSettings = () => {
 	if (isLoading) return <Loading />
 	return (
 		<section className='settingsContainer'>
-			<h4 className='mb-4'>Project Settings</h4>
+			<h2 className='mb-6 dark:text-light'>Project Settings</h2>
 			<ProjectSettingsForm />
 
 			<div className='flex flex-col gap-4 mt-4'>

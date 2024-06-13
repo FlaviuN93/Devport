@@ -37,6 +37,7 @@ function App() {
 							<Routes>
 								<Route path='/' element={<HomePage />} />
 								<Route path='/my-portfolio/:userId' element={<PublicPortfolio />} />
+								<Route path='/app/my-portfolio' element={<MyPortfolio />} />
 								<Route
 									path='/app'
 									element={
@@ -45,7 +46,6 @@ function App() {
 										</PrivateRoute>
 									}
 								>
-									<Route path='my-portfolio' element={<MyPortfolio />} />
 									<Route path='project-settings' element={<ProjectSettings />} />
 									<Route path='profile-settings' element={<ProfileSettings />} />
 								</Route>

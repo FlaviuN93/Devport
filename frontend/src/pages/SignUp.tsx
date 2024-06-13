@@ -1,5 +1,4 @@
 import Button from '../components/UI/Button'
-import GithubIcon from '../assets/github.svg?react'
 import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
 import { useForm } from 'react-hook-form'
@@ -11,6 +10,7 @@ import { useEffect } from 'react'
 import { useUserContext } from '../contexts/contextHooks'
 import { useRegister } from '../services/queries'
 import { catchPasswordErrors, useValidateResult } from '../utils/functions'
+import { BiLogoGithub } from 'react-icons/bi'
 
 const SignUp = () => {
 	const {
@@ -50,7 +50,12 @@ const SignUp = () => {
 				<h1 className='mb-1'>Create Your Account</h1>
 				<h6>Enter the fields below to get started</h6>
 			</div>
-			<Button onClick={handleGithubSignup} buttonText='Sign In with Github' buttonStyles='bg-darkBlue text-white' icon={<GithubIcon />} />
+			<Button
+				onClick={handleGithubSignup}
+				buttonText='Sign In with Github'
+				buttonStyles='bg-darkBlue text-white'
+				icon={<BiLogoGithub className='h-6 w-6' />}
+			/>
 			<div className='borderWord'>or</div>
 
 			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => registerUser(data))}>

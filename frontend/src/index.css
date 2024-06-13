@@ -5,21 +5,25 @@
 @tailwind utilities;
 
 :root {
-	--light: #ffffff;
+	--light: #f8f9fa;
 	--light-2: #e3e8ef;
 	--light-3: #ced4da;
-	--black-1: #212529;
+	--black: #212529;
 	--black-2: #364153;
-	--light-gray: #cbcdd1;
-	--light-gray-2: #cdd5e0;
+	--black-3: #343a40;
+	--lightGray: #cbcdd1;
+	--lightGray-2: #cdd5e0;
 	--gray: #677489;
-	--darkGray: '#495057',
-	--dark-blue: #20293a;
+	--gray-2: #adb5bd;
+	--darkGray: #495057;
 	--violet: #6466e9;
-	--light-violet: #e1e7fd;
-	--dark-violet: #4138c2;
+	--violet2: #6f72e3;
+	--lightViolet: #e1e7fd;
+	--darkViolet: #4138c2;
+	--blueColor: #91a1f3;
+	--darkBlue: #111823;
 	--error: #ab1b1b;
-	--backdrop-color: rgba(255, 255, 255, 0.2);
+	--backdropColor: rgba(255, 255, 255, 0.2);
 
 	font-family: Inter, sans-serif;
 
@@ -30,22 +34,33 @@
 }
 
 :root.light {
-	background-color: var(--light);
-	--error: #ab1b1b;
-	--danger: #dd524c;
-	--content-color: var(--black-1);
+	--themeColor: var(--black);
+	--themeColor2: var(--black-3);
+	--bgColor: var(--light);
+	--bgColor2: var(--light-2);
+	--bgColor3: var(--light-2);
+	--hoverColor: var(--violet);
+	--hoverColor2: var(--lightGray);
+	--buttonColor: var(--light);
+	--borderColor: var(--blueColor);
+	--inputBg: rgba(255, 255, 255, 0.4);
+	--inputBgFocus: rgba(255, 255, 255, 0.5);
 	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12), 0 4px 6px -4px rgb(0 0 0 / 0.12);
 }
 :root.dark {
-	background-color: var(--black-2);
-	--light-gray: #868e96;
-	--gray: #343a40;
-	--error: #ab1b1b;
-	--danger: #dd524c;
-	--dark-blue: #20293a;
-	--content-color: var(--light);
+	--themeColor: var(--light);
+	--themeColor2: var(--light-3);
+	--bgColor: var(--black-3);
+	--bgColor2: var(--black-3);
+	--bgColor3: var(--darkGray);
+	--hoverColor: var(--darkViolet);
+	--hoverColor2: var(--darkGray);
+	--buttonColor: var(--light-3);
+	--borderColor: var(--light-2);
+	--inputBg: rgba(0, 0, 0, 0.4);
+	--inputBgFocus: rgba(0, 0, 0, 0.5);
 	--shadow-sm: 0 1px 2px 0 rgb(255, 255, 255/ 0.05);
 	--shadow-md: 0 4px 6px -1px rgb(255, 255, 255/ 0.1), 0 2px 4px -2px rgb(255, 255, 255/ 0.1);
 	--shadow-lg: 0 10px 15px -3px rgb(255, 255, 255/ 0.12), 0 4px 6px -4px rgb(255, 255, 255/ 0.12);
@@ -79,35 +94,36 @@ h1,
 h2,
 h4 {
 	font-weight: 600;
-	color: var(--black-1);
+	color: var(--black);
 }
 
 h2 {
 	font-size: 1.5rem;
 	line-height: 2.25rem;
-	color: var(--black-1);
+	color: var(--black);
 }
 
 h3 {
 	font-size: 1.3rem;
 	line-height: 2rem;
-	color: var(--black-1);
+	color: var(--black);
 }
 
 h4 {
 	font-size: 1.25rem;
-	color: var(--black-1);
+	line-height: 1.75rem;
+	color: var(--black);
 }
 
 h5 {
 	font-size: 1rem;
-	line-height: 1.75rem;
+	line-height: 1.5rem;
 	font-weight: 500;
-	color: var(--black-1);
+	color: var(--black);
 }
 
 p {
-	color: var(--black-1);
+	color: var(--black);
 }
 
 h6 {
@@ -153,13 +169,17 @@ h6 {
 	padding: 0.75rem;
 	border-radius: 8px;
 	margin-bottom: 1rem;
-	border: 1px solid var(--light-gray);
+	background-color: var(--bgColor2);
+	min-height: 100%;
+	border: 1px solid var(--hoverColor2);
+	color: var(--themeColor);
 }
 
 .formSettingsContainer {
-	border: 1px solid var(--light-gray-2);
+	border: 1px solid var(--hoverColor2);
+	border-radius: 8px;
 	padding: 1rem;
-	background-color: var(--light);
+	background-color: var(--bgColor);
 	display: flex;
 	flex-direction: column;
 	padding: 1rem;
@@ -171,7 +191,7 @@ h6 {
 	flex-direction: column;
 	align-items: center;
 	gap: 1.5rem;
-	background-color: var(--light-2);
+	background-color: var(--bgColor3);
 	border-radius: 6px;
 	padding: 2.25rem 0;
 	height: 230px;

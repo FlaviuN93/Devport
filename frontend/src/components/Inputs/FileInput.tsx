@@ -73,7 +73,7 @@ const FileInput = <T extends FieldValues>({
 				onMouseOut={() => setShowTooltip(false)}
 			>
 				{icon && <span>{icon}</span>}
-				<span className='font-medium'>{buttonText}</span>
+				<span>{buttonText}</span>
 
 				<motion.input
 					animate={size}

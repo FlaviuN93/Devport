@@ -92,7 +92,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 								<ModalOpen openedModalName='removeProject'>
 									<Button
 										buttonText='Remove'
-										buttonStyles='text-darkBlue bg-light2 border-0 order-1 mobile:order-2'
+										buttonStyles='text-black3 bg-light dark:bg-light3 order-1 mobile:order-2'
 										icon={<TrashIcon className='h-5 w-5' />}
 									/>
 								</ModalOpen>

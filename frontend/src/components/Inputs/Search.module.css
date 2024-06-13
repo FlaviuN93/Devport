@@ -8,8 +8,8 @@
 	padding: 0.5rem 1rem;
 	font-family: inherit;
 	transition: all 0.2s ease;
-	border: 1px solid var(--light-gray);
-	background-color: rgba(255, 255, 255, 0.4);
+	border: 1px solid var(--bgColor2);
+	background-color: var(--inputBg);
 	box-shadow: var(--shadow-xs);
 	letter-spacing: 0.25px;
 	flex-grow: 1;
@@ -17,17 +17,16 @@
 
 .searchInput:focus {
 	outline: none;
-	border: 1px solid #91a1f3;
 	box-shadow: var(--shadow-sm);
-	background-color: rgba(255, 255, 255, 0.5);
+	background-color: var(--inputBgFocus);
 }
 
 .searchInput:focus:not(.error) {
-	border: 1px solid #91a1f3;
+	border: 1px solid var(--borderColor);
 }
 
 .searchInput::placeholder {
-	color: var(--gray);
+	color: var(--gray-2);
 	font-size: 14px;
 }
 
