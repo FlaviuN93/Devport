@@ -43,8 +43,8 @@
 	--hoverColor2: var(--lightGray);
 	--buttonColor: var(--light);
 	--borderColor: var(--blueColor);
-	--inputBg: rgba(255, 255, 255, 0.4);
-	--inputBgFocus: rgba(255, 255, 255, 0.5);
+	--inputBg: rgba(255, 255, 255, 0.75);
+	--inputBgFocus: rgba(255, 255, 255, 0.85);
 	--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 	--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 	--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.12), 0 4px 6px -4px rgb(0 0 0 / 0.12);
@@ -59,8 +59,8 @@
 	--hoverColor2: var(--darkGray);
 	--buttonColor: var(--light-3);
 	--borderColor: var(--light-2);
-	--inputBg: rgba(0, 0, 0, 0.4);
-	--inputBgFocus: rgba(0, 0, 0, 0.5);
+	--inputBg: rgba(0, 0, 0, 0.45);
+	--inputBgFocus: rgba(0, 0, 0, 0.55);
 	--shadow-sm: 0 1px 2px 0 rgb(255, 255, 255/ 0.05);
 	--shadow-md: 0 4px 6px -1px rgb(255, 255, 255/ 0.1), 0 2px 4px -2px rgb(255, 255, 255/ 0.1);
 	--shadow-lg: 0 10px 15px -3px rgb(255, 255, 255/ 0.12), 0 4px 6px -4px rgb(255, 255, 255/ 0.12);
@@ -169,15 +169,14 @@ h6 {
 	padding: 0.75rem;
 	border-radius: 8px;
 	margin-bottom: 1rem;
-	background-color: var(--bgColor2);
+	background-color: var(--bgColor);
 	min-height: 100%;
-	border: 1px solid var(--hoverColor2);
+	border: 1px solid var(--bgColor3);
 	color: var(--themeColor);
 }
 
 .formSettingsContainer {
 	border: 1px solid var(--hoverColor2);
-	border-radius: 8px;
 	padding: 1rem;
 	background-color: var(--bgColor);
 	display: flex;
@@ -256,9 +255,6 @@ h6 {
 @media (min-width: 640px) {
 	h3 {
 		font-size: 1.2rem;
-	}
-	h4 {
-		font-size: 1.1rem;
 	}
 }
 

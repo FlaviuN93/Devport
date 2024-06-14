@@ -17,7 +17,7 @@
 	box-shadow: var(--shadow-sm);
 	transition: all 0.2s ease-in-out;
 	transform: translate(-1px);
-	color: var(--darkGray);
+	color: var(--black-3);
 	transition: all 0.2s ease;
 }
 

@@ -80,15 +80,17 @@ const CoverForm = () => {
 		<form onSubmit={handleSubmit(submitCoverFile)}>
 			{!coverUrl ? (
 				<>
-					<h2>Add cover photo</h2>
+					<h2 className='dark:text-light text-black3'>Add cover photo</h2>
 					<Divider />
-					<div className='flex justify-center bg-darkGray text-darkGray fill-darkGray'>
+					<div className='flex justify-center mb-2'>
 						<img src={addCoverImage} className=' w-full mobile:w-3/4 md:w-2/3' alt='Cover' />
 					</div>
-					<p className='text-center mb-4 text-lg font-medium'>Showcase your personality, interests, values or notable milestones </p>
-					<p className='text-center text-sm font-light'>
+					<p className='text-center mb-2 text-lg font-medium dark:text-light3 text-black3'>
+						Showcase your personality, interests, values or notable milestones{' '}
+					</p>
+					<p className='text-center text-sm font-light dark:text-light3 text-black3'>
 						A good cover photo should give your next employeer a good idea of who you are so
-						<span className='font-medium'> pick wisely.</span>
+						<span className='font-medium dark:text-light text-black'> pick wisely.</span>
 					</p>
 					<Divider />
 					<div className='flex flex-col w-full mobile:flex-row mobile:justify-end'>
@@ -108,7 +110,7 @@ const CoverForm = () => {
 				</>
 			) : (
 				<>
-					<h2>Edit Cover Photo</h2>
+					<h2 className='dark:text-light3 text-black3'>Edit Cover Photo</h2>
 					<Divider />
 					<div className={styles.cropperContainer}>
 						<Cropper
@@ -141,7 +143,7 @@ const CoverForm = () => {
 					<div className='flex flex-col gap-4 lgMobile:flex-row'>
 						<div className='md:w-1/2 w-full'>
 							<ModalOpen openedModalName='deleteCover'>
-								<Button buttonStyles='border-1 hover:bg-lightGray w-full md:w-auto' buttonText='Delete Photo' type='button' />
+								<Button buttonStyles='border-1 text-black3 dark:text-light w-full md:w-auto' buttonText='Delete Photo' type='button' />
 							</ModalOpen>
 						</div>
 						<div className='w-full flex flex-col gap-2 justify-end md:flex-row md:w-1/2'>

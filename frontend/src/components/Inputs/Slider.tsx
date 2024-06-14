@@ -32,11 +32,11 @@ const Slider: FC<ISlider> = ({
 
 	return (
 		<div className='w-full'>
-			<label className='font-medium mb-2' htmlFor='slider'>
+			<label className='font-semibold mb-2 dark:text-light text-black3' htmlFor='slider'>
 				{label}
 			</label>
 			<div className={sliderContainerClasses}>
-				{leftIcon && <span>{leftIcon}</span>}
+				{leftIcon && <span className='dark:text-light3 text-black3'>{leftIcon}</span>}
 				<input
 					id='slider'
 					type='range'
@@ -48,7 +48,7 @@ const Slider: FC<ISlider> = ({
 					aria-labelledby={label}
 					onChange={(e: ChangeEvent<HTMLInputElement>) => onSliderChange(+e.target.value)}
 				/>
-				{rightIcon && <span>{rightIcon}</span>}
+				{rightIcon && <span className='dark:text-light3 text-black3'>{rightIcon}</span>}
 			</div>
 		</div>
 	)

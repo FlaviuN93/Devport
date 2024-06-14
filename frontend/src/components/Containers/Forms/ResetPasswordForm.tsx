@@ -92,8 +92,10 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 					<PasswordValidation key={error.type} isActive={error.isActive} type={error.type} />
 				))}
 			</div>
-			<div className='flex gap-2 flex-col mobile:flex-row mobile:justify-end'>
-				{showCancelBtn && <Button type='button' variant='transparent' buttonText='Cancel' onClick={() => close()} />}
+			<div className='flex gap-2 mt-2 flex-col mobile:flex-row mobile:justify-end'>
+				{showCancelBtn && (
+					<Button type='button' buttonStyles='bg-light dark:text-light dark:bg-gray2' buttonText='Cancel' onClick={() => close()} />
+				)}
 				<Button
 					buttonText={buttonName}
 					type='submit'

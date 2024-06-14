@@ -3,7 +3,7 @@ import PageNav from '../Containers/PageNav'
 
 const AppLayout = () => {
 	return (
-		<section className='flex flex-col justify-center items-center gap-10 dark:bg-black'>
+		<section className='flex flex-col gap-10 items-center min-h-screen bg-light2 dark:bg-black'>
 			<PageNav />
 			<Outlet />
 		</section>

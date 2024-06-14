@@ -81,10 +81,10 @@ const AvatarForm = () => {
 		<form onSubmit={handleSubmit(submitAvatarFile)}>
 			{!avatarUrl ? (
 				<>
-					<h2>Add profile photo</h2>
+					<h2 className='dark:text-light text-black3'>Add profile photo</h2>
 					<Divider />
 					<div className='flex flex-col gap-4'>
-						<p className='text-center mb-4 text-lg font-medium'>Choose a profile photo that represents you</p>
+						<p className='text-center mb-4 text-lg font-medium dark:text-light3 text-black3'>Choose a profile photo that represents you</p>
 						<div className='flex justify-center gap-3'>
 							<Avatar
 								avatarStyles='h-32 w-32 shadow-lg'
@@ -95,9 +95,9 @@ const AvatarForm = () => {
 								imageUrl='https://liakrqgjvgqicvzrakra.supabase.co/storage/v1/object/public/avatars/defaultAvatar2.png'
 							/>
 						</div>
-						<p className='text-center text-sm font-light'>
-							Make a lasting impression! A professional and friendly headshot is <span className='font-medium'>essential</span> to standing
-							out from the crowd.
+						<p className='text-center text-sm font-light dark:text-light3 text-black3'>
+							Make a lasting impression! A professional and friendly headshot is{' '}
+							<span className='font-medium dark:text-light text-black'>essential</span> to standing out from the crowd.
 						</p>
 					</div>
 					<Divider />
@@ -118,7 +118,7 @@ const AvatarForm = () => {
 				</>
 			) : (
 				<>
-					<h2>Edit Profile Photo</h2>
+					<h2 className='dark:text-light text-black3'>Edit Profile Photo</h2>
 					<Divider />
 					<div className={styles.avatarContainer}>
 						<Cropper
