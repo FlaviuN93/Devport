@@ -169,7 +169,7 @@ h6 {
 	padding: 0.75rem;
 	border-radius: 8px;
 	margin-bottom: 1rem;
-	background-color: var(--bgColor);
+	background-color: var(--bgColor2);
 	min-height: 100%;
 	border: 1px solid var(--bgColor3);
 	color: var(--themeColor);
@@ -177,6 +177,7 @@ h6 {
 
 .formSettingsContainer {
 	border: 1px solid var(--hoverColor2);
+	border-top: none;
 	padding: 1rem;
 	background-color: var(--bgColor);
 	display: flex;

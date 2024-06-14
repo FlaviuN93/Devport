@@ -6,10 +6,13 @@ import { useUserContext } from '../../contexts/contextHooks'
 import { CameraIcon, PencilIcon } from '@heroicons/react/24/solid'
 import useSuccess from '../../hooks/useSuccess'
 import { useDeleteMyCover } from '../../services/queries'
+import { addCoverImage } from '../../utils/variables'
+import useLoadImage from '../../hooks/useLoadImage'
 
 const CoverModal = () => {
 	const { isPending: isCoverPending, isSuccess: isCoverSuccess, mutate: deleteCover, reset: resetCover } = useDeleteMyCover()
 	const { user: loggedUser, removeCover } = useUserContext()
+	const isImageLoaded = useLoadImage(addCoverImage)
 	useSuccess(isCoverPending, isCoverSuccess, resetCover)
 
 	return (
@@ -21,9 +24,11 @@ const CoverModal = () => {
 					icon={loggedUser.coverURL ? <PencilIcon className='h-6 w-6 text-gray' /> : <CameraIcon className='h-6 w-6 text-gray' />}
 				/>
 			</ModalOpen>
-			<ModalWindow modalName='addCoverModal' modalWindowStyles='max-w-[850px]'>
-				<CoverForm />
-			</ModalWindow>
+			{isImageLoaded && (
+				<ModalWindow modalName='addCoverModal' modalWindowStyles='max-w-[850px]'>
+					<CoverForm />
+				</ModalWindow>
+			)}
 
 			<ModalWindow modalName='deleteCover' modalWindowStyles='max-w-[500px]'>
 				<DeleteModal

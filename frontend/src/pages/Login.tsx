@@ -27,7 +27,7 @@ const Login = () => {
 		if (isSuccess && !isPending) {
 			handleSetUser(data.user)
 			handleIsLoggedIn()
-			navigate('/app/profile-settings', { replace: true })
+			navigate('/app/my-portfolio', { replace: true })
 		}
 	}, [navigate, isSuccess, data?.user, handleSetUser, handleIsLoggedIn, isPending])
 

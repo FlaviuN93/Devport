@@ -11,7 +11,7 @@ import DarkModeToggle from '../Utilities/DarkModeToggle'
 
 const PageNav = () => {
 	const { user: loggedUser, handleLogoutUser } = useUserContext()
-	const { themeMode } = useDarkModeContext()
+	const { themeMode, clearDarkMode } = useDarkModeContext()
 	const { isPending, isSuccess, mutate: logout } = useLogout()
 
 	const showAccount = loggedUser.avatarURL && loggedUser.fullName && loggedUser.jobTitle
@@ -20,9 +20,10 @@ const PageNav = () => {
 	const navContainerClasses = `${themeMode === 'dark' ? 'bg-[#000]/50' : 'bg-light3/50'} ${styles.navContainer}`
 	const dropdownToggleClasses = `${themeMode === 'dark' ? 'bg-darkGray/50' : 'bg-light/50'}  ${styles.dropdownToggleStyles}`
 
-	const handleLogout = () => {
-		handleLogoutUser()
-		navigate('/auth/login', { replace: true })
+	const handleLogout = async () => {
+		await handleLogoutUser()
+		clearDarkMode()
+		navigate('/', { replace: true })
 	}
 
 	useSuccess(isPending, isSuccess, handleLogout)
@@ -42,32 +43,35 @@ const PageNav = () => {
 					/>
 					<DropdownMenu position='bottom' menuStyles='min-w-64'>
 						{showAccount && (
-							<DropdownItem itemStyles='cursor-default' closeOnClick={false}>
-								<div className='flex w-full items-center gap-4'>
-									<img src={avatarUrl} className='w-12 h-12 rounded-full' alt='' />
+							<>
+								<DropdownItem itemStyles='cursor-default' closeOnClick={false}>
+									<div className='flex w-full items-center gap-4 -my-2'>
+										<img src={avatarUrl} className='w-12 h-12 rounded-full border-[1px] border-light3 dark:border-gray-2' alt='' />
 
-									<div>
-										<h5>{loggedUser.fullName}</h5>
-										<p className='text-xs text-darkGray dark:text-light font-medium'>{loggedUser.jobTitle}</p>
+										<div>
+											<h5 className='text-darkGray dark:text-light'>{loggedUser.fullName}</h5>
+											<p className='text-xs text-darkGray dark:text-light font-medium'>{loggedUser.jobTitle}</p>
+										</div>
 									</div>
-								</div>
+								</DropdownItem>
 								<Divider />
-							</DropdownItem>
+							</>
 						)}
-						<h6 className='text-start dark:text-light3 mb-3'>Account</h6>
-						<Link to={'profile-settings'}>
+
+						<h6 className='text-start dark:text-light3 text-darkGray text-normal font-medium mb-3'>Account</h6>
+						<Link to={'/app/profile-settings'}>
 							<DropdownItem itemId='2'>
 								<UserCircleIcon className='h-6 w-6 ' />
 								<span>Profile Settings</span>
 							</DropdownItem>
 						</Link>
-						<Link to={'project-settings'}>
+						<Link to={'/app/project-settings'}>
 							<DropdownItem itemId='3'>
 								<SquaresPlusIcon className='h-6 w-6' />
 								<span>Project Settings</span>
 							</DropdownItem>
 						</Link>
-						<Link to={'my-portfolio'}>
+						<Link to={'/app/my-portfolio'}>
 							<DropdownItem itemId='4'>
 								<BookOpenIcon className='h-6 w-6 ' />
 								<span>My Portfolio</span>

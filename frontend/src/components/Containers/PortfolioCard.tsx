@@ -18,14 +18,16 @@ const PortfolioCard: FC<{ projects: Project[] | undefined; clipBoardBtn?: ReactN
 					<h3 className='font-semibold text-[2rem] text-black dark:text-light'>{loggedUser?.fullName || 'Full Name'}</h3>
 					<h6 className='font-medium text-violet text-xl mt-2'>{loggedUser?.jobTitle || 'Your job description'}</h6>
 				</div>
-				<Link to={'/app/profile-settings'}>
-					<Button
-						buttonText='Edit Profile'
-						buttonStyles='bg-darkViolet text-light px-2.5 py-2 w-full text-sm'
-						icon={<PencilSquareIcon className='h-5 w-5' />}
-						iconPos='right'
-					/>
-				</Link>
+				{clipBoardBtn && (
+					<Link to={'/app/profile-settings'}>
+						<Button
+							buttonText='Edit Profile'
+							buttonStyles='bg-darkViolet text-light px-2.5 py-2 w-full text-sm'
+							icon={<PencilSquareIcon className='h-5 w-5' />}
+							iconPos='right'
+						/>
+					</Link>
+				)}
 			</div>
 
 			<div className='flex gap-4'>

@@ -6,11 +6,14 @@ import { useUserContext } from '../../contexts/contextHooks'
 import useSuccess from '../../hooks/useSuccess'
 import { useDeleteMyAvatar } from '../../services/queries'
 import { UserIcon } from '@heroicons/react/24/solid'
+import useLoadImage from '../../hooks/useLoadImage'
+import { defaultAvatarImages } from '../../utils/variables'
 
 const AvatarModal = () => {
 	const { user: loggedUser, removeAvatar } = useUserContext()
 	const { isPending: isAvatarPending, isSuccess: isAvatarSuccess, mutate: deleteAvatar, reset: resetAvatar } = useDeleteMyAvatar()
 	const avatarUrl = loggedUser.avatarURL ? loggedUser.avatarURL : ''
+	const isImageLoaded = useLoadImage(defaultAvatarImages)
 	useSuccess(isAvatarPending, isAvatarSuccess, resetAvatar)
 
 	return (
@@ -23,9 +26,11 @@ const AvatarModal = () => {
 					icon={!loggedUser.avatarURL && <UserIcon className='h-20 w-20 text-gray2 dark:text-black3' />}
 				/>
 			</ModalOpen>
-			<ModalWindow modalName='addAvatarModal' modalWindowStyles='max-w-[650px] -mt-20'>
-				<AvatarForm />
-			</ModalWindow>
+			{isImageLoaded && (
+				<ModalWindow modalName='addAvatarModal' modalWindowStyles='max-w-[650px] -mt-20'>
+					<AvatarForm />
+				</ModalWindow>
+			)}
 			<ModalWindow modalName='deleteAvatarModal' modalWindowStyles='max-w-[500px]'>
 				<DeleteModal
 					title='Delete Profile Photo'

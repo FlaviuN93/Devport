@@ -22,7 +22,7 @@ export interface UserContextProps {
 	setEmail: (email: string) => void
 	removeCover: () => void
 	removeAvatar: () => void
-	handleLogoutUser: () => void
+	handleLogoutUser: () => Promise<any>
 	handleIsLoggedIn: () => void
 }
 
@@ -65,11 +65,14 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		setIsLoggedIn(true)
 	}
 
-	const handleLogoutUser = () => {
-		window.localStorage.removeItem('user')
-		window.localStorage.removeItem('isLoggedIn')
-		setUser(initialUser)
-		setIsLoggedIn(false)
+	const handleLogoutUser = (): Promise<any> => {
+		return new Promise((resolve: any) => {
+			window.localStorage.removeItem('user')
+			window.localStorage.removeItem('isLoggedIn')
+			setUser(initialUser)
+			setIsLoggedIn(false)
+			resolve()
+		})
 	}
 
 	return (

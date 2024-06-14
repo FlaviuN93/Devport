@@ -25,6 +25,7 @@ import PrivacyPolicy from './pages/InfoPages/PrivacyPolicy'
 import ContactUs from './pages/InfoPages/ContactUs'
 import PublicPortfolio from './pages/PublicPortfolio'
 import { DarkModeProvider } from './contexts/DarkModeContext'
+import ProtectAuthRoutes from './components/Utilities/ProtectAuthRoutes'
 
 function App() {
 	return (
@@ -37,7 +38,14 @@ function App() {
 							<Routes>
 								<Route path='/' element={<HomePage />} />
 								<Route path='/my-portfolio/:userId' element={<PublicPortfolio />} />
-								<Route path='/app/my-portfolio' element={<MyPortfolio />} />
+								<Route
+									path='/app/my-portfolio'
+									element={
+										<PrivateRoute>
+											<MyPortfolio />
+										</PrivateRoute>
+									}
+								/>
 								<Route
 									path='/app'
 									element={
@@ -50,7 +58,14 @@ function App() {
 									<Route path='profile-settings' element={<ProfileSettings />} />
 								</Route>
 
-								<Route path='/auth' element={<AuthLayout />}>
+								<Route
+									path='/auth'
+									element={
+										<ProtectAuthRoutes>
+											<AuthLayout />
+										</ProtectAuthRoutes>
+									}
+								>
 									<Route index element={<SignUp />} />
 									<Route path='login' element={<Login />} />
 									<Route path='forgot-password' element={<ForgotPassword />} />
