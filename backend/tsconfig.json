@@ -9,6 +9,24 @@
 		"outDir": "build",
 		"moduleResolution": "Bundler"
 	},
-	"include": ["src/**/*.ts"],
-	"files": ["src/global.d.ts"]
+	"include": ["api/**/*.ts"],
+	"files": ["api/global.d.ts"]
 }
+// {
+// 	"compilerOptions": {
+// 		"target": "ES2022",
+// 		"lib": ["dom", "dom.iterable", "esnext"],
+// 		"allowJs": true,
+// 		"skipLibCheck": true,
+// 		"esModuleInterop": true,
+// 		"strict": true,
+// 		"outDir": "build",
+// 		"module": "NodeNext",
+// 		"declaration": true,
+// 		"emitDeclarationOnly": true,
+// 		"allowImportingTsExtensions": true,
+// 		"moduleResolution": "NodeNext"
+// 	},
+// 	"include": ["api/**/*.ts"],
+// 	"files": ["api/global.d.ts"]
+// }

@@ -1,10 +1,10 @@
 import { z } from 'zod'
 import bcrypt from 'bcrypt'
-import supabase from '../services/supabase'
-import { updateUserSchema } from '../services/routeSchema'
-import AppError from '../utils/appError'
-import { removeUserColumns } from '../utils/functions'
-import { User, IDefault, IUser, IUserAndProjects, UserAndProjects, IAvatar, ICover } from './types'
+import supabase from '../services/supabase.ts'
+import { updateUserSchema } from '../services/routeSchema.ts'
+import AppError from '../utils/appError.ts'
+import { removeUserColumns } from '../utils/functions.ts'
+import { User, IDefault, IUser, IUserAndProjects, UserAndProjects, IAvatar, ICover } from './types.ts'
 
 export const getUserAndProjects = async (userId: string): Promise<IUserAndProjects | AppError> => {
 	const { data: userWithProjects, error } = await supabase.from('users').select(`*, projects(*)`).eq('id', userId).single()

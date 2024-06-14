@@ -1,5 +1,6 @@
-import multer from 'multer'
 import { NextFunction, Request, Response } from 'express'
+import multer from 'multer'
+import sharp from 'sharp'
 import {
 	deleteMyAvatar,
 	deleteMyCover,
@@ -9,13 +10,12 @@ import {
 	updateMyAvatar,
 	updateMyCover,
 	updateUser,
-} from '../models/userModel'
-import { patchAvatarSchema, patchCoverSchema, updateUserSchema } from '../services/routeSchema'
-import { catchAsync } from '../utils/errorFunctions'
-import AppError, { getSuccessMessage } from '../utils/appError'
-import { idSchema, passwordSchema } from '../services/baseSchema'
-import sharp from 'sharp'
-import { removeAvatarImage, removeCoverImage, updateAvatarImage, updateCoverImage } from '../models/imagesModel'
+} from '../models/userModel.ts'
+import { patchAvatarSchema, patchCoverSchema, updateUserSchema } from '../services/routeSchema.ts'
+import { catchAsync } from '../utils/errorFunctions.ts'
+import AppError, { getSuccessMessage } from '../utils/appError.ts'
+import { idSchema, passwordSchema } from '../services/baseSchema.ts'
+import { removeAvatarImage, removeCoverImage, updateAvatarImage, updateCoverImage } from '../models/imagesModel.ts'
 
 export const upload = multer({
 	storage: multer.memoryStorage(),

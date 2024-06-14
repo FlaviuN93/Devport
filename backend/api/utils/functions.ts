@@ -1,10 +1,10 @@
-import jwt, { JsonWebTokenError, NotBeforeError, TokenExpiredError } from 'jsonwebtoken'
-import AppError from './appError'
+import pkg from 'jsonwebtoken'
+import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import { NextFunction, Response } from 'express'
-import { array } from 'zod'
-import { CreateProject } from '../models/projectModel'
+import AppError from './appError.ts'
 
+const { JsonWebTokenError, NotBeforeError, TokenExpiredError } = pkg
 // Remove User Data that should not be returned
 export const removeUserColumns = <T extends { [key: string]: any }>(obj: T): T => {
 	if (obj.hasOwnProperty('password')) delete obj.password

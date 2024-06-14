@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"dev": "npx ts-node-dev src/server.ts",
-		"production": "NODE_ENV=production npx ts-node-dev src/server.ts"
+		"dev": "npx ts-node-dev api/index.ts",
+		"production": "NODE_ENV=production npx ts-node-dev api/index.ts"
 	},
 	"keywords": [],
 	"author": "",

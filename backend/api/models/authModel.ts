@@ -1,11 +1,11 @@
-import supabase from '../services/supabase'
-import AppError from '../utils/appError'
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 
-import { hasPasswordChanged, createPasswordResetToken, signToken, verifyToken, removeUserColumns } from '../utils/functions'
-import { IDefault, IRegisterUser, IUser, TokenPayload, User, UserRoles } from './types'
-import Email from '../utils/email'
+import supabase from '../services/supabase.ts'
+import AppError from '../utils/appError.ts'
+import { hasPasswordChanged, createPasswordResetToken, signToken, verifyToken, removeUserColumns } from '../utils/functions.ts'
+import { IDefault, IRegisterUser, IUser, TokenPayload, User, UserRoles } from './types.ts'
+import Email from '../utils/email.ts'
 
 export const registerUser = async (email: string, password: string): Promise<IRegisterUser | AppError> => {
 	const hashedPassword = await bcrypt.hash(password, 12)

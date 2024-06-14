@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
-import AppError from './appError'
 import { ZodError } from 'zod'
-import { isEmptyObject } from './functions'
 import { MulterError } from 'multer'
+import AppError from './appError.ts'
+import { isEmptyObject } from './functions.ts'
 
 const unknownErrorMessage = 'Something went wrong on our end. Please give us time to fix the problem.'
 // Helper Functions
@@ -25,9 +25,7 @@ const sendError = (err: AppError, res: Response, type: 'clientError' | 'serverEr
 
 const sendZodError = (err: ZodError, res: Response): void => {
 	const formattedErrors = err.flatten()
-	const errorMessage = isEmptyObject(formattedErrors.fieldErrors)
-		? formattedErrors.formErrors
-		: formattedErrors.fieldErrors
+	const errorMessage = isEmptyObject(formattedErrors.fieldErrors) ? formattedErrors.formErrors : formattedErrors.fieldErrors
 
 	res.status(400).json({
 		type: 'zodError',

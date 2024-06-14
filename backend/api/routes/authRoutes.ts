@@ -10,7 +10,7 @@ import {
 	resetPasswordHandler,
 	updatePasswordHandler,
 	userRolesHandler,
-} from '../controllers/authController'
+} from '../controllers/authController.ts'
 
 const authRouter = express.Router()
 

@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import multer from 'multer'
 import sharp from 'sharp'
-import { createProjectSchema } from '../services/routeSchema'
-import { catchAsync } from '../utils/errorFunctions'
-import { createMyProject, deleteMyProject, getMyProject, getMyProjects, getTechnologies, updateMyProject } from '../models/projectModel'
-import AppError, { getSuccessMessage } from '../utils/appError'
-import { idSchema } from '../services/baseSchema'
-import { removeProjectImage, updateProjectImage } from '../models/imagesModel'
+import { createProjectSchema } from '../services/routeSchema.ts'
+import { catchAsync } from '../utils/errorFunctions.ts'
+import { createMyProject, deleteMyProject, getMyProject, getMyProjects, getTechnologies, updateMyProject } from '../models/projectModel.ts'
+import AppError, { getSuccessMessage } from '../utils/appError.ts'
+import { idSchema } from '../services/baseSchema.ts'
+import { removeProjectImage, updateProjectImage } from '../models/imagesModel.ts'
 
 const upload = multer({
 	storage: multer.memoryStorage(),
