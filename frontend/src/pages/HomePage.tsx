@@ -9,7 +9,7 @@ const HomePage = () => {
 		<section className='relative w-screen h-screen overflow-hidden'>
 			<HomeImage />
 			<div className='flex flex-col px-6 md:px-9 laptop:px-12 pt-12 gap-8 desktop:gap-12'>
-				<LogoIcon iconStyles='w-[100px] h-[40px] tablet:w-[150px] tablet:h-[50px]' />
+				<LogoIcon iconStyles='w-[100px] h-[40px] tablet:w-[150px] tablet:h-[50px] ' />
 
 				<div className='flex flex-col gap-8 md:gap-6'>
 					<h4 className='text-violet font-medium text-lg laptop:text-xl'>SHOWCASE YOUR CODING MASTERY</h4>

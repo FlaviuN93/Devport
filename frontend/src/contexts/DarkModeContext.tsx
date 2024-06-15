@@ -35,6 +35,7 @@ export const DarkModeProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 	const clearDarkMode = () => {
 		window.localStorage.removeItem('themeMode')
+		setThemeMode('light')
 	}
 	return <DarkModeContext.Provider value={{ themeMode, setDarkMode, setLightMode, clearDarkMode }}>{children}</DarkModeContext.Provider>
 }

@@ -2,7 +2,7 @@ import pkg from 'jsonwebtoken'
 import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import { NextFunction, Response } from 'express'
-import AppError from './appError.ts'
+import AppError from './appError'
 
 const { JsonWebTokenError, NotBeforeError, TokenExpiredError } = pkg
 // Remove User Data that should not be returned

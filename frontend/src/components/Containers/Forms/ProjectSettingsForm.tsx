@@ -1,4 +1,4 @@
-import { XMarkIcon, PlusIcon, PhotoIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon, PlusIcon, PhotoIcon } from '@heroicons/react/24/outline'
 import { BiCloudUpload } from 'react-icons/bi'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
@@ -162,17 +162,11 @@ const ProjectSettingsForm = () => {
 				error={errors.description?.message}
 			/>
 			<div className='mb-2 flex flex-col w-full gap-4 mobile:flex-row mobile:justify-end'>
-				<Button
-					buttonText='Clear'
-					buttonStyles='text-black3 bg-light dark:bg-light3'
-					icon={<TrashIcon className='h-5 w-5' />}
-					onClick={handleResetForm}
-					iconPos='left'
-				/>
+				<Button buttonText='Cancel' buttonStyles='text-black3 bg-light dark:bg-light3' onClick={handleResetForm} iconPos='left' />
 				<Button
 					icon={<PlusIcon className='h-5 w-5' />}
 					iconPos='left'
-					buttonText={isProjectSelected ? 'Update' : 'Save'}
+					buttonText={isProjectSelected ? 'Update' : 'Add'}
 					buttonStyles='px-3'
 					variant='primary'
 					isLoading={isProjectSelected ? IsPendingUpdate : IsPendingCreate}

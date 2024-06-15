@@ -1,11 +1,11 @@
 import bcrypt from 'bcrypt'
 import crypto from 'crypto'
 
-import supabase from '../services/supabase.ts'
-import AppError from '../utils/appError.ts'
-import { hasPasswordChanged, createPasswordResetToken, signToken, verifyToken, removeUserColumns } from '../utils/functions.ts'
-import { IDefault, IRegisterUser, IUser, TokenPayload, User, UserRoles } from './types.ts'
-import Email from '../utils/email.ts'
+import supabase from '../services/supabase'
+import AppError from '../utils/appError'
+import { hasPasswordChanged, createPasswordResetToken, signToken, verifyToken, removeUserColumns } from '../utils/functions'
+import { IDefault, IRegisterUser, IUser, TokenPayload, User, UserRoles } from './types'
+import Email from '../utils/email'
 
 export const registerUser = async (email: string, password: string): Promise<IRegisterUser | AppError> => {
 	const hashedPassword = await bcrypt.hash(password, 12)
@@ -22,7 +22,6 @@ export const registerUser = async (email: string, password: string): Promise<IRe
 export const loginUser = async (email: string, loginPassword: string): Promise<IUser | AppError> => {
 	const { data: user } = await supabase.from('users').select('*').eq('email', email).single()
 	if (!user) return new AppError(400, `Your user credentials don't match. Try again.`)
-
 	const arePasswordsEqual = await bcrypt.compare(loginPassword, user.password)
 	if (!arePasswordsEqual) return new AppError(401, `Hmm, your user credentials don't match. Try again`)
 

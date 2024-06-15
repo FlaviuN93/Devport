@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
 import multer from 'multer'
 import sharp from 'sharp'
-import { createProjectSchema } from '../services/routeSchema.ts'
-import { catchAsync } from '../utils/errorFunctions.ts'
-import { createMyProject, deleteMyProject, getMyProject, getMyProjects, getTechnologies, updateMyProject } from '../models/projectModel.ts'
-import AppError, { getSuccessMessage } from '../utils/appError.ts'
-import { idSchema } from '../services/baseSchema.ts'
-import { removeProjectImage, updateProjectImage } from '../models/imagesModel.ts'
+import { createProjectSchema } from '../services/routeSchema'
+import { catchAsync } from '../utils/errorFunctions'
+import { createMyProject, deleteMyProject, getMyProject, getMyProjects, getTechnologies, updateMyProject } from '../models/projectModel'
+import AppError, { getSuccessMessage } from '../utils/appError'
+import { idSchema } from '../services/baseSchema'
+import { removeProjectImage, updateProjectImage } from '../models/imagesModel'
 
 const upload = multer({
 	storage: multer.memoryStorage(),
@@ -22,7 +22,7 @@ export const uploadProjectImage = upload.single('imageFile')
 export const resizeProjectImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
 
-	const reSizedBuffer = await sharp(req.file.buffer).resize(1200, 800, { fit: 'inside' }).toFormat('png').toBuffer()
+	const reSizedBuffer = await sharp(req.file.buffer).resize(1200, 800, { fit: 'inside' }).withMetadata().toFormat('png').toBuffer()
 
 	req.file.buffer = reSizedBuffer
 	req.file.mimetype = 'image/png'

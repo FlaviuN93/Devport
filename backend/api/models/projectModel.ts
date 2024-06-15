@@ -1,8 +1,8 @@
 import { z } from 'zod'
-import { createProjectSchema } from '../services/routeSchema.ts'
-import supabase from '../services/supabase.ts'
-import AppError from '../utils/appError.ts'
-import { IDefault, IProjects, IProject, ITechnologies } from './types.ts'
+import { createProjectSchema } from '../services/routeSchema'
+import supabase from '../services/supabase'
+import AppError from '../utils/appError'
+import { IDefault, IProjects, IProject, ITechnologies } from './types'
 
 export const getTechnologies = async (): Promise<ITechnologies | AppError> => {
 	const { data: technologies, error, status } = await supabase.from('technologies').select('id,name')

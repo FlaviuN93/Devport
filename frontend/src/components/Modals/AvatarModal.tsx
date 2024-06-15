@@ -23,6 +23,7 @@ const AvatarModal = () => {
 					avatarStyles='h-40 w-40 absolute -mt-20 z-50 bg-light3 dark:bg-darkGray shadow-md'
 					role='button'
 					imageUrl={avatarUrl}
+					showEditIcon={true}
 					icon={!loggedUser.avatarURL && <UserIcon className='h-20 w-20 text-gray2 dark:text-black3' />}
 				/>
 			</ModalOpen>

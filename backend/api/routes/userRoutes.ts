@@ -1,5 +1,5 @@
 import express from 'express'
-import { protectHandler, userRolesHandler } from '../controllers/authController.ts'
+import { protectHandler, userRolesHandler } from '../controllers/authController'
 import {
 	deleteMeHandler,
 	deleteMyAvatarHandler,
@@ -12,7 +12,7 @@ import {
 	updateMyAvatarHandler,
 	updateMyCoverHandler,
 	upload,
-} from '../controllers/userController.ts'
+} from '../controllers/userController'
 
 const userRouter = express.Router()
 

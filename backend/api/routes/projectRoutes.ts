@@ -1,6 +1,6 @@
 import express from 'express'
 
-import { protectHandler, userRolesHandler } from '../controllers/authController.ts'
+import { protectHandler, userRolesHandler } from '../controllers/authController'
 import {
 	createMyProjectData,
 	getMyProjectsData,
@@ -10,7 +10,7 @@ import {
 	getTechnologiesData,
 	uploadProjectImage,
 	resizeProjectImage,
-} from '../controllers/projectController.ts'
+} from '../controllers/projectController'
 
 const projectRouter = express.Router()
 

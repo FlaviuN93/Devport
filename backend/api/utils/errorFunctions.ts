@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import { ZodError } from 'zod'
 import { MulterError } from 'multer'
-import AppError from './appError.ts'
-import { isEmptyObject } from './functions.ts'
+import AppError from './appError'
+import { isEmptyObject } from './functions'
 
 const unknownErrorMessage = 'Something went wrong on our end. Please give us time to fix the problem.'
 // Helper Functions

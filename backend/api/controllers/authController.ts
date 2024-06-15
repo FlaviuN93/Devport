@@ -1,13 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
-import { checkResetToken, forgotPassword, loginUser, protect, registerUser, resetPassword, updatePassword } from '../models/authModel.ts'
+import { checkResetToken, forgotPassword, loginUser, protect, registerUser, resetPassword, updatePassword } from '../models/authModel'
 
-import Email from '../utils/email.ts'
-import { catchAsync } from '../utils/errorFunctions.ts'
-import { authSchema, contactUsSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema.ts'
-import AppError, { getSuccessMessage } from '../utils/appError.ts'
-import { sendTokenByCookie } from '../utils/functions.ts'
-import { UserRoles } from '../models/types.ts'
-import { stringSchema } from '../services/baseSchema.ts'
+import Email from '../utils/email'
+import { catchAsync } from '../utils/errorFunctions'
+import { authSchema, contactUsSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
+import AppError, { getSuccessMessage } from '../utils/appError'
+import { sendTokenByCookie } from '../utils/functions'
+import { UserRoles } from '../models/types'
+import { stringSchema } from '../services/baseSchema'
 
 // Have to come up with a default image avatar for when the user first registers and assign it to the user on the
 // supabase database.

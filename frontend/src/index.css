@@ -23,7 +23,7 @@
 	--blueColor: #91a1f3;
 	--darkBlue: #111823;
 	--error: #ab1b1b;
-	--backdropColor: rgba(255, 255, 255, 0.2);
+	--backdropColor: rgba(0, 0, 0, 0.4);
 
 	font-family: Inter, sans-serif;
 
@@ -177,7 +177,6 @@ h6 {
 
 .formSettingsContainer {
 	border: 1px solid var(--hoverColor2);
-	border-top: none;
 	padding: 1rem;
 	background-color: var(--bgColor);
 	display: flex;

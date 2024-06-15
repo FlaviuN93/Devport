@@ -17,18 +17,10 @@ interface IResetPasswordForm {
 	passwordLabel?: string
 	confirmLabel?: string
 	formStyles?: TailwindClasses
-	buttonStyles?: TailwindClasses
 	showCancelBtn?: boolean
 }
 
-const ResetPasswordForm: FC<IResetPasswordForm> = ({
-	passwordLabel,
-	confirmLabel,
-	formStyles,
-	buttonName,
-	buttonStyles,
-	showCancelBtn = false,
-}) => {
+const ResetPasswordForm: FC<IResetPasswordForm> = ({ passwordLabel, confirmLabel, formStyles, buttonName, showCancelBtn = false }) => {
 	const {
 		handleSubmit,
 		register,
@@ -99,7 +91,8 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({
 				<Button
 					buttonText={buttonName}
 					type='submit'
-					buttonStyles={buttonStyles}
+					variant='primary'
+					buttonStyles='w-full mobile:w-auto'
 					isLoading={isResetLoading || isChangeLoading}
 					icon={<CheckCircleIcon className='h-5 w-5' />}
 				/>

@@ -1,4 +1,4 @@
-import { emailSchema, passwordSchema, descriptionSchema, nameSchema, urlSchema, bioSchema, jobSchema } from './baseSchema.ts'
+import { emailSchema, passwordSchema, descriptionSchema, nameSchema, urlSchema, bioSchema, jobSchema } from './baseSchema'
 import { z } from 'zod'
 
 // Auth Schema

@@ -10,16 +10,17 @@ import {
 	updateMyAvatar,
 	updateMyCover,
 	updateUser,
-} from '../models/userModel.ts'
-import { patchAvatarSchema, patchCoverSchema, updateUserSchema } from '../services/routeSchema.ts'
-import { catchAsync } from '../utils/errorFunctions.ts'
-import AppError, { getSuccessMessage } from '../utils/appError.ts'
-import { idSchema, passwordSchema } from '../services/baseSchema.ts'
-import { removeAvatarImage, removeCoverImage, updateAvatarImage, updateCoverImage } from '../models/imagesModel.ts'
+} from '../models/userModel'
+import { patchAvatarSchema, patchCoverSchema, updateUserSchema } from '../services/routeSchema'
+import { catchAsync } from '../utils/errorFunctions'
+import AppError, { getSuccessMessage } from '../utils/appError'
+import { idSchema, passwordSchema } from '../services/baseSchema'
+import { removeAvatarImage, removeCoverImage, updateAvatarImage, updateCoverImage } from '../models/imagesModel'
 
 export const upload = multer({
 	storage: multer.memoryStorage(),
 	fileFilter: (req, file, cb) => {
+		console.log(req.file, file, 'multer')
 		const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 		if (ACCEPTED_IMAGE_TYPES.includes(file.mimetype)) cb(null, true)
 		else cb(new AppError(400, 'Uploaded file is not a supported image format'))
@@ -29,8 +30,8 @@ export const upload = multer({
 
 export const resizeAvatarImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
-
-	const resizedBuffer = await sharp(req.file.buffer).resize(720, 720).toFormat('png').toBuffer()
+	console.log(req.file, 'helloFRomFile')
+	const resizedBuffer = await sharp(req.file.buffer).resize(720, 720).withMetadata().toFormat('png').toBuffer()
 	req.file.buffer = resizedBuffer
 	req.file.mimetype = 'image/png'
 	req.file.filename = `avatar-${req.userId}-${Date.now()}.png`
@@ -41,7 +42,7 @@ export const resizeAvatarImage = catchAsync(async (req: Request, res: Response, 
 export const resizeCoverImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
 
-	const resizedBuffer = await sharp(req.file.buffer).resize(1600, 400).toFormat('png').toBuffer()
+	const resizedBuffer = await sharp(req.file.buffer).resize(1600, 400).withMetadata().toFormat('png').toBuffer()
 	req.file.buffer = resizedBuffer
 	req.file.mimetype = 'image/png'
 	req.file.filename = `cover-${req.userId}-${Date.now()}.png`

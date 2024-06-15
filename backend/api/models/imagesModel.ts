@@ -1,6 +1,6 @@
-import supabase from '../services/supabase.ts'
-import AppError from '../utils/appError.ts'
-import { splitStringByPattern } from '../utils/functions.ts'
+import supabase from '../services/supabase'
+import AppError from '../utils/appError'
+import { splitStringByPattern } from '../utils/functions'
 
 export const addProjectImage = async (file: Express.Multer.File): Promise<string | AppError> => {
 	const { data: url, error } = await supabase.storage
