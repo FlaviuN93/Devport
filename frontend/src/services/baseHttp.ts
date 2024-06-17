@@ -1,7 +1,7 @@
 import axios, { AxiosError, Method } from 'axios'
 import { HttpParamsType } from './types'
 
-const instance = axios.create({
+export const axiosApiInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_DOMAIN,
 	withCredentials: true,
 	timeout: 5000,
@@ -9,7 +9,7 @@ const instance = axios.create({
 
 const request = async <D, B = undefined>(method: Method, url: string, paramsData?: HttpParamsType<B>): Promise<D> => {
 	try {
-		const { data } = await instance.request<D>({
+		const { data } = await axiosApiInstance.request<D>({
 			method,
 			url,
 			data: paramsData?.body,

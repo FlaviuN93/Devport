@@ -3,10 +3,11 @@ import {
 	checkResetTokenHandler,
 	contactUsHandler,
 	forgotPasswordHandler,
-	githubSignInHandler,
+	githubAccessTokenHandler,
 	loginUserHandler,
 	logoutMeHandler,
 	protectHandler,
+	refreshTokenHandler,
 	registerUserHandler,
 	resetPasswordHandler,
 	updatePasswordHandler,
@@ -18,10 +19,11 @@ const authRouter = express.Router()
 authRouter.route('/contactUs').post(contactUsHandler)
 authRouter.route('/register').post(registerUserHandler)
 authRouter.route('/login').post(loginUserHandler)
+authRouter.route('/refreshToken').get(refreshTokenHandler)
 authRouter.route('/logout').post(protectHandler, logoutMeHandler)
 authRouter.route('/forgotPassword').post(forgotPasswordHandler)
-authRouter.route('/changePassword').post(protectHandler, userRolesHandler('user'), updatePasswordHandler)
+authRouter.route('/updatePassword').post(protectHandler, userRolesHandler('user'), updatePasswordHandler)
 authRouter.route('/resetPassword/:resetToken').get(checkResetTokenHandler).patch(resetPasswordHandler)
-authRouter.route('/github/:accessToken').get(githubSignInHandler)
+authRouter.route('/github/:accessToken').get(githubAccessTokenHandler)
 
 export default authRouter

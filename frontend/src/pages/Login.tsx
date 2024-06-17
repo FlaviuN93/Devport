@@ -7,7 +7,7 @@ import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
 import { useGithubAccessToken, useLogin } from '../services/queries'
 import { useEffect } from 'react'
-import { useUserContext } from '../contexts/contextHooks'
+import { useAuthContext, useUserContext } from '../contexts/contextHooks'
 import { useSearchParams } from 'react-router-dom'
 import { BiLogoGithub } from 'react-icons/bi'
 
@@ -22,18 +22,20 @@ const Login = () => {
 	})
 	const { mutate: loginUser, isPending, isSuccess, data } = useLogin()
 	const { handleSetUser, handleIsLoggedIn } = useUserContext()
+	const { handleSetToken } = useAuthContext()
 	const githubUrl = `${import.meta.env.VITE_GITHUB_DOMAIN}?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}`
 	const navigate = useNavigate()
 	const [searchParams] = useSearchParams()
-	const { data: githubData, isSuccess: githubSuccess, isLoading: githubLoading } = useGithubAccessToken(searchParams.get('code') || '')
+	// const { data: githubData, isSuccess: githubSuccess, isLoading: githubLoading } = useGithubAccessToken(searchParams.get('code') || '')
 
 	useEffect(() => {
 		if (isSuccess && !isPending) {
 			handleSetUser(data.user)
+			handleSetToken(data.token as string)
 			handleIsLoggedIn()
 			navigate('/app/my-portfolio', { replace: true })
 		}
-	}, [navigate, isSuccess, data?.user, handleSetUser, handleIsLoggedIn, isPending])
+	}, [navigate, isSuccess, data?.user, handleSetUser, handleIsLoggedIn, isPending, handleSetToken, data?.token])
 
 	return (
 		<div className='formContainer'>

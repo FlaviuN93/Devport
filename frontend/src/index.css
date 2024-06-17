@@ -139,6 +139,7 @@ h6 {
 	gap: 1.5rem;
 	flex: 1 1 auto;
 	max-width: 400px;
+	min-width: 320px;
 }
 
 .borderWord {
@@ -268,6 +269,10 @@ h6 {
 		flex-direction: row;
 		justify-content: space-between;
 		padding: 2rem 1.5rem;
+	}
+
+	.formContainer {
+		min-width: 365px;
 	}
 }
 

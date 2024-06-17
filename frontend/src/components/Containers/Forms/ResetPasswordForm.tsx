@@ -7,7 +7,7 @@ import { FC, useEffect } from 'react'
 import { TailwindClasses } from '../../../utils/types'
 import Button from '../../UI/Button'
 import { useModalContext } from '../../../contexts/contextHooks'
-import { useChangePassword, useResetPassword } from '../../../services/queries'
+import { useUpdatePassword, useResetPassword } from '../../../services/queries'
 import { useNavigate, useParams } from 'react-router-dom'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import { catchPasswordErrors, useValidateResult } from '../../../utils/functions'
@@ -43,7 +43,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({ passwordLabel, confirmLabel
 	const { close } = useModalContext()
 	const { resetToken } = useParams()
 
-	const { isPending: isChangeLoading, mutate: changePassword, isSuccess: isChangeSuccess } = useChangePassword()
+	const { isPending: isChangeLoading, mutate: changePassword, isSuccess: isChangeSuccess } = useUpdatePassword()
 	const { isPending: isResetLoading, mutate: resetPassword, isSuccess: isResetSuccess } = useResetPassword(resetToken)
 
 	useEffect(() => {

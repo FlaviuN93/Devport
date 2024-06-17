@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
-	changePassword,
 	checkResetToken,
 	contactUs,
 	createMyProject,
@@ -23,11 +22,12 @@ import {
 	updateMyAvatar,
 	updateMyCover,
 	updateMyProject,
+	updatePassword,
 } from './api.requests'
 import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar, MessageUs, IRegisteredUser } from './types'
 import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
-import { updateValueFromStorage } from '../utils/functions'
+import { updateObjectFromStorage } from '../utils/functions'
 
 // User Queries and Mutations
 export const useGetMyUserId = () => useQuery<string, IDefaultError>({ queryKey: ['getMyUserId'], queryFn: getMyUserId })
@@ -45,14 +45,14 @@ export const useDeleteMyCover = () =>
 	useMutation<IDefaultSuccess, IDefaultError>({
 		mutationFn: deleteMyCover,
 		onSuccess: () => {
-			updateValueFromStorage({ key: 'user', keyToUpdate: 'coverURL', valueToUpdate: '' })
+			updateObjectFromStorage({ storageKey: 'user', objectKey: 'coverURL', valueToUpdate: '' })
 		},
 	})
 export const useDeleteMyAvatar = () =>
 	useMutation<IDefaultSuccess, IDefaultError>({
 		mutationFn: deleteMyAvatar,
 		onSuccess: () => {
-			updateValueFromStorage({ key: 'user', keyToUpdate: 'avatarURL', valueToUpdate: '' })
+			updateObjectFromStorage({ storageKey: 'user', objectKey: 'avatarURL', valueToUpdate: '' })
 		},
 	})
 
@@ -69,8 +69,6 @@ export const useGetUserAndProjects = (userId: string) =>
 		queryKey: ['getPortfolio', userId],
 		queryFn: () => getUserAndProjects(userId),
 	})
-
-export const useChangePassword = () => useMutation<IUser, IDefaultError, ResetPasswordType>({ mutationFn: changePassword })
 
 //Project Queries and Mutations
 
@@ -145,4 +143,6 @@ export const useContactUs = () =>
 	})
 
 export const useGithubAccessToken = (accessToken: string) =>
-	useQuery<any, IDefaultError>({ queryKey: ['github', 'accessToken'], queryFn: () => githubAccessToken(accessToken) })
+	useQuery<any, IDefaultError>({ queryKey: ['github', 'accessToken'], queryFn: () => githubAccessToken(accessToken), enabled: true })
+
+export const useUpdatePassword = () => useMutation<IUser, IDefaultError, ResetPasswordType>({ mutationFn: updatePassword })

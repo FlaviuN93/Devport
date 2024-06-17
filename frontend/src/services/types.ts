@@ -19,10 +19,12 @@ export interface IDefaultError {
 
 export interface IRegisteredUser extends IDefaultSuccess {
 	email: string
+	token: string
 }
 
 export interface IUser extends IDefaultSuccess {
 	user: User
+	token?: string
 }
 
 export interface IAvatar extends IDefaultSuccess {

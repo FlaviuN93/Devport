@@ -5,8 +5,8 @@ import { passwordSchema } from './schemas'
 import { ZodError } from 'zod'
 
 interface IUpdateStorage {
-	key: string
-	keyToUpdate: string
+	storageKey: string
+	objectKey: string
 	valueToUpdate: any
 }
 
@@ -14,7 +14,7 @@ export const getMessageForValidation = (messageKey: PasswordValidationType): str
 	const validationRules = {
 		lowerCase: 'Lowercase letter',
 		upperCase: 'Uppercase letter',
-		specialChar: 'Special character (!?<>@#$)',
+		specialChar: 'Special character (!?@#$)',
 		number: 'Number',
 		minLength: '8 characters or more',
 		maxLength: '20 caracters maximum',
@@ -27,19 +27,20 @@ export const getValueFromStorage = <T>(key: string, initialValue: T) => {
 	const item = window.localStorage.getItem(key)
 	if (!item) return initialValue
 
-	const data: T = item.startsWith('{') ? JSON.parse(item) : item
-
+	const data: T | string = item.startsWith('{') ? JSON.parse(item) : item
 	return data
 }
 
-export const updateValueFromStorage = (updateStorage: IUpdateStorage): void => {
+export const updateObjectFromStorage = (updateStorage: IUpdateStorage): void => {
 	if (typeof window.localStorage === 'undefined') console.log('localStorage is not supported')
-	const currentItem = window.localStorage.getItem(updateStorage.key)
+	const currentItem = window.localStorage.getItem(updateStorage.storageKey)
 	if (!currentItem) throw Error('Item from local storage does not exist')
 
-	const convertedItem = JSON.parse(currentItem)
-	convertedItem[updateStorage.keyToUpdate] = updateStorage.valueToUpdate
-	window.localStorage.setItem(updateStorage.key, JSON.stringify(convertedItem))
+	const convertedItem = currentItem.startsWith('{') ? JSON.parse(currentItem) : null
+	if (convertedItem === null) throw Error('Item from local storage is not an object')
+
+	convertedItem[updateStorage.objectKey] = updateStorage.valueToUpdate
+	window.localStorage.setItem(updateStorage.storageKey, JSON.stringify(convertedItem))
 }
 
 export const getImageFormat = (format: 'landscape' | 'cover', file: File) => {
@@ -104,8 +105,8 @@ export const useValidateResult = (errorTypes: string | string[]) => {
 	const passwordErrors = [
 		{ type: 'lowerCase', isActive: false },
 		{ type: 'upperCase', isActive: false },
-		{ type: 'specialChar', isActive: false },
 		{ type: 'number', isActive: false },
+		{ type: 'specialChar', isActive: false },
 		{ type: 'minLength', isActive: false },
 		{ type: 'maxLength', isActive: false },
 	]
