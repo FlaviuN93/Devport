@@ -35,7 +35,7 @@ const ClipBoardButton: FC<{ isPortfolioValid: boolean }> = ({ isPortfolioValid }
 			{!isPortfolioValid ? (
 				<div className='relative w-10 h-10 items-center flex'>
 					<InformationCircleIcon
-						className='h-5 w-5 text-darkGray opacity-75 cursor-pointer'
+						className='h-5 w-5 text-darkGray dark:text-light3 opacity-85 cursor-pointer'
 						onMouseOver={() => setShowTooltip(true)}
 						onMouseOut={() => setShowTooltip(false)}
 					/>

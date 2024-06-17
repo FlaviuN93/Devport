@@ -20,7 +20,6 @@ import { removeAvatarImage, removeCoverImage, updateAvatarImage, updateCoverImag
 export const upload = multer({
 	storage: multer.memoryStorage(),
 	fileFilter: (req, file, cb) => {
-		console.log(req.file, file, 'multer')
 		const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
 		if (ACCEPTED_IMAGE_TYPES.includes(file.mimetype)) cb(null, true)
 		else cb(new AppError(400, 'Uploaded file is not a supported image format'))
@@ -30,7 +29,7 @@ export const upload = multer({
 
 export const resizeAvatarImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
-	console.log(req.file, 'helloFRomFile')
+
 	const resizedBuffer = await sharp(req.file.buffer).resize(720, 720).withMetadata().toFormat('png').toBuffer()
 	req.file.buffer = resizedBuffer
 	req.file.mimetype = 'image/png'
@@ -42,7 +41,7 @@ export const resizeAvatarImage = catchAsync(async (req: Request, res: Response, 
 export const resizeCoverImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
 
-	const resizedBuffer = await sharp(req.file.buffer).resize(1600, 400).withMetadata().toFormat('png').toBuffer()
+	const resizedBuffer = await sharp(req.file.buffer).resize(1600, 400).keepExif().toFormat('png').toBuffer()
 	req.file.buffer = resizedBuffer
 	req.file.mimetype = 'image/png'
 	req.file.filename = `cover-${req.userId}-${Date.now()}.png`

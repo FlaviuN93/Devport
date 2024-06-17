@@ -6,11 +6,10 @@ import { catchAsync } from '../utils/errorFunctions'
 import { authSchema, contactUsSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { sendTokenByCookie } from '../utils/functions'
+import axios from 'axios'
 import { UserRoles } from '../models/types'
 import { stringSchema } from '../services/baseSchema'
 
-// Have to come up with a default image avatar for when the user first registers and assign it to the user on the
-// supabase database.
 export const registerUserHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { email, password } = await authSchema.parseAsync(req.body)
 
@@ -29,10 +28,20 @@ export const registerUserHandler = catchAsync(async (req: Request, res: Response
 	})
 })
 
+export const githubAccessTokenHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	console.log(req.query.code, 'queryCode Backend')
+	const params =
+		'?client_id=' + process.env.GITHUB_CLIENT_ID + '&client_secret=' + process.env.GITHUB_CLIENT_SECRET + '&code=' + req.query.code
+	const response = await axios.post('https://github.com/login/oauth/access_token' + params, undefined, {
+		headers: { Accept: 'application/json' },
+	})
+	console.log(response, 'responseFromAxiosPOst')
+})
+
 export const loginUserHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const { email, password } = await authSchema.parseAsync(req.body)
 	const response = await loginUser(email, password)
-
+	console.log(req.secure, 'hellloFROM LOGIN')
 	if (response instanceof AppError) return next(response)
 	const { user, token, statusCode, statusText = [] } = response
 	sendTokenByCookie(token, res, next)

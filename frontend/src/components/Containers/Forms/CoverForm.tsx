@@ -42,6 +42,7 @@ const CoverForm = () => {
 	const { isPending, isSuccess, data, mutate: updateCover } = useUpdateMyCover()
 
 	const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
+	const isDisabled = !!errors.coverFile?.message
 
 	useEffect(() => {
 		if (isSuccess && !isPending) {
@@ -68,12 +69,9 @@ const CoverForm = () => {
 		}
 
 		const formData = new FormData()
-		if (zoom > 1) {
-			const croppedFile = await getCroppedImg(coverUrl, croppedAreaPixels)
-			if (!croppedFile) return setError('coverFile', { message: 'There was an error cropping the image. Please try again.' })
-			formData.append('coverFile', croppedFile)
-		} else formData.append('coverFile', data.coverFile)
-
+		const croppedFile = await getCroppedImg(coverUrl, croppedAreaPixels)
+		if (!croppedFile) return setError('coverFile', { message: 'There was an error cropping the image. Please try a different image.' })
+		formData.append('coverFile', croppedFile)
 		updateCover(formData)
 	}
 	return (
@@ -83,7 +81,7 @@ const CoverForm = () => {
 					<h2 className='dark:text-light text-black3'>Add cover photo</h2>
 					<Divider />
 					<div className='flex justify-center mb-2'>
-						<img src={addCoverImage} className=' w-full mobile:w-3/4 md:w-2/3' alt='Cover' />
+						<img src={addCoverImage[0]} className=' w-full mobile:w-3/4 md:w-2/3' alt='Cover' />
 					</div>
 					<p className='text-center mb-2 text-lg font-medium dark:text-light3 text-black3'>
 						Showcase your personality, interests, values or notable milestones{' '}
@@ -164,9 +162,9 @@ const CoverForm = () => {
 								icon={<CheckIcon className='h-5 w-5' />}
 								buttonText='Apply'
 								isLoading={isPending}
-								disabled={!!errors.coverFile?.message}
+								disabled={isDisabled}
 								variant='primary'
-								buttonStyles={isEmpty ? 'opacity-75 transition-opacity duration-300' : 'opacity-100'}
+								buttonStyles={isEmpty || isDisabled ? 'opacity-75 transition-opacity duration-300' : 'opacity-100'}
 								type='submit'
 							/>
 						</div>

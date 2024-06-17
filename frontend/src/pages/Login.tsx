@@ -5,9 +5,10 @@ import { LoginType, loginSchema } from '../utils/schemas'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Text from '../components/Inputs/Text'
 import Password from '../components/Inputs/Password'
-import { useLogin } from '../services/queries'
+import { useGithubAccessToken, useLogin } from '../services/queries'
 import { useEffect } from 'react'
 import { useUserContext } from '../contexts/contextHooks'
+import { useSearchParams } from 'react-router-dom'
 import { BiLogoGithub } from 'react-icons/bi'
 
 const Login = () => {
@@ -21,7 +22,10 @@ const Login = () => {
 	})
 	const { mutate: loginUser, isPending, isSuccess, data } = useLogin()
 	const { handleSetUser, handleIsLoggedIn } = useUserContext()
+	const githubUrl = `${import.meta.env.VITE_GITHUB_DOMAIN}?client_id=${import.meta.env.VITE_GITHUB_CLIENT_ID}`
 	const navigate = useNavigate()
+	const [searchParams] = useSearchParams()
+	const { data: githubData, isSuccess: githubSuccess, isLoading: githubLoading } = useGithubAccessToken(searchParams.get('code') || '')
 
 	useEffect(() => {
 		if (isSuccess && !isPending) {
@@ -31,22 +35,21 @@ const Login = () => {
 		}
 	}, [navigate, isSuccess, data?.user, handleSetUser, handleIsLoggedIn, isPending])
 
-	const handleGithubSignup = () => {
-		console.log('Github')
-	}
-
 	return (
 		<div className='formContainer'>
 			<div>
 				<h1 className='mb-1'>Login to Account</h1>
 				<h6>Enter your credentials to access your account</h6>
 			</div>
-			<Button
-				onClick={handleGithubSignup}
-				buttonText='Sign In with Github'
-				buttonStyles='bg-darkBlue text-white'
-				icon={<BiLogoGithub className='h-6 w-6' />}
-			/>
+
+			<Link to={githubUrl} className='w-full'>
+				<Button
+					// onClick={handleGithubSignup}
+					buttonText='Sign In with Github'
+					buttonStyles='bg-darkBlue text-white w-full'
+					icon={<BiLogoGithub className='h-6 w-6' />}
+				/>
+			</Link>
 			<div className='borderWord'>or</div>
 
 			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => loginUser(data))} autoComplete='on'>

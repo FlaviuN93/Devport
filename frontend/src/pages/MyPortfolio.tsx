@@ -19,14 +19,14 @@ const MyPortfolio = () => {
 	const [isPortfolioValid, setIsPortfolioValid] = useState(false)
 
 	useEffect(() => {
-		if (!projects || !allValuesValid(loggedUser)) setIsPortfolioValid(false)
+		if (projects?.length === 0 || !allValuesValid(loggedUser)) setIsPortfolioValid(false)
 		else setIsPortfolioValid(true)
 	}, [loggedUser, projects])
 
 	if (isLoading) return <Loading />
 
 	return (
-		<section className='flex flex-col justify-center items-center gap-10'>
+		<section className='flex flex-col justify-center min-h-screen items-center gap-10'>
 			<PageNav />
 			<BackgroundImage />
 			<div className='portfolioContainer'>
@@ -47,7 +47,7 @@ const MyPortfolio = () => {
 					<AvatarModal />
 				</div>
 				<PortfolioCard projects={projects} clipBoardBtn={<ClipBoardButton isPortfolioValid={isPortfolioValid} />} />
-				<p className='self-center flex items-center mb-8 mt-2 gap-2'>
+				<p className='mt-auto self-center flex items-center mb-8 gap-2'>
 					<span className='font-light text-sm'>power by </span>
 					<LogoIcon width={75} />
 				</p>

@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import LogoIcon from '../UI/LogoIcon'
 import styles from './PageNav.module.css'
 import { Dropdown, Divider, DropdownItem, DropdownMenu, DropdownToggle } from '../UI/Dropdown'
-import { BookOpenIcon, SquaresPlusIcon, UserCircleIcon } from '@heroicons/react/24/outline'
+import { BookOpenIcon, SquaresPlusIcon, UserCircleIcon, UserIcon } from '@heroicons/react/24/outline'
 import { useDarkModeContext, useUserContext } from '../../contexts/contextHooks'
 import { useLogout } from '../../services/queries'
 import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/solid'
@@ -39,7 +39,7 @@ const PageNav = () => {
 					<DropdownToggle
 						btnStyles={dropdownToggleClasses}
 						imageUrl={avatarUrl}
-						icon={<UserCircleIcon className='h-7 w-7 dark:text-light3' />}
+						icon={<UserIcon className='h-7 w-7 text-darkGray dark:text-light3' />}
 					/>
 					<DropdownMenu position='bottom' menuStyles='min-w-64'>
 						{showAccount && (

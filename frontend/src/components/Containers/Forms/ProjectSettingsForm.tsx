@@ -26,7 +26,7 @@ const ProjectSettingsForm = () => {
 		setValue,
 		getValues,
 		reset,
-		formState: { errors },
+		formState: { errors, isDirty },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
 		defaultValues: initialProjectValue,
@@ -162,7 +162,13 @@ const ProjectSettingsForm = () => {
 				error={errors.description?.message}
 			/>
 			<div className='mb-2 flex flex-col w-full gap-4 mobile:flex-row mobile:justify-end'>
-				<Button buttonText='Cancel' buttonStyles='text-black3 bg-light dark:bg-light3' onClick={handleResetForm} iconPos='left' />
+				<Button
+					buttonText='Cancel'
+					disabled={!isDirty}
+					buttonStyles='text-black3 bg-light dark:bg-light3'
+					onClick={handleResetForm}
+					iconPos='left'
+				/>
 				<Button
 					icon={<PlusIcon className='h-5 w-5' />}
 					iconPos='left'

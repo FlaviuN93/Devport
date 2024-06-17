@@ -36,6 +36,7 @@ export const getTechnologies = () => get<Technology[]>('/projects/currentUser/te
 
 // Authentication Routes
 export const register = (body: SignupType) => post<IRegisteredUser, SignupType>('/auth/register', { body })
+export const githubAccessToken = (accessToken: string) => get<any>(`/auth/github/${accessToken}`)
 
 export const login = (body: LoginType) => post<IUser, LoginType>('/auth/login', { body })
 export const logout = () => post<IDefaultSuccess>('/auth/logout')

@@ -6,9 +6,9 @@ import './index.css'
 import { ErrorDisplay } from './components/UI/ErrorDisplay.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-	<React.StrictMode>
-		<ErrorBoundary FallbackComponent={ErrorDisplay} onReset={() => window.location.reload()}>
-			<App />
-		</ErrorBoundary>
-	</React.StrictMode>
+	// <React.StrictMode>
+	<ErrorBoundary FallbackComponent={ErrorDisplay} onReset={() => window.location.reload()}>
+		<App />
+	</ErrorBoundary>
+	// </React.StrictMode>
 )

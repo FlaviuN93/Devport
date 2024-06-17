@@ -14,6 +14,7 @@ import {
 	getMyUserId,
 	getTechnologies,
 	getUserAndProjects,
+	githubAccessToken,
 	login,
 	logout,
 	register,
@@ -142,3 +143,6 @@ export const useContactUs = () =>
 	useMutation<IDefaultSuccess, IDefaultError, MessageUs>({
 		mutationFn: contactUs,
 	})
+
+export const useGithubAccessToken = (accessToken: string) =>
+	useQuery<any, IDefaultError>({ queryKey: ['github', 'accessToken'], queryFn: () => githubAccessToken(accessToken) })

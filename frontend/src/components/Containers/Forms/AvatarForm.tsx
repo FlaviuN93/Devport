@@ -69,11 +69,9 @@ const AvatarForm = () => {
 		}
 
 		const formData = new FormData()
-		if (zoom > 1) {
-			const croppedFile = await getCroppedImg(avatarUrl, croppedAreaPixels)
-			if (!croppedFile) return setError('avatarFile', { message: 'There was an error cropping the image. Please try again.' })
-			formData.append('avatarFile', croppedFile)
-		} else formData.append('avatarFile', data.avatarFile)
+		const croppedFile = await getCroppedImg(avatarUrl, croppedAreaPixels)
+		if (!croppedFile) return setError('avatarFile', { message: 'There was an error cropping the image. Please try again.' })
+		formData.append('avatarFile', croppedFile)
 
 		updateAvatar(formData)
 	}
@@ -96,7 +94,7 @@ const AvatarForm = () => {
 							/>
 						</div>
 						<p className='text-center text-sm font-light dark:text-light3 text-black3'>
-							Make a lasting impression! A professional and friendly headshot is{' '}
+							Make a lasting impression! A professional and friendly headshot is
 							<span className='font-medium dark:text-light text-black'>essential</span> to standing out from the crowd.
 						</p>
 					</div>

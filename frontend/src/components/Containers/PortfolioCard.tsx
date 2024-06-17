@@ -69,8 +69,10 @@ const PortfolioCard: FC<{ projects: Project[] | undefined; clipBoardBtn?: ReactN
 					</Link>
 				)}
 			</div>
-			{projects ? (
-				projects.map((project) => (
+			{projects?.length === 0 ? (
+				<p className='text-lg font-medium text-darkGray dark:text-light'>You have no project added.</p>
+			) : (
+				projects?.map((project) => (
 					<ProjectCard
 						key={project.id}
 						projectId={project.id}
@@ -83,8 +85,6 @@ const PortfolioCard: FC<{ projects: Project[] | undefined; clipBoardBtn?: ReactN
 						cardState='presentation'
 					/>
 				))
-			) : (
-				<p className='text-lg font-medium text-darkGray dark:text-light'>You have no project added.</p>
 			)}
 		</>
 	)
