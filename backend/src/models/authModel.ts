@@ -124,13 +124,14 @@ export const resetPassword = async (newPassword: string, resetToken: string): Pr
 
 export const checkResetToken = async (resetToken: string): Promise<string | AppError> => {
 	const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex')
-	const { data: user } = await supabase
+	const { data: user, error } = await supabase
 		.from('users')
 		.select('id,resetToken')
 		.eq('resetToken', hashedToken)
 		.gt('resetTokenExpiresIn', Date.now())
 		.single()
-	if (!user) return new AppError(500, 'Reset token is invalid or has expired. Go to the forgot password page and start again.')
+
+	if (!user) return new AppError(400, 'Reset token is invalid or has expired.')
 	return 'Success'
 }
 

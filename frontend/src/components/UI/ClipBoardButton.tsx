@@ -43,11 +43,11 @@ const ClipBoardButton: FC<{ isPortfolioValid: boolean }> = ({ isPortfolioValid }
 						content='To share your portfolio link, please complete all profile details and add at least one project.'
 						position='right'
 						hoverTooltip={showTooltip}
-						tooltipStyles='bg-gray2 dark:bg-darkGray'
+						tooltipStyles='bg-darkGray'
 					/>
 				</div>
 			) : (
-				<span className='font-medium text-gray'>{copyMessage}</span>
+				<span className='font-medium text-light3'>{copyMessage}</span>
 			)}
 		</div>
 	)

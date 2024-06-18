@@ -52,8 +52,8 @@ const MyPortfolio = () => {
 				</div>
 				<PortfolioCard projects={projects} clipBoardBtn={<ClipBoardButton isPortfolioValid={isPortfolioValid} />} />
 				<p className='mt-auto self-center flex items-center mb-8 gap-2'>
-					<span className='font-light text-sm'>power by </span>
-					<LogoIcon width={75} />
+					<span className='font-light text-sm dark:text-light'>power by </span>
+					<LogoIcon width={85} />
 				</p>
 			</div>
 		</section>

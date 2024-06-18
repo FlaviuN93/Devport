@@ -86,12 +86,16 @@ export const forgotPasswordHandler = catchAsync(async (req: Request, res: Respon
 })
 
 export const checkResetTokenHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	console.log(req.params.resetToken, 'helloFromCheckReset')
 	const resetToken = stringSchema.parse(req.params.resetToken)
 	const response = await checkResetToken(resetToken)
 	if (response instanceof AppError) return next(response)
+
+	res.status(200).send('Success')
 })
 
 export const resetPasswordHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+	console.log('helloFromResetPassword')
 	const { password } = resetPasswordSchema.parse(req.body)
 	const response = await resetPassword(password, req.params.resetToken)
 

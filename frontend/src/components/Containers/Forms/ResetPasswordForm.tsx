@@ -47,6 +47,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({ passwordLabel, confirmLabel
 
 	const { isPending: isChangeLoading, mutate: changePassword } = useUpdatePassword()
 	const { isPending: isResetLoading, mutate: resetPassword } = useResetPassword(resetToken)
+	const buttonClasses = `${showCancelBtn ? 'w-full mobile:w-auto' : 'w-full'}`
 
 	const handleResetPassword: SubmitHandler<ResetPasswordType> = (data) => {
 		if (resetToken) return resetPassword(data, { onSuccess: () => navigate('/auth/login', { replace: true }) })
@@ -96,7 +97,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({ passwordLabel, confirmLabel
 					buttonText={buttonName}
 					type='submit'
 					variant='primary'
-					buttonStyles='w-full mobile:w-auto'
+					buttonStyles={buttonClasses}
 					isLoading={isResetLoading || isChangeLoading}
 					icon={<CheckCircleIcon className='h-5 w-5' />}
 				/>

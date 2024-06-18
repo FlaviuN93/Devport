@@ -132,8 +132,9 @@ export const useResetPassword = (resetToken: string | undefined) =>
 	useMutation<IDefaultSuccess, IDefaultError, ResetPasswordType>({
 		mutationFn: (body) => resetPassword(resetToken, body),
 	})
-export const useCheckResetToken = (resetToken: string | undefined) =>
-	useQuery<undefined, IDefaultError>({ queryKey: ['resetToken'], queryFn: () => checkResetToken(resetToken), enabled: !!resetToken })
+
+export const useCheckResetToken = () =>
+	useMutation<string, IDefaultError, string>({ mutationFn: (resetToken) => checkResetToken(resetToken) })
 
 export const useContactUs = () =>
 	useMutation<IDefaultSuccess, IDefaultError, MessageUs>({

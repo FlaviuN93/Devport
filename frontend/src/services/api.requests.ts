@@ -46,6 +46,6 @@ export const forgotPassword = (body: { email: string }) => post<IDefaultSuccess,
 export const resetPassword = (resetToken: string | undefined, body: ResetPasswordType) =>
 	patch<IDefaultSuccess, ResetPasswordType>(`/auth/resetPassword/${resetToken}`, { body })
 
-export const checkResetToken = (resetToken: string | undefined) => get<undefined>(`/auth/resetPassword/${resetToken}`)
+export const checkResetToken = (resetToken: string) => post<string>(`/auth/resetPassword/${resetToken}`)
 
 export const contactUs = (body: MessageUs) => post<IDefaultSuccess, MessageUs>('/auth/contactUs', { body })

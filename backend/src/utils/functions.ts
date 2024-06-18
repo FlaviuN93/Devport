@@ -48,7 +48,7 @@ export const isEmptyObject = (obj: Object<unknown>) => Object.keys(obj).length =
 export const createPasswordResetToken = (): PasswordResetTokenData => {
 	const resetToken = crypto.randomBytes(32).toString('hex')
 	const encryptedResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
-	const tokenExpiresIn = Date.now() + 10 * 60 * 1000
+	const tokenExpiresIn = Date.now() + 20 * 60 * 1000
 	return { resetToken, encryptedResetToken, tokenExpiresIn }
 }
 

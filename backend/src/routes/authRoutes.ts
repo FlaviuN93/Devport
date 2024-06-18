@@ -22,6 +22,6 @@ authRouter.route('/refreshToken').get(refreshTokenHandler)
 authRouter.route('/logout').post(logoutMeHandler)
 authRouter.route('/forgotPassword').post(forgotPasswordHandler)
 authRouter.route('/updatePassword').post(protectHandler, userRolesHandler('user'), updatePasswordHandler)
-authRouter.route('/resetPassword/:resetToken').get(checkResetTokenHandler).patch(resetPasswordHandler)
+authRouter.route('/resetPassword/:resetToken').post(checkResetTokenHandler).patch(resetPasswordHandler)
 
 export default authRouter
