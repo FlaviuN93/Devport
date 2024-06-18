@@ -13,7 +13,6 @@ import {
 	getMyUserId,
 	getTechnologies,
 	getUserAndProjects,
-	githubAccessToken,
 	login,
 	logout,
 	register,
@@ -37,7 +36,6 @@ export const useUpdateMe = () =>
 		mutationFn: updateMe,
 	})
 
-// export const useUpdateMyPortfolio = () => useMutation<IUser, IDefaultError, FormData>({ mutationFn: updateMyPortfolio })
 export const useUpdateMyCover = () => useMutation<ICover, IDefaultError, FormData>({ mutationFn: updateMyCover })
 export const useUpdateMyAvatar = () => useMutation<IAvatar, IDefaultError, FormData>({ mutationFn: updateMyAvatar })
 
@@ -82,7 +80,7 @@ export const useGetMyProject = (projectId: number) =>
 	useQuery<Project, IDefaultError>({
 		queryKey: ['myProject', projectId],
 		queryFn: () => getMyProject(projectId),
-		enabled: false,
+		enabled: !!projectId,
 	})
 
 export const useCreateMyProject = () =>
@@ -135,14 +133,11 @@ export const useResetPassword = (resetToken: string | undefined) =>
 		mutationFn: (body) => resetPassword(resetToken, body),
 	})
 export const useCheckResetToken = (resetToken: string | undefined) =>
-	useQuery<undefined, IDefaultError>({ queryKey: ['resetToken'], queryFn: () => checkResetToken(resetToken), enabled: true })
+	useQuery<undefined, IDefaultError>({ queryKey: ['resetToken'], queryFn: () => checkResetToken(resetToken), enabled: !!resetToken })
 
 export const useContactUs = () =>
 	useMutation<IDefaultSuccess, IDefaultError, MessageUs>({
 		mutationFn: contactUs,
 	})
 
-export const useGithubAccessToken = (accessToken: string) =>
-	useQuery<any, IDefaultError>({ queryKey: ['github', 'accessToken'], queryFn: () => githubAccessToken(accessToken), enabled: true })
-
-export const useUpdatePassword = () => useMutation<IUser, IDefaultError, ResetPasswordType>({ mutationFn: updatePassword })
+export const useUpdatePassword = () => useMutation<IDefaultSuccess, IDefaultError, ResetPasswordType>({ mutationFn: updatePassword })

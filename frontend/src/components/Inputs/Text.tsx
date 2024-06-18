@@ -42,11 +42,7 @@ const Text = <T extends FieldValues>({
 				{label}
 			</label>
 
-			<div
-				className='relative mt-1'
-				onMouseOver={() => setShowTooltip(true)}
-				onMouseOut={() => setShowTooltip(false)}
-			>
+			<div className='relative mt-1' onMouseOver={() => setShowTooltip(true)} onMouseOut={() => setShowTooltip(false)}>
 				{variant === 'input' ? (
 					<input
 						{...register?.(name)}
@@ -54,6 +50,7 @@ const Text = <T extends FieldValues>({
 						id={label}
 						placeholder={placeholder}
 						disabled={disabled}
+						autoComplete='on'
 						aria-placeholder={placeholder}
 						aria-describedby={`${uniqueId}-${name}`}
 						type='text'
@@ -65,6 +62,7 @@ const Text = <T extends FieldValues>({
 						className={textClasses}
 						id={label}
 						disabled={disabled}
+						autoComplete='on'
 						placeholder={placeholder}
 						aria-placeholder={placeholder}
 						aria-describedby={`${uniqueId}-${name}`}
@@ -74,12 +72,7 @@ const Text = <T extends FieldValues>({
 					/>
 				)}{' '}
 				{error && typeof error === 'string' && (
-					<Tooltip
-						position={isLaptop ? 'right' : 'bottom'}
-						content={error}
-						hoverTooltip={showTooltip}
-						tooltipStyles={tooltipStyles}
-					/>
+					<Tooltip position={isLaptop ? 'right' : 'bottom'} content={error} hoverTooltip={showTooltip} tooltipStyles={tooltipStyles} />
 				)}
 			</div>
 		</div>

@@ -40,21 +40,19 @@ export const loginUser = async (email: string, loginPassword: string): Promise<I
 	return { user: loginUser, accessToken, refreshToken, statusCode: 200, statusText: ['sign in', 'Welcome back'] }
 }
 
-export const updatePassword = async (password: string, userId: string): Promise<IUser | AppError> => {
+export const updatePassword = async (password: string, userId: string): Promise<IDefault | AppError> => {
 	const { data: user } = await supabase.from('users').select('*').eq('id', userId).single()
-	if (!user) return new AppError(404, 'User token has probably expired. Try to log in again.')
+	if (!user) return new AppError(403, 'User token has probably expired. Try again.')
+	const hashedPassword = await bcrypt.hash(password, 12)
 
-	const hashedPassword = bcrypt.hash(password, 12)
-	await supabase.from('users').update({ password: hashedPassword, passwordUpdatedAt: new Date().toISOString() }).eq('id', user.id)
+	const { error, status } = await supabase
+		.from('users')
+		.update({ password: hashedPassword, passwordUpdatedAt: new Date().toISOString() })
+		.eq('id', user.id)
 
-	const accessToken = signAccessToken(user.id)
-	const refreshToken = signRefreshToken(user.id)
-	const loginUser = removeUserColumns<User>(user)
+	if (error) return new AppError(status)
 
 	return {
-		user: loginUser,
-		accessToken,
-		refreshToken,
 		statusCode: 200,
 		statusText: ['update password', 'Your new password was updated successfully'],
 	}

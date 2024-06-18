@@ -26,6 +26,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({ passwordLabel, confirmLabel
 		register,
 		watch,
 		reset,
+		clearErrors,
 		formState: { errors },
 	} = useForm<ResetPasswordType>({
 		resolver: zodResolver(resetPasswordSchema),
@@ -36,6 +37,7 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({ passwordLabel, confirmLabel
 
 	const formClasses = `flex flex-col -mt-1 gap-4 ${formStyles}`
 	const watchPassword = watch('password')
+	const watchConfirmPassword = watch('confirmPassword')
 	const watchedErrors = catchPasswordErrors(watchPassword)
 	const passwordErrors = useValidateResult(watchedErrors)
 
@@ -43,21 +45,23 @@ const ResetPasswordForm: FC<IResetPasswordForm> = ({ passwordLabel, confirmLabel
 	const { close } = useModalContext()
 	const { resetToken } = useParams()
 
-	const { isPending: isChangeLoading, mutate: changePassword, isSuccess: isChangeSuccess } = useUpdatePassword()
-	const { isPending: isResetLoading, mutate: resetPassword, isSuccess: isResetSuccess } = useResetPassword(resetToken)
-
-	useEffect(() => {
-		if (!isResetLoading && isResetSuccess) setTimeout(() => navigate('/auth/login', { replace: true }), 500)
-		else if (!isChangeLoading && isChangeSuccess) {
-			reset()
-			setTimeout(() => close(), 500)
-		}
-	}, [isResetLoading, isResetSuccess, reset, isChangeLoading, isChangeSuccess, close, navigate])
+	const { isPending: isChangeLoading, mutate: changePassword } = useUpdatePassword()
+	const { isPending: isResetLoading, mutate: resetPassword } = useResetPassword(resetToken)
 
 	const handleResetPassword: SubmitHandler<ResetPasswordType> = (data) => {
-		if (resetToken) return resetPassword(data)
-		else changePassword(data)
+		if (resetToken) return resetPassword(data, { onSuccess: () => navigate('/auth/login', { replace: true }) })
+		else
+			changePassword(data, {
+				onSuccess: () => {
+					reset()
+					close()
+				},
+			})
 	}
+
+	useEffect(() => {
+		if (watchConfirmPassword === watchPassword) clearErrors('confirmPassword')
+	}, [clearErrors, watchPassword, watchConfirmPassword])
 
 	return (
 		<form className={formClasses} onSubmit={handleSubmit(handleResetPassword)}>

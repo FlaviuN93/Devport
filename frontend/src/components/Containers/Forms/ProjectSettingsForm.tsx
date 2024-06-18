@@ -14,7 +14,6 @@ import Avatar from '../../UI/Avatar'
 import Button from '../../UI/Button'
 import Text from '../../Inputs/Text'
 import FileInput from '../../Inputs/FileInput'
-import useSuccess from '../../../hooks/useSuccess'
 
 const initialProjectValue = { imageFile: null, demoURL: '', description: '', name: '', repositoryURL: '', technologies: [] }
 
@@ -32,25 +31,20 @@ const ProjectSettingsForm = () => {
 		defaultValues: initialProjectValue,
 	})
 
-	const { isProjectSelected, selectedProject, resetImageUrl, closeProject } = useProjectContext()
+	const { isProjectSelected, selectedProject, resetImageUrl, clearProject } = useProjectContext()
 	const { data: technologies } = useGetTechnologies()
 	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const resetMultiSelect = useRef<() => void>(() => {})
 	const url = getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile as File) : selectedProject.imageURL
 
-	const { isPending: IsPendingUpdate, mutate: updateMutation, isSuccess: isUpdateSuccess } = useUpdateMyProject(selectedProject.id)
-	const { isPending: IsPendingCreate, mutate: createMutation, isSuccess: isCreateSuccess } = useCreateMyProject()
+	const { isPending: IsPendingUpdate, mutate: updateMutation } = useUpdateMyProject(selectedProject.id)
+	const { isPending: IsPendingCreate, mutate: createMutation } = useCreateMyProject()
 
 	const handleResetForm = useCallback(() => {
 		reset(initialProjectValue)
-		resetImageUrl()
 		resetMultiSelect.current()
-		closeProject()
-	}, [reset, resetImageUrl, resetMultiSelect, closeProject])
-
-	// Reseting the form
-	useSuccess(IsPendingCreate, isCreateSuccess, handleResetForm)
-	useSuccess(IsPendingUpdate, isUpdateSuccess, handleResetForm)
+		clearProject()
+	}, [resetMultiSelect, reset, clearProject])
 
 	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
 	useEffect(() => {
@@ -74,8 +68,8 @@ const ProjectSettingsForm = () => {
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		const formData = Object.assign(data, { imageURL: null })
 		const projectFormData = convertToFormData(formData)
-		if (isProjectSelected) updateMutation(projectFormData)
-		else createMutation(projectFormData)
+		if (isProjectSelected) updateMutation(projectFormData, { onSuccess: handleResetForm })
+		else createMutation(projectFormData, { onSuccess: handleResetForm })
 	}
 
 	return (
@@ -165,7 +159,7 @@ const ProjectSettingsForm = () => {
 				<Button
 					buttonText='Cancel'
 					disabled={!isDirty}
-					buttonStyles='text-black3 bg-light dark:bg-light3'
+					buttonStyles='text-black3 bg-light dark:text-light dark:bg-light3'
 					onClick={handleResetForm}
 					iconPos='left'
 				/>

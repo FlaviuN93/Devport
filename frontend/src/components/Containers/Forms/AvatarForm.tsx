@@ -40,17 +40,9 @@ const AvatarForm = () => {
 	const [isImageSelected, setIsImageSelected] = useState(false)
 	const { close } = useModalContext()
 
-	const { isPending, isSuccess, data, mutate: updateAvatar } = useUpdateMyAvatar()
+	const { isPending, mutate: updateAvatar } = useUpdateMyAvatar()
 
 	const avatarFile = getValues().avatarFile && !errors.avatarFile ? URL.createObjectURL(getValues().avatarFile as File) : null
-
-	useEffect(() => {
-		if (isSuccess && !isPending) {
-			setAvatar(data.avatarURL)
-			setIsImageSelected(false)
-			close()
-		}
-	}, [data?.avatarURL, isPending, isSuccess, close])
 
 	useEffect(() => {
 		if (loggedUser.avatarURL && !isImageSelected) setAvatarUrl(loggedUser.avatarURL)
@@ -73,7 +65,13 @@ const AvatarForm = () => {
 		if (!croppedFile) return setError('avatarFile', { message: 'There was an error cropping the image. Please try again.' })
 		formData.append('avatarFile', croppedFile)
 
-		updateAvatar(formData)
+		updateAvatar(formData, {
+			onSuccess: (data) => {
+				setAvatar(data.avatarURL)
+				setIsImageSelected(false)
+				close()
+			},
+		})
 	}
 	return (
 		<form onSubmit={handleSubmit(submitAvatarFile)}>
@@ -95,7 +93,7 @@ const AvatarForm = () => {
 						</div>
 						<p className='text-center text-sm font-light dark:text-light3 text-black3'>
 							Make a lasting impression! A professional and friendly headshot is
-							<span className='font-medium dark:text-light text-black'>essential</span> to standing out from the crowd.
+							<span className='font-medium dark:text-light text-black'> essential</span> to standing out from the crowd.
 						</p>
 					</div>
 					<Divider />

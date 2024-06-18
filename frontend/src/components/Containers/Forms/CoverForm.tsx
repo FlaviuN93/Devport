@@ -39,18 +39,10 @@ const CoverForm = () => {
 	const [isImageSelected, setIsImageSelected] = useState(false)
 	const { close } = useModalContext()
 
-	const { isPending, isSuccess, data, mutate: updateCover } = useUpdateMyCover()
+	const { isPending, mutate: updateCover } = useUpdateMyCover()
 
 	const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
 	const isDisabled = !!errors.coverFile?.message
-
-	useEffect(() => {
-		if (isSuccess && !isPending) {
-			setCover(data.coverURL)
-			setIsImageSelected(false)
-			close()
-		}
-	}, [data?.coverURL, isPending, isSuccess, close])
 
 	useEffect(() => {
 		if (loggedUser.coverURL && !isImageSelected) setCoverUrl(loggedUser.coverURL)
@@ -72,7 +64,14 @@ const CoverForm = () => {
 		const croppedFile = await getCroppedImg(coverUrl, croppedAreaPixels)
 		if (!croppedFile) return setError('coverFile', { message: 'There was an error cropping the image. Please try a different image.' })
 		formData.append('coverFile', croppedFile)
-		updateCover(formData)
+
+		updateCover(formData, {
+			onSuccess: (data) => {
+				setCover(data.coverURL)
+				setIsImageSelected(false)
+				close()
+			},
+		})
 	}
 	return (
 		<form onSubmit={handleSubmit(submitCoverFile)}>

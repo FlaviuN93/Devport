@@ -6,7 +6,6 @@ import { catchAsync } from '../utils/errorFunctions'
 import { authSchema, contactUsSchema, forgotPasswordSchema, resetPasswordSchema } from '../services/routeSchema'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { sendTokenByCookie, signAccessToken, verifyToken } from '../utils/functions'
-import axios from 'axios'
 import { TokenPayload, UserRoles } from '../models/types'
 import { stringSchema } from '../services/baseSchema'
 
@@ -26,15 +25,6 @@ export const registerUserHandler = catchAsync(async (req: Request, res: Response
 		message: getSuccessMessage(statusCode, statusText),
 		email: savedEmail,
 		token: accessToken,
-	})
-})
-
-export const githubAccessTokenHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	console.log(req.query.code, 'queryCode Backend')
-	const params =
-		'?client_id=' + process.env.GITHUB_CLIENT_ID + '&client_secret=' + process.env.GITHUB_CLIENT_SECRET + '&code=' + req.query.code
-	const response = await axios.post('https://github.com/login/oauth/access_token' + params, undefined, {
-		headers: { Accept: 'application/json' },
 	})
 })
 
@@ -76,13 +66,10 @@ export const updatePasswordHandler = catchAsync(async (req: Request, res: Respon
 
 	const response = await updatePassword(password, req.userId)
 	if (response instanceof AppError) return next(response)
-	const { user, accessToken, refreshToken, statusCode, statusText = [] } = response
+	const { statusCode, statusText = [] } = response
 
-	sendTokenByCookie(refreshToken, res, next)
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
-		user,
-		token: accessToken,
 	})
 })
 
@@ -126,7 +113,6 @@ export const contactUsHandler = catchAsync(async (req: Request, res: Response, n
 })
 
 export const protectHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	console.log(req.headers.authorization, 'hello')
 	if (!req.headers.authorization?.startsWith('Bearer ')) return next(401)
 	const token = req.headers.authorization.split(' ')[1]
 

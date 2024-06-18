@@ -22,6 +22,7 @@ export const ErrorDisplay: FC<IErrorDisplay> = ({ error, resetErrorBoundary }) =
 			localStorage.removeItem('user')
 			localStorage.removeItem('isLoggedIn')
 			window.location.replace('/auth/login')
+			localStorage.setItem('errorCount', '0')
 		} else resetErrorBoundary()
 	}
 

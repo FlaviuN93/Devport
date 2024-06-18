@@ -35,7 +35,7 @@ export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
 				if (!error.config) return
 				const originalRequest = error.config
 
-				if (error.response?.status === 500 && !originalRequest._retry) {
+				if ((error.response?.status === 500 || error.response?.status === 403) && !originalRequest._retry) {
 					originalRequest._retry = true
 					try {
 						const response = await getRefreshToken()

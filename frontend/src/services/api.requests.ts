@@ -37,10 +37,8 @@ export const getTechnologies = () => get<Technology[]>('/projects/currentUser/te
 // Authentication Routes
 export const register = (body: SignupType) => post<IRegisteredUser, SignupType>('/auth/register', { body })
 export const login = (body: LoginType) => post<IUser, LoginType>('/auth/login', { body })
-export const updatePassword = (body: ResetPasswordType) => post<IUser, ResetPasswordType>('/auth/updatePassword', { body })
+export const updatePassword = (body: ResetPasswordType) => post<IDefaultSuccess, ResetPasswordType>('/auth/updatePassword', { body })
 export const getRefreshToken = () => get<{ token: string }>('/auth/refreshToken')
-
-export const githubAccessToken = (accessToken: string) => get<any>(`/auth/github/${accessToken}`)
 
 export const logout = () => post<IDefaultSuccess>('/auth/logout')
 export const forgotPassword = (body: { email: string }) => post<IDefaultSuccess, { email: string }>('/auth/forgotPassword', { body })

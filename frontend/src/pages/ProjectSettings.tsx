@@ -3,18 +3,34 @@ import ProjectCard from '../components/Containers/ProjectCard'
 import Loading from '../components/UI/Loading'
 import ProjectSettingsForm from '../components/Containers/Forms/ProjectSettingsForm'
 import { useProjectContext } from '../contexts/contextHooks'
+import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
+import { motionVariants } from '../utils/variables'
 
 const ProjectSettings = () => {
-	const { data: projects, isLoading } = useGetMyProjects()
-	const { isProjectSelected } = useProjectContext()
+	const { data, isLoading } = useGetMyProjects()
+	const { isProjectSelected, selectedProject } = useProjectContext()
+	const [projects, setProjects] = useState(data)
+
+	useEffect(() => {
+		if (isProjectSelected) setProjects((projectsState) => projectsState?.filter((project) => project.id !== selectedProject.id))
+		else setProjects(data)
+	}, [data, isProjectSelected, selectedProject.id])
 
 	if (isLoading) return <Loading />
+
 	return (
 		<section className='settingsContainer'>
 			<h2 className='mb-6 dark:text-light'>{isProjectSelected ? 'Edit Project' : 'Add New Project'}</h2>
 			<ProjectSettingsForm />
 
-			<div className='flex flex-col gap-4 mt-4'>
+			<motion.div
+				initial='visible'
+				animate={isProjectSelected ? 'hidden' : 'visible'}
+				variants={motionVariants}
+				transition={{ duration: 0.4 }}
+				className='flex flex-col gap-4 mt-4'
+			>
 				{projects &&
 					projects.map((project) => {
 						return (
@@ -31,7 +47,7 @@ const ProjectSettings = () => {
 							/>
 						)
 					})}
-			</div>
+			</motion.div>
 		</section>
 	)
 }

@@ -38,7 +38,14 @@ function App() {
 						<ProjectProvider>
 							<BrowserRouter>
 								<Routes>
-									<Route path='/' element={<HomePage />} />
+									<Route
+										path='/'
+										element={
+											<ProtectAuthRoutes>
+												<HomePage />
+											</ProtectAuthRoutes>
+										}
+									/>
 									<Route path='/my-portfolio/:userId' element={<PublicPortfolio />} />
 									<Route
 										path='/app/my-portfolio'
@@ -103,7 +110,7 @@ function App() {
 								fontSize: '1rem',
 								maxWidth: '500px',
 								fontWeight: 'normal',
-								textAlign: 'center',
+								textAlign: 'start',
 								padding: '1rem 1.5rem',
 								background: 'var(--light)',
 								color: 'var(--black)',

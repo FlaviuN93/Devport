@@ -152,12 +152,22 @@ export async function getCroppedImg(imageSrc: string | null, pixelCrop: Area | n
 
 	// Draw the cropped image onto the new canvas
 	croppedCtx.drawImage(canvas, pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height, 0, 0, pixelCrop.width, pixelCrop.height)
+	const imageData = croppedCtx.getImageData(0, 0, croppedCanvas.width, croppedCanvas.height).data
 
+	let hasTransparency = false
+	for (let i = 3; i < imageData.length; i += 4) {
+		if (imageData[i] === 0) {
+			hasTransparency = true
+			break
+		}
+	}
+
+	const imageType = hasTransparency ? 'image/png' : 'image/jpeg'
 	return new Promise((resolve) => {
 		croppedCanvas.toBlob((canvasBlob) => {
 			if (!canvasBlob) return null
-			const croppedFile = new File([canvasBlob], 'coverFile', { lastModified: Date.now(), type: 'image/jpeg' })
+			const croppedFile = new File([canvasBlob], 'coverFile', { lastModified: Date.now(), type: imageType })
 			resolve(croppedFile)
-		}, 'image/jpeg')
+		}, imageType)
 	})
 }
