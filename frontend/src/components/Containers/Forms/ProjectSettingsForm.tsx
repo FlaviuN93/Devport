@@ -16,7 +16,7 @@ import Text from '../../Inputs/Text'
 import FileInput from '../../Inputs/FileInput'
 
 const initialProjectValue = { imageFile: null, demoURL: '', description: '', name: '', repositoryURL: '', technologies: [] }
-
+type ProjectKeys = keyof typeof initialProjectValue
 const ProjectSettingsForm = () => {
 	const {
 		handleSubmit,
@@ -46,6 +46,14 @@ const ProjectSettingsForm = () => {
 		clearProject()
 	}, [resetMultiSelect, reset, clearProject])
 
+	const updateFormWithSelectedProject = useCallback(() => {
+		const projectKeys: ProjectKeys[] = Object.keys(initialProjectValue) as ProjectKeys[]
+		projectKeys.forEach((key) => {
+			if (key === 'imageFile') setValue('imageFile', null)
+			else setValue(`${key}`, selectedProject[key], { shouldDirty: true })
+		})
+	}, [selectedProject, setValue])
+
 	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
 	useEffect(() => {
 		setPreviewUrl(url)
@@ -53,17 +61,8 @@ const ProjectSettingsForm = () => {
 
 	// Filling the form with values
 	useEffect(() => {
-		if (isProjectSelected) {
-			reset({
-				imageFile: null,
-				demoURL: selectedProject.demoURL,
-				description: selectedProject.description,
-				name: selectedProject.name,
-				repositoryURL: selectedProject.repositoryURL,
-				technologies: selectedProject.technologies,
-			})
-		}
-	}, [isProjectSelected, selectedProject, reset])
+		if (isProjectSelected) updateFormWithSelectedProject()
+	}, [updateFormWithSelectedProject, isProjectSelected])
 
 	const projectData: SubmitHandler<IProjectSettings> = (data) => {
 		const formData = Object.assign(data, { imageURL: null })

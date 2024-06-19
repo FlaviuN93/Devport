@@ -27,7 +27,8 @@ export const getValueFromStorage = <T>(key: string, initialValue: T) => {
 	const item = window.localStorage.getItem(key)
 	if (!item) return initialValue
 
-	const data: T | string = item.startsWith('{') ? JSON.parse(item) : item
+	const data: T = item.startsWith('{') ? JSON.parse(item) : item
+
 	return data
 }
 

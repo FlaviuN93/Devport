@@ -28,7 +28,6 @@ export const upload = multer({
 
 export const resizeAvatarImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
-	console.log(req.file)
 	const resizedBuffer = await sharp(req.file.buffer).toFormat('png').resize(480, 480).toBuffer()
 	req.file.buffer = resizedBuffer
 	req.file.mimetype = 'image/png'
@@ -115,16 +114,16 @@ export const updateMeHandler = catchAsync(async (req: Request, res: Response, ne
 export const deleteMeHandler = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const password = passwordSchema.parse(req.body.password)
 
-	const response = await deleteUser(password, req.userId)
-	if (response instanceof AppError) return next(response)
-
 	const coverImageResponse = await removeCoverImage(req.userId)
 	const avatarImageResponse = await removeAvatarImage(req.userId)
+
 	if (coverImageResponse instanceof AppError) return next(coverImageResponse)
 	if (avatarImageResponse instanceof AppError) return next(avatarImageResponse)
 
-	const { statusCode, statusText = [] } = response
+	const response = await deleteUser(password, req.userId)
+	if (response instanceof AppError) return next(response)
 
+	const { statusCode, statusText = [] } = response
 	res.cookie('jwt', '')
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),

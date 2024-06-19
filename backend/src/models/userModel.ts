@@ -75,11 +75,10 @@ export const deleteUser = async (password: string, userId: string): Promise<IDef
 	const arePasswordsEqual = await bcrypt.compare(password, user.password)
 	if (!arePasswordsEqual) return new AppError(401, `Hmm, your passwords don't match. Try again.`)
 
-	const { error, status, data } = await supabase.from('users').delete().eq('id', userId).select('fullName').single()
-
+	const { error, status } = await supabase.from('users').delete().eq('id', userId).select('fullName').single()
 	if (error) return new AppError(status)
 
-	return { statusCode: 200, statusText: ['delete', `${data.fullName} account has been deleted`] }
+	return { statusCode: 200, statusText: ['delete', `Your Account has been deleted`] }
 }
 
 export const deleteMyCover = async (userId: string): Promise<IDefault | AppError> => {

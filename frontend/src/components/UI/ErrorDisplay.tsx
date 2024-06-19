@@ -11,7 +11,7 @@ interface IErrorDisplay {
 }
 
 export const ErrorDisplay: FC<IErrorDisplay> = ({ error, resetErrorBoundary }) => {
-	const [errorCount] = useState(parseInt(getValueFromStorage('errorCount', '0')))
+	const [errorCount] = useState(parseInt(getValueFromStorage<string>('errorCount', '0')))
 
 	const handleTryAgain = async () => {
 		localStorage.setItem('errorCount', JSON.stringify(errorCount + 1))

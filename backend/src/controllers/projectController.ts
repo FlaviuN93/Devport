@@ -22,11 +22,11 @@ export const uploadProjectImage = upload.single('imageFile')
 export const resizeProjectImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
 
-	const reSizedBuffer = await sharp(req.file.buffer).resize(1200, 800, { fit: 'inside' }).withMetadata().toFormat('jpeg').toBuffer()
+	const reSizedBuffer = await sharp(req.file.buffer).resize(1200, 800, { fit: 'cover' }).withMetadata().toFormat('png').toBuffer()
 
 	req.file.buffer = reSizedBuffer
 	req.file.mimetype = 'image/png'
-	req.file.filename = `project-${req.userId}-${Date.now()}.jpeg`
+	req.file.filename = `project-${req.userId}-${Date.now()}.png`
 	next()
 })
 

@@ -54,7 +54,7 @@ const PortfolioCard: FC<{ projects: Project[] | undefined; clipBoardBtn?: ReactN
 			</div>
 			<div>
 				<h4 className='text-gray dark:text-gray2 mb-2 font-bold tracking-wider'>BIO</h4>
-				<p className='text-lg font-medium text-darkGray dark:text-light'>{loggedUser?.bio || aboutMeDefault}</p>
+				<p className='text-lg font-medium text-darkGray dark:text-light break-words'>{loggedUser?.bio || aboutMeDefault}</p>
 			</div>
 
 			<hr className='text-gray dark:text-light3 my-3' />
