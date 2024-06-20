@@ -4,7 +4,7 @@ import supabase from '../services/supabase'
 import { updateUserSchema } from '../services/routeSchema'
 import AppError from '../utils/appError'
 import { removeUserColumns } from '../utils/functions'
-import { User, IDefault, IUser, IUserAndProjects, UserAndProjects, IAvatar, ICover } from './types'
+import { User, IDefault, IUser, IUserAndProjects, UserAndProjects, IImageURL } from './types'
 
 export const getUserAndProjects = async (userId: string): Promise<IUserAndProjects | AppError> => {
 	const { data: userWithProjects, error } = await supabase.from('users').select(`*, projects(*)`).eq('id', userId).single()
@@ -41,7 +41,7 @@ export const updateUser = async (reqBody: UpdateUserType, userId: string): Promi
 	}
 }
 
-export const updateMyAvatar = async (avatarURL: string | null, userId: string): Promise<IAvatar | AppError> => {
+export const updateMyAvatar = async (avatarURL: string | null, userId: string): Promise<IImageURL | AppError> => {
 	const { data: url } = await supabase.from('projects').select('avatarURL').eq('id', userId).single()
 	if (avatarURL === null) avatarURL = url?.avatarURL
 
@@ -49,13 +49,13 @@ export const updateMyAvatar = async (avatarURL: string | null, userId: string): 
 	if (error) return new AppError(status)
 
 	return {
-		avatarURL: data?.avatarURL,
+		imageURL: data?.avatarURL,
 		statusCode: 200,
 		statusText: ['update', 'Your profile information has been updated succesfully'],
 	}
 }
 
-export const updateMyCover = async (coverURL: string | null, userId: string): Promise<ICover | AppError> => {
+export const updateMyCover = async (coverURL: string | null, userId: string): Promise<IImageURL | AppError> => {
 	const { data: url } = await supabase.from('projects').select('coverURL').eq('id', userId).single()
 	if (coverURL === null) coverURL = url?.coverURL
 
@@ -63,7 +63,7 @@ export const updateMyCover = async (coverURL: string | null, userId: string): Pr
 	if (error) return new AppError(status)
 
 	return {
-		coverURL: data?.coverURL,
+		imageURL: data?.coverURL,
 		statusCode: 200,
 		statusText: ['update', 'Your profile information has been updated succesfully'],
 	}

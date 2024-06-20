@@ -90,7 +90,6 @@ export const resetPasswordSchema = z
 // Settings Schemas
 
 export const projectSettingsSchema = z.object({
-	imageFile: z.union([fileSchema, z.null()]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,
@@ -114,6 +113,10 @@ export const avatarSchema = z.object({
 	avatarFile: z.union([fileSchema, z.null()]),
 })
 
+export const projectSchema = z.object({
+	projectFile: z.union([fileSchema, z.null()]),
+})
+
 export type ResetPasswordType = z.infer<typeof resetPasswordSchema>
 
 export type SignupType = z.infer<typeof signupSchema>
@@ -129,7 +132,6 @@ export interface IProfileSettings {
 }
 
 export interface IProjectSettings {
-	imageFile: File | null
 	name: string
 	demoURL: string
 	repositoryURL: string

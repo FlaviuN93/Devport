@@ -1,0 +1,40 @@
+.cropperContainer {
+	position: relative;
+	width: 160px;
+	height: 160px;
+}
+
+@media (min-width: 420px) {
+	.cropperContainer {
+		width: 325px;
+		height: 150px;
+	}
+}
+
+@media (min-width: 480px) {
+	.cropperContainer {
+		width: 375px;
+		height: 175px;
+	}
+}
+
+@media (min-width: 640px) {
+	.cropperContainer {
+		width: 450px;
+		height: 175px;
+	}
+}
+
+@media (min-width: 768px) {
+	.cropperContainer {
+		width: 500px;
+		height: 200px;
+	}
+}
+
+@media (min-width: 1024px) {
+	.cropperContainer {
+		width: 500px;
+		height: 225px;
+	}
+}

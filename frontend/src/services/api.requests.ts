@@ -1,6 +1,6 @@
 import { remove, get, patch, post, put } from './baseHttp'
 import { IAvatar, ICover, IDefaultSuccess, IRegisteredUser, IUser, MessageUs, Project, Technology, User } from './types'
-import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
+import { IProfileSettings, IProjectSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 
 // User Routes
 
@@ -10,9 +10,12 @@ export const updateMe = (body: IProfileSettings) => patch<IUser, IProfileSetting
 
 export const updateMyCover = (body: FormData) => patch<ICover, FormData>('/users/currentUser/coverImg', { body })
 export const updateMyAvatar = (body: FormData) => patch<IAvatar, FormData>('/users/currentUser/avatarImg', { body })
+export const updateMyProjectImage = (body: FormData, projectId: string) =>
+	patch<IDefaultSuccess, FormData>(`/projects/currentUser/projectImg/${projectId}`, { body })
 
 export const deleteMyCover = () => remove<IDefaultSuccess>('/users/currentUser/coverImg')
 export const deleteMyAvatar = () => remove<IDefaultSuccess>('/users/currentUser/avatarImg')
+export const deleteMyProjectImage = () => remove<IDefaultSuccess>('/projects/currentUser/projectImg')
 
 export const deleteMe = (body: { password: string }) => remove<IDefaultSuccess, { password: string }>('/users/currentUser', { body })
 
@@ -23,10 +26,10 @@ export const getMyProjects = () => get<Project[]>('/projects/currentUser')
 
 export const getMyProject = (projectId: number) => get<Project>(`/projects/currentUser/${projectId}`)
 
-export const createMyProject = (body: FormData) => post<IDefaultSuccess, FormData>('projects/currentUser', { body })
+export const createMyProject = (body: IProjectSettings) => post<IDefaultSuccess, IProjectSettings>('projects/currentUser', { body })
 
-export const updateMyProject = (projectId: number, body: FormData) =>
-	put<IDefaultSuccess, FormData>(`projects/currentUser/${projectId}`, {
+export const updateMyProject = (projectId: number, body: IProjectSettings) =>
+	put<IDefaultSuccess, IProjectSettings>(`projects/currentUser/${projectId}`, {
 		body,
 	})
 

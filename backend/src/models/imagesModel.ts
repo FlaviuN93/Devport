@@ -1,34 +1,31 @@
 import supabase from '../services/supabase'
 import AppError from '../utils/appError'
 import { splitStringByPattern } from '../utils/functions'
+import { IDefault } from './types'
 
-export const addProjectImage = async (file: Express.Multer.File): Promise<string | AppError> => {
-	const { data: url, error } = await supabase.storage
-		.from('project-images')
-		.upload(file.filename, file.buffer, { contentType: file.mimetype })
-
-	if (error) return new AppError(400)
-	const { data } = supabase.storage.from('project-images').getPublicUrl(url.path)
-
-	return data.publicUrl
-}
-
-export const updateProjectImage = async (file: Express.Multer.File, projectId?: string): Promise<string | AppError> => {
+export const updateProjectImage = async (file: Express.Multer.File, projectId?: string): Promise<IDefault | AppError> => {
 	const { data: urlPath } = await supabase.from('projects').select('imageURL').eq('id', projectId).single()
 	if (urlPath?.imageURL) {
 		const filePath = splitStringByPattern(urlPath.imageURL, 'project-images/')
-		const { error: deleteError } = await supabase.storage.from('project-images').remove([filePath])
-		if (deleteError) return new AppError(400, 'The image could not be updated. Something went wrong with your request.')
+		await supabase.storage.from('project-images').remove([filePath])
 	}
 
-	const { data: url, error } = await supabase.storage
+	const { data: url, error: uploadError } = await supabase.storage
 		.from('project-images')
 		.upload(file.filename, file.buffer, { contentType: file.mimetype })
+	if (uploadError) return new AppError(400, 'The image could not be updated. Something went wrong with your request.')
 
-	if (error) return new AppError(400)
+	const {
+		data: { publicUrl },
+	} = supabase.storage.from('project-images').getPublicUrl(url.path)
 
-	const { data } = supabase.storage.from('project-images').getPublicUrl(url.path)
-	return data.publicUrl
+	const { error, status } = await supabase.from('users').update({ imageURL: publicUrl }).eq('id', projectId)
+	if (error) return new AppError(status)
+
+	return {
+		statusCode: 200,
+		statusText: ['update', 'Your project image has been updated succesfully'],
+	}
 }
 
 export const removeProjectImage = async (projectId: string): Promise<string | AppError> => {
@@ -48,14 +45,11 @@ export const updateAvatarImage = async (file: Express.Multer.File, userId: strin
 
 	if (urlPath?.avatarURL) {
 		const filePath = splitStringByPattern(urlPath.avatarURL, 'avatars/')
-		const { error: deleteError } = await supabase.storage.from('avatars').remove([filePath])
-		if (deleteError) return new AppError(500, 'The image could not be updated. Something went wrong with your request.')
+		await supabase.storage.from('avatars').remove([filePath])
 	}
 
 	const { data: url, error } = await supabase.storage.from('avatars').upload(file.filename, file.buffer, { contentType: file.mimetype })
-
-	if (error) return new AppError(400)
-
+	if (error) return new AppError(400, 'The image could not be updated. Something went wrong with your request.')
 	const { data } = supabase.storage.from('avatars').getPublicUrl(url.path)
 
 	return data.publicUrl
@@ -66,13 +60,12 @@ export const updateCoverImage = async (file: Express.Multer.File, userId: string
 
 	if (urlPath?.coverURL) {
 		const filePath = splitStringByPattern(urlPath.coverURL, 'user-covers/')
-		const { error: deleteError } = await supabase.storage.from('user-covers').remove([filePath])
-		if (deleteError) return new AppError(400, 'The image could not be updated. Something went wrong with your request.')
+		await supabase.storage.from('user-covers').remove([filePath])
 	}
 
 	const { data: url, error } = await supabase.storage.from('user-covers').upload(file.filename, file.buffer, { contentType: file.mimetype })
 
-	if (error) return new AppError(400)
+	if (error) return new AppError(400, 'The image could not be updated. Something went wrong with your request.')
 
 	const { data } = supabase.storage.from('user-covers').getPublicUrl(url.path)
 

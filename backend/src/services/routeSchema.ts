@@ -23,7 +23,6 @@ export const resetPasswordSchema = z
 
 // Project Schema
 export const createProjectSchema = z.object({
-	imageURL: z.union([urlSchema, z.null()]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,
@@ -41,12 +40,8 @@ export const updateUserSchema = z.object({
 	bio: z.union([bioSchema, z.literal('')]),
 })
 
-export const patchCoverSchema = z.object({
-	coverURL: z.union([urlSchema, z.null()]),
-})
-
-export const patchAvatarSchema = z.object({
-	avatarURL: z.union([urlSchema, z.null()]),
+export const patchImageSchema = z.object({
+	url: z.union([urlSchema, z.null()]),
 })
 
 export const contactUsSchema = z.object({

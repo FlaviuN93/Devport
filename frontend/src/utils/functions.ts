@@ -49,7 +49,7 @@ export const getImageFormat = (format: 'landscape' | 'cover', file: File) => {
 		const img = document.createElement('img')
 		img.onload = function () {
 			const aspectRatio = img.width / img.height
-
+			console.log(aspectRatio, 'image')
 			if (format === 'landscape' && aspectRatio > 1.5) resolve(false)
 			if (format === 'cover' && aspectRatio < 2.75) resolve(false)
 			resolve(true)

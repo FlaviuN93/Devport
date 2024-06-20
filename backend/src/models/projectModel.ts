@@ -47,19 +47,21 @@ export const getMyProject = async (userId: string, projectId: string): Promise<I
 }
 
 export const createMyProject = async (reqBody: CreateProject): Promise<IDefault | AppError> => {
-	const { error, status } = await supabase.from('projects').insert(reqBody)
+	const { name, demoURL, description, repositoryURL, technologies, user_id } = reqBody
+	const { error, status } = await supabase.from('projects').insert({ name, demoURL, description, repositoryURL, technologies, user_id })
 	if (error) return new AppError(status)
 
 	return { statusCode: 201, statusText: ['project', 'created'] }
 }
 
 export const updateMyProject = async (reqBody: CreateProject, projectId: string): Promise<IDefault | AppError> => {
-	if (reqBody.imageURL === null) {
-		const { data } = await supabase.from('projects').select('imageURL').eq('id', projectId).single()
-		reqBody.imageURL = data?.imageURL
-	}
-
-	const { error, status, data } = await supabase.from('projects').update(reqBody).eq('id', projectId).select('name').single()
+	const { name, demoURL, description, repositoryURL, technologies, user_id } = reqBody
+	const { error, status, data } = await supabase
+		.from('projects')
+		.update({ name, demoURL, description, repositoryURL, technologies, user_id })
+		.eq('id', projectId)
+		.select('name')
+		.single()
 	if (error) return new AppError(status)
 
 	return { statusCode: 200, statusText: ['update', `Project ${data.name} has been updated successfully`] }
