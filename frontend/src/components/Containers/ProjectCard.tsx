@@ -37,7 +37,11 @@ const ProjectCard: FC<ProjectCardProps> = ({
 	return (
 		<div className='flex flex-col border-[1px] border-light3 rounded-lg p-3 mx-2 mobile:mx-0 gap-6 bg-light dark:bg-darkBlue2 tablet:flex-row'>
 			{imageURL ? (
-				<img src={imageURL} alt='Image' className='aspect-video stroke-1 rounded-lg tablet:w-1/3 min-w-[250px]' />
+				<img
+					src={imageURL}
+					alt='Image'
+					className='aspect-video stroke-1 rounded-lg bg-light3 dark:bg-black3 tablet:w-[35%] min-w-[250px]'
+				/>
 			) : (
 				<PhotoIcon className='aspect-video stroke-1 rounded-lg tablet:w-1/3 min-w-[250px]' />
 			)}

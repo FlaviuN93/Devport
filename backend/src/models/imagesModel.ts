@@ -1,9 +1,8 @@
 import supabase from '../services/supabase'
 import AppError from '../utils/appError'
 import { splitStringByPattern } from '../utils/functions'
-import { IDefault } from './types'
 
-export const updateProjectImage = async (file: Express.Multer.File, projectId?: string): Promise<IDefault | AppError> => {
+export const updateProjectImage = async (file: Express.Multer.File, projectId?: string): Promise<string | AppError> => {
 	const { data: urlPath } = await supabase.from('projects').select('imageURL').eq('id', projectId).single()
 	if (urlPath?.imageURL) {
 		const filePath = splitStringByPattern(urlPath.imageURL, 'project-images/')
@@ -13,19 +12,12 @@ export const updateProjectImage = async (file: Express.Multer.File, projectId?: 
 	const { data: url, error: uploadError } = await supabase.storage
 		.from('project-images')
 		.upload(file.filename, file.buffer, { contentType: file.mimetype })
+
 	if (uploadError) return new AppError(400, 'The image could not be updated. Something went wrong with your request.')
 
-	const {
-		data: { publicUrl },
-	} = supabase.storage.from('project-images').getPublicUrl(url.path)
+	const { data } = supabase.storage.from('project-images').getPublicUrl(url.path)
 
-	const { error, status } = await supabase.from('users').update({ imageURL: publicUrl }).eq('id', projectId)
-	if (error) return new AppError(status)
-
-	return {
-		statusCode: 200,
-		statusText: ['update', 'Your project image has been updated succesfully'],
-	}
+	return data.publicUrl
 }
 
 export const removeProjectImage = async (projectId: string): Promise<string | AppError> => {

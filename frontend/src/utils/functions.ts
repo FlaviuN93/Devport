@@ -49,7 +49,6 @@ export const getImageFormat = (format: 'landscape' | 'cover', file: File) => {
 		const img = document.createElement('img')
 		img.onload = function () {
 			const aspectRatio = img.width / img.height
-			console.log(aspectRatio, 'image')
 			if (format === 'landscape' && aspectRatio > 1.5) resolve(false)
 			if (format === 'cover' && aspectRatio < 2.75) resolve(false)
 			resolve(true)
@@ -130,7 +129,10 @@ export const createImage = (url: string): Promise<HTMLImageElement> =>
 		image.src = url
 	})
 
-export async function getCroppedImg(imageSrc: string | null, pixelCrop: Area | null): Promise<File | null> {
+export async function getCroppedImg(
+	imageSrc: string | null,
+	pixelCrop: Area | null
+): Promise<{ croppedFile: File; croppedUrl: string } | null> {
 	if (!imageSrc) return null
 	if (!pixelCrop) return null
 	const image = await createImage(imageSrc)
@@ -167,8 +169,9 @@ export async function getCroppedImg(imageSrc: string | null, pixelCrop: Area | n
 	return new Promise((resolve) => {
 		croppedCanvas.toBlob((canvasBlob) => {
 			if (!canvasBlob) return null
-			const croppedFile = new File([canvasBlob], 'coverFile', { lastModified: Date.now(), type: imageType })
-			resolve(croppedFile)
+			const croppedFile = new File([canvasBlob], 'croppedFile', { lastModified: Date.now(), type: imageType })
+			const croppedUrl = URL.createObjectURL(croppedFile)
+			resolve({ croppedFile, croppedUrl })
 		}, imageType)
 	})
 }

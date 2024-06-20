@@ -17,12 +17,12 @@ const upload = multer({
 	},
 })
 
-export const uploadProjectImage = upload.single('projectFile')
+export const uploadProjectImage = upload.single('imageFile')
 export const resizeProjectImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	if (!req.file) return next()
 
 	const reSizedBuffer = await sharp(req.file.buffer)
-		.resize(600, 400, { fit: 'cover' })
+		.resize(1200, 600, { fit: 'inside' })
 		.withMetadata()
 		.toFormat('png', { progressive: true, quality: 80 })
 		.toBuffer()
@@ -61,23 +61,37 @@ export const getMyProjectData = catchAsync(async (req: Request, res: Response, n
 })
 
 export const createMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	req.body.user_id = req.userId
-	const projectData = createProjectSchema.parse(req.body)
+	const reqBody = JSON.parse(req.body.body)
+	reqBody.user_id = req.userId
 
+	if (req.file) {
+		const url = await updateProjectImage(req.file, undefined)
+		if (url instanceof AppError) return next(url)
+		reqBody.imageURL = url
+	}
+
+	const projectData = createProjectSchema.parse(reqBody)
 	const response = await createMyProject(projectData)
 	if (response instanceof AppError) return next(response)
-	const { statusCode, statusText = [] } = response
 
+	const { statusCode, statusText = [] } = response
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
 	})
 })
 
 export const updateMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	req.body.user_id = req.userId
+	const reqBody = JSON.parse(req.body.body)
+	reqBody.user_id = req.userId
 	const projectId = idSchema.parse(req.params.projectId).toString()
 
-	const projectData = createProjectSchema.parse(req.body)
+	if (req.file) {
+		const url = await updateProjectImage(req.file, projectId)
+		if (url instanceof AppError) return next(url)
+		reqBody.imageURL = url
+	}
+
+	const projectData = createProjectSchema.parse(reqBody)
 	const response = await updateMyProject(projectData, projectId)
 	if (response instanceof AppError) return next(response)
 
@@ -86,21 +100,6 @@ export const updateMyProjectData = catchAsync(async (req: Request, res: Response
 	res.status(statusCode).json({
 		message: getSuccessMessage(statusCode, statusText),
 	})
-})
-
-export const updateMyProjectImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	if (!req.file) return null
-	const response = await updateProjectImage(req.file, req.params.projectId)
-	if (response instanceof AppError) return next(response)
-	const { statusCode, statusText = [] } = response
-
-	res.status(statusCode).json({
-		message: getSuccessMessage(statusCode, statusText),
-	})
-})
-
-export const deleteMyProjectImage = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	res.status(200)
 })
 
 export const deleteMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

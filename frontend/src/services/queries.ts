@@ -7,7 +7,6 @@ import {
 	deleteMyAvatar,
 	deleteMyCover,
 	deleteMyProject,
-	deleteMyProjectImage,
 	forgotPassword,
 	getMyProject,
 	getMyProjects,
@@ -26,7 +25,7 @@ import {
 	updatePassword,
 } from './api.requests'
 import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar, MessageUs, IRegisteredUser } from './types'
-import { IProfileSettings, IProjectSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
+import { IProfileSettings, LoginType, ResetPasswordType, SignupType } from '../utils/schemas'
 import { queryClient } from './queryClient'
 import { updateObjectFromStorage } from '../utils/functions'
 
@@ -56,11 +55,6 @@ export const useDeleteMyAvatar = () =>
 		onSuccess: () => {
 			updateObjectFromStorage({ storageKey: 'user', objectKey: 'avatarURL', valueToUpdate: '' })
 		},
-	})
-
-export const useDeleteMyProjectImage = () =>
-	useMutation<IDefaultSuccess, IDefaultError>({
-		mutationFn: deleteMyProjectImage,
 	})
 
 export const useDeleteMe = () =>
@@ -93,7 +87,7 @@ export const useGetMyProject = (projectId: number) =>
 	})
 
 export const useCreateMyProject = () =>
-	useMutation<IDefaultSuccess, IDefaultError, IProjectSettings>({
+	useMutation<IDefaultSuccess, IDefaultError, FormData>({
 		mutationFn: createMyProject,
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['myProjects'] })
@@ -101,7 +95,7 @@ export const useCreateMyProject = () =>
 	})
 
 export const useUpdateMyProject = (projectId: number) =>
-	useMutation<IDefaultSuccess, IDefaultError, IProjectSettings>({
+	useMutation<IDefaultSuccess, IDefaultError, FormData>({
 		mutationFn: (body) => updateMyProject(projectId, body),
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['myProjects'] })

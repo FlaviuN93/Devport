@@ -23,6 +23,7 @@ export const resetPasswordSchema = z
 
 // Project Schema
 export const createProjectSchema = z.object({
+	imageURL: z.union([urlSchema, z.null()]),
 	name: nameSchema,
 	demoURL: urlSchema,
 	repositoryURL: urlSchema,

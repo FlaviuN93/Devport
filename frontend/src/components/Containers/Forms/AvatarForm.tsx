@@ -61,9 +61,9 @@ const AvatarForm = () => {
 		}
 
 		const formData = new FormData()
-		const croppedFile = await getCroppedImg(avatarUrl, croppedAreaPixels)
-		if (!croppedFile) return setError('avatarFile', { message: 'There was an error cropping the image. Please try again.' })
-		formData.append('avatarFile', croppedFile)
+		const file = await getCroppedImg(avatarUrl, croppedAreaPixels)
+		if (!file) return setError('avatarFile', { message: 'There was an error cropping the image. Please try again.' })
+		formData.append('avatarFile', file.croppedFile)
 
 		updateAvatar(formData, {
 			onSuccess: (data) => {

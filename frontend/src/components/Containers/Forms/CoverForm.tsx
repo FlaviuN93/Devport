@@ -61,9 +61,9 @@ const CoverForm = () => {
 		}
 
 		const formData = new FormData()
-		const croppedFile = await getCroppedImg(coverUrl, croppedAreaPixels)
-		if (!croppedFile) return setError('coverFile', { message: 'There was an error cropping the image. Please try a different image.' })
-		formData.append('coverFile', croppedFile)
+		const file = await getCroppedImg(coverUrl, croppedAreaPixels)
+		if (!file) return setError('coverFile', { message: 'There was an error cropping the image. Please try a different image.' })
+		formData.append('coverFile', file.croppedFile)
 
 		updateCover(formData, {
 			onSuccess: (data) => {

@@ -3,7 +3,7 @@
 	top: 0;
 	left: 0;
 	width: 100%;
-	height: 100vh;
+	min-height: 100vh;
 	background-color: var(--backdropColor);
 	backdrop-filter: blur(2px);
 	z-index: 1000;
@@ -19,7 +19,7 @@
 	box-shadow: var(--shadow-md);
 	border: 1px solid var(--bgColor);
 	border-radius: 8px;
-	padding: 1rem 1.5rem;
+	padding: 1rem;
 	position: relative;
 	/* top: 50%; */
 	left: 50%;
@@ -48,5 +48,9 @@
 @media (min-width: 640px) {
 	.modalOverlay {
 		padding: 0 2rem;
+	}
+
+	.modalContainer {
+		padding: 1rem 1.5rem;
 	}
 }
