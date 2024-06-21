@@ -1,14 +1,10 @@
 import { MoonIcon, SunIcon } from '@heroicons/react/24/outline'
 import { useDarkModeContext } from '../../contexts/contextHooks'
 import Avatar from '../UI/Avatar'
-import { useEffect } from 'react'
 
 export default function DarkModeToggle() {
-	const { themeMode, setDarkMode, setLightMode } = useDarkModeContext()
+	const { setDarkMode, setLightMode } = useDarkModeContext()
 
-	useEffect(() => {
-		console.log(themeMode, 'themeMode')
-	}, [themeMode])
 	return (
 		<div>
 			<div className='flex gap-2 mx-6 p-1 h-11 ease-out duration-300 rounded-full bg-light dark:bg-black3'>

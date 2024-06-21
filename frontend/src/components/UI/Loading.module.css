@@ -7,7 +7,7 @@
 	border: 6px solid var(--darkViolet);
 	transform: translate(-50%, -50%);
 	border-radius: 50%;
-	border-top-color: var(--light-2);
+	border-top-color: var(--light-3);
 	animation: spin 1s linear infinite;
 }
 

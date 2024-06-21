@@ -10,6 +10,8 @@ export const updateMe = (body: IProfileSettings) => patch<IUser, IProfileSetting
 
 export const updateMyCover = (body: FormData) => patch<ICover, FormData>('/users/currentUser/coverImg', { body })
 export const updateMyAvatar = (body: FormData) => patch<IAvatar, FormData>('/users/currentUser/avatarImg', { body })
+export const updateMyProjectImage = (body: FormData, projectId: string) =>
+	patch<IDefaultSuccess, FormData>(`/projects/currentUser/projectImg/${projectId}`, { body })
 
 export const deleteMyCover = () => remove<IDefaultSuccess>('/users/currentUser/coverImg')
 export const deleteMyAvatar = () => remove<IDefaultSuccess>('/users/currentUser/avatarImg')
@@ -20,8 +22,6 @@ export const getUserAndProjects = (userId: string) => get<User>(`/users/projects
 
 // Project Routes
 export const getMyProjects = () => get<Project[]>('/projects/currentUser')
-
-export const getMyProject = (projectId: number) => get<Project>(`/projects/currentUser/${projectId}`)
 
 export const createMyProject = (body: FormData) => post<IDefaultSuccess, FormData>('projects/currentUser', { body })
 
@@ -36,16 +36,16 @@ export const getTechnologies = () => get<Technology[]>('/projects/currentUser/te
 
 // Authentication Routes
 export const register = (body: SignupType) => post<IRegisteredUser, SignupType>('/auth/register', { body })
-export const githubAccessToken = (accessToken: string) => get<any>(`/auth/github/${accessToken}`)
-
 export const login = (body: LoginType) => post<IUser, LoginType>('/auth/login', { body })
+export const updatePassword = (body: ResetPasswordType) => post<IDefaultSuccess, ResetPasswordType>('/auth/updatePassword', { body })
+export const getRefreshToken = () => get<{ token: string }>('/auth/refreshToken')
+
 export const logout = () => post<IDefaultSuccess>('/auth/logout')
 export const forgotPassword = (body: { email: string }) => post<IDefaultSuccess, { email: string }>('/auth/forgotPassword', { body })
 
 export const resetPassword = (resetToken: string | undefined, body: ResetPasswordType) =>
 	patch<IDefaultSuccess, ResetPasswordType>(`/auth/resetPassword/${resetToken}`, { body })
 
-export const checkResetToken = (resetToken: string | undefined) => get<undefined>(`/auth/resetPassword/${resetToken}`)
+export const checkResetToken = (resetToken: string) => post<string>(`/auth/resetPassword/${resetToken}`)
 
-export const changePassword = (body: ResetPasswordType) => post<IUser, ResetPasswordType>('/auth/changePassword', { body })
 export const contactUs = (body: MessageUs) => post<IDefaultSuccess, MessageUs>('/auth/contactUs', { body })

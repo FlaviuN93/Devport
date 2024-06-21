@@ -10,6 +10,7 @@ import { PencilSquareIcon, PlusIcon, EnvelopeIcon } from '@heroicons/react/24/ou
 
 const PortfolioCard: FC<{ projects: Project[] | undefined; clipBoardBtn?: ReactNode }> = ({ projects, clipBoardBtn }) => {
 	const { user: loggedUser } = useUserContext()
+	const isLinkedinEmpty = loggedUser.linkedin?.length === 0 ? true : false
 
 	return (
 		<>
@@ -40,10 +41,11 @@ const PortfolioCard: FC<{ projects: Project[] | undefined; clipBoardBtn?: ReactN
 					/>
 				</Link>
 
-				<Link to={loggedUser?.linkedin || 'https://linkedin.com'} target='_blank'>
+				<Link to={loggedUser?.linkedin || ''} target='_blank'>
 					<Button
 						icon={<BiLogoLinkedinSquare className='h-5 w-5' />}
 						iconPos='left'
+						disabled={isLinkedinEmpty}
 						buttonText='Linkedin'
 						buttonStyles='text-violet bg-light dark:bg-light3 font-semibold transition-shadow duration-250 hover:shadow-md active:shadow-sm'
 					/>
@@ -52,7 +54,7 @@ const PortfolioCard: FC<{ projects: Project[] | undefined; clipBoardBtn?: ReactN
 			</div>
 			<div>
 				<h4 className='text-gray dark:text-gray2 mb-2 font-bold tracking-wider'>BIO</h4>
-				<p className='text-lg font-medium text-darkGray dark:text-light'>{loggedUser?.bio || aboutMeDefault}</p>
+				<p className='text-lg font-medium text-darkGray dark:text-light break-words'>{loggedUser?.bio || aboutMeDefault}</p>
 			</div>
 
 			<hr className='text-gray dark:text-light3 my-3' />

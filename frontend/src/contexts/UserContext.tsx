@@ -1,6 +1,6 @@
 import { FC, ReactNode, createContext, useState } from 'react'
 import { User } from '../services/types'
-import { getValueFromStorage, updateValueFromStorage } from '../utils/functions'
+import { getValueFromStorage, updateObjectFromStorage } from '../utils/functions'
 
 const initialUser = {
 	email: '',
@@ -33,20 +33,20 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [isLoggedIn, setIsLoggedIn] = useState(getValueFromStorage<boolean>('isLoggedIn', false))
 
 	const setCover = (url: string) => {
-		updateValueFromStorage({ key: 'user', keyToUpdate: 'coverURL', valueToUpdate: url })
+		updateObjectFromStorage({ storageKey: 'user', objectKey: 'coverURL', valueToUpdate: url })
 		setUser((user) => ({ ...user, coverURL: url }))
 	}
 	const setAvatar = (url: string) => {
-		updateValueFromStorage({ key: 'user', keyToUpdate: 'avatarURL', valueToUpdate: url })
+		updateObjectFromStorage({ storageKey: 'user', objectKey: 'avatarURL', valueToUpdate: url })
 		setUser((user) => ({ ...user, avatarURL: url }))
 	}
 
 	const removeCover = () => {
-		updateValueFromStorage({ key: 'user', keyToUpdate: 'coverURL', valueToUpdate: '' })
+		updateObjectFromStorage({ storageKey: 'user', objectKey: 'coverURL', valueToUpdate: '' })
 		setUser((user) => ({ ...user, coverURL: '' }))
 	}
 	const removeAvatar = () => {
-		updateValueFromStorage({ key: 'user', keyToUpdate: 'avatarURL', valueToUpdate: '' })
+		updateObjectFromStorage({ storageKey: 'user', objectKey: 'avatarURL', valueToUpdate: '' })
 		setUser((user) => ({ ...user, avatarURL: '' }))
 	}
 

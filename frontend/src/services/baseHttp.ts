@@ -1,19 +1,25 @@
-import axios, { AxiosError, Method } from 'axios'
+import axios, { AxiosError, Method, RawAxiosRequestHeaders } from 'axios'
 import { HttpParamsType } from './types'
 
-const instance = axios.create({
+export const axiosApiInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_DOMAIN,
 	withCredentials: true,
 	timeout: 5000,
 })
 
-const request = async <D, B = undefined>(method: Method, url: string, paramsData?: HttpParamsType<B>): Promise<D> => {
+const request = async <D, B = undefined>(
+	method: Method,
+	url: string,
+	paramsData?: HttpParamsType<B>,
+	headers?: RawAxiosRequestHeaders
+): Promise<D> => {
 	try {
-		const { data } = await instance.request<D>({
+		const { data } = await axiosApiInstance.request<D>({
 			method,
 			url,
 			data: paramsData?.body,
 			params: paramsData?.query,
+			headers,
 		})
 
 		return data
@@ -44,13 +50,17 @@ const request = async <D, B = undefined>(method: Method, url: string, paramsData
 	}
 }
 
-export const get = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> => request<D, B>('get', url, paramsData)
+export const get = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>, headers?: RawAxiosRequestHeaders): Promise<D> =>
+	request<D, B>('get', url, paramsData, headers)
 
-export const post = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> => request<D, B>('post', url, paramsData)
+export const post = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>, headers?: RawAxiosRequestHeaders): Promise<D> =>
+	request<D, B>('post', url, paramsData, headers)
 
-export const patch = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> => request<D, B>('patch', url, paramsData)
+export const patch = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>, headers?: RawAxiosRequestHeaders): Promise<D> =>
+	request<D, B>('patch', url, paramsData, headers)
 
-export const put = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> => request<D, B>('put', url, paramsData)
+export const put = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>, headers?: RawAxiosRequestHeaders): Promise<D> =>
+	request<D, B>('put', url, paramsData, headers)
 
-export const remove = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>): Promise<D> =>
-	request<D, B>('delete', url, paramsData)
+export const remove = <D, B = undefined>(url: string, paramsData?: HttpParamsType<B>, headers?: RawAxiosRequestHeaders): Promise<D> =>
+	request<D, B>('delete', url, paramsData, headers)

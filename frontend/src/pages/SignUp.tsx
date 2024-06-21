@@ -7,10 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import PasswordValidation from '../components/Inputs/PasswordValidation'
 import { Link, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
-import { useUserContext } from '../contexts/contextHooks'
+import { useAuthContext, useUserContext } from '../contexts/contextHooks'
 import { useRegister } from '../services/queries'
 import { catchPasswordErrors, useValidateResult } from '../utils/functions'
-import { BiLogoGithub } from 'react-icons/bi'
 
 const SignUp = () => {
 	const {
@@ -25,7 +24,7 @@ const SignUp = () => {
 	})
 	const { data, isSuccess, mutate: registerUser, isPending } = useRegister()
 	const navigate = useNavigate()
-
+	const { handleSetToken } = useAuthContext()
 	const watchPassword = watch('password')
 	const watchedErrors = catchPasswordErrors(watchPassword)
 	const passwordErrors = useValidateResult(watchedErrors)
@@ -36,13 +35,10 @@ const SignUp = () => {
 		if (isSuccess && !isPending) {
 			setEmail(data.email)
 			handleIsLoggedIn()
+			handleSetToken(data.token)
 			navigate('/app/my-portfolio', { replace: true })
 		}
-	}, [navigate, isSuccess, data?.email, setEmail, handleIsLoggedIn, isPending])
-
-	const handleGithubSignup = () => {
-		console.log('Github')
-	}
+	}, [navigate, isSuccess, data?.email, setEmail, handleIsLoggedIn, isPending, handleSetToken, data?.token])
 
 	return (
 		<div className='formContainer'>
@@ -50,13 +46,6 @@ const SignUp = () => {
 				<h1 className='mb-1'>Create Your Account</h1>
 				<h6>Enter the fields below to get started</h6>
 			</div>
-			<Button
-				onClick={handleGithubSignup}
-				buttonText='Sign In with Github'
-				buttonStyles='bg-darkBlue text-white'
-				icon={<BiLogoGithub className='h-6 w-6' />}
-			/>
-			<div className='borderWord'>or</div>
 
 			<form className='flex flex-col -mt-2.5 gap-4' onSubmit={handleSubmit((data) => registerUser(data))}>
 				<Text name='email' register={register} placeholder='Enter email' error={errors.email?.message} />

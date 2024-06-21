@@ -1,23 +1,21 @@
-import { XMarkIcon, PlusIcon, PhotoIcon } from '@heroicons/react/24/outline'
-import { BiCloudUpload } from 'react-icons/bi'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { motion } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { PlusIcon, PhotoIcon } from '@heroicons/react/24/outline'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { useProjectContext } from '../../../contexts/contextHooks'
 import { useGetTechnologies, useUpdateMyProject, useCreateMyProject } from '../../../services/queries'
 import { convertToFormData } from '../../../utils/functions'
 import { IProjectSettings, projectSettingsSchema } from '../../../utils/schemas'
-import { motionVariants } from '../../../utils/variables'
 import MultiSelect from '../../Inputs/MultiSelect'
 import Avatar from '../../UI/Avatar'
 import Button from '../../UI/Button'
 import Text from '../../Inputs/Text'
-import FileInput from '../../Inputs/FileInput'
-import useSuccess from '../../../hooks/useSuccess'
+import { Modal, ModalOpen, ModalWindow } from '../../UI/Modal'
+import ProjectImageForm from './ProjectImage'
+import { CameraIcon, PencilIcon } from '@heroicons/react/24/solid'
 
 const initialProjectValue = { imageFile: null, demoURL: '', description: '', name: '', repositoryURL: '', technologies: [] }
-
+type ProjectKeys = keyof typeof initialProjectValue
 const ProjectSettingsForm = () => {
 	const {
 		handleSubmit,
@@ -26,102 +24,92 @@ const ProjectSettingsForm = () => {
 		setValue,
 		getValues,
 		reset,
+		setError,
 		formState: { errors, isDirty },
 	} = useForm<IProjectSettings>({
 		resolver: zodResolver(projectSettingsSchema),
 		defaultValues: initialProjectValue,
 	})
 
-	const { isProjectSelected, selectedProject, resetImageUrl, closeProject } = useProjectContext()
+	const { isProjectSelected, selectedProject, clearProject } = useProjectContext()
 	const { data: technologies } = useGetTechnologies()
-	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 	const resetMultiSelect = useRef<() => void>(() => {})
+
+	const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+
 	const url = getValues().imageFile && !errors.imageFile ? URL.createObjectURL(getValues().imageFile as File) : selectedProject.imageURL
 
-	const { isPending: IsPendingUpdate, mutate: updateMutation, isSuccess: isUpdateSuccess } = useUpdateMyProject(selectedProject.id)
-	const { isPending: IsPendingCreate, mutate: createMutation, isSuccess: isCreateSuccess } = useCreateMyProject()
+	const { isPending: IsPendingUpdate, mutate: updateMutation } = useUpdateMyProject(selectedProject.id)
+	const { isPending: IsPendingCreate, mutate: createMutation } = useCreateMyProject()
 
 	const handleResetForm = useCallback(() => {
 		reset(initialProjectValue)
-		resetImageUrl()
 		resetMultiSelect.current()
-		closeProject()
-	}, [reset, resetImageUrl, resetMultiSelect, closeProject])
+		setPreviewUrl(null)
+		clearProject()
+	}, [resetMultiSelect, reset, clearProject])
 
-	// Reseting the form
-	useSuccess(IsPendingCreate, isCreateSuccess, handleResetForm)
-	useSuccess(IsPendingUpdate, isUpdateSuccess, handleResetForm)
-
-	// This UseEffect requires specific dependencies to sync correctly both with edit mode state and creation state for previewUrl functionality
-	useEffect(() => {
-		setPreviewUrl(url)
-	}, [selectedProject.imageURL, getValues().imageFile])
+	const updateFormWithSelectedProject = useCallback(() => {
+		const projectKeys: ProjectKeys[] = Object.keys(initialProjectValue) as ProjectKeys[]
+		projectKeys.forEach((key) => {
+			if (key === 'imageFile') setValue('imageFile', null)
+			else setValue(`${key}`, selectedProject[key], { shouldDirty: true })
+		})
+	}, [selectedProject, setValue])
 
 	// Filling the form with values
 	useEffect(() => {
 		if (isProjectSelected) {
-			reset({
-				imageFile: null,
-				demoURL: selectedProject.demoURL,
-				description: selectedProject.description,
-				name: selectedProject.name,
-				repositoryURL: selectedProject.repositoryURL,
-				technologies: selectedProject.technologies,
-			})
+			updateFormWithSelectedProject()
+			setPreviewUrl(selectedProject.imageURL)
 		}
-	}, [isProjectSelected, selectedProject, reset])
+	}, [updateFormWithSelectedProject, isProjectSelected, selectedProject.imageURL])
 
-	const projectData: SubmitHandler<IProjectSettings> = (data) => {
+	const submitProject: SubmitHandler<IProjectSettings> = async (data) => {
 		const formData = Object.assign(data, { imageURL: null })
 		const projectFormData = convertToFormData(formData)
-		if (isProjectSelected) updateMutation(projectFormData)
-		else createMutation(projectFormData)
+		if (isProjectSelected) updateMutation(projectFormData, { onSuccess: handleResetForm })
+		else createMutation(projectFormData, { onSuccess: handleResetForm })
 	}
 
 	return (
-		<form onSubmit={handleSubmit(projectData)} className='formSettingsContainer'>
-			<motion.div
-				initial='hidden'
-				animate={previewUrl ? 'visible' : 'hidden'}
-				variants={motionVariants}
-				transition={{ duration: 0.5 }}
-				className='relative justify-center bg-light2 dark:bg-darkGray py-4 rounded-lg'
-			>
-				{previewUrl && (
+		<form onSubmit={handleSubmit(submitProject)} className='formSettingsContainer'>
+			<div className='imageFileContainer'>
+				{previewUrl ? (
+					<div className='flex items-center justify-center relative'>
+						<img src={previewUrl} alt='ProjectImage' className='bg-cover max-w-[800px] w-full h-[200px]' />
+					</div>
+				) : (
 					<>
-						<XMarkIcon
-							onClick={() => {
-								setPreviewUrl(null)
-								resetImageUrl()
-							}}
-							className='h-6 w-6 absolute top-2 right-2 text-black cursor-pointer'
-						/>
-						<img src={previewUrl} className='object-cover h-[200px] aspect-video' />
+						<Avatar icon={<PhotoIcon className='h-9 w-9' />} avatarStyles='h-16 w-16' />
+						<p className='text-gray dark:text-light3 text-sm text-center font-semibold px-4'>
+							Image must be PNG, JPEG, JPG, WEBP - max 5MB
+						</p>
 					</>
 				)}
-			</motion.div>
 
-			<motion.div
-				initial='hidden'
-				animate={!previewUrl ? 'visible' : 'hidden'}
-				variants={motionVariants}
-				transition={{ duration: 0.5 }}
-				className='imageFileContainer'
-			>
-				<Avatar icon={<PhotoIcon className='h-7 w-7' />} avatarStyles='h-[52px] w-[52px]' />
-				<p className='text-gray dark:text-light3 text-sm text-center font-medium px-4'>Image must be PNG, JPEG, JPG, WEBP - max 5MB</p>
+				<Modal>
+					<ModalOpen openedModalName='addProjectModal'>
+						<Avatar
+							role='button'
+							avatarStyles='h-10 w-10 border-none bg-white absolute top-2 right-4'
+							icon={previewUrl ? <PencilIcon className='h-6 w-6 text-gray' /> : <CameraIcon className='h-6 w-6 text-gray' />}
+						/>
+					</ModalOpen>
 
-				<FileInput
-					buttonText='Upload Project Image'
-					icon={<BiCloudUpload className='h-6 w-6' />}
-					name='imageFile'
-					fileStyles='gap-2'
-					register={register}
-					onFileUpload={(selectedFile: File) => setValue('imageFile', selectedFile, { shouldValidate: true })}
-					error={errors.imageFile?.message}
-				/>
-			</motion.div>
-
+					<ModalWindow modalName='addProjectModal' modalWindowStyles='max-w-[850px]'>
+						<ProjectImageForm
+							register={register}
+							name='imageFile'
+							onFileUpload={(selectedFile) => setValue('imageFile', selectedFile, { shouldValidate: true })}
+							errorMessage={errors.imageFile?.message}
+							imageUrl={url}
+							setUrl={(imageUrl) => setPreviewUrl(imageUrl)}
+							onFileError={(errorMsg) => setError('imageFile', { message: errorMsg })}
+						/>
+					</ModalWindow>
+				</Modal>
+			</div>
 			<div className='flex flex-col gap-4 lgMobile:flex-row md:gap-10'>
 				<Text label='Project Name' register={register} name='name' placeholder='Enter your project name' error={errors.name?.message} />
 
@@ -165,7 +153,7 @@ const ProjectSettingsForm = () => {
 				<Button
 					buttonText='Cancel'
 					disabled={!isDirty}
-					buttonStyles='text-black3 bg-light dark:bg-light3'
+					buttonStyles='text-black3 bg-light dark:text-light3 dark:bg-darkGray'
 					onClick={handleResetForm}
 					iconPos='left'
 				/>

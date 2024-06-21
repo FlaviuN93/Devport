@@ -31,26 +31,18 @@ const CoverForm = () => {
 	})
 
 	const { user: loggedUser, setCover } = useUserContext()
+	const { close } = useModalContext()
+	const { isPending, mutate: updateCover } = useUpdateMyCover()
+
 	const [coverUrl, setCoverUrl] = useState<string | null>(null)
 	const [crop, setCrop] = useState<Point>(CONSTANTS.cropPoints)
 	const [zoom, setZoom] = useState(CONSTANTS.zoom)
 	const [isEmpty, setIsEmpty] = useState(false)
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 	const [isImageSelected, setIsImageSelected] = useState(false)
-	const { close } = useModalContext()
-
-	const { isPending, isSuccess, data, mutate: updateCover } = useUpdateMyCover()
 
 	const coverFile = getValues().coverFile && !errors.coverFile ? URL.createObjectURL(getValues().coverFile as File) : null
 	const isDisabled = !!errors.coverFile?.message
-
-	useEffect(() => {
-		if (isSuccess && !isPending) {
-			setCover(data.coverURL)
-			setIsImageSelected(false)
-			close()
-		}
-	}, [data?.coverURL, isPending, isSuccess, close])
 
 	useEffect(() => {
 		if (loggedUser.coverURL && !isImageSelected) setCoverUrl(loggedUser.coverURL)
@@ -69,10 +61,17 @@ const CoverForm = () => {
 		}
 
 		const formData = new FormData()
-		const croppedFile = await getCroppedImg(coverUrl, croppedAreaPixels)
-		if (!croppedFile) return setError('coverFile', { message: 'There was an error cropping the image. Please try a different image.' })
-		formData.append('coverFile', croppedFile)
-		updateCover(formData)
+		const file = await getCroppedImg(coverUrl, croppedAreaPixels)
+		if (!file) return setError('coverFile', { message: 'There was an error cropping the image. Please try a different image.' })
+		formData.append('coverFile', file.croppedFile)
+
+		updateCover(formData, {
+			onSuccess: (data) => {
+				setCover(data.coverURL)
+				setIsImageSelected(false)
+				close()
+			},
+		})
 	}
 	return (
 		<form onSubmit={handleSubmit(submitCoverFile)}>
@@ -81,7 +80,7 @@ const CoverForm = () => {
 					<h2 className='dark:text-light text-black3'>Add cover photo</h2>
 					<Divider />
 					<div className='flex justify-center mb-2'>
-						<img src={addCoverImage[0]} className=' w-full mobile:w-3/4 md:w-2/3' alt='Cover' />
+						<img src={addCoverImage[0]} className='w-full mobile:w-3/4 md:w-2/3 max-h-[450px]' alt='Cover' />
 					</div>
 					<p className='text-center mb-2 text-lg font-medium dark:text-light3 text-black3'>
 						Showcase your personality, interests, values or notable milestones{' '}

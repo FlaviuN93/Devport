@@ -5,8 +5,8 @@ import { passwordSchema } from './schemas'
 import { ZodError } from 'zod'
 
 interface IUpdateStorage {
-	key: string
-	keyToUpdate: string
+	storageKey: string
+	objectKey: string
 	valueToUpdate: any
 }
 
@@ -14,7 +14,7 @@ export const getMessageForValidation = (messageKey: PasswordValidationType): str
 	const validationRules = {
 		lowerCase: 'Lowercase letter',
 		upperCase: 'Uppercase letter',
-		specialChar: 'Special character (!?<>@#$)',
+		specialChar: 'Special character (!?@#$)',
 		number: 'Number',
 		minLength: '8 characters or more',
 		maxLength: '20 caracters maximum',
@@ -32,29 +32,16 @@ export const getValueFromStorage = <T>(key: string, initialValue: T) => {
 	return data
 }
 
-export const updateValueFromStorage = (updateStorage: IUpdateStorage): void => {
+export const updateObjectFromStorage = (updateStorage: IUpdateStorage): void => {
 	if (typeof window.localStorage === 'undefined') console.log('localStorage is not supported')
-	const currentItem = window.localStorage.getItem(updateStorage.key)
+	const currentItem = window.localStorage.getItem(updateStorage.storageKey)
 	if (!currentItem) throw Error('Item from local storage does not exist')
 
-	const convertedItem = JSON.parse(currentItem)
-	convertedItem[updateStorage.keyToUpdate] = updateStorage.valueToUpdate
-	window.localStorage.setItem(updateStorage.key, JSON.stringify(convertedItem))
-}
+	const convertedItem = currentItem.startsWith('{') ? JSON.parse(currentItem) : null
+	if (convertedItem === null) throw Error('Item from local storage is not an object')
 
-export const getImageFormat = (format: 'landscape' | 'cover', file: File) => {
-	return new Promise<boolean>((resolve) => {
-		const img = document.createElement('img')
-		img.onload = function () {
-			const aspectRatio = img.width / img.height
-
-			if (format === 'landscape' && aspectRatio > 1.5) resolve(false)
-			if (format === 'cover' && aspectRatio < 2.75) resolve(false)
-			resolve(true)
-		}
-
-		img.src = URL.createObjectURL(file)
-	})
+	convertedItem[updateStorage.objectKey] = updateStorage.valueToUpdate
+	window.localStorage.setItem(updateStorage.storageKey, JSON.stringify(convertedItem))
 }
 
 export const createZodErrorMessage = (error: IDefaultError): string | null => {
@@ -104,8 +91,8 @@ export const useValidateResult = (errorTypes: string | string[]) => {
 	const passwordErrors = [
 		{ type: 'lowerCase', isActive: false },
 		{ type: 'upperCase', isActive: false },
-		{ type: 'specialChar', isActive: false },
 		{ type: 'number', isActive: false },
+		{ type: 'specialChar', isActive: false },
 		{ type: 'minLength', isActive: false },
 		{ type: 'maxLength', isActive: false },
 	]
@@ -128,7 +115,10 @@ export const createImage = (url: string): Promise<HTMLImageElement> =>
 		image.src = url
 	})
 
-export async function getCroppedImg(imageSrc: string | null, pixelCrop: Area | null): Promise<File | null> {
+export async function getCroppedImg(
+	imageSrc: string | null,
+	pixelCrop: Area | null
+): Promise<{ croppedFile: File; croppedUrl: string } | null> {
 	if (!imageSrc) return null
 	if (!pixelCrop) return null
 	const image = await createImage(imageSrc)
@@ -151,12 +141,23 @@ export async function getCroppedImg(imageSrc: string | null, pixelCrop: Area | n
 
 	// Draw the cropped image onto the new canvas
 	croppedCtx.drawImage(canvas, pixelCrop.x, pixelCrop.y, pixelCrop.width, pixelCrop.height, 0, 0, pixelCrop.width, pixelCrop.height)
+	const imageData = croppedCtx.getImageData(0, 0, croppedCanvas.width, croppedCanvas.height).data
 
+	let hasTransparency = false
+	for (let i = 3; i < imageData.length; i += 4) {
+		if (imageData[i] === 0) {
+			hasTransparency = true
+			break
+		}
+	}
+
+	const imageType = hasTransparency ? 'image/png' : 'image/jpeg'
 	return new Promise((resolve) => {
 		croppedCanvas.toBlob((canvasBlob) => {
 			if (!canvasBlob) return null
-			const croppedFile = new File([canvasBlob], 'coverFile', { lastModified: Date.now(), type: 'image/jpeg' })
-			resolve(croppedFile)
-		}, 'image/jpeg')
+			const croppedFile = new File([canvasBlob], 'croppedFile', { lastModified: Date.now(), type: imageType })
+			const croppedUrl = URL.createObjectURL(croppedFile)
+			resolve({ croppedFile, croppedUrl })
+		}, imageType)
 	})
 }

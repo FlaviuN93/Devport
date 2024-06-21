@@ -33,7 +33,11 @@ const MyPortfolio = () => {
 				<div className='relative mb-20'>
 					<div className='flex items-center justify-center relative'>
 						{loggedUser?.coverURL ? (
-							<img src={loggedUser?.coverURL} alt='CoverImage' className='bg-cover max-w-[800px] w-full h-[200px] rounded-lg' />
+							<img
+								src={loggedUser?.coverURL}
+								alt='CoverImage'
+								className='bg-cover max-w-[800px] w-full h-[200px] bg-light3 dark:bg-darkGray rounded-lg shadow-md'
+							/>
 						) : (
 							<div className='bg-cover bg-light3 dark:bg-darkGray max-w-[800px] w-full h-[200px] rounded-lg'>
 								<Avatar
@@ -48,8 +52,8 @@ const MyPortfolio = () => {
 				</div>
 				<PortfolioCard projects={projects} clipBoardBtn={<ClipBoardButton isPortfolioValid={isPortfolioValid} />} />
 				<p className='mt-auto self-center flex items-center mb-8 gap-2'>
-					<span className='font-light text-sm'>power by </span>
-					<LogoIcon width={75} />
+					<span className='font-light text-sm dark:text-light'>power by </span>
+					<LogoIcon width={85} />
 				</p>
 			</div>
 		</section>

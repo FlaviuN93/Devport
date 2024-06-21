@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Password from '../../Inputs/Password'
 import Button from '../../UI/Button'
 import { useDeleteMe } from '../../../services/queries'
@@ -7,18 +7,23 @@ import { useNavigate } from 'react-router-dom'
 import { useModalContext, useUserContext } from '../../../contexts/contextHooks'
 
 const DeleteAccountForm = () => {
-	const { error, isPending, mutate: deleteUser, isSuccess } = useDeleteMe()
+	const { error, isPending, mutate: deleteUser } = useDeleteMe()
 	const { close } = useModalContext()
 	const { handleLogoutUser } = useUserContext()
 	const [deletePassword, setDeletePassword] = useState('')
 	const navigate = useNavigate()
 
-	useEffect(() => {
-		if (!isPending && isSuccess) {
-			handleLogoutUser()
-			navigate('/', { replace: true })
-		}
-	}, [isPending, isSuccess, navigate, close, handleLogoutUser])
+	const handleDeleteAccount = () => {
+		deleteUser(
+			{ password: deletePassword },
+			{
+				onSuccess: () => {
+					handleLogoutUser()
+					navigate('/', { replace: true })
+				},
+			}
+		)
+	}
 
 	return (
 		<div>
@@ -47,7 +52,7 @@ const DeleteAccountForm = () => {
 						buttonStyles='bg-danger text-white'
 						iconStyles='border-light2 border-t-danger'
 						isLoading={isPending}
-						onClick={() => deleteUser({ password: deletePassword })}
+						onClick={handleDeleteAccount}
 					/>
 				</div>
 			</div>

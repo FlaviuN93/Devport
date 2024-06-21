@@ -6,12 +6,12 @@
 }
 
 .errorBox {
-	background-color: var(--light-2);
+	background-color: var(--gray-2);
 	padding: 4rem;
 	margin: 1rem;
 	margin-top: -1rem;
 	flex: 0 1 96rem;
 	text-align: center;
-	border: 2px solid var(--light);
+	border: 2px solid var(--light-3);
 	border-radius: 8px;
 }

@@ -17,6 +17,7 @@ interface ProjectCardProps {
 	description: string
 	imageURL: string
 	cardState?: tCardState
+	onEdit?: () => void
 }
 
 const ProjectCard: FC<ProjectCardProps> = ({
@@ -34,9 +35,14 @@ const ProjectCard: FC<ProjectCardProps> = ({
 	const { handleProjectSelect } = useProjectContext()
 
 	return (
-		<div className='flex flex-col border-[1px] border-light3 rounded-lg p-3 mx-2 mobile:mx-0 gap-6 bg-light dark:bg-darkBlue2 tablet:flex-row'>
+		// Intreab-o pe Maria aici
+		<div className='flex flex-col border-[1px] border-light3 rounded-lg p-3 mx-2 mobile:mx-0 gap-6 bg-light2 dark:bg-black tablet:flex-row'>
 			{imageURL ? (
-				<img src={imageURL} alt='Image' className='aspect-video stroke-1 rounded-lg tablet:w-1/3 min-w-[250px]' />
+				<img
+					src={imageURL}
+					alt='Image'
+					className='aspect-video stroke-1 rounded-lg bg-light3 dark:bg-black3 tablet:w-[35%] min-w-[250px]'
+				/>
 			) : (
 				<PhotoIcon className='aspect-video stroke-1 rounded-lg tablet:w-1/3 min-w-[250px]' />
 			)}
@@ -44,7 +50,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 				<article className='text-start text-sm mb-4'>
 					<h4 className='text-xl dark:text-light'>{title}</h4>
 					<p className='font-semibold text-darkGray dark:text-light3 mb-2'>{techJoin}</p>
-					<p className='text-darkGray font-medium dark:text-light w-full break-words'>{description}</p>
+					<p className='text-darkGray font-medium dark:text-light w-full tablet:w-auto break-words'>{description}</p>
 				</article>
 
 				<div className='flex flex-col gap-4 mb-1 lgMobile:flex-row'>

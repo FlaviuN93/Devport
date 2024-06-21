@@ -17,7 +17,7 @@
 	box-shadow: var(--shadow-sm);
 	transition: all 0.2s ease-in-out;
 	transform: translate(-1px);
-	color: var(--black-3);
+	color: var(--themeColor2);
 	transition: all 0.2s ease;
 }
 
@@ -33,7 +33,7 @@
 .label {
 	font-size: 1rem;
 	margin-bottom: 5px;
-	color: var(--black);
+	color: var(--themeColor2);
 	font-weight: 500;
 }
 

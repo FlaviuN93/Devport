@@ -6,7 +6,6 @@ import Button from '../../UI/Button'
 import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
 import { useContactUs } from '../../../services/queries'
 import { MessageUs } from '../../../services/types'
-import { useEffect } from 'react'
 
 const MailForm = () => {
 	const {
@@ -17,14 +16,10 @@ const MailForm = () => {
 	} = useForm<MessageUs>({
 		resolver: zodResolver(contactUsSchema),
 	})
-	const { isPending, isSuccess, mutate: contactUs } = useContactUs()
-
-	useEffect(() => {
-		if (!isPending && isSuccess) reset()
-	}, [isPending, isSuccess, reset])
+	const { isPending, mutate: contactUs } = useContactUs()
 
 	return (
-		<form onSubmit={handleSubmit((data) => contactUs(data))} className='flex flex-col gap-6'>
+		<form onSubmit={handleSubmit((data) => contactUs(data, { onSuccess: () => reset() }))} className='flex flex-col gap-6'>
 			<Text name='name' register={register} error={errors.name?.message} label='Your Name' placeholder='Let us know your name' />
 			<Text
 				name='email'

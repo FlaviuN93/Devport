@@ -33,6 +33,7 @@ export const queryClient = new QueryClient({
 	}),
 	mutationCache: new MutationCache({
 		onSuccess: (data: unknown) => {
+			if (data === 'Success') return null
 			const { message } = data as IDefaultSuccess
 			return toast.success(`${message}`)
 		},

@@ -31,7 +31,7 @@ const Search: FC<SearchProps> = ({
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => setQuery(e.target.value)
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && handleSearch()
 
-	const buttonClasses = `bg-white/40 shadow-xs border border-solid border-[--lightGray] focus:shadow-sm py-2 px-2 hover:bg-white/50 ${
+	const buttonClasses = `bg-white/40 shadow-xs border border-solid border-[--light3] focus:shadow-sm py-2 px-2 hover:bg-white/50 ${
 		iconPos === 'right' ? disableRadiusLeft : disableRadiusRight
 	}`
 	const searchClasses = `${styles.searchInput} ${searchStyles}  ${iconPos === 'right' ? disableRadiusRight : disableRadiusLeft}`

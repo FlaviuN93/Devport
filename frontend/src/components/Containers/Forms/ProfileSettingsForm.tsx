@@ -5,7 +5,6 @@ import { useUpdateMe } from '../../../services/queries'
 import { IProfileSettings, profileSettingsSchema } from '../../../utils/schemas'
 import Button from '../../UI/Button'
 import Text from '../../Inputs/Text'
-import { useEffect } from 'react'
 import { CheckCircleIcon } from '@heroicons/react/24/outline'
 
 const ProfileSettingsForm = () => {
@@ -25,15 +24,13 @@ const ProfileSettingsForm = () => {
 		},
 	})
 
-	const { isPending: pendingUpdate, mutate: updateUser, isSuccess, data: newUser } = useUpdateMe()
-
-	// Updating user
-	useEffect(() => {
-		if (isSuccess && !pendingUpdate) handleSetUser(newUser.user)
-	}, [isSuccess, pendingUpdate, handleSetUser, newUser?.user])
+	const { isPending: pendingUpdate, mutate: updateUser } = useUpdateMe()
 
 	return (
-		<form onSubmit={handleSubmit((data) => updateUser(data))} className='formSettingsContainer'>
+		<form
+			onSubmit={handleSubmit((data) => updateUser(data, { onSuccess: (newUser) => handleSetUser(newUser.user) }))}
+			className='formSettingsContainer'
+		>
 			<div className='flex flex-col gap-4 md:flex-row md:gap-10'>
 				<Text label='Name' register={register} name='fullName' placeholder='Enter your name' error={errors.fullName?.message} />
 

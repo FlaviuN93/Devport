@@ -51,6 +51,7 @@ const Password = <T extends FieldValues>({
 						className={passwordClasses}
 						name={name}
 						id={label}
+						autoComplete='on'
 						placeholder={placeholder}
 						aria-placeholder={placeholder}
 						type={showPassword ? 'text' : 'password'}
@@ -65,6 +66,7 @@ const Password = <T extends FieldValues>({
 						id={label}
 						onChange={(event) => onChange(event.target.value)}
 						placeholder={placeholder}
+						autoComplete='on'
 						aria-placeholder={placeholder}
 						type={showPassword ? 'text' : 'password'}
 						disabled={disabled}

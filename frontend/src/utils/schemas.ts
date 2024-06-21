@@ -33,7 +33,7 @@ const descriptionSchema = z
 	.string()
 	.trim()
 	.min(125, 'To present your skills in more detail, include a description (at least 125 characters) for each project.')
-	.max(250, 'Your description has too many characters! Please keep it under 250 characters.')
+	.max(200, 'Your description has too many characters! Please keep it under 200 characters.')
 	.regex(/^[a-zA-Z0-9,.-\s]+$/, 'Your description should be clean and readable. No special characters allowed.')
 
 const bioSchema = z
@@ -112,6 +112,10 @@ export const coverSchema = z.object({
 
 export const avatarSchema = z.object({
 	avatarFile: z.union([fileSchema, z.null()]),
+})
+
+export const projectSchema = z.object({
+	projectFile: z.union([fileSchema, z.null()]),
 })
 
 export type ResetPasswordType = z.infer<typeof resetPasswordSchema>

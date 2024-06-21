@@ -4,6 +4,7 @@ import { UserContext } from './UserContext'
 import { ModalContext } from './ModalContext'
 import { ProjectContext } from './ProjectContext'
 import { DarkModeContext } from './DarkModeContext'
+import { AuthContext } from './AuthContext'
 
 export const useDropdownContext = () => {
 	const context = useContext(DropdownContext)
@@ -48,5 +49,13 @@ export const useDarkModeContext = () => {
 		throw new Error('DarkMode context must be used within a DarkModeProvider')
 	}
 
+	return context
+}
+
+export const useAuthContext = () => {
+	const context = useContext(AuthContext)
+	if (!context) {
+		throw new Error('The Authentication context must be used within a Auth Provider')
+	}
 	return context
 }

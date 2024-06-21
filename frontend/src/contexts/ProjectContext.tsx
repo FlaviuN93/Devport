@@ -15,7 +15,7 @@ export interface IProjectContextProps {
 	isProjectSelected: boolean
 	handleProjectSelect: (project: Project) => void
 	selectedProject: Project
-	closeProject: () => void
+	clearProject: () => void
 	resetImageUrl: () => void
 }
 
@@ -30,17 +30,21 @@ export const ProjectProvider: FC<{ children: ReactNode }> = ({ children }) => {
 		setIsProjectSelected(true)
 	}
 
+	const clearProject = () => {
+		setSelectedProject(initialProjectState)
+		setIsProjectSelected(false)
+	}
+
 	const resetImageUrl = () => setSelectedProject((prevState) => ({ ...prevState, imageURL: '' }))
-	const closeProject = () => setIsProjectSelected(false)
 
 	return (
 		<ProjectContext.Provider
 			value={{
 				selectedProject,
 				handleProjectSelect,
+				clearProject,
 				isProjectSelected,
 				resetImageUrl,
-				closeProject,
 			}}
 		>
 			{children}

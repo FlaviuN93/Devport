@@ -6,13 +6,12 @@ import { BookOpenIcon, SquaresPlusIcon, UserCircleIcon, UserIcon } from '@heroic
 import { useDarkModeContext, useUserContext } from '../../contexts/contextHooks'
 import { useLogout } from '../../services/queries'
 import { ArrowLeftStartOnRectangleIcon } from '@heroicons/react/24/solid'
-import useSuccess from '../../hooks/useSuccess'
 import DarkModeToggle from '../Utilities/DarkModeToggle'
 
 const PageNav = () => {
 	const { user: loggedUser, handleLogoutUser } = useUserContext()
 	const { themeMode, clearDarkMode } = useDarkModeContext()
-	const { isPending, isSuccess, mutate: logout } = useLogout()
+	const { mutate: logout } = useLogout()
 
 	const showAccount = loggedUser.avatarURL && loggedUser.fullName && loggedUser.jobTitle
 	const avatarUrl = loggedUser.avatarURL ? loggedUser.avatarURL : undefined
@@ -25,8 +24,6 @@ const PageNav = () => {
 		clearDarkMode()
 		navigate('/', { replace: true })
 	}
-
-	useSuccess(isPending, isSuccess, handleLogout)
 
 	return (
 		<nav className={navContainerClasses}>
@@ -80,7 +77,7 @@ const PageNav = () => {
 						<Divider />
 
 						<DropdownItem itemId='5' itemStyles='mb-0'>
-							<div onClick={() => logout()} className='w-full flex gap-2'>
+							<div onClick={() => logout(undefined, { onSuccess: handleLogout })} className='w-full flex gap-2'>
 								<ArrowLeftStartOnRectangleIcon className='h-6 w-6 text-danger2' />
 								<span className='text-danger2 text-base font-medium'>Log out</span>
 							</div>
