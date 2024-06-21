@@ -11,7 +11,7 @@ import Avatar from '../../UI/Avatar'
 import Button from '../../UI/Button'
 import Text from '../../Inputs/Text'
 import { Modal, ModalOpen, ModalWindow } from '../../UI/Modal'
-import ProjectImageForm from './ProjectImage'
+import ProjectImageForm from '../ProjectImage'
 import { CameraIcon, PencilIcon } from '@heroicons/react/24/solid'
 
 const initialProjectValue = { imageFile: null, demoURL: '', description: '', name: '', repositoryURL: '', technologies: [] }

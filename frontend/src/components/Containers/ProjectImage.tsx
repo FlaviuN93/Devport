@@ -1,15 +1,15 @@
-import { CONSTANTS, addProjectImage } from '../../../utils/variables'
-import Button from '../../UI/Button'
-import { Divider } from '../../UI/Dropdown'
+import { CONSTANTS, addProjectImage } from '../../utils/variables'
+import Button from '../UI/Button'
+import { Divider } from '../UI/Dropdown'
 import { useState } from 'react'
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form'
 import Cropper, { Area, Point } from 'react-easy-crop'
-import Slider from '../../Inputs/Slider'
-import FileInput from '../../Inputs/FileInput'
-import { getCroppedImg } from '../../../utils/functions'
+import Slider from '../Inputs/Slider'
+import FileInput from '../Inputs/FileInput'
+import { getCroppedImg } from '../../utils/functions'
 import { MinusIcon, PlusIcon } from '@heroicons/react/24/outline'
 import { BiCloudUpload } from 'react-icons/bi'
-import { useModalContext } from '../../../contexts/contextHooks'
+import { useModalContext } from '../../contexts/contextHooks'
 
 interface ProjectImageProps<T extends FieldValues> {
 	name: Path<T>
