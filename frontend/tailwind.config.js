@@ -7,8 +7,6 @@ export default {
 			colors: {
 				gray: '#677489',
 				gray2: '#ADB5BD',
-				//Vezi daca nu trebuie sters
-				darkBlue2: '#111823',
 				violet: '#6466e9',
 				light: '#f8f9fa',
 				light2: '#e3e8ef',

@@ -36,7 +36,7 @@ const ProjectCard: FC<ProjectCardProps> = ({
 
 	return (
 		// Intreab-o pe Maria aici
-		<div className='flex flex-col border-[1px] border-light3 rounded-lg p-3 mx-2 mobile:mx-0 gap-6 bg-light dark:bg-black2 tablet:flex-row'>
+		<div className='flex flex-col border-[1px] border-light3 rounded-lg p-3 mx-2 mobile:mx-0 gap-6 bg-light2 dark:bg-black tablet:flex-row'>
 			{imageURL ? (
 				<img
 					src={imageURL}
