@@ -72,10 +72,11 @@ export const updateMyAvatarHandler = catchAsync(async (req: Request, res: Respon
 	if (req.file) {
 		const avatarUrl = await updateAvatarImage(req.file, req.userId)
 		if (avatarUrl instanceof AppError) return next(avatarUrl)
-		req.body.avatarURL = avatarUrl
+		req.body.url = avatarUrl
 	}
 	const { url } = patchImageSchema.parse(req.body)
 	const response = await updateMyAvatar(url, req.userId)
+
 	if (response instanceof AppError) return next(response)
 	const { imageURL, statusCode, statusText = [] } = response
 
@@ -89,8 +90,9 @@ export const updateMyCoverHandler = catchAsync(async (req: Request, res: Respons
 	if (req.file) {
 		const coverURL = await updateCoverImage(req.file, req.userId)
 		if (coverURL instanceof AppError) return next(coverURL)
-		req.body.coverURL = coverURL
+		req.body.url = coverURL
 	}
+
 	const { url } = patchImageSchema.parse(req.body)
 	const response = await updateMyCover(url, req.userId)
 	if (response instanceof AppError) return next(response)

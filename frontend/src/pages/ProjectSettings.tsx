@@ -3,8 +3,7 @@ import ProjectCard from '../components/Containers/ProjectCard'
 import Loading from '../components/UI/Loading'
 import { useProjectContext } from '../contexts/contextHooks'
 import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion'
-import { motionVariants } from '../utils/variables'
+
 import ProjectSettingsForm from '../components/Containers/Forms/ProjectSettingsForm'
 
 const ProjectSettings = () => {
@@ -12,7 +11,6 @@ const ProjectSettings = () => {
 	const { isProjectSelected, selectedProject } = useProjectContext()
 	const [projects, setProjects] = useState(data)
 
-	// Here is what i have left
 	useEffect(() => {
 		if (isProjectSelected && selectedProject) {
 			setProjects((projectsState) => projectsState?.filter((project) => project.id !== selectedProject.id))
@@ -27,16 +25,9 @@ const ProjectSettings = () => {
 
 			<ProjectSettingsForm />
 
-			<motion.div
-				initial='visible'
-				animate={isProjectSelected ? 'hidden' : 'visible'}
-				variants={motionVariants}
-				transition={{ duration: 0.4 }}
-				className='flex flex-col gap-4 mt-4'
-			>
+			<div className='flex flex-col gap-4 mt-4'>
 				{projects &&
 					projects.map((project) => {
-						console.log(project, 'whatsHappening')
 						return (
 							<ProjectCard
 								key={project.id}
@@ -51,7 +42,7 @@ const ProjectSettings = () => {
 							/>
 						)
 					})}
-			</motion.div>
+			</div>
 		</section>
 	)
 }
