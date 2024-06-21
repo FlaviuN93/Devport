@@ -28,7 +28,7 @@ const HomePage = () => {
 						onClick={() => navigate('/auth/login')}
 					/>
 					<Button
-						buttonStyles='bg-darkBlue px-8 py-3.5 laptop:text-lg text-white w-full lgMobile:w-auto'
+						buttonStyles='bg-black3 px-8 py-3.5 laptop:text-lg text-white w-full lgMobile:w-auto'
 						buttonText='Sign up'
 						onClick={() => navigate('/auth')}
 					/>

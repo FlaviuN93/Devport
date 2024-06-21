@@ -112,8 +112,8 @@ function App() {
 								fontWeight: 'normal',
 								textAlign: 'start',
 								padding: '1rem 1.5rem',
-								background: 'var(--light)',
-								color: 'var(--black)',
+								background: 'var(--bgColor)',
+								color: 'var(--themeColor2)',
 							},
 						}}
 					/>

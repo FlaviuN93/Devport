@@ -5,7 +5,7 @@
 .svgTitle {
 	font-size: 1.875rem;
 	font-weight: 600;
-	color: var(--light);
+	color: var(--buttonColor);
 	margin-bottom: 0.5rem;
 }
 
@@ -13,5 +13,5 @@
 	font-size: 1.1rem;
 	font-weight: 400;
 	line-height: 2rem;
-	color: var(--light);
+	color: var(--buttonColor);
 }

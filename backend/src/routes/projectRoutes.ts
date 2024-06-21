@@ -6,7 +6,6 @@ import {
 	getMyProjectsData,
 	updateMyProjectData,
 	deleteMyProjectData,
-	getMyProjectData,
 	getTechnologiesData,
 	uploadProjectImage,
 	resizeProjectImage,
@@ -24,7 +23,6 @@ projectRouter
 
 projectRouter
 	.route('/currentUser/:projectId')
-	.get(protectHandler, userRolesHandler('user', 'tester'), getMyProjectData)
 	.put(protectHandler, userRolesHandler('user', 'tester'), uploadProjectImage, resizeProjectImage, updateMyProjectData)
 	.delete(protectHandler, userRolesHandler('user'), deleteMyProjectData)
 

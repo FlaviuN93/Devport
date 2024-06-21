@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import multer from 'multer'
 import sharp from 'sharp'
-import { createProjectSchema, patchImageSchema } from '../services/routeSchema'
+import { createProjectSchema } from '../services/routeSchema'
 import { catchAsync } from '../utils/errorFunctions'
-import { createMyProject, deleteMyProject, getMyProject, getMyProjects, getTechnologies, updateMyProject } from '../models/projectModel'
+import { createMyProject, deleteMyProject, getMyProjects, getTechnologies, updateMyProject } from '../models/projectModel'
 import AppError, { getSuccessMessage } from '../utils/appError'
 import { idSchema } from '../services/baseSchema'
 import { removeProjectImage, updateProjectImage } from '../models/imagesModel'
@@ -49,16 +49,6 @@ export const getMyProjectsData = async (req: Request, res: Response, next: NextF
 	const { projects, statusCode } = response
 	res.status(statusCode).send(projects)
 }
-
-export const getMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-	const projectId = idSchema.parse(req.params.projectId).toString()
-	const response = await getMyProject(req.userId, projectId)
-
-	if (response instanceof AppError) return next(response)
-	const { project, statusCode } = response
-
-	res.status(statusCode).send(project)
-})
 
 export const createMyProjectData = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
 	const reqBody = JSON.parse(req.body.body)

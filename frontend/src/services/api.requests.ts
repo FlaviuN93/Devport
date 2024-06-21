@@ -23,8 +23,6 @@ export const getUserAndProjects = (userId: string) => get<User>(`/users/projects
 // Project Routes
 export const getMyProjects = () => get<Project[]>('/projects/currentUser')
 
-export const getMyProject = (projectId: number) => get<Project>(`/projects/currentUser/${projectId}`)
-
 export const createMyProject = (body: FormData) => post<IDefaultSuccess, FormData>('projects/currentUser', { body })
 
 export const updateMyProject = (projectId: number, body: FormData) =>

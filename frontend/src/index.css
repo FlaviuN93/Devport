@@ -12,16 +12,11 @@
 	--black-2: #364153;
 	--black-3: #343a40;
 	--lightGray: #cbcdd1;
-	--lightGray-2: #cdd5e0;
-	--gray: #677489;
 	--gray-2: #adb5bd;
 	--darkGray: #495057;
 	--violet: #6466e9;
-	--violet2: #6f72e3;
-	--lightViolet: #e1e7fd;
 	--darkViolet: #4138c2;
 	--blueColor: #91a1f3;
-	--darkBlue: #111823;
 	--error: #ab1b1b;
 	--backdropColor: rgba(0, 0, 0, 0.4);
 
@@ -42,6 +37,7 @@
 	--hoverColor: var(--violet);
 	--hoverColor2: var(--lightGray);
 	--buttonColor: var(--light);
+	--buttonColor2: var(--black);
 	--borderColor: var(--blueColor);
 	--inputBg: rgba(255, 255, 255, 0.75);
 	--inputBgFocus: rgba(255, 255, 255, 0.85);
@@ -58,6 +54,7 @@
 	--hoverColor: var(--darkViolet);
 	--hoverColor2: var(--darkGray);
 	--buttonColor: var(--light-3);
+	--buttonColor: -var(--black-3);
 	--borderColor: var(--light-2);
 	--inputBg: rgba(0, 0, 0, 0.45);
 	--inputBgFocus: rgba(0, 0, 0, 0.55);
@@ -129,7 +126,7 @@ p {
 h6 {
 	font-size: 1rem;
 	line-height: 1.5rem;
-	color: var(--gray);
+	color: var(--gray-2);
 }
 
 .formContainer {
@@ -152,7 +149,7 @@ h6 {
 	position: absolute;
 	top: 55%;
 	height: 0;
-	background-color: var(--gray);
+	background-color: var(--gray-2);
 	width: 180px;
 }
 

@@ -35,7 +35,8 @@ const ProjectCard: FC<ProjectCardProps> = ({
 	const { handleProjectSelect } = useProjectContext()
 
 	return (
-		<div className='flex flex-col border-[1px] border-light3 rounded-lg p-3 mx-2 mobile:mx-0 gap-6 bg-light dark:bg-darkBlue2 tablet:flex-row'>
+		// Intreab-o pe Maria aici
+		<div className='flex flex-col border-[1px] border-light3 rounded-lg p-3 mx-2 mobile:mx-0 gap-6 bg-light dark:bg-black2 tablet:flex-row'>
 			{imageURL ? (
 				<img
 					src={imageURL}

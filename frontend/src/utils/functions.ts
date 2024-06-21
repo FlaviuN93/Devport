@@ -44,20 +44,6 @@ export const updateObjectFromStorage = (updateStorage: IUpdateStorage): void => 
 	window.localStorage.setItem(updateStorage.storageKey, JSON.stringify(convertedItem))
 }
 
-export const getImageFormat = (format: 'landscape' | 'cover', file: File) => {
-	return new Promise<boolean>((resolve) => {
-		const img = document.createElement('img')
-		img.onload = function () {
-			const aspectRatio = img.width / img.height
-			if (format === 'landscape' && aspectRatio > 1.5) resolve(false)
-			if (format === 'cover' && aspectRatio < 2.75) resolve(false)
-			resolve(true)
-		}
-
-		img.src = URL.createObjectURL(file)
-	})
-}
-
 export const createZodErrorMessage = (error: IDefaultError): string | null => {
 	if (error.type === 'zodError' && typeof error.message === 'object') {
 		let toastMessage = `${error.statusTitle.toUpperCase()}:\n `

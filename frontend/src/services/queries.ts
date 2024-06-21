@@ -8,7 +8,6 @@ import {
 	deleteMyCover,
 	deleteMyProject,
 	forgotPassword,
-	getMyProject,
 	getMyProjects,
 	getMyUserId,
 	getTechnologies,
@@ -21,7 +20,6 @@ import {
 	updateMyAvatar,
 	updateMyCover,
 	updateMyProject,
-	updateMyProjectImage,
 	updatePassword,
 } from './api.requests'
 import { IDefaultError, IDefaultSuccess, Technology, IUser, Project, User, ICover, IAvatar, MessageUs, IRegisteredUser } from './types'
@@ -39,8 +37,6 @@ export const useUpdateMe = () =>
 
 export const useUpdateMyCover = () => useMutation<ICover, IDefaultError, FormData>({ mutationFn: updateMyCover })
 export const useUpdateMyAvatar = () => useMutation<IAvatar, IDefaultError, FormData>({ mutationFn: updateMyAvatar })
-export const useUpdateMyProjectImage = (projectId: string) =>
-	useMutation<IDefaultSuccess, IDefaultError, FormData>({ mutationFn: (body) => updateMyProjectImage(body, projectId) })
 
 export const useDeleteMyCover = () =>
 	useMutation<IDefaultSuccess, IDefaultError>({
@@ -77,13 +73,6 @@ export const useGetMyProjects = () =>
 	useQuery<Project[], IDefaultError>({
 		queryKey: ['myProjects'],
 		queryFn: getMyProjects,
-	})
-
-export const useGetMyProject = (projectId: number) =>
-	useQuery<Project, IDefaultError>({
-		queryKey: ['myProject', projectId],
-		queryFn: () => getMyProject(projectId),
-		enabled: !!projectId,
 	})
 
 export const useCreateMyProject = () =>

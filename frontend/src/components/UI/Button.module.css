@@ -45,15 +45,7 @@
 
 .button.primary {
 	background-color: var(--hoverColor);
-	color: var(--light);
-}
-
-.button.secondary {
-	background-color: var(--lightViolet);
-	padding: 0.8rem 1rem;
-	color: var(--darkViolet);
-	justify-content: start;
-	width: 100%;
+	color: white;
 }
 
 .left {
@@ -72,7 +64,7 @@
 	display: inline-block;
 	border: 4px solid var(--darkViolet);
 	border-radius: 50%;
-	border-top-color: var(--light-2);
+	border-top-color: var(--buttonColor);
 	animation: spin 1s linear infinite;
 }
 
