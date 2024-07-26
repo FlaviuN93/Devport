@@ -10,8 +10,6 @@ export const updateMe = (body: IProfileSettings) => patch<IUser, IProfileSetting
 
 export const updateMyCover = (body: FormData) => patch<ICover, FormData>('/users/currentUser/coverImg', { body })
 export const updateMyAvatar = (body: FormData) => patch<IAvatar, FormData>('/users/currentUser/avatarImg', { body })
-export const updateMyProjectImage = (body: FormData, projectId: string) =>
-	patch<IDefaultSuccess, FormData>(`/projects/currentUser/projectImg/${projectId}`, { body })
 
 export const deleteMyCover = () => remove<IDefaultSuccess>('/users/currentUser/coverImg')
 export const deleteMyAvatar = () => remove<IDefaultSuccess>('/users/currentUser/avatarImg')

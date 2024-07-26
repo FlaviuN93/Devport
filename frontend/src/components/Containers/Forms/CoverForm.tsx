@@ -37,7 +37,6 @@ const CoverForm = () => {
 	const [coverUrl, setCoverUrl] = useState<string | null>(null)
 	const [crop, setCrop] = useState<Point>(CONSTANTS.cropPoints)
 	const [zoom, setZoom] = useState(CONSTANTS.zoom)
-	const [isEmpty, setIsEmpty] = useState(false)
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 	const [isImageSelected, setIsImageSelected] = useState(false)
 
@@ -49,17 +48,9 @@ const CoverForm = () => {
 		if (coverFile && isImageSelected) setCoverUrl(coverFile)
 	}, [getValues().coverFile, loggedUser.coverURL, isImageSelected])
 
-	const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => setCroppedAreaPixels(croppedAreaPixels)
+	const onCropComplete = (_: Area, croppedAreaPixels: Area) => setCroppedAreaPixels(croppedAreaPixels)
 
-	const submitCoverFile: SubmitHandler<{ coverFile: File | null }> = async (data) => {
-		if (!data.coverFile) {
-			setIsEmpty(true)
-			return setTimeout(() => {
-				setIsEmpty(false)
-				close()
-			}, 1000)
-		}
-
+	const submitCoverFile: SubmitHandler<{ coverFile: File | null }> = async () => {
 		const formData = new FormData()
 		const file = await getCroppedImg(coverUrl, croppedAreaPixels)
 		if (!file) return setError('coverFile', { message: 'There was an error cropping the image. Please try a different image.' })
@@ -163,7 +154,7 @@ const CoverForm = () => {
 								isLoading={isPending}
 								disabled={isDisabled}
 								variant='primary'
-								buttonStyles={isEmpty || isDisabled ? 'opacity-75 transition-opacity duration-300' : 'opacity-100'}
+								buttonStyles={isDisabled ? 'opacity-75 transition-opacity duration-300' : 'opacity-100'}
 								type='submit'
 							/>
 						</div>

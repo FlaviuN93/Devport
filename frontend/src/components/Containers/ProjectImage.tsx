@@ -1,3 +1,4 @@
+import React from 'react'
 import { CONSTANTS, addProjectImage } from '../../utils/variables'
 import Button from '../UI/Button'
 import { Divider } from '../UI/Dropdown'
@@ -32,13 +33,13 @@ const ProjectImage = <T extends FieldValues>({
 }: ProjectImageProps<T>) => {
 	const { close } = useModalContext()
 
-	const [crop, setCrop] = useState<Point>(CONSTANTS.cropPoints)
+	const [crop, setCrop] = React.useState<Point>(CONSTANTS.cropPoints)
 	const [isLoading, setIsLoading] = useState(false)
 	const [zoom, setZoom] = useState(CONSTANTS.zoom)
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 	const isDisabled = !!errorMessage
 
-	const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => setCroppedAreaPixels(croppedAreaPixels)
+	const onCropComplete = (_: Area, croppedAreaPixels: Area) => setCroppedAreaPixels(croppedAreaPixels)
 
 	const handleFileCrop = async () => {
 		setIsLoading(true)

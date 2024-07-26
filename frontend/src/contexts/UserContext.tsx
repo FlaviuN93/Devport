@@ -67,8 +67,7 @@ export const UserProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
 	const handleLogoutUser = (): Promise<any> => {
 		return new Promise((resolve: any) => {
-			window.localStorage.removeItem('user')
-			window.localStorage.removeItem('isLoggedIn')
+			localStorage.clear()
 			setUser(initialUser)
 			setIsLoggedIn(false)
 			resolve()

@@ -4,7 +4,7 @@ import { HttpParamsType } from './types'
 export const axiosApiInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_DOMAIN,
 	withCredentials: true,
-	timeout: 5000,
+	timeout: 15000,
 })
 
 const request = async <D, B = undefined>(

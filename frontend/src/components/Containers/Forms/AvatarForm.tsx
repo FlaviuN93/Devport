@@ -35,31 +35,21 @@ const AvatarForm = () => {
 	const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
 	const [crop, setCrop] = useState<Point>(CONSTANTS.cropPoints)
 	const [zoom, setZoom] = useState(CONSTANTS.zoom)
-	const [isEmpty, setIsEmpty] = useState(false)
 	const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null)
 	const [isImageSelected, setIsImageSelected] = useState(false)
 	const { close } = useModalContext()
-
+	const isDisabled = !!errors.avatarFile?.message
 	const { isPending, mutate: updateAvatar } = useUpdateMyAvatar()
 
 	const avatarFile = getValues().avatarFile && !errors.avatarFile ? URL.createObjectURL(getValues().avatarFile as File) : null
-
 	useEffect(() => {
 		if (loggedUser.avatarURL && !isImageSelected) setAvatarUrl(loggedUser.avatarURL)
 		if (avatarFile && isImageSelected) setAvatarUrl(avatarFile)
 	}, [getValues().avatarFile, loggedUser.avatarURL, isImageSelected])
 
-	const onCropComplete = (croppedArea: Area, croppedAreaPixels: Area) => setCroppedAreaPixels(croppedAreaPixels)
+	const onCropComplete = (_: Area, croppedAreaPixels: Area) => setCroppedAreaPixels(croppedAreaPixels)
 
-	const submitAvatarFile: SubmitHandler<{ avatarFile: File | null }> = async (data) => {
-		if (!data.avatarFile) {
-			setIsEmpty(true)
-			return setTimeout(() => {
-				setIsEmpty(false)
-				close()
-			}, 1000)
-		}
-
+	const submitAvatarFile: SubmitHandler<{ avatarFile: File | null }> = async () => {
 		const formData = new FormData()
 		const file = await getCroppedImg(avatarUrl, croppedAreaPixels)
 		if (!file) return setError('avatarFile', { message: 'There was an error cropping the image. Please try again.' })
@@ -174,9 +164,9 @@ const AvatarForm = () => {
 								icon={<CheckIcon className='h-5 w-5' />}
 								buttonText='Apply'
 								isLoading={isPending}
-								disabled={!!errors.avatarFile?.message}
+								disabled={isDisabled}
 								variant='primary'
-								buttonStyles={isEmpty ? 'opacity-75 transition-opacity duration-300' : 'opacity-100'}
+								buttonStyles={isDisabled ? 'opacity-75 transition-opacity duration-300' : 'opacity-100'}
 								type='submit'
 							/>
 						</div>

@@ -16,9 +16,7 @@ export const ErrorDisplay: FC<IErrorDisplay> = ({ error, resetErrorBoundary }) =
 	const handleTryAgain = async () => {
 		localStorage.setItem('errorCount', JSON.stringify(errorCount + 1))
 
-		if (errorCount > 2) {
-			window.location.replace('/app/my-portfolio')
-		} else if (errorCount > 4) {
+		if (errorCount > 3) {
 			localStorage.removeItem('user')
 			localStorage.removeItem('isLoggedIn')
 			window.location.replace('/auth/login')

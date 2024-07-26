@@ -11,7 +11,7 @@ import {
 	resizeProjectImage,
 } from '../controllers/projectController'
 
-// Order matters. Leave the routes with dynamic parameters at the bottom
+// Order matters. Leave the routes with dynamic parameters at the bottom.
 const projectRouter = express.Router()
 
 projectRouter.route('/currentUser/technologies').get(protectHandler, getTechnologiesData)
@@ -23,7 +23,7 @@ projectRouter
 
 projectRouter
 	.route('/currentUser/:projectId')
-	.put(protectHandler, userRolesHandler('user', 'tester'), uploadProjectImage, resizeProjectImage, updateMyProjectData)
+	.patch(protectHandler, userRolesHandler('user', 'tester'), uploadProjectImage, resizeProjectImage, updateMyProjectData)
 	.delete(protectHandler, userRolesHandler('user'), deleteMyProjectData)
 
 export default projectRouter
