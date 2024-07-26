@@ -7,7 +7,7 @@ export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
 			staleTime: 60 * 1000,
-			retry: 1,
+			retry: 2,
 			throwOnError: (error: unknown) => {
 				const defaultError = error as IDefaultError
 				return defaultError.statusTitle.startsWith('500')
